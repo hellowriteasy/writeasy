@@ -1,10 +1,18 @@
 const express = require("express");
 const router = express.Router();
-const UserController = require("../controllers/userController");
+const UserController = require("../src/controllers/userController");
+const {
+  registerValidationRules,
+  loginValidationRules,
+  validate,
+} = require("../middleware/validationMiddleware");
 
-// Define routes for user authentication
-router.post("/register", UserController.register);
-router.post("/login", UserController.login);
-// Add routes for logout, password management, etc. as needed...
+router.post(
+  "/register",
+  registerValidationRules(),
+  validate,
+  UserController.register
+);
+router.post("/login", loginValidationRules(), validate, UserController.login);
 
 module.exports = router;

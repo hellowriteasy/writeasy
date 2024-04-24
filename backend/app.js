@@ -1,30 +1,34 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const { connectDB, initializeDatabase } = require("./config/db");
-const authRoutes = require("./routes/auth");
 
-// Load environment variables
+const errorHandlingMiddleware = require("./middleware/errorHandlingMiddleware");
+const bodyParser = require("body-parser");
+
+const authRoutes = require("./routes/auth");
+const storyRoutes = require("./routes/storyRoutes");
+const promptRoutes = require("./routes/promptRoutes");
+const contestRoutes = require("./routes/contestRoutes");
+
 dotenv.config();
 
 connectDB();
 initializeDatabase();
 
-// Create Express app
 const app = express();
 
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// Routes
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
-// Use authentication routes
+// Use routes
 app.use("/api/auth", authRoutes);
+app.use("/api/stories", storyRoutes);
+app.use("/api/prompts", promptRoutes);
+app.use("/api/contests", contestRoutes);
 
-// Start server
+// Global error handling
+app.use(errorHandlingMiddleware);
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
