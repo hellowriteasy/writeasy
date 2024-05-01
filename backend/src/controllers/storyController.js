@@ -1,13 +1,30 @@
 const StoryService = require("../services/storyService");
+const GptService = require("../services/GptService");
+
+const gptService = new GptService(process.env.GPT_API_KEY); // Initialize GPT service
 
 const createStory = async (req, res) => {
   try {
     const story = await StoryService.createStory(req.body);
-    res.status(201).json(story);
+    res.status(201).json({ message: "Story has been successfully saved." }); // Respond without score
+
+    // Process the story for scoring in the background
+    processStoryForScoring(story._id, story.content); // Ensuring 'content' exists in your story model
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
+// Function to handle scoring
+async function processStoryForScoring(storyId, content) {
+  try {
+    const score = await gptService.generateScore(content); // Get score from GPT API
+    await StoryService.updateStory(storyId, { score }); // Update the story with the score
+    console.log(`Score updated for story ${storyId}.`);
+  } catch (error) {
+    console.error(`Failed to score story ${storyId}:`, error);
+  }
+}
 
 const getStories = async (req, res) => {
   try {

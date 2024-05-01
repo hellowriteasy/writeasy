@@ -46,7 +46,7 @@ const updateContest = async (req, res) => {
 const deleteContest = async (req, res) => {
   try {
     await ContestService.deleteContest(req.params.id);
-    res.status(204).send();
+    res.status(204).json({ message: "Contest deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
