@@ -26,6 +26,15 @@ app.use("/api/stories", storyRoutes);
 app.use("/api/prompts", promptRoutes);
 app.use("/api/contests", contestRoutes);
 
+app.get("/success", (req, res) => {
+  const token = req.query.token;
+  if (token) {
+    res.status(200).send(`Authentication Success! Your token is: ${token}`);
+  } else {
+    res.status(200).send(`Authentication Success! No token received.`);
+  }
+});
+
 // Global error handling
 app.use(errorHandlingMiddleware);
 
