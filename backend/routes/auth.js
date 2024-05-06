@@ -17,19 +17,88 @@ const client = new OAuth2Client(
   `${process.env.SERVER_URL}/api/auth/google/callback`
 );
 
+/**
+ * @openapi
+ * /api/auth/register:
+ *   post:
+ *     tags:
+ *       - Authentication
+ *     summary: Register a new user
+ *     description: Registers a new user and returns user data with token.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       201:
+ *         description: Successfully registered the user.
+ *       400:
+ *         description: Validation errors or incorrect data.
+ *       500:
+ *         description: Internal server error.
+ */
 router.post(
   "/register",
   registerValidationRules(),
   validate,
   UserController.register
 );
+
+/**
+ * @openapi
+ * /api/auth/login:
+ *   post:
+ *     tags:
+ *       - Authentication
+ *     summary: User login
+ *     description: Authenticate and log in the user.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: Successfully logged in the user.
+ *       401:
+ *         description: Unauthorized access. Invalid credentials or user account is inactive.
+ *       500:
+ *         description: Internal server error.
+ */
 router.post("/login", loginValidationRules(), validate, UserController.login);
 
+/**
+ * @openapi
+ * /api/auth/logout:
+ *   post:
+ *     tags:
+ *       - Authentication
+ *     summary: User logout
+ *     description: Log out the user. But the localstorage should be emptied from the frontend! Mind this!!
+ *     responses:
+ *       200:
+ *         description: Successfully logged out the user.
+ */
 router.post("/logout", (req, res) => {
   // (IMPORTANT) Instruct frontend client to remove the token from local storage
   res.status(200).send({ message: "Logged out successfully" });
 });
 
+/**
+ * @openapi
+ * /api/auth/google:
+ *   get:
+ *     tags:
+ *       - Authentication
+ *     summary: Google login
+ *     description: Initiate the Google login flow.
+ *     responses:
+ *       302:
+ *         description: Redirect to the Google OAuth authorization page.
+ */
 router.get("/google", (req, res) => {
   const url = client.generateAuthUrl({
     access_type: "offline",
@@ -42,6 +111,26 @@ router.get("/google", (req, res) => {
   res.redirect(url);
 });
 
+/**
+ * @openapi
+ * /api/auth/google/callback:
+ *   get:
+ *     tags:
+ *       - Authentication
+ *     summary: Google login callback
+ *     description: Callback for handling the Google OAuth response.
+ *     parameters:
+ *       - name: code
+ *         in: query
+ *         description: Authorization code received from Google OAuth.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       302:
+ *         description: Redirect to the success page with the authentication token.
+ *       500:
+ *         description: Internal server error.
+ */
 router.get("/google/callback", async (req, res) => {
   try {
     const { tokens } = await client.getToken(req.query.code);

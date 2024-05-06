@@ -1,12 +1,28 @@
 const Prompt = require("../models/prompt");
 
-const createPrompt = async (data) => {
-  const prompt = new Prompt(data);
+const createPrompt = async (data, type) => {
+  const prompt = new Prompt({ ...data, promptType: type });
   return await prompt.save();
 };
 
-const getAllPrompts = async () => {
-  return await Prompt.find();
+const createPracticePrompt = (data) => {
+  return createPrompt(data, "practicePrompt");
+};
+
+const createContestPrompt = (data) => {
+  return createPrompt(data, "contestPrompt");
+};
+
+const getPromptsByType = async (type) => {
+  return await Prompt.find({ promptType: type });
+};
+
+const getPracticePrompts = () => {
+  return getPromptsByType("practicePrompt");
+};
+
+const getContestPrompts = () => {
+  return getPromptsByType("contestPrompt");
 };
 
 const getPromptById = async (promptId) => {
@@ -22,9 +38,11 @@ const deletePrompt = async (id) => {
 };
 
 module.exports = {
-  createPrompt,
-  getAllPrompts,
+  createPracticePrompt,
+  createContestPrompt,
+  getPracticePrompts,
+  getContestPrompts,
+  getPromptById,
   updatePrompt,
   deletePrompt,
-  getPromptById,
 };
