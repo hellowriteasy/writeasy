@@ -1,7 +1,7 @@
-import Group17 from "../../public/Landingpage-images/Group (17).png"
-import Group18 from "../../public/Landingpage-images/Group (18).png"
-import Logo from "../../public/Landingpage-images/logo.png"
-import Earth from "../../public/Landingpage-images/earth.png"
+import Group17 from "../../public/Landingpage-img/Group (19).svg"
+import Group18 from "../../public/Landingpage-img/Group (20).svg"
+import Logo from "../../public/Landingpage-img/logo.svg"
+import Earth from "../../public/Landingpage-img/earth.svg"
 import Image from "next/image"
 
 const Footer = () => {
@@ -9,7 +9,7 @@ const Footer = () => {
     <div className="" >
       <div className="flex justify-between items-center w-screen p-20 " >
          <Image className="ms-20" src={Logo} alt=""></Image>
-         <div className="flex gap-20 me-20">
+         <div className="flex gap-28 text-xl  me-20">
           <div>
            <ul>
             <li>About</li>

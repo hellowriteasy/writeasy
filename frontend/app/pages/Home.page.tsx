@@ -1,31 +1,31 @@
 import Navbar from "../components/Navbar";
 import Image from "next/image";
-import Buttonbg from "../../public/Landingpage-images/path102.png";
-import Arrow from "../../public/Landingpage-images/path64.png";
-import Rocket from "../../public/Landingpage-images/rocket1.png";
-import Moon from "../../public/Landingpage-images/moon.png";
-import Group1 from "../../public/Landingpage-images/Group (1).png";
-import Group2 from "../../public/Landingpage-images/Group (2).png";
-import Group from "../../public/Landingpage-images/Group.png";
-import Star from "../../public/Landingpage-images/Group (3).png";
-import Group4 from "../../public/Landingpage-images/Group (4).png";
-import Group5 from "../../public/Landingpage-images/Group (5).png";
-import Group6 from "../../public/Landingpage-images/Group (6).png";
-import Group7 from "../../public/Landingpage-images/Group (7).png";
-import Group8 from "../../public/Landingpage-images/Group (8).png";
-import Group9 from "../../public/Landingpage-images/Group (9).png";
-import Group10 from "../../public/Landingpage-images/Group (10).png";
-import Group11 from "../../public/Landingpage-images/Group (11).png";
-import Group12 from "../../public/Landingpage-images/Group (12).png";
-import Group13 from "../../public/Landingpage-images/Group (13).png";
-import Arrow1 from "../../public/Landingpage-images/arrrow 1.png"
-import Arrow2 from "../../public/Landingpage-images/arrow 2.png";
-import Arrow3 from "../../public/Landingpage-images/arrow3.png";
-import Bulb from "../../public/Landingpage-images/bulb.png";
-import Note from "../../public/Landingpage-images/note1.png";
-import Note2 from "../../public/Landingpage-images/note2.png";
-import Note3 from "../../public/Landingpage-images/note3.png";
-import Paperplane from "../../public/Landingpage-images/paper_plane.png"
+import Buttonbg from "../../public/Landingpage-img/path102.svg";
+import Arrow from "../../public/Landingpage-img/path64.svg";
+import Rocket from "../../public/Landingpage-img/rocket1.svg";
+import Moon from "../../public/Landingpage-img/moon.svg";
+import Group1 from "../../public/Landingpage-img/Group (1).svg";
+import Group2 from "../../public/Landingpage-img/Group (2).svg";
+import Group from "../../public/Landingpage-img/Group.svg";
+import Star from "../../public/Landingpage-img/Group (13).svg";
+import Group4 from "../../public/Landingpage-img/Group (3).svg";
+import Group5 from "../../public/Landingpage-img/Group (5).svg";
+import Group6 from "../../public/Landingpage-img/Group (6).svg";
+import Group7 from "../../public/Landingpage-img/Group (14).svg";
+import Group8 from "../../public/Landingpage-img/Group (8).svg";
+import Group9 from "../../public/Landingpage-img/Group (9).svg";
+import Group10 from "../../public/Landingpage-img/Group (4).svg";
+import Group11 from "../../public/Landingpage-img/Group (7).svg";
+import Group12 from "../../public/Landingpage-img/Group (11).svg";
+import Group13 from "../../public/Landingpage-img/Group (12).svg";
+import Arrow1 from "../../public/Landingpage-img/arrrow 1.svg"
+import Arrow2 from "../../public/Landingpage-img/arrow 2.svg";
+import Arrow3 from "../../public/Landingpage-img/arrow3.svg";
+import Bulb from "../../public/Landingpage-img/bulb.svg";
+import Note from "../../public/Landingpage-img/note1.svg";
+import Note2 from "../../public/Landingpage-img/note2.svg";
+import Note3 from "../../public/Landingpage-img/note3.svg";
+import Paperplane from "../../public/Landingpage-img/paper_plane.svg"
 import Pricing from "../components/Pricing";
 import FrequentlyAsked from "../components/FrequentlyAsked";
 import Footer from "../components/Footer";
@@ -43,16 +43,16 @@ const Hero = () => {
       <div className="relative border border-gray ">
         <div className="w-1/2 ms-32 mt-20  relative">
           <div>
-            <h1 className="text-5xl font-bold">Where Stories Come to Life</h1>
+            <h1 className="text-7xl text-nowrap font-crayon font-bold">Where Stories Come to Life</h1>
+          <div className=" 1/3" >
+            <p className=" pt-8 w-full text-wrap text-start   text-2xl">Discover a world where writing is an adventure! With Writease, kids craft captivating tales with our AI-powered editor. Engage in story contests, collaborate with friends, and let imagination reign supreme. Join Writease today and transform storytelling into an exciting journey!</p>
           </div>
-          <div >
-            <p className=" pt-8 w-full pr-36 text-start  text-xl">Discover a world where writing is an adventure! With Writease, kids craft captivating tales with our AI-powered editor. Engage in story contests, collaborate with friends, and let imagination reign supreme. Join Writease today and transform storytelling into an exciting journey!</p>
           </div>
           <div className="absolute top-50 mt-5 left-80">
             <Image src={Arrow} width={30} height={30} alt="Arrow" />
           </div>
           <button className="relative w-72 h-20 px-4 mt-20 py-2 z-50 text-white rounded-md overflow-hidden">
-            <span className="relative z-10 w-full h-full flex items-center justify-center text-4xl">Get Started</span>
+            <span className="relative z-10 w-full h-full font-crayon flex  items-center justify-center text-4xl">Get Started</span>
             <div className="absolute inset-0">
               <Image src={Buttonbg} className="w-full h-full" alt="" />
             </div>
@@ -168,7 +168,7 @@ const Hero = () => {
         </div>
       </div>
       <Pricing />
-      {/* <FrequentlyAsked/> */}
+      <FrequentlyAsked/>
       <Footer/>
 
     </div>

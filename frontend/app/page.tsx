@@ -1,9 +1,12 @@
   "use client"
 import React from "react";
-
+import Pay from "./pages/Pay";
 import Hero from "./pages/Home.page";
+import Prompt from "@/app/components/Others/Prompt"
+   import WeeklyTest from "./components/Others/WeeklyTest"
+   import SelectMenu from "./components/Others/TypesButton"
  // Corrected import statement
-
+import TopWriting from "./components/Others/TopWriting";
 export default function Home() {
   // function handlechange() {
   //   // Define your handleChange logic here
@@ -11,12 +14,12 @@ export default function Home() {
 
   return (
     
-    <main className="">
-       <Hero/>
-      {/* <InputField type="password" placeholder="password"  onChange={handlechange} />
-      <Button type="login">login</Button>
-      <Button type="signup">signup</Button>
-      <Button type="google"></Button> */}
+    <main className="font-poppins two-line-bg ">
+       {/* <Hero/> */}
+         {/* <Prompt></Prompt>
+         <TopWriting></TopWriting>
+         <WeeklyTest></WeeklyTest> */}
+          <SelectMenu></SelectMenu>
     </main>
   );
 }

@@ -2,7 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.cdnfonts.com/css/dk-crayon-crumble');
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.cdnfonts.com/css/sans-comic-sans');
 
 @layer utilities {
   .text-balance {
@@ -12,15 +15,29 @@
 }
 body{
   background-color: #f5f5f5;
-  
+  font-family: "Poppins";
 }
-/* .two-line-bg {
+.white{
+  background-color: #f5f5f5;
+}
+.two-line-bg {
   background-image: url("../public/bg.png");
- 
+ background-repeat: repeat;
+ background-attachment: fixed;
   background-size: cover;
   background-position: center;
-  }   */
+  }  
 
 .yellow{
   background-color: #FCD800;
+}
+.navbar {
+  position: sticky;
+  top: 10;
+  z-index: 1000; /* Ensure it's above other elements */
+  width: 100%;
+ 
+}
+h1{
+  font-family: crayon cramble;
 }
