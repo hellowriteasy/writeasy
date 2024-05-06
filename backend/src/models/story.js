@@ -10,6 +10,16 @@ const storySchema = new mongoose.Schema({
   corrections: [
     { type: mongoose.Schema.Types.ObjectId, ref: "StoryCorrection" },
   ],
+  contest: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Contest",
+    required: true,
+  },
+  prompt: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Prompt",
+    required: true,
+  },
 });
 
 const Story = mongoose.model("Story", storySchema);

@@ -69,10 +69,45 @@ const deleteStory = async (req, res) => {
   }
 };
 
+async function submitStoryToContest(req, res) {
+  const { contestId, promptId } = req.params;
+  const { userId, title, content, wordCount } = req.body;
+
+  try {
+    // Ensure the contest and prompt exist and are related
+    const contest = await Contest.findById(contestId);
+    if (!contest) return res.status(404).json({ message: "Contest not found" });
+
+    const prompt = await Prompt.findById(promptId);
+    if (!prompt) return res.status(404).json({ message: "Prompt not found" });
+
+    // Ensure the prompt belongs to the contest
+    if (!contest.prompts.includes(prompt._id)) {
+      return res
+        .status(400)
+        .json({ message: "Prompt does not belong to this contest" });
+    }
+
+    // Create and save the story linked to the contest
+    const story = await StoryService.createStory({
+      user: userId,
+      title,
+      content,
+      wordCount,
+      contest: contestId,
+      prompt: promptId,
+    });
+    res.status(201).json(story);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 module.exports = {
   createStory,
   getStories,
   updateStory,
   deleteStory,
   getStory,
+  submitStoryToContest,
 };

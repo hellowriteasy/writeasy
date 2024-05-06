@@ -25,6 +25,11 @@ router.post(
 );
 router.post("/login", loginValidationRules(), validate, UserController.login);
 
+router.post("/logout", (req, res) => {
+  // (IMPORTANT) Instruct frontend client to remove the token from local storage
+  res.status(200).send({ message: "Logged out successfully" });
+});
+
 router.get("/google", (req, res) => {
   const url = client.generateAuthUrl({
     access_type: "offline",

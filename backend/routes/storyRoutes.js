@@ -6,6 +6,7 @@ const {
   updateStory,
   deleteStory,
   getStory,
+  submitStoryToContest,
 } = require("../src/controllers/storyController");
 const { scoreStory } = require("../src/controllers/StoryScoreController");
 
@@ -16,5 +17,6 @@ router.put("/:id", updateStory);
 router.delete("/:id", deleteStory);
 
 router.post("/score", scoreStory);
+router.post("/contest/:contestId/prompt/:promptId", submitStoryToContest);
 
 module.exports = router;
