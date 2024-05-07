@@ -21,10 +21,23 @@ const deleteStory = async (id) => {
   return await Story.findByIdAndDelete(id);
 };
 
+const getTopContestStories = async () => {
+  const totalContestStories = await Story.countDocuments({
+    storyType: "contestStory",
+  });
+
+  const top20PercentCount = Math.ceil(totalContestStories * 0.2);
+
+  return await Story.find({ storyType: "contestStory" })
+    .sort({ score: -1 })
+    .limit(top20PercentCount);
+};
+
 module.exports = {
   createStory,
   getAllStories,
   updateStory,
   deleteStory,
   getStoryById,
+  getTopContestStories,
 };

@@ -19,7 +19,7 @@ class GptService {
 
       If the content includes any inappropriate themes such as violence or explicit content, immediately assign a score of -10.
 
-      Please provide the numerical score strictly in the first line based solely on this rubric. Additionally, (${systemMessage[taskType]}). Start this from the second line of your response.
+      Please provide the numerical score strictly in the first line based solely on this rubric. Additionally, You are a master proofreader. Only proofread the given text, don't add new text to the document.(${systemMessage[taskType]}). Start this from the second line of your response.
     `;
 
     try {

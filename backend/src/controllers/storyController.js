@@ -110,6 +110,15 @@ async function submitStoryToContest(req, res) {
   }
 }
 
+const getTopContestStories = async (req, res) => {
+  try {
+    const stories = await StoryService.getTopContestStories();
+    res.json(stories);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createStory,
   getStories,
@@ -117,4 +126,5 @@ module.exports = {
   deleteStory,
   getStory,
   submitStoryToContest,
+  getTopContestStories,
 };

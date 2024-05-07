@@ -9,37 +9,54 @@ exports.scoreStory = async function (req, res) {
   const wordCount = content.split(" ").length;
 
   try {
-    const { score, corrections } = await gptService.generateScore(
-      content,
-      taskType
-    );
-
+    // Save the new story to the database without score and corrections
     const newStory = new Story({
       user: userId,
       title: title,
       content: content,
       wordCount: wordCount,
-      score: score,
       submissionDateTime: new Date(),
-      corrections: corrections, // Save corrections
       storyType: storyType,
       prompt: prompt,
     });
 
-    await newStory.save();
+    const savedStory = await newStory.save();
+
+    scoreAndCorrectStoryInBackground(savedStory._id);
 
     return res.status(201).json({
       success: true,
-      message: "Story scored, corrected, and saved successfully",
-      storyId: newStory._id,
-      score: score,
-      corrections: corrections,
+      message: "Story submitted and scoring in progress",
+      storyId: savedStory._id,
     });
   } catch (error) {
-    console.error("Failed to score, correct, and save story:", error);
+    console.error("Failed to save story:", error);
     return res.status(500).json({
       success: false,
-      message: "Failed to score and process the story",
+      message: "Failed to save the story",
     });
   }
 };
+
+async function scoreAndCorrectStoryInBackground(storyID) {
+  try {
+    const story = await Story.findById(storyID);
+    if (!story) {
+      console.error(`Failed to find story: ${storyID}`);
+      return;
+    }
+
+    const { score, corrections } = await gptService.generateScore(
+      story.content,
+      story.taskType
+    );
+
+    story.score = score;
+    story.corrections = corrections; // update corrections
+
+    await story.save();
+    console.log("Story scored and corrected successfully");
+  } catch (err) {
+    console.error(`Failed to score and correct story: ${storyID}`, err);
+  }
+}

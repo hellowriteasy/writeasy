@@ -7,6 +7,7 @@ const {
   deleteStory,
   getStory,
   submitStoryToContest,
+  getTopContestStories,
 } = require("../src/controllers/storyController");
 const { scoreStory } = require("../src/controllers/StoryScoreController");
 
@@ -47,6 +48,22 @@ router.post("/", createStory);
  *         description: Error occurred while fetching the stories.
  */
 router.get("/", getStories);
+
+/**
+ * @openapi
+ * /api/stories/top:
+ *   get:
+ *     tags:
+ *       - Stories
+ *     summary: Get top 20% contest stories
+ *     description: Retrieves top 20% stories of type 'contestStory' sorted by score.
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved top stories.
+ *       500:
+ *         description: Error occurred while fetching the stories.
+ */
+router.get("/top", getTopContestStories);
 
 /**
  * @openapi
