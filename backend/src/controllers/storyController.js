@@ -5,7 +5,12 @@ const gptService = new GptService(process.env.GPT_API_KEY); // Initialize GPT se
 
 const createStory = async (req, res) => {
   try {
-    const story = await StoryService.createStory(req.body);
+    const { content } = req.body;
+    // Calculate word count
+    const wordCount = content.split(" ").length;
+
+    const story = await StoryService.createStory({ ...req.body, wordCount });
+
     res.status(201).json({ message: "Story has been successfully saved." }); // Respond without score
 
     // Process the story for scoring in the background
@@ -71,7 +76,9 @@ const deleteStory = async (req, res) => {
 
 async function submitStoryToContest(req, res) {
   const { contestId, promptId } = req.params;
-  const { userId, title, content, wordCount } = req.body;
+  const { userId, title, content } = req.body;
+  // Calculate word count
+  const wordCount = content.split(" ").length;
 
   try {
     // Ensure the contest and prompt exist and are related
