@@ -9,7 +9,7 @@ const TopWriting = () => {
         
       <div className="text-center w-11/12 pt-4 text-3xl font-bold" >
 
-      <h2>Top writings  of previous week</h2>
+      <h2 className="font-comic font-bold">Top writings  of previous week</h2>
       </div>
     </div>
   )

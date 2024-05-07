@@ -1,4 +1,4 @@
-import Navbar from "../components/Navbar";
+
 import Image from "next/image";
 import Buttonbg from "../../public/Landingpage-img/path102.svg";
 import Arrow from "../../public/Landingpage-img/path64.svg";
@@ -28,15 +28,15 @@ import Note3 from "../../public/Landingpage-img/note3.svg";
 import Paperplane from "../../public/Landingpage-img/paper_plane.svg"
 import Pricing from "../components/Pricing";
 import FrequentlyAsked from "../components/FrequentlyAsked";
-import Footer from "../components/Footer";
+
 const Hero = () => {
-  const navTitles = ['Practice', 'Contest', 'Game', 'Login'];
+
 
   return (
-    <div className="Hero two-line-bg w-full h-full  overflow-x-hidden">
+    <div className="Hero two-line-bg w-full h-full  overflow-hidden">
 
 
-        <Navbar titles={navTitles}  />
+      
     
       
     
@@ -64,7 +64,7 @@ const Hero = () => {
         <div className="absolute top-20 right-24 z-0">
           <Image src={Rocket} width={150} height={195.35} alt="Rocket" />
         </div>
-        <div className="absolute top-64 right-1/3 z-0">
+        <div className="absolute top-64 right-96 z-0">
           <Image src={Group2} alt="Group2" />
         </div>
         <div className="absolute top-60 right-40 z-0">
@@ -167,9 +167,14 @@ const Hero = () => {
         
         </div>
       </div>
+      <div className="bg-custom-yellow -mt-40">
       <Pricing />
+      </div>
+      <div className="-ms-20">
+
       <FrequentlyAsked/>
-      <Footer/>
+      </div>
+     
 
     </div>
     
