@@ -52,10 +52,20 @@ const deleteContest = async (req, res) => {
   }
 };
 
+const getOngoingContests = async (req, res) => {
+  try {
+    const ongoingContests = await ContestService.getOngoingContests();
+    res.json(ongoingContests);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   createContest,
   getContests,
   updateContest,
   deleteContest,
   getContest,
+  getOngoingContests,
 };

@@ -9,7 +9,7 @@ const Prompt= () => {
         <div className="font-bold font-comic text-xl mb-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni corporis error</div>
         <p className="text-gray-700 font-comic pt-8 text-base">Category :</p>
       </div>
-      <Link href="/viewcontest">
+      <Link href="viewcontest/createcontest">
       <div className="px-6 py-12 flex cursor-pointer justify-end">
         <Image src={Pencil} alt='Pencil'  ></Image>
       </div>

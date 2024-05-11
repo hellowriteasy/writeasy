@@ -56,3 +56,6 @@ h1{
   background-image: url("../public/navbg.svg");
   background-size:cover 
 } */
+button:hover{
+  opacity: 80%;
+}

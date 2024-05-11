@@ -21,10 +21,19 @@ const deleteContest = async (id) => {
   return await Contest.findByIdAndDelete(id);
 };
 
+const getOngoingContests = async () => {
+  const currentDateTime = new Date();
+  return await Contest.find({
+    isActive: true,
+    submissionDeadline: { $gt: currentDateTime },
+  }).populate("prompts");
+};
+
 module.exports = {
   createContest,
   getAllContests,
   updateContest,
   deleteContest,
   getContestById,
+  getOngoingContests,
 };

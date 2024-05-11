@@ -1,43 +1,50 @@
-import Navbar from "../components/Navbar";
-import Prompt from "../components/contest/Prompt";
+
 import TopWriting from "../components/Others/TopWriting";
 import WeeklyTest from "../components/Others/WeeklyTest";
-import Cloud from "@/public/Game/cloud.svg"
-import Cloud2 from "@/public/Game/cloud3.svg"
+import earth from "../../public/Game/earth.svg"
+import A from "../../public/Game/A.svg"
+import Dumbelman from "../../public/Game/dumbelman.svg"
+import Bee from "../../public/Game/Bee.svg"
+import Cloud from "../../public/Game/cloud.svg"
 import Image from "next/image";
-import Pagination from "@/app/components/Pagination";
-const page = () => {
-
+import Join from "../components/contest/Join"
+import Contestitle from "../components/contest/Contestitle"
+import Pagination from "../../app/components/Pagination";
+const Contest = () => {
   return (
     <div className="w-full h-[1300px]   mt-6 z-0 relative  flex justify-center">
-        
+        <div className="absolute   -top-14 right-0">
+          <Image src={earth} alt="earth" ></Image>  
+        </div>
       <div className="w-10/12 h-screen ms-12 ">
-       <div className="w-full h-10 text-center text-2xl font-comic relative pt-4  " >
+       <div className="w-full h-60  relative pt-4  " >
 
-       until 20:00 - Apr 19, 2024 GMT
+        <h1 className="text-6xl font-bold font-comic " >Enter the Contest Arena</h1>
+        <div className="absolute top-6 right-20
+        ">
+            <Image src={A} alt="group" ></Image>
+        </div>
+        <div className="absolute top-10 right-48">
+            <Image src={Dumbelman} alt="group" ></Image>
+        </div>
+        <p className="text-xl font-comic pt-4 ">Compete with young writers worldwide and unleash your creativity.</p>
        </div>
        <div className="flex w-full h-auto relative mt-0 items-center justify-around" >
-        <div className="absolute  top-0  -left-40">
-            <Image src={Cloud2} alt="cloud"></Image>
+        <div className="absolute  -top-40  -left-32">
+            <Image src={Bee} alt="bee"></Image>
         </div>
         <div className=" gap-8 relative  flex flex-col" >
-          <div className="w-[53vw]" >
-            <h1 className="text-6xl font-comic font-bold p-10">#8: Contest Title</h1>
-            <p className="text-xl" >Lörem ipsum son last epipreligt om pal avis, vire firen postnomi beslutsblindhet, ödleplåster ösm nyck. Disk pladat, inte FAR oaktat teradunas or ultrar artdöden och pimpa tehet pokål, fast nyprevis fengen. Icke-binär homomålig mura samt spehet pälogi stupstockspolitik de es, mobilblottare då larat sodigor teraprengar. 
-             Antitön dinade: cirkulent att nörat boserade sohössade. Ben kvasipära trafficking askbränd previs ninar kåtir det nere innan dade och egot. Tren paska. Du kan vara drabbad. 
-            </p>
-          </div>
-          <Prompt  ></Prompt>
-          <Prompt></Prompt>
-          <div className="absolute bottom-80 -left-32">
+           <Join></Join>
+          <Contestitle></Contestitle>
+          <div className="absolute bottom-32 -left-40">
             <Image src={Cloud} alt="Cloud" ></Image>
           </div>
-          <Prompt></Prompt>
-          <Prompt></Prompt>
+          <Contestitle></Contestitle>
+          <Contestitle></Contestitle>
           
         </div>
-        <div className=" flex -mt-28  flex-col gap-8">
-         <WeeklyTest></WeeklyTest>
+        <div className=" flex -mt-16  flex-col gap-8">
+          <WeeklyTest></WeeklyTest>
          <TopWriting></TopWriting>
         </div>
        </div>
@@ -50,4 +57,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Contest

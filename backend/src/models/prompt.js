@@ -8,6 +8,11 @@ const promptSchema = new mongoose.Schema({
   promptCategory: {
     type: String,
   },
+  promptType: {
+    type: String,
+    enum: ["practicePrompt", "contestPrompt"],
+    required: true, // Assuming each prompt must explicitly be identified as practice or contest
+  },
 });
 
 const Prompt = mongoose.model("Prompt", promptSchema);

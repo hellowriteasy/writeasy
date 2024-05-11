@@ -14,11 +14,10 @@ import Code from "@tiptap/extension-code";
 import History from "@tiptap/extension-history";
 import * as Icons from "./Icons";
 import { diffChars, Change } from "diff";
-
 // import PDF from "./PDF"
 // import "../app/globals.css";
 // import usePdfStore from "@/app/store/usePdf";
-// import { usePDF } from "react-to-pdf";
+import { usePDF } from "react-to-pdf";
 // import PDF from "./PDF";
 const Page = ({
   inputText,
@@ -116,15 +115,15 @@ export function SimpleEditor() {
   const [copied, setCopied] = useState(false); // State to track if text is copied
   const [improved, setImproved] = useState<React.ReactNode[]>([]);
   const [final, setFinal] = useState("");
-//   const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
-//   const setStoredFunction = usePdfStore((state) => state.setPdfExportFunction);
+  // const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
+  // const setStoredFunction = usePdfStore((state) => state.setPdfExportFunction);
   const [isCheckingGrammer, setIsCheckingGrammer] = useState(false);
 
-//   const pdfExportFunction = usePdfStore((state) => state.pdfExportFunction);
+  // const pdfExportFunction = usePdfStore((state) => state.pdfExportFunction);
 
-//   useEffect(() => {
-//     setStoredFunction(toPDF);
-//   }, []);
+  // useEffect(() => {
+  //   setStoredFunction(toPDF);
+  // }, []);
 
   const getCorrectedContent = (original: string, corrected: string) => {
     original = original.replace(/<\/?p>/g, "");
@@ -218,13 +217,18 @@ export function SimpleEditor() {
       Strike,
       Code,
     ],
-    content:
-      "<p><del>h</del><u><p>H</u>ello<u>,</u> how are you<u>?</u> <del>i</del><u>I</u> am fine<del> </del><u>.</p></u></p>",
+  
+   
+    editorProps: {
+      attributes: {
+        class: 'prose dark:prose-invert prose-sm sm:prose-base  lg:prose-lg xl:prose-2xl m-5 h-full focus:outline-none',
+      },
+    },
   }) as Editor;
 
-//   const handleExport = () => {
-//     toPDF();
-//   };
+  // const handleExport = () => {
+  //   toPDF();
+  // };
 
   const handleClickFeature = async (type:TWriteEasyFeature) => {
     try {
@@ -296,11 +300,11 @@ export function SimpleEditor() {
 
   return (
     <>
-      <div className="editor bg-white p-4 rounded shadow-md w-full">
-        <div className="menu flex justify-center items-center gap-5 mb-4 flex-col">
-          <div className="flex gap-3 ">
+      <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
+        <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100  rounded-t-3xl absolute">
+          <div className="flex gap-3 p-3 ps-6 ">
             <button
-              className="menu-button mr-2 w-5 h-5 "
+              className="menu-button mr-2  "
               onClick={() => editor.chain().focus().undo().run()}
               disabled={!editor.can().undo()}
             >
@@ -353,7 +357,7 @@ export function SimpleEditor() {
             >
               <Icons.Code />
             </button>
-            <button
+            {/* <button
               className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
               onClick={() => handleClickFeature("grammer")}
               disabled={isCheckingGrammer}
@@ -389,26 +393,26 @@ export function SimpleEditor() {
                   Reject All
                 </button>
               </>
-            )}
+            )} */}
 
-            <button
-              className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
+            {/* <button
+              className="bg-slate-100 border  border-slate-500 p-1 text-sm rounded-md"
               onClick={handleCopy}
             >
               {copied ? "Copied" : "Copy"}
-            </button>
+            </button> */}
             {/* <button
               className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
               onClick={() => {
                 pdfExportFunction && pdfExportFunction();
               }}
-            > */}
-              {/* Export pdf
+            >
+              Export pdf
             </button> */}
           </div>
         </div>
-        <div className="h-[500px]">
-          <EditorContent height={500} editor={editor} />
+        <div className="h-[400px] w-[50vw]  rounded-3xl ">
+          <EditorContent className="h-96 mt-10" editor={editor} />
         </div>
       </div>
 

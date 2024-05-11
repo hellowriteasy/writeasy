@@ -27,16 +27,16 @@ const page = () => {
      
      
        </div>
-       <div className="flex w-[100%] border border-slate-950 h-auto relative mt-0  " >
+       <div className="flex w-[100%]  relative mt-0  " >
         <div className="absolute  -top-40 mt-3  -left-48">
             <Image src={Bee} alt="bee"></Image>
         </div>
         <div className=" gap-8 relative w-4/5 flex flex-col" >
-        <form action="" className="   border border-amber-950 ">
-        <div className="flex flex-col w-full items-center  border border-slate-900 gap-4 h-96 ">
+        <form action="" className=" height-[800px]  ">
+        <div className="flex flex-col w-full items-center   gap-4 h-96 ">
           <div>
         <input  className="border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[40vw] h-12 focus:outline-none focus:border-yellow-600"  placeholder='Email or Username comma separated' />
-        <button type="submit" className='text-white bg-black border text-2xl font-bold font-comic rounded-full w-40 h-12'>Invite</button>
+        <button type="submit" className='text-white bg-black border text-2xl font-bold font-comic rounded-full w-40 h-14'>Invite</button>
           </div>
           <div>
         <input  className="border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[50vw] h-12 focus:outline-none focus:border-yellow-600"  placeholder='Untitled Story' />
@@ -45,14 +45,19 @@ const page = () => {
           <div>
             <Categories></Categories>
           </div>
-          <div>
-            <SimpleEditor></SimpleEditor>
+          <div className="h-[800px] rounded-full ">
+            <SimpleEditor ></SimpleEditor>
+          </div>
+          <div className=" ">
+          <button  className='text-white bg-black border text-2xl font-bold font-comic rounded-full w-[50vw] h-14'>Submit Story</button>
           </div>
        </div>
         </form>
-          
+          {/* <div className="absolute top-1/2 left-1">
+            <Image src={Cloud} alt="cloud"></Image>
+          </div> */}
         </div>
-        <div className=" flex border border-slate-800 flex-col gap-8">
+        <div className=" flex flex-col gap-8">
          <WeeklyTest></WeeklyTest>
          <TopWriting></TopWriting>
         </div>

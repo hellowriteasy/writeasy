@@ -26,14 +26,14 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
         <div className="text-sm lg:flex-grow flex justify-center gap-2">
           <ul className="flex justify-center mr-28 items-center font-comic text-xl ">
             {titles.map(link => {
-              const isActive = path === link.path; // Check if the link is active
+            const isActive = path.startsWith(link.path) || path.includes(link.path);
               return (
                 <li  key={`${link.label}-${link.path}`} className={isActive ? 'active w-32 h-8' : 'px-6 py-2 text-center hover:text-white '}>
                   <Link
                     className=" pt-5 ps-6  cursor-pointer hover:text-white"
                     href={link.path}
                   >
-                    {link.label}
+                    {link.label}  
                   </Link>
                 </li>
               );

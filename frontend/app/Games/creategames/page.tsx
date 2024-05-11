@@ -15,7 +15,7 @@ const page = () => {
     <div className='w-4/5 font-comic flex flex-col gap-10 mt-20'>
 
    <h1 className='text-6xl font-bold font-comic '>Setting text of this story </h1>
-   <Link href="/Pricing">
+   <Link href="/Games/creategames/play">
    <button className='w-full bg-black hover:opacity-80 text-center text-white rounded-3xl border h-20 text-4xl'>Create you Story </button>
    </Link>
     </div>

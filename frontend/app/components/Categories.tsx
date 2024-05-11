@@ -29,11 +29,11 @@ const Categories = () => {
       </div>
       
       {showOptions && (
-        <div className="absolute w-full mt-2 bg-white border border-black rounded-lg shadow-lg">
+        <div className="absolute z-10 w-full mt-2 bg-white border border-black rounded-lg shadow-lg">
           {options.map((option) => (
             <div
               key={option.value}
-              className="px-4 py-2 h-9 border-y border-slate-400  cursor-pointer hover:bg-gray-100"
+              className="px-4 z-20 py-2 h-9 border-y border-slate-400  cursor-pointer hover:bg-gray-100"
               onClick={() => {
                 setSelectedOption(option.value);
                 setShowOptions(false); // Hide options when an option is selected

@@ -1,6 +1,6 @@
 "use client"
 import Navbar from "../components/Navbar";
-import Prompt from "../components/Others/Prompt";
+import Prompt from "../components/Practice/Prompt";
 import TopWriting from "../components/Others/TopWriting";
 import WeeklyTest from "../components/Others/WeeklyTest";
 import moon from "@/public/Game/moon.svg"
