@@ -13,6 +13,7 @@ import Image from "next/image";
 import SelectMenu from "@/app/components/Others/TypesButton";
 
 const page = () => {
+ 
   return (
     <div className="w-full h-[1000px]   mt-6 z-0 relative  flex justify-center">
         <div className="absolute   -top-10 right-0">
@@ -40,11 +41,11 @@ const page = () => {
             <SelectMenu></SelectMenu>
           </div>
           <Prompt></Prompt>
-          <div className="absolute bottom-32 -left-40">
+          {/* <div className="absolute bottom-32 -left-40">
             <Image src={Cloud} alt="Cloud" ></Image>
-          </div>
-          <Prompt></Prompt>
-          <Prompt></Prompt>
+          </div> */}
+          {/* <Prompt ></Prompt>
+          <Prompt></Prompt> */}
           
         </div>
         <div className=" flex mt-10  flex-col ">

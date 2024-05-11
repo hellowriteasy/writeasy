@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation'; // Import 'usePathname' from 'next/navigation'
 import { useRouter } from 'next/navigation'
+import UserMenu from './UserMenu';
 interface NavbarProps {
   titles: { label: string; path: string }[]; // Update type definition
 }
@@ -41,8 +42,9 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
           </ul>
         </div>
         <div className='justify-center mr-20 flex gap-4 items-center'>
-          <button onClick={() => router.push('/login')} className='text-2xl font-bold text-center bg-custom-yellow border-2 w-20 h-12 hover:bg-white rounded-3xl border-black text-black font-comic'>Login</button>
-          <button onClick={() => router.push('/signup')} className='text-2xl font-bold text-center bg-black border-2 w-32 h-12 rounded-3xl hover:opacity-80 border-black text-white font-comic'>Sign up</button>
+          {/* <button onClick={() => router.push('/login')} className='text-2xl font-bold text-center bg-custom-yellow border-2 w-20 h-12 hover:bg-white rounded-3xl border-black text-black font-comic'>Login</button>
+          <button onClick={() => router.push('/signup')} className='text-2xl font-bold text-center bg-black border-2 w-32 h-12 rounded-3xl hover:opacity-80 border-black text-white font-comic'>Sign up</button> */}
+          <UserMenu></UserMenu>
         </div>
       </div>
     </nav>
@@ -74,8 +76,9 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
           </ul>
         </div>
         <div className='justify-center mr-20 flex gap-4 items-center'>
-          <button onClick={() => router.push('/login')} className='text-2xl font-bold text-center bg-custom-yellow border-2 w-20 h-12 hover:bg-white rounded-3xl border-black text-black font-comic'>Login</button>
-          <button onClick={() => router.push('/signup')} className='text-2xl font-bold text-center bg-black border-2 w-32 h-12 rounded-3xl hover:opacity-80 border-black text-white font-comic'>Sign up</button>
+          {/* <button onClick={() => router.push('/login')} className='text-2xl font-bold text-center bg-custom-yellow border-2 w-20 h-12 hover:bg-white rounded-3xl border-black text-black font-comic'>Login</button>
+          <button onClick={() => router.push('/signup')} className='text-2xl font-bold text-center bg-black border-2 w-32 h-12 rounded-3xl hover:opacity-80 border-black text-white font-comic'>Sign up</button> */}
+          <UserMenu></UserMenu>
         </div>
       </div>
     </nav>
