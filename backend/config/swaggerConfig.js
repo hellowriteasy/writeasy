@@ -180,11 +180,8 @@ const options = {
               description: "The score of the story",
             },
             corrections: {
-              type: "array",
-              items: {
-                type: "string",
-                description: "The IDs of the story corrections",
-              },
+              type: "string",
+              description: "The corrections given by the OpenAI Api",
             },
             contest: {
               type: "string",

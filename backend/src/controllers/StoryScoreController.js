@@ -48,15 +48,29 @@ async function scoreAndCorrectStoryInBackground(storyID) {
 
     const { score, corrections } = await gptService.generateScore(
       story.content,
-      story.taskType
+      story.taskType,
+      story.wordCount // Adding missed wordCount argument
+    );
+
+    // Generating a summary of the corrections
+    const correctionSummary = await gptService.generateCorrectionSummary(
+      story.content,
+      corrections,
+      score
     );
 
     story.score = score;
     story.corrections = corrections; // update corrections
+    story.correctionSummary = correctionSummary; // add the correction summary
 
     await story.save();
-    console.log("Story scored and corrected successfully");
+    console.log(
+      "Story scored, corrected, and corrections summary generated successfully"
+    );
   } catch (err) {
-    console.error(`Failed to score and correct story: ${storyID}`, err);
+    console.error(
+      `Failed to score, correct, and summarize story: ${storyID}`,
+      err
+    );
   }
 }

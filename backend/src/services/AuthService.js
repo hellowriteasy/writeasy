@@ -34,7 +34,7 @@ class AuthService {
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: 3600,
     });
-    return token;
+    return { token, _id: user.id }; // Return token and _id
   }
 
   async loginUser(email, password) {
@@ -51,7 +51,7 @@ class AuthService {
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: 3600,
     });
-    return token;
+    return { token, _id: user.id }; // Return token and _id
   }
 
   async googleSignInOrRegister(token) {
@@ -64,9 +64,8 @@ class AuthService {
     let user = await User.findOne({ email: payload.email });
 
     if (!user) {
-      // Create user without a password
       user = new User({
-        username: payload.name || payload.email, // Fallback to email if name not available
+        username: payload.name || payload.email,
         email: payload.email,
         googleId: payload.sub,
       });
@@ -77,7 +76,7 @@ class AuthService {
     const jwtToken = jwt.sign(userPayload, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
-    return jwtToken;
+    return { token: jwtToken, _id: user.id }; // Return token and _id
   }
 }
 

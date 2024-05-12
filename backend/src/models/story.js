@@ -10,6 +10,7 @@ const storySchema = new mongoose.Schema({
   corrections: {
     type: String,
   },
+  correctionSummary: { type: String },
   prompt: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Prompt",

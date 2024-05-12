@@ -22,13 +22,24 @@ const deleteStory = async (id) => {
 };
 
 const getTopContestStories = async () => {
+  const aWeekAgo = new Date();
+  aWeekAgo.setDate(aWeekAgo.getDate() - 7); // Fetches the date 7 days prior from today
+
   const totalContestStories = await Story.countDocuments({
     storyType: "contestStory",
+    submissionDateTime: {
+      $gte: aWeekAgo, // Compares if the date of story submission falls in the last 7 days
+    },
   });
 
   const top20PercentCount = Math.ceil(totalContestStories * 0.2);
 
-  return await Story.find({ storyType: "contestStory" })
+  return await Story.find({
+    storyType: "contestStory",
+    submissionDateTime: {
+      $gte: aWeekAgo, // Compares if the date of story submission falls in the last 7 days
+    },
+  })
     .sort({ score: -1 })
     .limit(top20PercentCount);
 };
