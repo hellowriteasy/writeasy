@@ -1,4 +1,4 @@
-
+'use client'
 import Image from "next/image";
 import Buttonbg from "../../public/Landingpage-img/path102.svg";
 import Arrow from "../../public/Landingpage-img/path64.svg";
@@ -49,7 +49,7 @@ const Hero = () => {
           </div>
           </div>
           <div className="absolute top-50 mt-5 left-80">
-            <Image src={Arrow} width={30} height={30} alt="Arrow" />
+            <Image src={Arrow}  alt="Arrow" />
           </div>
           <button className="relative w-72 h-20 px-4 mt-20 py-2 z-50 text-white rounded-md overflow-hidden">
             <span className="relative z-10 w-full h-full font-crayon flex  items-center justify-center text-4xl">Get Started</span>
@@ -62,7 +62,7 @@ const Hero = () => {
           <Image src={Star} alt="Star" />
         </div>
         <div className="absolute top-20 right-24 z-0">
-          <Image src={Rocket} width={150} height={195.35} alt="Rocket" />
+          <Image src={Rocket}  alt="Rocket" />
         </div>
         <div className="absolute top-64 right-96 z-0">
           <Image src={Group2} alt="Group2" />

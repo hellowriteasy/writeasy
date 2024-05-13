@@ -229,14 +229,26 @@ export function SimpleEditor() {
   // const handleExport = () => {
   //   toPDF();
   // };
-
-  const handleClickFeature = async (type:TWriteEasyFeature) => {
+  const handleClickFeature = async (type: TWriteEasyFeature, event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault(); // Prevent default form submission behavior
+  
     try {
       const currentContent = editor.getHTML();
+      const payload = {
+        userId: "6640daca328ae758689fcfc1",
+        title: "Title",
+        content: "i are boy and love coding",
+        wordCount: 6, // Your word count
+        taskType: "grammar",
+        storyType: "practiceStory",
+        prompt: "Prompt for your story"
+      };
+  
       const { data, status } = await axios.post(
         "http://localhost:3000/api/stories/score",
-        { messages: getAiPrompt(type, currentContent) }
+        payload
       );
+      
       if (status === 200) {
         setInputText(currentContent); // Set input text
         setCorrectedText(data.message); // Set corrected text
@@ -357,13 +369,14 @@ export function SimpleEditor() {
             >
               <Icons.Code />
             </button>
-            {/* <button
-              className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
-              onClick={() => handleClickFeature("grammer")}
-              disabled={isCheckingGrammer}
-            >
-              Grammar
-            </button>
+            <button
+  className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
+  onClick={(event) => handleClickFeature("grammer", event)}
+  disabled={isCheckingGrammer}
+>
+  Grammar
+</button>
+            {/* 
             <button
               className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
               onClick={() => handleClickFeature("improve")}

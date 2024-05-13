@@ -71,8 +71,7 @@ const page = () => {
        </div>
        <div className="mt-10 flex flex-col gap-10 ms-10 w-[60vw]">
         <Prompt></Prompt>
-        <Prompt></Prompt>
-        <Prompt></Prompt>
+        
        </div>
         <div className="w-full ms-28 mt-10">
           <Pagination></Pagination>

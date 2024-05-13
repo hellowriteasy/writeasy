@@ -11,6 +11,7 @@ import Join from "../components/contest/Join"
 import Contestitle from "../components/contest/Contestitle"
 import Pagination from "../../app/components/Pagination";
 const Contest = () => {
+  
   return (
     <div className="w-full h-[1300px]   mt-6 z-0 relative  flex justify-center">
         <div className="absolute   -top-14 right-0">
@@ -39,8 +40,7 @@ const Contest = () => {
           <div className="absolute bottom-32 -left-40">
             <Image src={Cloud} alt="Cloud" ></Image>
           </div>
-          <Contestitle></Contestitle>
-          <Contestitle></Contestitle>
+          
           
         </div>
         <div className=" flex -mt-16  flex-col gap-8">

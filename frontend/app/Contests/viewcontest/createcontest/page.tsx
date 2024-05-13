@@ -42,8 +42,8 @@ const page = () => {
             <SimpleEditor ></SimpleEditor>
           </div>
           <div className="flex gap-10 h-28 ">
-          <button  className='text-white bg-black border text-2xl font-bold font-comic rounded-full w-[20vw] h-14'>Submit Story</button>
-          <button  className='text-white bg-black border text-2xl font-bold font-comic rounded-full w-[20vw] h-14'>Submit Story</button>
+          <button  className='text-white bg-black border text-2xl font-bold font-comic rounded-full w-[20vw] h-14'>Save to Profile</button>
+          <button  className='text-white bg-black border text-2xl font-bold font-comic rounded-full w-[20vw] h-14'>Submit to Story</button>
           </div>
        </div>
         </form>

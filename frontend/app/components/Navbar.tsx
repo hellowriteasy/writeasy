@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation'; // Import 'usePathname' from 'next/navigation'
 import { useRouter } from 'next/navigation'
 import UserMenu from './UserMenu';
+import Login from '../pages/Login';
+import useAuthStore from '../store/useAuthStore';
 interface NavbarProps {
   titles: { label: string; path: string }[]; // Update type definition
 }
@@ -13,6 +15,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ titles }) => {
   const path = usePathname(); // Get current path
   const router = useRouter()
+  const loggedIn = useAuthStore((state) => state.loggedIn);
   if(path === "/login" || path === "/signup"){
 
   
@@ -50,6 +53,7 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
     </nav>
   );
 }else{
+  
   return(
   <nav className="navbar flex  w-screen sticky top-0 h-28 justify-between items-center bg-custom-yellow p-6 z-50">
       <Link href="/">
@@ -76,9 +80,14 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
           </ul>
         </div>
         <div className='justify-center mr-20 flex gap-4 items-center'>
-          {/* <button onClick={() => router.push('/login')} className='text-2xl font-bold text-center bg-custom-yellow border-2 w-20 h-12 hover:bg-white rounded-3xl border-black text-black font-comic'>Login</button>
-          <button onClick={() => router.push('/signup')} className='text-2xl font-bold text-center bg-black border-2 w-32 h-12 rounded-3xl hover:opacity-80 border-black text-white font-comic'>Sign up</button> */}
-          <UserMenu></UserMenu>
+        {loggedIn ? ( // Render UserMenu if logged in, otherwise render login and sign up buttons
+            <UserMenu />
+          ) : (
+            <>
+              <button onClick={() => router.push('/login')} className='text-2xl font-bold text-center bg-custom-yellow border-2 w-20 h-12 hover:bg-white rounded-3xl border-black text-black font-comic'>Login</button>
+              <button onClick={() => router.push('/signup')} className='text-2xl font-bold text-center bg-black border-2 w-32 h-12 rounded-3xl hover:opacity-80 border-black text-white font-comic'>Sign up</button>
+            </>
+          )}
         </div>
       </div>
     </nav>

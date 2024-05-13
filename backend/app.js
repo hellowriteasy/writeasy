@@ -1,7 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const { connectDB, initializeDatabase } = require("./config/db");
-
+const cors=require("cors")
 const errorHandlingMiddleware = require("./middleware/errorHandlingMiddleware");
 const bodyParser = require("body-parser");
 const swaggerUi = require("swagger-ui-express");
@@ -19,7 +19,11 @@ connectDB();
 initializeDatabase();
 
 const app = express();
-
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

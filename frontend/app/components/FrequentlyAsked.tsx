@@ -3,6 +3,24 @@ import Path from "@/public/Landingpage-img/path34.svg";
 import Image from "next/image";
 import cloud from "@/public/Game/sm-cloud.svg"
 const FrequentlyAsked = () => {
+  const Questions=[
+    {
+      "question":"What is Writeasy?",
+      "id":1
+    },
+    {
+      "question":"What is Writeasy?",
+      "id":1
+    },
+    {
+      "question":"What is Writeasy?",
+      "id":1
+    },
+    {
+      "question":"What is Writeasy?",
+      "id":1
+    }
+  ]
   return (
     <div className="flex flex-col justify-center items-center w-screen">
       <div className="flex  relative ms-0 w-screen  justify-around items-center  mt-4  ">

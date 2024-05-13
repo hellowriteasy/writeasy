@@ -40,6 +40,7 @@ const page = () => {
            <h1 className="text-5xl ps-2 font-comic font-bold">All Prompts</h1>
             <SelectMenu></SelectMenu>
           </div>
+          
           <Prompt></Prompt>
           {/* <div className="absolute bottom-32 -left-40">
             <Image src={Cloud} alt="Cloud" ></Image>

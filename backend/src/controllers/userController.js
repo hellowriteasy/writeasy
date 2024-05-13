@@ -1,9 +1,10 @@
+const User = require("../models/user");
 const AuthService = require("../services/AuthService");
 const authService = new AuthService();
 
 const UserController = {
   async register(req, res) {
-    const { username, email, password } = req.body;
+    const { username, email, password   } = req.body;
     try {
       const token = await authService.registerUser(username, email, password);
       res.json({ token });
@@ -13,7 +14,7 @@ const UserController = {
   },
 
   async login(req, res) {
-    const { email, password } = req.body;
+    const { email, password  } = req.body;
     try {
       const token = await authService.loginUser(email, password);
       res.json({ token });

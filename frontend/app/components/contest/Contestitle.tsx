@@ -1,5 +1,4 @@
 import React from 'react'
-
 const Contestitle = () => {
   return (
     <div className=" w-[50vw] h-40  flex  bg-white shadow-md rounded-3xl overflow-hidden">
