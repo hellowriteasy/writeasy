@@ -1,7 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const { connectDB, initializeDatabase } = require("./config/db");
-const cors=require("cors")
+const cors = require("cors");
 const errorHandlingMiddleware = require("./middleware/errorHandlingMiddleware");
 const bodyParser = require("body-parser");
 const swaggerUi = require("swagger-ui-express");
@@ -48,7 +48,7 @@ app.get("/success", (req, res) => {
 // Global error handling
 app.use(errorHandlingMiddleware);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
