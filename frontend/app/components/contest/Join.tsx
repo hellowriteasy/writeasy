@@ -19,7 +19,7 @@ const Join = () => {
     const fetchContests = async () => {
       try {
         const response = await fetch(
-          `${process.env.SERVER_URL}/contests/ongoing`
+          `${process.env.Server_URL}/api/contests/ongoing`
         );
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
@@ -43,11 +43,11 @@ const Join = () => {
   const contest = contests[0]; // We only need to display one ongoing contest for now.
 
   return (
-    <div className="flex flex-col font-comic rounded-3xl w-[50vw] h-80 gap-7 bg-white justify-center items-center">
+    <div className="flex flex-col font-comic rounded-3xl w-[50vw] h-80 gap-7 bg-white border-2 border-gray-300 justify-center items-center">
       <h3 className="text-3xl">
         until {new Date(contest.submissionDeadline).toLocaleString()} GMT
       </h3>
-      <h1 className="text-5xl font-comic font-bold">
+      <h1 className="text-5xl text-center font-comic font-bold">
         #8: Here goes the title - remove this{contest.contestTitle}
       </h1>
       {/* <p className="text-xl">Theme: {contest.contestTheme}</p> */}

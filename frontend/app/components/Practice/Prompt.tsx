@@ -1,8 +1,9 @@
+'use client'
 import React, { useEffect, useState } from "react";
 import Pencil from "@/public/Game/Pencil.svg";
 import Image from "next/image";
 import Link from "next/link";
-
+import prompt from "@/app/json/prompt.json"
 interface PromptData {
   promptText: string;
   promptCategory: string;

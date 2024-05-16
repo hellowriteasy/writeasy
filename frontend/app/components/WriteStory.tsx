@@ -14,24 +14,13 @@ import Code from "@tiptap/extension-code";
 import History from "@tiptap/extension-history";
 import * as Icons from "./Icons";
 import { diffChars, Change } from "diff";
-// import PDF from "./PDF"
-// import "../app/globals.css";
-// import usePdfStore from "@/app/store/usePdf";
+import usePdfStore from "@/app/store/usePDFStore";
 import { usePDF } from "react-to-pdf";
-// import PDF from "./PDF";
-const Page = ({
-  inputText,
-  corrected,
-}: {
-  inputText: string;
-  corrected: string;
-}) => {
+import PDF from "./PDF";
+const Page = ({ inputText, corrected }: { inputText: string; corrected: string; }) => {
   const [improved, setImproved] = useState<React.ReactNode[]>([]);
 
-  const compareSentences = (
-    original: string,
-    corrected: string
-  ): React.ReactNode[] => {
+  const compareSentences = (original: string, corrected: string): React.ReactNode[] => {
     original = original.replace(/<\/?p>/g, "");
     corrected = corrected.replace(/<\/?p>/g, "");
     console.log(original, corrected);
@@ -66,11 +55,6 @@ const Page = ({
           {part.value}
         </div>
       );
-      // result.push(
-      //   <span key={index} style={style}>
-      //     {part.value}
-      //   </span>
-      // );
       result.push(span);
     });
 
@@ -109,23 +93,22 @@ const getAiPrompt = (type: TWriteEasyFeature, userInput: string) => {
   return messages;
 };
 
-export function SimpleEditor() {
+export function SimpleEditor({  triggerGrammarCheck,taskType,title }: { triggerGrammarCheck: boolean }) {
   const [inputText, setInputText] = useState(""); // State to hold input text
   const [correctedText, setCorrectedText] = useState("");
   const [copied, setCopied] = useState(false); // State to track if text is copied
   const [improved, setImproved] = useState<React.ReactNode[]>([]);
   const [final, setFinal] = useState("");
-  // const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
-  // const setStoredFunction = usePdfStore((state) => state.setPdfExportFunction);
+  const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
+  const setStoredFunction = usePdfStore((state) => state.setPdfExportFunction);
   const [isCheckingGrammer, setIsCheckingGrammer] = useState(false);
+  const pdfExportFunction = usePdfStore((state) => state.pdfExportFunction);
 
-  // const pdfExportFunction = usePdfStore((state) => state.pdfExportFunction);
-
-  // useEffect(() => {
-  //   setStoredFunction(toPDF);
-  // }, []);
-
+  useEffect(() => {
+    setStoredFunction(toPDF);
+  }, []);
   const getCorrectedContent = (original: string, corrected: string) => {
+    
     original = original.replace(/<\/?p>/g, "");
     const diff: Change[] = diffChars(original, corrected);
     let text = "";
@@ -147,18 +130,12 @@ export function SimpleEditor() {
     return stringWithoutPTags;
   };
 
-  const compareSentences = (
-    original: string,
-    corrected: string
-  ): React.ReactNode[] => {
+  const compareSentences = (original: string, corrected: string): React.ReactNode[] => {
     original = original.replace(/<\/?p>/g, "");
     corrected = corrected.replace(/<\/?p>/g, "");
     console.log(original, corrected);
 
     const diff: Change[] = diffChars(original, corrected);
-
-    //  corrected = corrected.replace(/<\/?p>/g, "");
-
     const result: React.ReactNode[] = [];
 
     diff.forEach((part: Change, index: number) => {
@@ -175,7 +152,6 @@ export function SimpleEditor() {
         style = {
           color: "red",
           backgroundColor: "lightcoral",
-          //  textDecoration: "line-through",
           height: "40px",
         };
       } else {
@@ -217,44 +193,54 @@ export function SimpleEditor() {
       Strike,
       Code,
     ],
-  
-   
     editorProps: {
       attributes: {
-        class: 'prose dark:prose-invert prose-sm sm:prose-base  lg:prose-lg xl:prose-2xl m-5 h-full focus:outline-none',
+        class: 'prose dark:prose-invert prose-sm sm:prose-base inline-block   lg:prose-lg xl:prose-2xl  m-5 h-full focus:outline-none',
       },
     },
   }) as Editor;
+  const handleExport = () => {
+    toPDF();
+  };
+  useEffect(() => {
+    if (triggerGrammarCheck) {
+      handleClickFeature("grammer", new MouseEvent("click"));
+    }
+  }, [triggerGrammarCheck]);
 
-  // const handleExport = () => {
-  //   toPDF();
-  // };
-  const handleClickFeature = async (type: TWriteEasyFeature, event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault(); // Prevent default form submission behavior
-  
+  type THandleClickFeature = (type: "improve" | "grammer" | "rewrite", event: React.MouseEvent<HTMLButtonElement>) => void;
+
+  const handleClickFeature: THandleClickFeature = async (type, event) => {
+    event.preventDefault();
+
     try {
-      const currentContent = editor.getHTML();
+      const currentContent = editor.getText();
+      console.log(currentContent);
       const payload = {
         userId: "6640daca328ae758689fcfc1",
-        title: "Title",
-        content: "i are boy and love coding",
-        wordCount: 6, // Your word count
-        taskType: "grammar",
+        title: title,
+        content: currentContent,
+        taskType: taskType,
         storyType: "practiceStory",
-        prompt: "Prompt for your story"
+        prompt: "66392eeacf380a90bde1c838"
       };
-  
+      
       const { data, status } = await axios.post(
-        "http://localhost:3000/api/stories/score",
+        "http://localhost:5000/api/stories/score",
         payload
       );
-      
-      if (status === 200) {
-        setInputText(currentContent); // Set input text
-        setCorrectedText(data.message); // Set corrected text
-        setCopied(false); // Reset copied state
-        setIsCheckingGrammer(true);
-      }
+
+      const responce = await axios.get(
+        "http://localhost:5000/api/stories/6644b08bc3d40378df7988ba",
+      );
+
+      setInputText(currentContent);
+      setCorrectedText(responce.data.corrections);
+      setCopied(false);
+      setIsCheckingGrammer(true);
+      alert(data.message);
+      console.log(data);
+      console.log(responce.data);
     } catch (error) {
       console.log("error", error);
     }
@@ -266,6 +252,7 @@ export function SimpleEditor() {
     }
     setIsCheckingGrammer(false);
   };
+
   const handleReject = () => {
     if (editor) {
       editor.commands.setContent(`${inputText}`);
@@ -279,7 +266,6 @@ export function SimpleEditor() {
         `${getCorrectedContent(inputText, correctedText)}`
       );
     }
-    // setIsOpen(false);
   };
 
   const toggleBold = useCallback(() => {
@@ -303,9 +289,10 @@ export function SimpleEditor() {
   }, [editor]);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(correctedText); // Copy corrected text to clipboard
-    setCopied(true); // Set copied state to true
+    navigator.clipboard.writeText(correctedText);
+    setCopied(true);
   };
+
   if (!editor) {
     return null;
   }
@@ -313,18 +300,20 @@ export function SimpleEditor() {
   return (
     <>
       <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
-        <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100  rounded-t-3xl absolute">
-          <div className="flex gap-3 p-3 ps-6 ">
+        <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
+          <div className="flex gap-3 p-3 ps-6">
             <button
-              className="menu-button mr-2  "
-              onClick={() => editor.chain().focus().undo().run()}
+              className="menu-button mr-2"
+              type="button"
+              onClick={(e) => { e.preventDefault(); editor.chain().focus().undo().run(); }}
               disabled={!editor.can().undo()}
             >
               <Icons.RotateLeft />
             </button>
             <button
               className="menu-button mr-2"
-              onClick={() => editor.chain().focus().redo().run()}
+              type="button"
+              onClick={(e) => { e.preventDefault(); editor.chain().focus().redo().run(); }}
               disabled={!editor.can().redo()}
             >
               <Icons.RotateRight />
@@ -333,7 +322,8 @@ export function SimpleEditor() {
               className={classNames("menu-button mr-2", {
                 "is-active": editor.isActive("bold"),
               })}
-              onClick={toggleBold}
+              type="button"
+              onClick={(e) => { e.preventDefault(); toggleBold(); }}
             >
               <Icons.Bold />
             </button>
@@ -341,7 +331,8 @@ export function SimpleEditor() {
               className={classNames("menu-button mr-2", {
                 "is-active": editor.isActive("underline"),
               })}
-              onClick={toggleUnderline}
+              type="button"
+              onClick={(e) => { e.preventDefault(); toggleUnderline(); }}
             >
               <Icons.Underline />
             </button>
@@ -349,7 +340,8 @@ export function SimpleEditor() {
               className={classNames("menu-button mr-2", {
                 "is-active": editor.isActive("italic"),
               })}
-              onClick={toggleItalic}
+              type="button"
+              onClick={(e) => { e.preventDefault(); toggleItalic(); }}
             >
               <Icons.Italic />
             </button>
@@ -357,7 +349,8 @@ export function SimpleEditor() {
               className={classNames("menu-button mr-2", {
                 "is-active": editor.isActive("strike"),
               })}
-              onClick={toggleStrike}
+              type="button"
+              onClick={(e) => { e.preventDefault(); toggleStrike(); }}
             >
               <Icons.Strikethrough />
             </button>
@@ -365,91 +358,51 @@ export function SimpleEditor() {
               className={classNames("menu-button mr-2", {
                 "is-active": editor.isActive("code"),
               })}
-              onClick={toggleCode}
+              type="button"
+              onClick={(e) => { e.preventDefault(); toggleCode(); }}
             >
               <Icons.Code />
             </button>
-            <button
-  className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
-  onClick={(event) => handleClickFeature("grammer", event)}
-  disabled={isCheckingGrammer}
->
-  Grammar
-</button>
-            {/* 
-            <button
+            <>
+              <button
+                className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
+                type="button"
+                onClick={(e) => { e.preventDefault(); handleAcceptAll(); }}
+              >
+                Accept All
+              </button>
+              <button
+                className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
+                type="button"
+                onClick={(e) => { e.preventDefault(); handleReject(); }}
+              >
+                Reject All
+              </button>
+              <button
               className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
-              onClick={() => handleClickFeature("improve")}
-              disabled={isCheckingGrammer}
-            >
-              Improve
-            </button>
-            <button
-              className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
-              onClick={() => handleClickFeature("rewrite")}
-              disabled={isCheckingGrammer}
-            >
-              Rewrite
-            </button>
-            {isCheckingGrammer && (
-              <>
-                <button
-                  className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
-                  onClick={handleAcceptAll}
-                >
-                  Accept All
-                </button>
-                <button
-                  className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
-                  onClick={handleReject}
-                >
-                  Reject All
-                </button>
-              </>
-            )} */}
-
-            {/* <button
-              className="bg-slate-100 border  border-slate-500 p-1 text-sm rounded-md"
               onClick={handleCopy}
             >
               {copied ? "Copied" : "Copy"}
-            </button> */}
-            {/* <button
+            </button>
+              <button
               className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
-              onClick={() => {
+              onClick={(e) => {e.preventDefault();
                 pdfExportFunction && pdfExportFunction();
               }}
             >
               Export pdf
-            </button> */}
+            </button>
+            </>
           </div>
         </div>
-        <div className="h-[400px] w-[50vw]  rounded-3xl ">
-          <EditorContent className="h-96 mt-10" editor={editor} />
+        <div className="h-[400px] w-[50vw] rounded-3xl">
+          <EditorContent className="h-96 mt-10"  editor={editor} />
         </div>
       </div>
+      <div className="absolute -left-2/3">
 
-      {/* <PDF corrected={correctedText} originals={inputText} /> */}
-      {/* <div
-        className="flex items-center   h-[100vh] flex-col w-full  "
-        ref={targetRef}
-      >
-        <div className="w-11/12 p-6">
-          <div className="text  text-[17px]">
-            {isCheckingGrammer ? (
-              improved.length > 0 ? (
-                improved.map((element) => <>{element}</>)
-              ) : (
-                <div className="p-2">
-                  <p>your corrected data will be here </p>
-                </div>
-              )
-            ) : (
-              correctedText
-            )}
-          </div>
-        </div>
-      </div> */}
+      <PDF corrected={correctedText} originals={inputText} />
+      </div>
     </>
   );
 }

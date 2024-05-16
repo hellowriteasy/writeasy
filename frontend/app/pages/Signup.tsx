@@ -46,7 +46,7 @@ const Signup = () => {
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
   try {
     // Make a POST request to your API endpoint to create a new user
-    await axios.post("http://localhost:3000/api/auth/register", data);
+    await axios.post("http://localhost:5000/api/auth/register", data);
     
     // If successful, log the data
     

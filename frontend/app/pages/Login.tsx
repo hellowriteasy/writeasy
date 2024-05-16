@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
@@ -13,27 +13,29 @@ import Group3 from "../../public/Loginsignup-img/Group (1).svg";
 import Vector1 from "../../public/Loginsignup-img/Vector.svg";
 import Button from '../components/Button';
 import useAuthStore from '../store/useAuthStore';
-
+import {useRouter} from 'next/navigation';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const login = useAuthStore((state) => state.login);
-
+ const router=useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/login", {
+      const response = await axios.post("http://localhost:5000/api/auth/login", {
         email,
         password
       });
       const userId = response.data.token.id;
-      login(userId);
-      console.log(userId) // Set user as logged in
+      const token = response.data.token.token;
+      login(userId, token);
+      router.push('/', { scroll: false }) // Set user as logged in
     } catch (error) {
-      setError("failed");
+      setError("Login failed");
     }
   };
+
   return (
     <div className="overflow-hidden two-line-bg">
       <Link href="/">
@@ -76,7 +78,6 @@ const Login = () => {
         <div className="absolute right-6 bottom-20">
           <Image src={Vector1} alt='' height={300} />
         </div>
-        {/* <Image className=" w-screen" src={Earth} /> */}
       </div>
     </div>
   );
