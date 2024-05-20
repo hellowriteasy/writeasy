@@ -6,7 +6,7 @@ import Categories from "@/app/components/Categories";
 import Bee from "@/public/Game/cloud3.svg";
 import Cloud from "@/public/Game/cloud.svg";
 import Image from "next/image";
-import Prompt from "@/app/components/Practice/Prompt";
+import Prompt from "@/app/components/Practice/PracticePrompt";
 import { SimpleEditor } from "@/app/components/WriteStory";
 import Pagination from "@/app/components/Pagination";
 
@@ -131,7 +131,7 @@ const Page = () => {
           </div>
         </div>
         <div className="mt-10 flex flex-col gap-10 ms-10 w-[60vw]">
-          <Prompt />
+          {/* <Prompt /> */}
         </div>
         <div className="w-full ms-28 mt-10">
           <Pagination />

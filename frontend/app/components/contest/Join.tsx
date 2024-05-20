@@ -19,7 +19,7 @@ const Join = () => {
     const fetchContests = async () => {
       try {
         const response = await fetch(
-          `${process.env.Server_URL}/api/contests/ongoing`
+          `http://localhost:5000/api/contests/ongoing`
         );
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);

@@ -27,8 +27,9 @@ const Login = () => {
         email,
         password
       });
-      const userId = response.data.token.id;
+      const userId = response.data.token._id;
       const token = response.data.token.token;
+      console.log(response.data.token._id);
       login(userId, token);
       router.push('/', { scroll: false }) // Set user as logged in
     } catch (error) {

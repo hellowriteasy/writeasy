@@ -28,7 +28,7 @@ const SelectMenu = () => {
       </div>
       {/* Custom dropdown options */}
       {showOptions && (
-        <div className="absolute w-full mt-2 bg-white border border-black rounded-lg shadow-lg">
+        <div className="absolute w-full mt-2 bg-white border  border-black rounded-lg shadow-lg">
           {options.map((option) => (
             <div
               key={option.value}

@@ -380,7 +380,7 @@ export function SimpleEditor({  triggerGrammarCheck,taskType,title }: { triggerG
               </button>
               <button
               className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
-              onClick={handleCopy}
+              onClick={(e)=>{ e.preventDefault(); handleCopy}}
             >
               {copied ? "Copied" : "Copy"}
             </button>

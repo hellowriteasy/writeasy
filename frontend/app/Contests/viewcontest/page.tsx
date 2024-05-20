@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation"; // Use next/navigation for the router
 import Navbar from "../../components/Navbar";
-import PromptComponent from "../../components/contest/Prompt";
+import PromptComponent from "../../components/contest/ContestPrompt";
 import TopWriting from "../../components/Others/TopWriting";
 import WeeklyTest from "../../components/Others/WeeklyTest";
 import Cloud from "@/public/Game/cloud.svg";
@@ -40,7 +40,7 @@ const Page = () => {
     const fetchOngoingContest = async () => {
       try {
         const response = await fetch(
-          `${process.env.SERVER_URL}/contests/ongoing`
+          `http://localhost:5000/contests/ongoing`
         );
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
@@ -107,12 +107,12 @@ const Page = () => {
                   <Image src={Cloud} alt="Cloud" />
                 </div>
               </div>
-              <div className="flex -mt-28 flex-col gap-8">
+              <div className="flex  flex-col gap-8">
                 <WeeklyTest />
                 <TopWriting />
               </div>
             </div>
-            <div className="w-full ms-28 mt-10">
+            <div className="w-full ms-28 ">
               <Pagination />
             </div>
           </>

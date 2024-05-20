@@ -170,7 +170,7 @@ const Hero = () => {
       <div className="bg-custom-yellow -mt-40">
       <Pricing />
       </div>
-      <div className="-ms-20">
+      <div className="">
 
       <FrequentlyAsked/>
       </div>

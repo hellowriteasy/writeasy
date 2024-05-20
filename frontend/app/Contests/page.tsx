@@ -18,7 +18,7 @@ const Contest = () => {
           <Image src={earth} alt="earth" ></Image>  
         </div>
       <div className="w-10/12 h-screen ms-12 ">
-       <div className="w-full h-60  relative pt-4  " >
+       <div className="w-full h-60 border  relative pt-4  " >
 
         <h1 className="text-6xl font-bold font-comic " >Enter the Contest Arena</h1>
         <div className="absolute top-6 right-20
@@ -31,10 +31,10 @@ const Contest = () => {
         <p className="text-xl font-comic pt-4 ">Compete with young writers worldwide and unleash your creativity.</p>
        </div>
        <div className="flex w-full h-auto relative mt-0 items-center justify-around" >
-        <div className="absolute  -top-40  -left-32">
+        <div className="absolute border -top-40  -left-32">
             <Image src={Bee} alt="bee"></Image>
         </div>
-        <div className=" gap-8 relative  flex flex-col" >
+        <div className=" gap-8 relative -top-40   flex flex-col" >
            <Join></Join>
           <Contestitle></Contestitle>
           <div className="absolute bottom-32 -left-40">
@@ -43,7 +43,7 @@ const Contest = () => {
           
           
         </div>
-        <div className=" flex -mt-16  flex-col gap-8">
+        <div className=" flex   flex-col gap-8">
           <WeeklyTest></WeeklyTest>
          <TopWriting></TopWriting>
         </div>

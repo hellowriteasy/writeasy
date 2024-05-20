@@ -1,12 +1,12 @@
 'use client'
-import React from 'react';
-import Logo from "@/public/Landingpage-img/logo.svg"
+import React, { useEffect, useState } from 'react';
+import Logo from "@/public/Landingpage-img/logo.svg";
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation'; // Import 'usePathname' from 'next/navigation'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 import UserMenu from './UserMenu';
-import Login from '../pages/Login';
+
 import useAuthStore from '../store/useAuthStore';
 interface NavbarProps {
   titles: { label: string; path: string }[]; // Update type definition
@@ -14,84 +14,88 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ titles }) => {
   const path = usePathname(); // Get current path
-  const router = useRouter()
+  const router = useRouter();
   const loggedIn = useAuthStore((state) => state.loggedIn);
-  if(path === "/login" || path === "/signup"){
-
+  const [isLoading, setIsLoading] = useState(true);
   
-  return (
-    <nav className="navbar hidden  w-screen sticky top-0 h-28 justify-between items-center bg-custom-yellow p-6 z-50">
-      <Link href="/">
-        <div className="flex cursor-pointer flex-col w-60 items-center justify-center flex-shrink-0 mr-6">
-          <Image src={Logo} alt='logo' />
-        </div>
-      </Link>
-      <div className="w-full flex justify-center lg:flex lg:items-center lg:w-auto">
-        <div className="text-sm lg:flex-grow flex justify-center gap-2">
-          <ul className="flex justify-center mr-28 items-center font-comic text-xl ">
-            {titles.map(link => {
-            const isActive = path.startsWith(link.path) || path.includes(link.path);
-              return (
-                <li  key={`${link.label}-${link.path}`} className={isActive ? 'active w-32 h-8' : 'px-6 py-2 text-center hover:text-white '}>
-                  <Link
-                    className=" pt-5 ps-6  cursor-pointer hover:text-white"
-                    href={link.path}
-                  >
-                    {link.label}  
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-       
-      </div>
-    </nav>
-  );
-}else{
-  
-  return(
-  <nav className="navbar flex  w-screen sticky top-0 h-28 justify-between items-center bg-custom-yellow p-6 z-50">
-      <Link href="/">
-        <div className="flex cursor-pointer flex-col w-60 items-center justify-center flex-shrink-0 mr-6">
-          <Image src={Logo} alt='logo' />
-        </div>
-      </Link>
-      <div className="w-full flex justify-center lg:flex lg:items-center lg:w-auto">
-        <div className="text-sm lg:flex-grow flex justify-center gap-2">
-          <ul className="flex justify-center mr-28 items-center font-comic text-xl ">
-            {titles.map(link => {
-              const isActive = path === link.path; // Check if the link is active
-              return (
-                <li  key={`${link.label}-${link.path}`} className={isActive ? 'active w-32 h-8' : 'px-6 py-2 text-center hover:text-white '}>
-                  <Link
-                    className=" pt-5 ps-6  cursor-pointer hover:text-white"
-                    href={link.path}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-        <div className='justify-center mr-20 flex gap-4 items-center'>
-          <div>
-        {loggedIn ? ( // Render UserMenu if logged in, otherwise render login and sign up buttons
-            <UserMenu />
-          ) : (
-            <>
-              <button onClick={() => router.push('/login')} className='text-2xl font-bold text-center bg-custom-yellow border-2 w-20 h-12 hover:bg-white rounded-3xl border-black text-black font-comic'>Login</button>
-              <button onClick={() => router.push('/signup')} className='text-2xl font-bold text-center bg-black border-2 w-32 h-12 rounded-3xl hover:opacity-80 border-black text-white font-comic'>Sign up</button>
-            </>
-          )}
-        </div>
-        </div>
-      </div>
-    </nav>
-  );
+  useEffect(() => {
+    // Simulate fetching login state from a source like localStorage or an API
+    const fetchLoggedInState = async () => {
+      // Assuming useAuthStore has an async method to check login status
+      // Replace this with your actual login check logic
+      setIsLoading(false);
+    };
 
-}
+    fetchLoggedInState();
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>; // Loading state to prevent mismatches
+  }
+
+  if (path === "/login" || path === "/signup" || path.startsWith("/admin")) {
+    return (
+      <nav className="navbar hidden w-screen sticky top-0 h-28 justify-between items-center bg-custom-yellow p-6 z-50">
+        <Link href="/">
+          <div className="flex cursor-pointer flex-col w-60 items-center justify-center flex-shrink-0 mr-6">
+            <Image src={Logo} alt='logo' />
+          </div>
+        </Link>
+        <div className="w-full flex justify-center lg:flex lg:items-center lg:w-auto">
+          <div className="text-sm lg:flex-grow flex justify-center gap-2">
+            <ul className="flex justify-center mr-28 items-center font-comic text-xl ">
+              {titles.map(link => {
+                const isActive = path.startsWith(link.path) || path.includes(link.path);
+                return (
+                  <li key={`${link.label}-${link.path}`} className={isActive ? 'active w-32 h-8' : 'px-6 py-2 text-center hover:text-white '}>
+                    <Link className="pt-5 ps-6 cursor-pointer hover:text-white" href={link.path}>
+                      {link.label}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </div>
+      </nav>
+    );
+  } else {
+    return (
+      <nav className="navbar flex w-screen sticky top-0 h-28 justify-between items-center bg-custom-yellow p-6 z-50">
+        <Link href="/">
+          <div className="flex cursor-pointer flex-col w-60 items-center justify-center flex-shrink-0 mr-6">
+            <Image src={Logo} alt='logo' />
+          </div>
+        </Link>
+        <div className="w-full flex justify-center lg:flex lg:items-center lg:w-auto">
+          <div className="text-sm lg:flex-grow flex justify-center gap-2">
+            <ul className="flex justify-center mr-28 items-center font-comic text-xl ">
+              {titles.map(link => {
+                const isActive = path.startsWith(link.path) || path.includes(link.path);
+                return (
+                  <li key={`${link.label}-${link.path}`} className={isActive ? 'active w-32 h-8' : 'px-6 py-2 text-center hover:text-white '}>
+                    <Link className="pt-5 ps-6 cursor-pointer hover:text-white" href={link.path}>
+                      {link.label}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+          <div className='justify-center mr-20 flex gap-4 items-center'>
+            {loggedIn ? (
+              <UserMenu />
+            ) : (
+              <div>
+                <button onClick={() => router.push('/login')} className='text-2xl font-bold text-center bg-custom-yellow border-2 w-20 h-12 hover:bg-white rounded-3xl border-black text-black font-comic'>Login</button>
+                <button onClick={() => router.push('/signup')} className='text-2xl font-bold text-center bg-black border-2 w-32 h-12 rounded-3xl hover:opacity-80 border-black text-white font-comic'>Sign up</button>
+              </div>
+            )}
+          </div>
+        </div>
+      </nav>
+    );
+  }
 };
 
 export default Navbar;

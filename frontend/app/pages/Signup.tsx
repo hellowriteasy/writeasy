@@ -51,7 +51,7 @@ const Signup = () => {
     // If successful, log the data
     
     console.log("User created:", data);
-    // router.push('/Login', { scroll: false })
+    router.push('/Login', { scroll: false })
     
     // Optionally, you can redirect the user to another page after successful registration
     // Replace "/dashboard" with the desired URL
