@@ -1,7 +1,6 @@
 import { Fragment, useState } from 'react';
 import { Dialog, Transition, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import axios from 'axios';
-import Card from '../../../components/admin/contests/CardAdd'; // Import your Card component
 
 interface ModalProps {
   setIsModalOpen: (isOpen: boolean) => void;
@@ -15,7 +14,6 @@ interface CardProps {
 const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
   const [promptTitle, setPromptTitle] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [promptCards, setPromptCards] = useState<CardProps[]>([]); // State to store added prompt cards
 
   const handleUpdate = () => {
     const promptData = {
@@ -27,17 +25,13 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
     axios.post('http://localhost:5000/api/prompts/contest-prompt', promptData)
       .then(response => {
         console.log(response.data);
-        const newPrompt: CardProps = {
-          title: promptTitle,
-          type: selectedCategory
-        };
-        setPromptCards([...promptCards, newPrompt]); // Add the new prompt card to the state
         setIsModalOpen(false);
       })
       .catch(error => {
         console.error('There was an error posting the data!', error);
       });
   };
+
   return (
     <Transition.Root show={true} as={Fragment}>
       <Dialog as="div" className="relative z-10 " onClose={() => setIsModalOpen(false)}>
@@ -119,7 +113,7 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
                     className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
                     onClick={handleUpdate}
                   >
-                    Update
+                    Add
                   </button>
                   <button
                     type="button"

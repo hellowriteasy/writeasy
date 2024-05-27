@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useState } from 'react';
 import Image from "next/image";
 import Link from "next/link";
@@ -12,14 +12,17 @@ import Group from "../../public/Loginsignup-img/Group (2).svg";
 import Group3 from "../../public/Loginsignup-img/Group (1).svg";
 import Vector1 from "../../public/Loginsignup-img/Vector.svg";
 import Button from '../components/Button';
+import InputField from '../components/InputFIelds';
 import useAuthStore from '../store/useAuthStore';
-import {useRouter} from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import Earth from "../../public/Landingpage-img/earth.svg";
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const login = useAuthStore((state) => state.login);
- const router=useRouter();
+  const router = useRouter();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -31,7 +34,7 @@ const Login = () => {
       const token = response.data.token.token;
       console.log(response.data.token._id);
       login(userId, token);
-      router.push('/', { scroll: false }) // Set user as logged in
+      router.push('/', { scroll: false });
     } catch (error) {
       setError("Login failed");
     }
@@ -45,16 +48,34 @@ const Login = () => {
         </div>
       </Link>
       <div className="flex flex-col -mt-20 h-full items-center">
-        <h1 className="text-center font-comic text-4xl pt-6"> <span className="font-bold">Hello!</span> Welcome to Writeasy</h1>
+        <h1 className="text-center font-comic text-4xl pt-6">
+          <span className="font-bold">Hello!</span> Welcome to Writeasy
+        </h1>
         <form onSubmit={handleSubmit} className="relative flex flex-col font-comic mt-14 z-10">
-          <input className='border border-gray-500 w-72 z-10 rounded-3xl indent-7 h-10 focus:outline-none focus:border-yellow-600' type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <input className='border border-gray-500 w-72 z-10 rounded-3xl indent-7 h-10 focus:outline-none focus:border-yellow-600' type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          <h1 className="text-end pt-4 font-comic text-sm underline font-bold"> <a href="#"> Forgot Password? </a></h1>
-          <button className="text-center border rounded-3xl text-white hover:opacity-80 bg-black h-10 text-2xl" type="submit">Login</button>
+          <InputField
+            types="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <InputField
+            types="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <h1 className="text-end pt-4 font-comic text-sm underline font-bold">
+            <a href="#">Forgot Password?</a>
+          </h1>
+          <button className="text-center border rounded-3xl text-white hover:opacity-80 bg-black h-12 mt-4 text-2xl" type="submit">
+            Login
+          </button>
           {error && <p className="text-red-500">{error}</p>}
           <h1 className="text-center pt-2 font-bold">or</h1>
           <Button type="google"></Button>
-          <h1 className="text-center font-comic pt-4">Don't have an account? <Link href="/signup" className="font-bold">Signup</Link></h1>
+          <h1 className="text-center font-comic pt-4">
+            Don't have an account? <Link href="/signup" className="font-bold cursor-pointer">Signup</Link>
+          </h1>
           <div className="absolute w-32 h-16 -top-4 -right-28">
             <Image src={Rocket} alt='' />
           </div>
@@ -69,16 +90,18 @@ const Login = () => {
           <Image src={Sun} alt='' />
         </div>
       </div>
-      <div className="relative mt-4">
+     
+      <div className="relative">
         <div className="absolute left-80 bottom-24">
-          <Image src={Group} alt='' height={200} />
+          <Image src={Group} height={200} alt="group" />
         </div>
         <div className="absolute right-60 bottom-24">
-          <Image src={Group3} alt='' height={200} />
+          <Image src={Group3} height={200} alt="group3" />
         </div>
         <div className="absolute right-6 bottom-20">
-          <Image src={Vector1} alt='' height={300} />
+          <Image src={Vector1} height={300} alt="vector1" />
         </div>
+        <Image className="w-screen mt-10"  alt="earth" src={Earth} />
       </div>
     </div>
   );

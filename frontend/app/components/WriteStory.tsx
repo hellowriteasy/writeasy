@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useCallback, useState, useEffect } from "react";
 import classNames from "classnames";
 import axios from "axios";
@@ -17,6 +17,8 @@ import { diffChars, Change } from "diff";
 import usePdfStore from "@/app/store/usePDFStore";
 import { usePDF } from "react-to-pdf";
 import PDF from "./PDF";
+import { resolve } from "path";
+
 const Page = ({ inputText, corrected }: { inputText: string; corrected: string; }) => {
   const [improved, setImproved] = useState<React.ReactNode[]>([]);
 
@@ -93,7 +95,16 @@ const getAiPrompt = (type: TWriteEasyFeature, userInput: string) => {
   return messages;
 };
 
-export function SimpleEditor({  triggerGrammarCheck,taskType,title }: { triggerGrammarCheck: boolean }) {
+interface SimpleEditorProps {
+
+  taskType: string;
+  title: string;
+  Userid: string;
+  _id: string;
+  type: string;
+}
+
+export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id, type }: SimpleEditorProps) {
   const [inputText, setInputText] = useState(""); // State to hold input text
   const [correctedText, setCorrectedText] = useState("");
   const [copied, setCopied] = useState(false); // State to track if text is copied
@@ -106,9 +117,9 @@ export function SimpleEditor({  triggerGrammarCheck,taskType,title }: { triggerG
 
   useEffect(() => {
     setStoredFunction(toPDF);
-  }, []);
+  }, [toPDF, setStoredFunction]);
+
   const getCorrectedContent = (original: string, corrected: string) => {
-    
     original = original.replace(/<\/?p>/g, "");
     const diff: Change[] = diffChars(original, corrected);
     let text = "";
@@ -131,9 +142,9 @@ export function SimpleEditor({  triggerGrammarCheck,taskType,title }: { triggerG
   };
 
   const compareSentences = (original: string, corrected: string): React.ReactNode[] => {
-    original = original.replace(/<\/?p>/g, "");
-    corrected = corrected.replace(/<\/?p>/g, "");
-    console.log(original, corrected);
+    // original = original.replace(/<\/?p>/g, "");
+    // corrected = corrected.replace(/<\/?p>/g, "");
+    // console.log(original, corrected);
 
     const diff: Change[] = diffChars(original, corrected);
     const result: React.ReactNode[] = [];
@@ -195,13 +206,15 @@ export function SimpleEditor({  triggerGrammarCheck,taskType,title }: { triggerG
     ],
     editorProps: {
       attributes: {
-        class: 'prose dark:prose-invert prose-sm sm:prose-base inline-block   lg:prose-lg xl:prose-2xl  m-5 h-full focus:outline-none',
+        class: 'prose dark:prose-invert prose-sm sm:prose-base inline-block lg:prose-lg xl:prose-2xl m-5 h-full focus:outline-none',
       },
     },
   }) as Editor;
+
   const handleExport = () => {
     toPDF();
   };
+
   useEffect(() => {
     if (triggerGrammarCheck) {
       handleClickFeature("grammer", new MouseEvent("click"));
@@ -222,25 +235,28 @@ export function SimpleEditor({  triggerGrammarCheck,taskType,title }: { triggerG
         content: currentContent,
         taskType: taskType,
         storyType: "practiceStory",
-        prompt: "66392eeacf380a90bde1c838"
+        prompt: _id
       };
+      
       
       const { data, status } = await axios.post(
         "http://localhost:5000/api/stories/score",
         payload
       );
-
-      const responce = await axios.get(
-        "http://localhost:5000/api/stories/6644b08bc3d40378df7988ba",
+      
+   alert(data.storyId);
+     
+      const response = await axios.get(
+        `http://localhost:5000/api/stories/${data.storyId}`,
       );
-
+       console.log(response);
       setInputText(currentContent);
-      setCorrectedText(responce.data.corrections);
+      setCorrectedText(response.data.corrections);
       setCopied(false);
       setIsCheckingGrammer(true);
       alert(data.message);
       console.log(data);
-      console.log(responce.data);
+      console.log(response);
     } catch (error) {
       console.log("error", error);
     }
@@ -379,29 +395,29 @@ export function SimpleEditor({  triggerGrammarCheck,taskType,title }: { triggerG
                 Reject All
               </button>
               <button
-              className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
-              onClick={(e)=>{ e.preventDefault(); handleCopy}}
-            >
-              {copied ? "Copied" : "Copy"}
-            </button>
+                className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
+                onClick={(e) => {e.preventDefault(); handleCopy()}}
+              >
+                {copied ? "Copied" : "Copy"}
+              </button>
               <button
-              className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
-              onClick={(e) => {e.preventDefault();
-                pdfExportFunction && pdfExportFunction();
-              }}
-            >
-              Export pdf
-            </button>
+              
+                className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
+                onClick={(e) => {e.preventDefault();
+                  pdfExportFunction && pdfExportFunction();
+                }}
+              >
+                Export pdf
+              </button>
             </>
           </div>
         </div>
         <div className="h-[400px] w-[50vw] rounded-3xl">
-          <EditorContent className="h-96 mt-10"  editor={editor} />
+          <EditorContent className="h-96 mt-10" editor={editor} />
         </div>
       </div>
       <div className="absolute -left-2/3">
-
-      <PDF corrected={correctedText} originals={inputText} />
+        <PDF corrected={correctedText} originals={inputText} />
       </div>
     </>
   );

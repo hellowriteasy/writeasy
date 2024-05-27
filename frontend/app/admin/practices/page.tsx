@@ -1,5 +1,6 @@
 'use client';
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import Navbar from "../../components/admin/Navbar";
 import Sidebar from "../../components/admin/Sidebar";
 import Card from "../../components/admin/practice/CardAdd";
@@ -7,10 +8,24 @@ import Modal from "../../components/admin/practice/Modal";
 
 const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [prompts, setPrompts] = useState([]);
 
   const handleAddClick = () => {
     setIsModalOpen(true);
   };
+
+  useEffect(() => {
+    const fetchPrompts = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/prompts/practice-prompts');
+        setPrompts(response.data);
+      } catch (error) {
+        console.error('Error fetching prompts:', error);
+      }
+    };
+
+    fetchPrompts();
+  }, []);
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -37,10 +52,9 @@ const Page = () => {
               </div>
             </div>
             <div className="mt-4 space-y-4">
-              <Card title="prompt" type="lorem" />
-              <Card title="prompt2" type="lorem2" />
-              <Card title="prompt3" type="lorem3" />
-              <Card title="prompt4" type="lorem4" />
+              {prompts.map((prompt, index) => (
+                <Card key={index} id={prompt._id} title={prompt.promptText} type={prompt.promptCategory} />
+              ))}
             </div>
           </div>
         </div>

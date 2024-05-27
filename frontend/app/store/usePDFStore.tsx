@@ -15,7 +15,7 @@ const usePdfStore = create<FunctionState>((set) => ({
   correctedData:"",
   pdfExportFunction: null,
   copyToClipboardFunction: null,
-  setPdfExportFunction: (func) => set({ pdfExportFunction: func }),
+  setPdfExportFunction: (func) => ({ pdfExportFunction: func }),
   setCopyToClipboardFuntion: (func) => set({ pdfExportFunction: func }),
 }));
 

@@ -3,15 +3,35 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Dialog, Transition } from '@headlessui/react';
 
 interface CardProps {
+  _id: string;
+  user: string;
   title: string;
-  usernames: string;
+  content: string;
+  wordCount: number;
+  submissionDateTime: string;
+  prompt: string;
+  storyType: string;
+  correctionSummary: string;
+  corrections: string;
+  score: number;
 }
 
-const Card: React.FC<CardProps> = ({ title, usernames }) => {
+const Card: React.FC<CardProps> = ({
+  _id,
+  user,
+  title,
+  content,
+  wordCount,
+  submissionDateTime,
+  prompt,
+  storyType,
+  correctionSummary,
+  corrections,
+  score
+}) => {
   const [open, setOpen] = useState(false);
-  const [promptTitle, setPromptTitle] = useState(title);
   const [feedback, setFeedback] = useState("");
-  const [storyDetail, setStoryDetail] = useState("");
+  const [storyDetail, setStoryDetail] = useState(content);
 
   const cancelButtonRef = useRef(null);
 
@@ -29,7 +49,9 @@ const Card: React.FC<CardProps> = ({ title, usernames }) => {
             </button>
           </div>
         </div>
-        <div className="text-gray-600">Username: {usernames}</div>
+        <div className="text-gray-600">User: {user}</div>
+        <div className="text-gray-600">Submission Date: {new Date(submissionDateTime).toLocaleString()}</div>
+        <div className="text-gray-600">Score: {score}</div>
       </div>
 
       <Transition.Root show={open} as={Fragment}>
@@ -57,12 +79,15 @@ const Card: React.FC<CardProps> = ({ title, usernames }) => {
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl"> {/* Increased max-width to max-w-4xl */}
                   <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                     <div className="sm:flex sm:items-start">
                       <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
                         <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                          Edit Story
+                          {title}
+                        </Dialog.Title>
+                        <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
+                          {user}
                         </Dialog.Title>
                         <div className="mt-2">
                           <div className="mb-4">
@@ -76,12 +101,12 @@ const Card: React.FC<CardProps> = ({ title, usernames }) => {
                               onChange={(e) => setFeedback(e.target.value)}
                             />
                           </div>
-                          <div className="mb-4">
+                          <div className="mb-4 ">
                             <label className="block text-gray-700 text-sm font-bold mb-2">
                               Story Details
                             </label>
                             <textarea
-                              className="mt-1 block w-full h-40 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
+                              className="mt-1 block w-full h-96 p-4 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
                               placeholder="Story details"
                               value={storyDetail}
                               onChange={(e) => setStoryDetail(e.target.value)}

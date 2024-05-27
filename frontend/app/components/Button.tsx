@@ -11,7 +11,7 @@ interface ButtonProps {
 
 const Button: React.FC<ButtonProps> = ({ children, type, onClick }) => {
   let buttonContent: React.ReactNode;
-  let buttonClass = "h-10 w-72 rounded-3xl mt-4 "; // Default class
+  let buttonClass = "h-12 w-96 rounded-3xl mt-4 "; // Default class
 
   // Apply specific classes and content based on the type prop
   if (type === "google") {

@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { FaEyeSlash, FaEye } from "react-icons/fa";
-import { useForm } from "react-hook-form";
 
-// Reusable Input component
-const InputField = ({ type, placeholder, value, onChange }) => {
+const InputField = React.forwardRef(({ types, placeholder, ...props }, ref) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -13,13 +11,13 @@ const InputField = ({ type, placeholder, value, onChange }) => {
   return (
     <div className="relative w-full flex flex-col justify-center items-center mt-4">
       <input
-        className="border border-gray-500 w-72 z-10 rounded-3xl indent-7 h-10 focus:outline-none focus:border-yellow-600"
-        type={showPassword ? 'text' : type}
+        className="border border-gray-500 w-96 z-10 rounded-3xl indent-7 h-12 focus:outline-none focus:border-yellow-600"
+        type={showPassword ? 'text' : types}
         placeholder={placeholder}
-        value={value}
-        onChange={onChange}
+        ref={ref}
+        {...props}
       />
-      {type === 'password' && (
+      {types === 'password' && (
         <button
           type="button"
           className="absolute right-2 z-20"
@@ -30,6 +28,8 @@ const InputField = ({ type, placeholder, value, onChange }) => {
       )}
     </div>
   );
-};
+});
+
+InputField.displayName = 'InputField';
 
 export default InputField;

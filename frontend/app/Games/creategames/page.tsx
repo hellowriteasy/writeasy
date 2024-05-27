@@ -27,18 +27,19 @@ const Page: React.FC = () => {
   return (
     <div className='w-screen font-comic h-[1750px] flex flex-col'>
       <div className='h-80 border-game relative w-full flex items-center flex-col'>
-        <div className='absolute left-0'>
-          <Image src={shootingstar} alt='shootingstar' />
-        </div>
-        <div className='w-4/5 font-comic flex flex-col gap-10 mt-20'>
-          <h1 className='text-6xl font-bold font-comic'>Setting text of this story</h1>
-          <Link href="/Games/creategames/play">
-            <button className='w-full bg-black hover:opacity-80 text-center text-white rounded-3xl border h-20 text-4xl'>Create your Story</button>
-          </Link>
-        </div>
-        <div className='absolute right-5 top-60'>
-          <Image src={cloud2} alt='cloud2' />
-        </div>
+      <div className='absolute left-0'>
+  <Image className='w-[9vw]' src={shootingstar} alt='shootingstar' />
+</div>
+<div className='w-4/5 font-comic flex flex-col gap-10 mt-20'>
+  <h1 className='text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold font-comic'>Setting text of this story</h1>
+  <Link href="/Games/creategames/play">
+    <button className='w-full bg-black hover:opacity-80 text-center text-white rounded-3xl border h-20 text-xl md:text-2xl lg:text-3xl xl:text-4xl'>Create your Story</button>
+  </Link>
+</div>
+<div className='absolute right-5 sm-hide top-60'>
+  <Image className='w-[12vw]' src={cloud2} alt='cloud2' />
+</div>
+
       </div>
       <div className='w-screen flex flex-col items-center'>
         <div className='w-4/5'>

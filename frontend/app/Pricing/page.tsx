@@ -7,11 +7,11 @@ const page = () => {
   return (
     <div className='two-line-bg relative'>
         <div className='absolute top-10      left-10' >
-         <Image src={cloudBig} alt='cloud-big' ></Image>
+         <Image src={cloudBig} width={80} height={40} alt='cloud-big' ></Image>
         </div>
         <Pricing  ></Pricing>
         <div className='absolute right-10 bottom-0'>
-            <Image src={cloud} alt='cloud-sm'></Image>
+            <Image width={40} height={20} src={cloud} alt='cloud-sm'></Image>
         </div>
     </div>
   )

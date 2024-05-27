@@ -28,23 +28,24 @@ const Games = () => {
   return (
     <div className="w-full h-[1300px] mt-6 z-0 relative flex justify-center">
       <div className="absolute -top-14 right-0">
-        <Image src={halfmoon} alt="halfmoon" />
+        <Image className="w-[5vw]" src={halfmoon} alt="halfmoon" />
       </div>
       <div className="w-10/12 h-screen ms-12">
-        <div className="w-full h-60 relative pt-4">
-          <h1 className="text-6xl font-bold font-comic">
-            Embark on a Collaborative Adventure
-          </h1>
-          <div className="absolute top-2 -right-14">
-            <Image src={group} alt="group" />
-          </div>
-          <p className="text-2xl font-comic pt-4">
-            Team up with friends to create captivating stories together.
-          </p>
-        </div>
+      <div className="w-full h-60 relative pt-4">
+  <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold font-comic">
+    Embark on a Collaborative Adventure
+  </h1>
+  <div className="absolute top-2 -right-14">
+    <Image className="w-[14vw] md-hide" src={group} alt="group" />
+  </div>
+  <p className="text-lg md:text-xl lg:text-2xl font-comic pt-4">
+    Team up with friends to create captivating stories together.
+  </p>
+</div>
+
         <div className="flex w-full h-auto relative mt-0 items-center justify-around">
           <div className="absolute -top-40 mt-3 -left-32">
-            <Image src={Bee} alt="bee" />
+            <Image className="w-[12vw]" src={Bee} alt="bee" />
           </div>
           <div className="gap-8 relative flex flex-col">
             {currentPrompts.map((prompt) => (
@@ -59,26 +60,26 @@ const Games = () => {
             <TopWriting />
           </div>
         </div>
-        <div className="w-full mt-10 text-2xl font-comic">
-          <ReactPaginate
-            previousLabel={<FaAngleLeft className="w-10 h-10" />}
-            nextLabel={<FaAngleRight className="w-10 h-10" />}
-            breakLabel="..."
-            breakClassName="break-me"
-            pageCount={pageCount}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
-            onPageChange={handlePageClick}
-            containerClassName="flex justify-center gap-6 rounded-full mt-8 "
-            pageClassName=""
-            pageLinkClassName="w-16 h-16 flex items-center  justify-center border border-gray-300 rounded-full "
-            previousClassName=""
-            previousLinkClassName="w-16 h-16 flex items-center justify-center border border-gray-300 rounded-full "
-            nextClassName=""
-            nextLinkClassName="w-16 h-16 flex items-center justify-center border border-gray-300 rounded-full "
-            activeClassName="bg-black text-white rounded-full"
-          />
-        </div>
+        <div className="w-full mt-10 text-lg md:text-xl font-comic">
+      <ReactPaginate
+        previousLabel={<FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />}
+        nextLabel={<FaAngleRight className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />}
+        breakLabel="..."
+        breakClassName="break-me"
+        pageCount={pageCount}
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={5}
+        onPageChange={handlePageClick}
+        containerClassName="flex justify-center gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
+        pageClassName=""
+        pageLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+        previousClassName=""
+        previousLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+        nextClassName=""
+        nextLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+        activeClassName="bg-black text-white rounded-full"
+      />
+    </div>
       </div>
     </div>
   );

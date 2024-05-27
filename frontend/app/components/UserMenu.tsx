@@ -32,7 +32,7 @@ const UserMenu = () => {
     >
       <div className="relative font-comic">
         <div className="w-full text-white h-14 text-center font-bold text-2xl font-comic bg-black border border-black rounded-3xl px-4 py-2 pr-7 focus:outline-none focus:border-black">
-          {selectedOption || "Types"}
+          {selectedOption || "Username"}
         </div>
         <div className="pointer-events-none absolute inset-y-0 -left-2 bg-white rounded-full flex items-center px-2 text-white">
           <IoPersonSharp className="w-10 h-5 text-black" />

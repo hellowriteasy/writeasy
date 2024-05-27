@@ -1,8 +1,10 @@
+'use client'
+import { useState } from 'react';
 import Group from "@/public/Landingpage-img/groupqn.svg";
 import Path from "@/public/Landingpage-img/path34.svg";
 import Image from "next/image";
 import cloud from "@/public/Game/sm-cloud.svg";
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
+import { Disclosure } from '@headlessui/react';
 import { Transition } from '@headlessui/react';
 
 const FrequentlyAsked = () => {
@@ -29,27 +31,35 @@ const FrequentlyAsked = () => {
     }
   ];
 
+  const [openId, setOpenId] = useState(Questions[0].id); // Initialize with the first question open
+
   return (
-    <div className="flex flex-col justify-center items-center w-screen text-black">
-      <div className="flex relative w-screen justify-around items-center mt-4">
-        <div className="mt-10">
-          <Image src={Group} alt="group" />
-        </div>
-        <div className="text-3xl flex-col font-comic gap-3 flex justify-center items-center font-bold">
-          <h1 className="text-center font-crayon text-7xl font-bold pt-10">Frequently Asked Questions</h1>
-          <div className="w-full pt-16 px-4">
-            <div className="mx-auto w-full max-w-lg divide-y divide-gray-300 rounded-xl">
+    <div className="relative w-screen text-black flex flex-col items-center px-4 md:px-10">
+      <div className="absolute left-4 md:left-10 vsm-hide top-20 md:top-32">
+        <Image className='w-[13vw]' src={Group} alt="group" />
+      </div>
+      <div className="absolute right-4 md:right-10 top-40 md:top-60">
+        <Image className='w-[5vw]' src={Path} alt="path" />
+      </div>
+      <div className="text-3xl flex-col font-comic gap-3 flex justify-center items-center font-bold">
+        <h1 className="text-center font-crayon text-5xl md:text-7xl font-bold pt-10">Frequently Asked Questions</h1>
+        <div className="w-full pt-16 px-4">
+          <div className="mx-auto w-full max-w-lg">
+            <div className="divide-y divide-gray-300 rounded-xl flex flex-col items-center">
               {Questions.map((question) => (
-                <Disclosure as="div" className="p-6 text-center" key={question.id}>
+                <Disclosure as="div" className="p-4 md:p-6 text-center w-full" key={question.id}>
                   {({ open }) => (
                     <>
-                      <DisclosureButton className="group flex w-full items-center justify-center">
-                        <span className="text-lg font-medium text-black">
+                      <Disclosure.Button
+                        className="group flex w-full items-center justify-center"
+                        onClick={() => setOpenId(openId === question.id ? null : question.id)}
+                      >
+                        <span className="text-lg md:text-xl font-medium text-black">
                           {question.question}
                         </span>
-                      </DisclosureButton>
+                      </Disclosure.Button>
                       <Transition
-                        show={open}
+                        show={openId === question.id}
                         enter="transition ease-out duration-300"
                         enterFrom="transform opacity-0 scale-95"
                         enterTo="transform opacity-100 scale-100"
@@ -57,9 +67,9 @@ const FrequentlyAsked = () => {
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                       >
-                        <DisclosurePanel className="mt-2 text-sm text-gray-800 bg-custom-yellow  rounded-full p-4  mx-auto w-max">
+                        <Disclosure.Panel className="mt-2 text-sm text-gray-800 bg-custom-yellow rounded-full p-4 mx-auto w-max">
                           {question.answer}
-                        </DisclosurePanel>
+                        </Disclosure.Panel>
                       </Transition>
                     </>
                   )}
@@ -67,18 +77,15 @@ const FrequentlyAsked = () => {
               ))}
             </div>
           </div>
-          <div className="mt-4">
-            <button className="mx-auto hover:bg-gray-200 bg-white text-black w-32 text-xl font-bold h-12 border-2 border-black rounded-3xl">
-              More
-            </button>
-          </div>
         </div>
-        <div className="mt-5">
-          <Image src={Path} alt="path" />
+        <div className="mt-4">
+          <button className="mx-auto hover:bg-gray-200 bg-white text-black w-24 md:w-32 text-lg md:text-xl font-bold h-10 md:h-12 border-2 border-black rounded-3xl">
+            More
+          </button>
         </div>
-        <div className="absolute right-0 -bottom-10">
-          <Image src={cloud} alt="cloud" />
-        </div>
+      </div>
+      <div className="absolute right-4 md:right-0 bottom-0 md:-bottom-10">
+        <Image src={cloud} alt="cloud" />
       </div>
     </div>
   );

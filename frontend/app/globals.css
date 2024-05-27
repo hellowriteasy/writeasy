@@ -70,3 +70,28 @@ u{
   color: green;
   background-color: rgba(8, 165, 8, 0.2);
 }
+@media (max-width: 1000px) {
+  .sm-hide {
+    display: none;
+  }
+ 
+}
+@media (max-width: 1400px) {
+  .md-hide {
+    display: none;
+  }
+ 
+}
+@media (max-width: 800px) {
+  .vsm-hide {
+    display: none;
+  }
+ 
+}
+.paid-card{
+  background-image: url("../public/Landingpage-img/Group\ \(15\).svg");
+  
+  background-attachment: fixed;
+   background-size: cover;
+   background-position: center;
+}

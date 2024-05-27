@@ -21,8 +21,8 @@ const PDF: React.FC<Props> = ({ originals, corrected }) => {
     original: string,
     corrected: string
   ): React.ReactElement[] => {
-    original = original.replace(/<\/?p>/g, "");
-    corrected = corrected.replace(/<\/?p>/g, "");
+    original 
+    corrected 
 
     const diff: Change[] = diffChars(original, corrected);
     const result: React.ReactElement[] = [];

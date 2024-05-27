@@ -13,6 +13,9 @@ const config: Config = {
        'comic':['"sans-comic-sans"', 'cursive']
     },
     extend: {
+      screens: {
+        'custom': '1000px',
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

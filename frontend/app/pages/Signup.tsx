@@ -1,10 +1,11 @@
-'use client'
-import React, { useState } from "react";
+'use client';
+import React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 import Earth from "../../public/Landingpage-img/earth.svg";
 import Group from "../../public/Loginsignup-img/Group (2).svg";
 import Group2 from "../../public/Loginsignup-img/Group.svg";
@@ -15,105 +16,93 @@ import Rocket from "../../public/Loginsignup-img/rocket.svg";
 import Sun from "../../public/Loginsignup-img/sun.svg";
 import logo from "../../public/Landingpage-img/logo.svg";
 import InputField from "../components/InputFIelds";
-import Button from "../components/Button";
-import { useRouter } from "next/navigation";
-import axios from "axios";
+import Link from "next/link";
 const schema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
   username: z.string()
-
 });
 
 type FormFields = z.infer<typeof schema>;
 
 const Signup = () => {
-  const router=useRouter();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
-    setError,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<FormFields>({
-    defaultValues: {
-      email: "",
-      password: "",
-      username:""
-    },
     resolver: zodResolver(schema),
   });
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-  try {
-    // Make a POST request to your API endpoint to create a new user
-    await axios.post("http://localhost:5000/api/auth/register", data);
-    
-    // If successful, log the data
-    
-    console.log("User created:", data);
-    router.push('/Login', { scroll: false })
-    
-    // Optionally, you can redirect the user to another page after successful registration
-    // Replace "/dashboard" with the desired URL
-    // router.push("/dashboard");
-  } catch (error) {
-    // If there's an error, handle it appropriately
-    if (error.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
-      console.error("Server Error:", error.response.data);
-    } else if (error.request) {
-      // The request was made but no response was received
-      console.error("Network Error:", error.request);
-    } else {
-      // Something happened in setting up the request that triggered an Error
-      console.error("Error:", error.message);
+    try {
+      await axios.post("http://localhost:5000/api/auth/register", data);
+      console.log("User created:", data);
+      router.push('/login', { scroll: false });
+    } catch (error) {
+      console.error("Error:", error);
     }
-  }
-}
-
+  };
 
   return (
-    <div className="overflow-hidden two-line-bg">
-      
-        <div className="ms-10 mt-10">
-          <Image src={logo} alt="logo" />
-        </div>
-      
+    <div className="overflow-y-hidden two-line-bg">
+      <Link href="/">
+      <div className="ms-10 mt-10">
+        <Image src={logo} alt="logo" />
+      </div>
+      </Link>
       <div className="flex flex-col -mt-20 h-[500px] items-center overflow-hidden">
         <h1 className="text-center text-4xl pt-6 font-comic">
           <span className="font-bold">Hello!</span> Welcome to Writeasy
         </h1>
 
-        <form
-          onSubmit={handleSubmit(onSubmit)} 
-          className="relative flex flex-col gap-2 font-comic mt-10 z-10"
-        >
-          <input  className="border border-gray-500 w-72 z-10 rounded-3xl indent-7 h-10 focus:outline-none focus:border-yellow-600" placeholder="Email" {...register("email")} />
+        <form onSubmit={handleSubmit(onSubmit)} className="relative flex flex-col gap-2 font-comic mt-10 z-10">
+          <InputField
+            types="text"
+            placeholder="Email"
+            {...register("email")}
+          />
           {errors.email && <div className="text-red-500">{errors.email.message}</div>}
-          <input  {...register("username")}  className="border border-gray-500 w-72 z-10 rounded-3xl indent-7 h-10 focus:outline-none focus:border-yellow-600"  placeholder="Username" />
+          
+          <InputField
+            types="text"
+            placeholder="Username"
+            {...register("username")}
+          />
           {errors.username && <div className="text-red-500">{errors.username.message}</div>}
-          <input  className="border border-gray-500 w-72 z-10 rounded-3xl indent-7 h-10 focus:outline-none focus:border-yellow-600" placeholder="Password" {...register("password")} />
-          <input   className="border border-gray-500 w-72 z-10 rounded-3xl indent-7 h-10 focus:outline-none focus:border-yellow-600" placeholder="confirm password"  />
+          
+          <InputField
+            types="password"
+            placeholder="Password"
+            {...register("password")}
+          />
           {errors.password && <div className="text-red-500">{errors.password.message}</div>}
+          
+          <InputField
+            types="password"
+            placeholder="Confirm Password"
+            // You need to handle password confirmation validation separately
+          />
 
-          <button  className="text-center border rounded-3xl text-white hover:opacity-80 bg-black h-10 text-2xl" >sign up</button>
-          {errors.root && <div className="text-red-500">{errors.root.message}</div>}
+          <button className="text-center border rounded-3xl text-white hover:opacity-80 w-96 mt-5 bg-black h-14 text-2xl">
+            Sign Up
+          </button>
           <h1 className="text-center font-comic pt-6">
-            Already have an account? <a href="/login" className="font-bold">Login</a>
+            Already have an account? <a href="/login" className="font-bold underline">Login</a>
           </h1>
           <div className="absolute w-32 h-16 -top-4 -right-28">
             <Image src={Rocket} alt="rocket" />
           </div>
         </form>
         <div className="absolute top-60 w-20 h-10 left-10">
-          <Image src={Group2} alt="rocket" />
+          <Image src={Group2} alt="group" />
         </div>
         <div className="absolute top-20 right-0">
           <Image src={Vector} alt="vector" />
         </div>
 
-        <div className="absolute  left-80  top-28">
+        <div className="absolute left-80 top-28">
           <Image src={Sun} alt="sun" />
         </div>
       </div>
@@ -128,7 +117,7 @@ const Signup = () => {
         <div className="absolute right-6 bottom-20">
           <Image src={Vector1} height={300} alt="vector1" />
         </div>
-        <Image className="w-screen" alt="earth" src={Earth} />
+        <Image className="w-screen mt-10"  alt="earth" src={Earth} />
       </div>
     </div>
   );
