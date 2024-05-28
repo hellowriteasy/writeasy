@@ -1,12 +1,11 @@
-const GptService = require("../services/GptService");
+const GptService = require("../services/gptService");
 const Story = require("../models/story");
 
 const gptService = new GptService(process.env.GPT_API_KEY);
 
 exports.scoreStory = async function (req, res) {
   const { userId, title, content, taskType, storyType, prompt } = req.body;
-  // Calculate word count
-  const wordCount = content.split(" ").length;
+  const wordCount = content.split(" ").length; // Calculate word count
 
   try {
     // Save the new story to the database without score and corrections
@@ -22,55 +21,39 @@ exports.scoreStory = async function (req, res) {
 
     const savedStory = await newStory.save();
 
-    scoreAndCorrectStoryInBackground(savedStory._id);
-
-    return res.status(201).json({
-      success: true,
-      message: "Story submitted and scoring in progress",
-      storyId: savedStory._id,
-    });
-  } catch (error) {
-    console.error("Failed to save story:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Failed to save the story",
-    });
-  }
-};
-
-async function scoreAndCorrectStoryInBackground(storyID) {
-  try {
-    const story = await Story.findById(storyID);
-    if (!story) {
-      console.error(`Failed to find story: ${storyID}`);
-      return;
-    }
-
+    // Call the GPT service to score and correct the story synchronously
     const { score, corrections } = await gptService.generateScore(
-      story.content,
-      story.taskType,
-      story.wordCount // Adding missed wordCount argument
+      savedStory.content,
+      taskType,
+      wordCount 
     );
 
-    // Generating a summary of the corrections
     const correctionSummary = await gptService.generateCorrectionSummary(
-      story.content,
+      savedStory.content,
       corrections,
       score
     );
 
-    story.score = score;
-    story.corrections = corrections; // update corrections
-    story.correctionSummary = correctionSummary; // add the correction summary
+    // Update the story with the score, corrections, and correction summary
+    savedStory.score = score;
+    savedStory.corrections = corrections;
+    savedStory.correctionSummary = correctionSummary;
+    
+    await savedStory.save();
 
-    await story.save();
-    console.log(
-      "Story scored, corrected, and corrections summary generated successfully"
-    );
-  } catch (err) {
-    console.error(
-      `Failed to score, correct, and summarize story: ${storyID}`,
-      err
-    );
+    return res.status(201).json({
+      success: true,
+      message: "Story scored and corrected successfully",
+      storyId: savedStory._id,
+      score,
+      corrections,
+      correctionSummary
+    });
+  } catch (error) {
+    console.error("Failed to score story:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to score the story",
+    });
   }
-}
+};

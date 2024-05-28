@@ -1,5 +1,5 @@
 const StoryService = require("../services/storyService");
-const GptService = require("../services/GptService");
+const GptService = require("../services/gptService");
 
 const gptService = new GptService(process.env.GPT_API_KEY); // Initialize GPT service
 

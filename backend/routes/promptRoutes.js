@@ -1,23 +1,24 @@
 const express = require("express");
 const router = express.Router();
 const {
-  createPracticePrompt,
-  createContestPrompt,
+  createPrompt,
   getPracticePrompts,
   getContestPrompts,
+  getGamePrompts, // Add this to imports
   getPrompt,
   updatePrompt,
   deletePrompt,
+  getPromptsByContestId
 } = require("../src/controllers/promptController");
 
 /**
  * @openapi
- * /api/prompts/practice-prompt:
+ * /api/prompts:
  *   post:
  *     tags:
  *       - Prompts
- *     summary: Create a practice prompt
- *     description: Creates a new practice prompt with the specified details.
+ *     summary: Create a prompt
+ *     description: Creates a new prompt with the specified details. promptType can be either "practice", or "contest", "game"
  *     requestBody:
  *       required: true
  *       content:
@@ -26,33 +27,11 @@ const {
  *             $ref: '#/components/schemas/Prompt'
  *     responses:
  *       201:
- *         description: Practice prompt created successfully.
+ *         description: Prompt created successfully.
  *       500:
  *         description: Server error when attempting to create a prompt.
  */
-router.post("/practice-prompt", createPracticePrompt);
-
-/**
- * @openapi
- * /api/prompts/contest-prompt:
- *   post:
- *     tags:
- *       - Prompts
- *     summary: Create a contest prompt
- *     description: Creates a new contest prompt with the specified details.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Prompt'
- *     responses:
- *       201:
- *         description: Contest prompt created successfully.
- *       500:
- *         description: Server error when attempting to create a prompt.
- */
-router.post("/contest-prompt", createContestPrompt);
+router.post("/", createPrompt);
 
 /**
  * @openapi
@@ -85,6 +64,22 @@ router.get("/practice-prompts", getPracticePrompts);
  *         description: Server error when fetching prompts.
  */
 router.get("/contest-prompts", getContestPrompts);
+
+/**
+ * @openapi
+ * /api/prompts/game-prompts:
+ *   get:
+ *     tags:
+ *       - Prompts
+ *     summary: Get all game prompts
+ *     description: Retrieves all game prompts.
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved all game prompts.
+ *       500:
+ *         description: Server error when fetching prompts.
+ */
+router.get("/game-prompts", getGamePrompts);
 
 /**
  * @openapi
@@ -166,5 +161,30 @@ router.put("/:id", updatePrompt);
  *         description: Server error when attempting to delete the prompt.
  */
 router.delete("/:id", deletePrompt);
+
+/**
+ * @openapi
+ * /api/prompts/contest/{contestId}:
+ *   get:
+ *     tags:
+ *       - Prompts
+ *     summary: Get all prompts for a contest
+ *     description: Retrieves all prompts for a specific contest by contest ID.
+ *     parameters:
+ *       - in: path
+ *         name: contestId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the contest.
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved the contest prompts.
+ *       404:
+ *         description: Contest not found.
+ *       500:
+ *         description: Server error when fetching contest prompts.
+ */
+router.get("/contest/:contestId", getPromptsByContestId);
 
 module.exports = router;

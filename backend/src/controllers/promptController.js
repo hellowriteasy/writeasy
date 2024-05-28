@@ -1,17 +1,8 @@
 const PromptService = require("../services/promptService");
 
-const createPracticePrompt = async (req, res) => {
+const createPrompt = async (req, res) => {
   try {
-    const prompt = await PromptService.createPracticePrompt(req.body);
-    res.status(201).json(prompt);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-const createContestPrompt = async (req, res) => {
-  try {
-    const prompt = await PromptService.createContestPrompt(req.body);
+    const prompt = await PromptService.createPrompt(req.body);
     res.status(201).json(prompt);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -30,6 +21,15 @@ const getPracticePrompts = async (req, res) => {
 const getContestPrompts = async (req, res) => {
   try {
     const prompts = await PromptService.getContestPrompts();
+    res.json(prompts);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const getGamePrompts = async (req, res) => {
+  try {
+    const prompts = await PromptService.getGamePrompts();
     res.json(prompts);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -69,12 +69,25 @@ const deletePrompt = async (req, res) => {
   }
 };
 
+const getPromptsByContestId = async (req, res) => {
+  try {
+    const prompts = await PromptService.getPromptsByContestId(req.params.contestId);
+    if (!prompts) {
+      return res.status(404).json({ message: "Contest not found" });
+    }
+    res.json(prompts);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
-  createPracticePrompt,
-  createContestPrompt,
+  createPrompt,
   getPracticePrompts,
   getContestPrompts,
+  getGamePrompts,
   getPrompt,
   updatePrompt,
   deletePrompt,
+  getPromptsByContestId,
 };

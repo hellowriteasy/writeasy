@@ -137,17 +137,22 @@ const options = {
         Prompt: {
           type: "object",
           properties: {
-            promptText: {
+            title: {
               type: "string",
               description: "The prompt text",
             },
             promptCategory: {
-              type: "string",
-              description: "The prompt category",
+              type: "array",
+              items: {
+                type: "string",
+                description: "The genres of the prompts",
+              },
             },
             promptType: {
               type: "string",
-              description: "The prompt type (practicePrompt or contestPrompt)",
+              enum: ["practice", "contest","game"],
+              description:
+                "The type of the prompt (practice or contest or game)",
             },
           },
         },

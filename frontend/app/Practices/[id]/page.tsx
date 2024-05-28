@@ -13,7 +13,7 @@ import { SimpleEditor } from "@/app/components/WriteStory";
 
 interface Prompt {
   _id: string;
-  promptText: string;
+  title: string;
   promptType: string;
   Userid:string;
   type:string
@@ -65,7 +65,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
     <div className="w-full h-[1900px] mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 h-screen ms-12">
         <div className="w-full h-32 relative pt-4">
-          <h1 className="text-5xl pt-4 ps-16 font-bold font-comic">{prompt.promptText}</h1>
+          <h1 className="text-5xl pt-4 ps-16 font-bold font-comic">{prompt.title}</h1>
         </div>
         <div className="flex w-[100%] relative mt-0">
           <div className="absolute -top-40 mt-3 -left-48">

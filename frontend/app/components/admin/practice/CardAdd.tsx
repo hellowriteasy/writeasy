@@ -19,7 +19,7 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
   const handleUpdate = async () => {
     try {
       const response = await axios.put(`http://localhost:5000/api/prompts/${id}`, {
-        promptText: promptTitle,
+        title: promptTitle,
         promptCategory: selectedType,
         promptType: 'practicePrompt'
       });

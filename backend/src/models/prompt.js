@@ -1,16 +1,19 @@
 const mongoose = require("mongoose");
 
 const promptSchema = new mongoose.Schema({
-  promptText: {
+  title: {
     type: String,
     required: true,
   },
   promptCategory: {
+    type: [String],
+  },
+  description: {
     type: String,
   },
   promptType: {
     type: String,
-    enum: ["practicePrompt", "contestPrompt"],
+    enum: ["practice", "contest","game"],
     required: true, // Assuming each prompt must explicitly be identified as practice or contest
   },
 });
