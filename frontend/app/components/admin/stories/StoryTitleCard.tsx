@@ -1,6 +1,7 @@
 import { useState, Fragment, useRef } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Dialog, Transition } from '@headlessui/react';
+import axios from 'axios';
 
 interface CardProps {
   _id: string;
@@ -30,14 +31,26 @@ const Card: React.FC<CardProps> = ({
   score
 }) => {
   const [open, setOpen] = useState(false);
-  const [feedback, setFeedback] = useState("");
+  const [feedback, setFeedback] = useState(correctionSummary);
   const [storyDetail, setStoryDetail] = useState(content);
-
   const cancelButtonRef = useRef(null);
+
+  const handleUpdate = async () => {
+    try {
+      const response = await axios.put(`http://localhost:5000/api/stories/${_id}`, {
+        correctionSummary: feedback,
+        content: storyDetail,
+      });
+      console.log(response.data);
+      setOpen(false);
+    } catch (error) {
+      console.error('There was an error updating the story!', error);
+    }
+  };
 
   return (
     <>
-      <div className="bg-white shadow-md rounded-lg w-5/6 border border-gray-300 p-4 mb-4">
+      <div className="bg-white shadow-md rounded-lg w-5/6 border z-50 border-gray-300 p-4 mb-4">
         <div className="flex justify-between items-center mb-2">
           <div className="text-xl font-semibold">{title}</div>
           <div className="flex space-x-2 gap-4">
@@ -79,7 +92,7 @@ const Card: React.FC<CardProps> = ({
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl"> {/* Increased max-width to max-w-4xl */}
+                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl">
                   <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                     <div className="sm:flex sm:items-start">
                       <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
@@ -95,13 +108,13 @@ const Card: React.FC<CardProps> = ({
                               Feedback
                             </label>
                             <textarea
-                              className="mt-1 block w-full h-24 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
+                              className="mt-1 block w-full h-80 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
                               placeholder="Enter your feedback"
                               value={feedback}
                               onChange={(e) => setFeedback(e.target.value)}
                             />
                           </div>
-                          <div className="mb-4 ">
+                          <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2">
                               Story Details
                             </label>
@@ -109,7 +122,7 @@ const Card: React.FC<CardProps> = ({
                               className="mt-1 block w-full h-96 p-4 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
                               placeholder="Story details"
                               value={storyDetail}
-                              onChange={(e) => setStoryDetail(e.target.value)}
+                             
                             />
                           </div>
                           <div className="mb-4 flex space-x-2">
@@ -128,7 +141,7 @@ const Card: React.FC<CardProps> = ({
                     <button
                       type="button"
                       className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
-                      onClick={() => setOpen(false)}
+                      onClick={handleUpdate}
                     >
                       Update
                     </button>

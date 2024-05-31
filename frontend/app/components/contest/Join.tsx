@@ -52,7 +52,7 @@ const Join = () => {
       </h1>
       {/* <p className="text-xl">Theme: {contest.contestTheme}</p> */}
       <button
-        onClick={() => router.push("/Contests/viewcontest")}
+        onClick={() => router.push(`/Contests/${contest._id}`)}
         className="bg-black font-comic rounded-3xl text-white h-12 w-40 text-center text-3xl"
       >
         Join

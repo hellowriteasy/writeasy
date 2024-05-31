@@ -2,6 +2,7 @@ import React from "react";
 import Pencil from "@/public/Game/Pencil.svg";
 import Image from "next/image";
 import { useRouter } from "next/navigation"; // Use next/navigation for the router
+import Link from "next/link";
 
 interface PromptProps {
   promptText: string;
@@ -23,6 +24,7 @@ const Prompt = ({
   };
 
   return (
+    // <Link href={`/Contests/${_id}/createcontest`}>
     <div className="w-11/12 h-40 flex bg-white shadow-md rounded-3xl overflow-hidden">
       <div className="px-6 py-4">
         <div className="font-bold font-comic text-xl mb-2">{promptText}</div>
@@ -37,7 +39,9 @@ const Prompt = ({
         <Image src={Pencil} alt="Pencil" />
       </div>
     </div>
+    // </Link>
   );
+
 };
 
 export default Prompt;

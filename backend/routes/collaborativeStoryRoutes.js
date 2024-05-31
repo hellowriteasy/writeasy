@@ -9,7 +9,7 @@ const {
 
 /**
  * @openapi
- * /api/collaborative_stories:
+ * /api/collaborative-stories:
  *   get:
  *     tags:
  *       - Collaborative Stories
@@ -31,7 +31,7 @@ router.get("/", getCollaborativeStories);
 
 /**
  * @openapi
- * /api/collaborative_stories:
+ * /api/collaborative-stories:
  *   post:
  *     tags:
  *       - Collaborative Stories
@@ -61,7 +61,7 @@ router.post("/", createCollaborativeStory);
 
 /**
  * @openapi
- * /api/collaborative_stories/invite:
+ * /api/collaborative-stories/invite:
  *   post:
  *     tags:
  *       - Collaborative Stories
@@ -99,7 +99,7 @@ router.post("/invite", inviteCollaborators);
 
 /**
  * @openapi
- * /api/collaborative_stories/submit:
+ * /api/collaborative-stories/submit:
  *   post:
  *     tags:
  *       - Collaborative Stories

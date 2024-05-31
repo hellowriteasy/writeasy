@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation"; // Use next/navigation for the router
+import { useRouter } from "next/navigation";
+import axios from "axios";
 import Navbar from "../../components/Navbar";
 import PromptComponent from "../../components/contest/ContestPrompt";
 import TopWriting from "../../components/Others/TopWriting";
@@ -10,7 +11,7 @@ import Cloud from "@/public/Game/cloud.svg";
 import Cloud2 from "@/public/Game/cloud3.svg";
 import Image from "next/image";
 import Pagination from "@/app/components/Pagination";
-import CreateContest from "./createcontest/page"; // Import the CreateContest component
+import CreateContest from "./createcontest/page";
 
 interface Prompt {
   _id: string;
@@ -26,8 +27,17 @@ interface Contest {
   prompts: Prompt[];
 }
 
-const Page = () => {
-  const router = useRouter();
+interface ContestPageProps {
+  params: {
+    _id: string;
+    
+   
+  };
+}
+
+const Page: React.FC<ContestPageProps> = ({ params }) => {
+  const { _id: contestId } = params;
+
   const [contest, setContest] = useState<Contest | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -37,19 +47,20 @@ const Page = () => {
   } | null>(null);
 
   useEffect(() => {
-    const fetchOngoingContest = async () => {
+    if (!contestId) {
+      setError("Contest ID is missing.");
+      setLoading(false);
+      return;
+    }
+
+    const fetchContestById = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:5000/contests/ongoing`
-        );
-        if (!response.ok) {
+        const response = await axios.get(`http://localhost:5000/api/contests/${contestId}`);
+        if (response.status !== 200) {
           throw new Error(`Error: ${response.status}`);
         }
-        const data: Contest[] = await response.json();
-        if (data.length === 0) {
-          throw new Error("No ongoing contest found.");
-        }
-        setContest(data[0]); // Assuming the first contest is the one we want
+        const data: Contest = response.data;
+        setContest(data);
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -57,8 +68,8 @@ const Page = () => {
       }
     };
 
-    fetchOngoingContest();
-  }, []);
+    fetchContestById();
+  }, [contestId]);
 
   const handleSelectPrompt = (contestId: string, promptId: string) => {
     setSelectedPrompt({ contestId, promptId });
@@ -73,7 +84,7 @@ const Page = () => {
       <div className="w-10/12 h-screen ms-12">
         {selectedPrompt ? (
           <CreateContest
-            contestId={selectedPrompt.contestId}
+            contestId={params._id}
             promptId={selectedPrompt.promptId}
           />
         ) : (
@@ -88,7 +99,7 @@ const Page = () => {
               <div className="gap-8 relative flex flex-col">
                 <div className="w-[53vw]">
                   <h1 className="text-6xl font-comic font-bold p-10">
-                    #8: This title needs to be removed{contest.contestTitle}
+                    {contest.contestTitle}
                   </h1>
                   {/* <p className="text-xl">{contest.contestTheme}</p> */}
                 </div>
@@ -103,11 +114,11 @@ const Page = () => {
                     onSelectPrompt={handleSelectPrompt}
                   />
                 ))}
-                <div className="absolute bottom-80 -left-32">
+                <div className="absolute bottom-80 -left-32"  >
                   <Image src={Cloud} alt="Cloud" />
                 </div>
               </div>
-              <div className="flex  flex-col gap-8">
+              <div className="flex flex-col gap-8">
                 <WeeklyTest />
                 <TopWriting />
               </div>

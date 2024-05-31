@@ -22,7 +22,7 @@ const getCollaborativeStories = async (req, res) => {
 };
 
 const createCollaborativeStory = [
-  authMiddleware,
+  // authMiddleware,
   checkPaidStatus,
   async (req, res) => {
     const { title } = req.body;

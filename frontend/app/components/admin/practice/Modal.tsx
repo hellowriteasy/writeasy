@@ -17,14 +17,14 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [promptCards, setPromptCards] = useState<CardProps[]>([]); // State to store added prompt cards
 
-  const handleUpdate = () => {
+  const handleAdd = () => {
     const promptData = {
       promptText: promptTitle,
       promptCategory: selectedCategory,
       promptType: 'contestPrompt'
     };
 
-    axios.post('http://localhost:5000/api/prompts/contest-prompt', promptData)
+    axios.post('http://localhost:5000/api/prompts/practice-prompt', promptData)
       .then(response => {
         console.log(response.data);
         const newPrompt: CardProps = {
@@ -38,6 +38,7 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
         console.error('There was an error posting the data!', error);
       });
   };
+
   return (
     <Transition.Root show={true} as={Fragment}>
       <Dialog as="div" className="relative z-10 " onClose={() => setIsModalOpen(false)}>
@@ -117,9 +118,9 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
-                    onClick={handleUpdate}
+                    onClick={handleAdd}
                   >
-                    Update
+                    Add
                   </button>
                   <button
                     type="button"

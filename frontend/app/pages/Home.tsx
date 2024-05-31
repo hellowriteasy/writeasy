@@ -1,4 +1,4 @@
-'use client'
+
 import Image from "next/image";
 import Buttonbg from "../../public/Landingpage-img/path102.svg";
 import Arrow from "../../public/Landingpage-img/path64.svg";
@@ -60,7 +60,7 @@ const Hero = () => {
         <h2>"The writer is by nature a dreamer - a conscious dreamer."</h2>
         <h2 className="font-bold">- Carson McCullers</h2>
       </div>
-      <div className="w-full h-[610px] flex relative flex-col justify-center items-center">
+      <div className="w-full h-[610px] flex relative  flex-col justify-center items-center">
         <div className="absolute top-0 left-0">
           <Image className="w-[20vw]" src={Group4} alt="Group4" />
         </div>
@@ -76,7 +76,7 @@ const Hero = () => {
         <div className="absolute -top-10 right-60 sm-hide">
           <Image className="w-[7vw]" src={Group6} alt="Group6" />
         </div>
-        <div className="absolute top-60 z-10 left-1/3">
+        <div className="absolute sm-hide top-60 z-10 left-1/3">
           
           <Image className="w-[14vw] absolute z-10" src={Group8} alt="Group8" />
           
@@ -86,14 +86,14 @@ const Hero = () => {
         </div>
         
        
-        <div className="absolute top-96 left-0">
+        <div className="absolute sm-hide top-96 left-0">
           <Image src={Paperplane} alt="Paperplane" />
         </div>
-        <div className="absolute top-96 right-60">
+        <div className="absolute top-96 sm-hide right-60">
           <Image className="w-[4vw]" src={Group9} alt="Group9" />
         </div>
       </div>
-      <div className="relative flex h-[540px] justify-center items-center">
+      <div className="relative flex h-[540px] sm-hide justify-center items-center">
         <div className="absolute left-40 top-0">
           <Image className="w-[20vw]" src={Note2} alt="Note2" />
         </div>

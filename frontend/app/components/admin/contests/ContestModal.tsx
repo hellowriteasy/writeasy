@@ -1,40 +1,39 @@
+'use client';
 import { Fragment, useState } from 'react';
 import { Dialog, Transition, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 
 interface ModalProps {
   setIsModalOpen: (isOpen: boolean) => void;
+  onAddPrompt: (prompt: { id: string; promptText: string; promptCategories: string[] }) => void;
 }
 
-interface CardProps {
-  title: string;
-  type: string;
-}
-
-const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
+const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
   const [promptTitle, setPromptTitle] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-  const handleUpdate = () => {
-    const promptData = {
+  const handleAddPrompt = () => {
+    onAddPrompt({
+      id: uuidv4(),
       promptText: promptTitle,
-      promptCategory: selectedCategory,
-      promptType: 'contestPrompt'
-    };
+      promptCategories: selectedCategories,
+    });
+    setIsModalOpen(false);
+  };
 
-    axios.post('http://localhost:5000/api/prompts/contest-prompt', promptData)
-      .then(response => {
-        console.log(response.data);
-        setIsModalOpen(false);
-      })
-      .catch(error => {
-        console.error('There was an error posting the data!', error);
-      });
+  const toggleCategory = (category: string) => {
+    setSelectedCategories((prev) => {
+      if (prev.includes(category)) {
+        return prev.filter((cat) => cat !== category);
+      } else {
+        return [...prev, category];
+      }
+    });
   };
 
   return (
     <Transition.Root show={true} as={Fragment}>
-      <Dialog as="div" className="relative z-10 " onClose={() => setIsModalOpen(false)}>
+      <Dialog as="div" className="relative z-10" onClose={() => setIsModalOpen(false)}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -63,18 +62,19 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
                   <div className="sm:flex sm:items-start">
                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                       <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                        Edit Prompt
+                        Add Prompt
                       </Dialog.Title>
                       <div className="mt-2">
                         <input
                           type="text"
-                          className="mt-1 block w-96 h-12 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
+                          className="mt-1 block w-96 h-12 rounded-md border-gray-300 shadow-sm outline-none ps-4 focus:ring-opacity-50"
                           placeholder="Prompt Title"
+                          value={promptTitle}
                           onChange={(e) => setPromptTitle(e.target.value)}
                         />
-                        <Menu as="div" className="relative h-40 mt-3">
+                        <Menu as="div" className="relative mt-3">
                           <MenuButton className="w-96 text-left rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                            {selectedCategory || "Select Category"}
+                            {selectedCategories.length ? selectedCategories.join(', ') : 'Select Categories'}
                           </MenuButton>
                           <Transition
                             as={Fragment}
@@ -86,15 +86,21 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
                             leaveTo="transform opacity-0 scale-95"
                           >
                             <MenuItems className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                              {["Category 1", "Category 2", "Category 3"].map((category) => (
+                              {['Category 1', 'Category 2', 'Category 3'].map((category) => (
                                 <MenuItem key={category}>
                                   {({ active }) => (
                                     <button
                                       className={`${
-                                        active ? "bg-indigo-600 text-white" : "text-gray-900"
+                                        active ? 'bg-indigo-600 text-white' : 'text-gray-900'
                                       } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                      onClick={() => setSelectedCategory(category)}
+                                      onClick={() => toggleCategory(category)}
                                     >
+                                      <input
+                                        type="checkbox"
+                                        checked={selectedCategories.includes(category)}
+                                        onChange={() => toggleCategory(category)}
+                                        className="mr-2"
+                                      />
                                       {category}
                                     </button>
                                   )}
@@ -111,7 +117,7 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
-                    onClick={handleUpdate}
+                    onClick={handleAddPrompt}
                   >
                     Add
                   </button>

@@ -1,8 +1,14 @@
+// layout.tsx
+import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import LoadingAnimation from "./components/LoadingAnimation";
+
+
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -26,10 +32,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="two-line-bg">
-        
         <Navbar titles={navTitles}></Navbar> 
+        <Suspense fallback={<LoadingAnimation />}>
+        
+        </Suspense>
+      
         {children}
-         <Footer></Footer>
+        <Footer></Footer>
       </body>
     </html>
   );

@@ -1,6 +1,7 @@
 const StoryService = require("../services/storyService");
 const GptService = require("../services/gptService");
-
+const Contest = require("../models/contest")
+const Prompt=require("../models/prompt")
 const gptService = new GptService(process.env.GPT_API_KEY); // Initialize GPT service
 
 const createStory = async (req, res) => {
@@ -78,6 +79,7 @@ async function submitStoryToContest(req, res) {
   const { contestId, promptId } = req.params;
   const { userId, title, content } = req.body;
   // Calculate word count
+  console.log(contestId)
   const wordCount = content.split(" ").length;
 
   try {
@@ -103,6 +105,7 @@ async function submitStoryToContest(req, res) {
       wordCount,
       contest: contestId,
       prompt: promptId,
+      storyType:"contestStory"
     });
     res.status(201).json(story);
   } catch (error) {

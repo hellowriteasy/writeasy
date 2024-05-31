@@ -2,8 +2,9 @@ const Prompt = require("../models/prompt");
 const Contest = require("../models/contest"); // Import Contest model
 
 const createPrompt = async (data) => {
+  console.log(data)
   const { promptType } = data;
-  if (!["practicePrompt", "contestPrompt", "gamesPrompt"].includes(promptType)) {
+  if (!["practice", "contest","game"].includes(promptType)) {
     throw new Error("Invalid prompt type");
   }
 

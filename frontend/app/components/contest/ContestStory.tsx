@@ -12,7 +12,7 @@ import Italic from "@tiptap/extension-italic";
 import Strike from "@tiptap/extension-strike";
 import Code from "@tiptap/extension-code";
 import History from "@tiptap/extension-history";
-import * as Icons from "./Icons";
+// import * as Icons from "./Icons";
 import { diffChars, Change } from "diff";
 import usePdfStore from "@/app/store/usePDFStore";
 import { usePDF } from "react-to-pdf";
@@ -397,7 +397,6 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
               >
                 {copied ? "Copied" : "Copy"}
               </button>
-              
               <button
               
                 className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
@@ -410,8 +409,8 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
             </>
           </div>
         </div>
-        <div className=" w-[50vw]  rounded-3xl">
-          <EditorContent className=" scroll-m-2 h-96 mt-10" editor={editor} />
+        <div className=" w-[50vw] rounded-3xl">
+          <EditorContent className="h-auto mt-10" editor={editor} />
         </div>
       </div>
       {/* <div className="absolute -left-2/3">

@@ -16,6 +16,7 @@ import InputField from '../components/InputFIelds';
 import useAuthStore from '../store/useAuthStore';
 import { useRouter } from 'next/navigation';
 import Earth from "../../public/Landingpage-img/earth.svg";
+
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -26,17 +27,17 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/login", {
+      const response = await axios.post(`http://localhost:5000/api/auth/login`, {
         email,
         password
       });
-      const userId = response.data.token._id;
-      const token = response.data.token.token;
-      console.log(response.data.token._id);
-      login(userId, token);
+
+      const { _id: userId, token, username, role, subscriptionType } = response.data;
+      login(userId, token, username, role, subscriptionType);
+      console.log(response.data._id)
       router.push('/', { scroll: false });
     } catch (error) {
-      setError("Login failed");
+      setError(error.response?.data?.message || "Login failed");
     }
   };
 
@@ -53,41 +54,41 @@ const Login = () => {
         </h1>
         <form onSubmit={handleSubmit} className="relative flex flex-col font-comic mt-14 z-10">
           <InputField
-            types="email"
+            type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           <InputField
-            types="password"
+            type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <h1 className="text-end pt-4 font-comic text-sm underline font-bold">
-            <a href="#">Forgot Password?</a>
+            <Link href="#">Forgot Password?</Link>
           </h1>
           <button className="text-center border rounded-3xl text-white hover:opacity-80 bg-black h-12 mt-4 text-2xl" type="submit">
             Login
           </button>
           {error && <p className="text-red-500">{error}</p>}
           <h1 className="text-center pt-2 font-bold">or</h1>
-          <Button type="google"></Button>
+          <Button type="google" />
           <h1 className="text-center font-comic pt-4">
             Don't have an account? <Link href="/signup" className="font-bold cursor-pointer">Signup</Link>
           </h1>
           <div className="absolute w-32 h-16 -top-4 -right-28">
-            <Image src={Rocket} alt='' />
+            <Image src={Rocket} alt='rocket' />
           </div>
         </form>
         <div className="absolute top-60 w-20 h-10 left-10">
-          <Image src={Group2} alt='' />
+          <Image src={Group2} alt='group2' />
         </div>
         <div className="absolute top-20 right-0">
-          <Image src={yellowvector} alt='' />
+          <Image src={yellowvector} alt='yellow vector' />
         </div>
         <div className="absolute left-80 top-28">
-          <Image src={Sun} alt='' />
+          <Image src={Sun} alt='sun' />
         </div>
       </div>
      

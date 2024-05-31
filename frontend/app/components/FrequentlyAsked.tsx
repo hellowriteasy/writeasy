@@ -34,24 +34,24 @@ const FrequentlyAsked = () => {
   const [openId, setOpenId] = useState(Questions[0].id); // Initialize with the first question open
 
   return (
-    <div className="relative w-screen text-black flex flex-col items-center px-4 md:px-10">
+    <div className="relative w-full text-black flex flex-col items-center px-4 md:px-10">
       <div className="absolute left-4 md:left-10 vsm-hide top-20 md:top-32">
         <Image className='w-[13vw]' src={Group} alt="group" />
       </div>
       <div className="absolute right-4 md:right-10 top-40 md:top-60">
         <Image className='w-[5vw]' src={Path} alt="path" />
       </div>
-      <div className="text-3xl flex-col font-comic gap-3 flex justify-center items-center font-bold">
+      <div className="text-3xl flex flex-col items-center font-bold font-comic gap-3">
         <h1 className="text-center font-crayon text-5xl md:text-7xl font-bold pt-10">Frequently Asked Questions</h1>
         <div className="w-full pt-16 px-4">
           <div className="mx-auto w-full max-w-lg">
             <div className="divide-y divide-gray-300 rounded-xl flex flex-col items-center">
               {Questions.map((question) => (
-                <Disclosure as="div" className="p-4 md:p-6 text-center w-full" key={question.id}>
+                <Disclosure as="div" className="p-4 md:p-6 w-full" key={question.id}>
                   {({ open }) => (
                     <>
                       <Disclosure.Button
-                        className="group flex w-full items-center justify-center"
+                        className="group flex w-full items-center justify-center focus:outline-none"
                         onClick={() => setOpenId(openId === question.id ? null : question.id)}
                       >
                         <span className="text-lg md:text-xl font-medium text-black">
@@ -67,7 +67,7 @@ const FrequentlyAsked = () => {
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                       >
-                        <Disclosure.Panel className="mt-2 text-sm text-gray-800 bg-custom-yellow rounded-full p-4 mx-auto w-max">
+                        <Disclosure.Panel className="mt-2 text-sm md:text-base text-gray-800 bg-custom-yellow rounded-full p-4 mx-auto w-full">
                           {question.answer}
                         </Disclosure.Panel>
                       </Transition>

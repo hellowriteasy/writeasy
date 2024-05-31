@@ -1,23 +1,58 @@
 import { useState, Fragment, useRef } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Dialog, Transition } from '@headlessui/react';
+import axios from 'axios';
 
 interface CardProps {
-  title: string;
+  _id: string;
   username: string;
+  title: string;
+  content: string;
+  wordCount: number;
+  submissionDateTime: string;
+  prompt: string;
+  storyType: string;
+  correctionSummary: string;
+  corrections: string;
+  score: number;
 }
 
-const Card: React.FC<CardProps> = ({ title, username }) => {
+const Card: React.FC<CardProps> = ({
+  _id,
+  username,
+  title,
+  content,
+  wordCount,
+  submissionDateTime,
+  prompt,
+  storyType,
+  correctionSummary,
+  corrections,
+  score,
+}) => {
   const [open, setOpen] = useState(false);
-  const [promptTitle, setPromptTitle] = useState(title);
-  const [feedback, setFeedback] = useState("");
-  const [storyDetail, setStoryDetail] = useState("");
-
+  const [feedback, setFeedback] = useState(correctionSummary);
+  const [storyDetail, setStoryDetail] = useState(content);
+  const [grade, setGrade] = useState(score); // Renamed to grade for clarity
   const cancelButtonRef = useRef(null);
+
+  const handleUpdate = async () => {
+    try {
+      const response = await axios.put(`http://localhost:5000/api//${_id}`, {
+        correctionSummary: feedback,
+        content: storyDetail,
+        score: grade,
+      });
+      console.log(response.data);
+      setOpen(false);
+    } catch (error) {
+      console.error('There was an error updating the story!', error);
+    }
+  };
 
   return (
     <>
-      <div className="bg-white shadow-md border-gray-300 border w-5/6 rounded-lg p-4 mb-4">
+      <div className="bg-white shadow-md rounded-lg w-5/6 border z-50 border-gray-300 p-4 mb-4">
         <div className="flex justify-between items-center mb-2">
           <div className="text-xl font-semibold">{title}</div>
           <div className="flex space-x-2 gap-4">
@@ -29,7 +64,9 @@ const Card: React.FC<CardProps> = ({ title, username }) => {
             </button>
           </div>
         </div>
-        <div className="text-gray-600">Username: {username}</div>
+        <div className="text-gray-600">User: {username}</div>
+        <div className="text-gray-600">Submission Date: {new Date(submissionDateTime).toLocaleString()}</div>
+        <div className="text-gray-600">Score: {score}</div>
       </div>
 
       <Transition.Root show={open} as={Fragment}>
@@ -57,24 +94,33 @@ const Card: React.FC<CardProps> = ({ title, username }) => {
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl">
                   <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                     <div className="sm:flex sm:items-start">
                       <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
-                        <Dialog.Title as="h3" className="text-base font-semibold flex justify-around leading-6 text-gray-900">
-                         <h2> Edit Story</h2>
-                         <div className='flex gap-4'>
-                         <label htmlFor="">Grade</label>
-                          <input className='w-10 h-8 outline-none border ps-3  border-slate-400' type="text" />
-                         </div>
+                        <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
+                          {title}
+                        </Dialog.Title>
+                        <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
+                          {username}
                         </Dialog.Title>
                         <div className="mt-2">
+                          <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2">
+                              Grade:
+                            </label>
+                            <input
+                              className="mt-1 block w-20 h-10 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
+                              value={grade}
+                              onChange={(e) => setGrade(Number(e.target.value))}
+                            />
+                          </div>
                           <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2">
                               Feedback
                             </label>
                             <textarea
-                              className="mt-1 block w-full h-24 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
+                              className="mt-1 block w-full h-80 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
                               placeholder="Enter your feedback"
                               value={feedback}
                               onChange={(e) => setFeedback(e.target.value)}
@@ -85,7 +131,7 @@ const Card: React.FC<CardProps> = ({ title, username }) => {
                               Story Details
                             </label>
                             <textarea
-                              className="mt-1 block w-full h-40 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
+                              className="mt-1 block w-full h-96 p-4 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
                               placeholder="Story details"
                               value={storyDetail}
                               onChange={(e) => setStoryDetail(e.target.value)}
@@ -107,7 +153,7 @@ const Card: React.FC<CardProps> = ({ title, username }) => {
                     <button
                       type="button"
                       className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
-                      onClick={() => setOpen(false)}
+                      onClick={handleUpdate}
                     >
                       Update
                     </button>

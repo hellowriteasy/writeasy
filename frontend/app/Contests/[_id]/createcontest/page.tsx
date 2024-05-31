@@ -1,49 +1,56 @@
-'use client';
+"use client";
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Image from "next/image";
-import TopWriting from "../../components/Others/TopWriting";
-import WeeklyTest from "../../components/Others/WeeklyTest";
 import Categories from "@/app/components/Categories";
 import Bee from "@/public/Game/cloud3.svg";
 import Cloud from "@/public/Game/cloud.svg";
-import Prompt from "@/app/components/Practice/PracticePrompt";
-import { SimpleEditor } from "@/app/components/WriteStory";
+import { SimpleEditor } from "@/app/components/contest/ContestStory";
 
 interface Prompt {
   _id: string;
   title: string;
   promptType: string;
-  Userid:string;
-  type:string
+  Userid: string;
+  type: string;
 }
 
 interface PromptPageProps {
-  params: {
-    id: string;
-    promptType: string;
-  };
+  
+    contestId: string;
+    promptId: string;
+
 }
 
-const PromptPage: React.FC<PromptPageProps> = ({ params }) => {  
+const PromptPage: React.FC<PromptPageProps> = ({contestId,promptId }) => {  
+
+
   const [prompt, setPrompt] = useState<Prompt | null>(null);
   const [triggerGrammarCheck, setTriggerGrammarCheck] = useState(false);
   const [taskType, setTaskType] = useState("");
   const [input, setInput] = useState("");
 
   useEffect(() => {
-    if (params.id) {
-      // Fetch the specific prompt data based on promptId
-      axios.get(`http://localhost:5000/api/prompts/${params.id}`)
-        .then(response => {
-          setPrompt(response.data);
-        })
-        .catch(error => {
-          console.error('Error fetching prompt:', error);
-        });
+    if (!promptId) {
+      return;
     }
-  }, [params.id]);
+
+    const fetchPromptById = async () => {
+      try {
+        const response = await axios.post(`http://localhost:5000/api/stories/contests/${contestId}/prompt/${promptId}`);
+        if (response.status !== 200) {
+          throw new Error(`Error: ${response.status}`);
+        }
+        const data: Prompt = response.data;
+        setPrompt(data);
+      } catch (err: any) {
+        console.error(err);
+      }
+    };
+
+    fetchPromptById();
+  }, [contestId, promptId]);
 
   const handleGrammarClick = () => {
     setTriggerGrammarCheck(true);
@@ -74,7 +81,6 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
           <div className="gap-8 relative w-4/5 flex flex-col">
             <form action="" className="height-[400px]">
               <div className="flex flex-col w-full items-center gap-8 h-96">
-              
                 <div>
                   <input
                     className="border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[50vw] h-12 focus:outline-none focus:border-yellow-600"
@@ -119,7 +125,6 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
             key={prompt._id}
           />
         </div>
-        
       </div>
     </div>
   );

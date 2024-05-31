@@ -43,7 +43,7 @@ const Page: React.FC = () => {
     fetchStories();
   }, []);
 
-  const handleAddClick = () => {
+  const handleAddClick = () => {          
     setIsModalOpen(true);
   };
 

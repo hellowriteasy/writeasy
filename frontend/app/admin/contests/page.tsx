@@ -1,13 +1,31 @@
 'use client';
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import Navbar from "../../components/admin/Navbar";
-
 import Card from "../../components/admin/contests/CardAdd";
 import Sidebar from "@/app/components/admin/Sidebar";
 
 const Page = () => {
   const router = useRouter();
+  const [contests, setContests] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchContests = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/contests");
+        setContests(response.data);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    };
+
+    fetchContests();
+  }, []);
 
   const handleAddClick = () => {
     router.push("/admin/contests/edit");
@@ -38,10 +56,15 @@ const Page = () => {
               </div>
             </div>
             <div className="mt-4 space-y-4 w-5/6">
-              <Card title="contest" deadline="lorem" />
-              <Card title="contest2" deadline="lorem" />
-              <Card title="contest3" deadline="lorem" />
-              <Card title="contest4" deadline="lorem" />
+              {loading ? (
+                <p>Loading...</p>
+              ) : error ? (
+                <p>Error: {error.message}</p>
+              ) : (
+                contests.map((contest) => (
+                  <Card key={contest.id} title={contest.contestTheme} deadline={contest.submissionDeadline} />
+                ))
+              )}
             </div>
           </div>
         </div>
