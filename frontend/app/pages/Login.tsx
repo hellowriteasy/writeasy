@@ -54,13 +54,13 @@ const Login = () => {
         </h1>
         <form onSubmit={handleSubmit} className="relative flex flex-col font-comic mt-14 z-10">
           <InputField
-            type="email"
+            types="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           <InputField
-            type="password"
+            types="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}

@@ -1,9 +1,9 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Navbar from '../../../components/admin/Navbar';
-import Sidebar from '../../../components/admin/Sidebar';
-import Card from '../../../components/admin/contests/CardAdd';
+import Sidebar from '../../../components/admin/SIdebar';
+import Card from '../../../components/admin/contests/CardUpdate';
 import Modal from '@/app/components/admin/contests/ContestModal';
 
 interface Prompt {
@@ -12,26 +12,62 @@ interface Prompt {
   promptCategories: string[];
 }
 
-const Page = () => {
+interface Contest {
+  _id: string;
+  contestTheme: string;
+  submissionDeadline: string;
+  prompts: Prompt[];
+}
+
+interface Params {
+  _id: string;
+}
+
+interface PageProps {
+  params: Params;
+}
+
+const Page = ({ params }: PageProps) => {
+  const { _id } = params;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [promptCards, setPromptCards] = useState<Prompt[]>([]);
   const [deadline, setDeadline] = useState('');
   const [theme, setTheme] = useState('');
-  
+
+  useEffect(() => {
+    const fetchContest = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/contests/${_id}`);
+        
+        console.log(response);
+        const contest: Contest = response.data;
+        setPromptCards(contest.prompts);
+        setDeadline(new Date(contest.submissionDeadline).toISOString().split('T')[0]); // Format the date correctly
+        setTheme(contest.contestTheme);
+      } catch (error) {
+        console.error('Error fetching contest:', error);
+      }
+    };
+
+    if (_id) {
+      fetchContest();
+    }
+  }, [_id]);
+
   const handleAddClick = () => {
     setIsModalOpen(true);
   };
 
   const handleSubmitContest = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/contests', {
+      const response = await axios.put(`http://localhost:5000/api/contests/${_id}`, {
         prompts: promptCards.map((prompt) => prompt._id),
         contestTheme: theme,
         submissionDeadline: deadline,
       });
-      console.log('Contest added successfully:', response.data);
+      console.log('Contest updated successfully:', response.data);
     } catch (error) {
-      console.error('Error adding contest:', error);
+      console.error('Error updating contest:', error);
     }
   };
 
@@ -54,6 +90,7 @@ const Page = () => {
                 id="deadline"
                 type="date"
                 className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                value={deadline}
                 onChange={(e) => setDeadline(e.target.value)}
               />
             </div>
@@ -65,10 +102,11 @@ const Page = () => {
                 id="theme"
                 type="text"
                 className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                value={theme}
                 onChange={(e) => setTheme(e.target.value)}
               />
             </div>
-          
+
             <button
               onClick={handleAddClick}
               className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
@@ -76,7 +114,7 @@ const Page = () => {
               Add Prompt
             </button>
             {promptCards.map((prompt, index) => (
-              <Card key={index} title={prompt.promptText} type={prompt.promptCategories.join(', ')} />
+              <Card key={index} title={prompt.promptText} id={prompt._id} type={prompt.promptCategories} />
             ))}
             <button
               onClick={handleSubmitContest}

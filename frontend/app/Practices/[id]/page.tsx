@@ -72,8 +72,8 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
             <Image src={Bee} alt="bee" />
           </div>
           <div className="gap-8 relative w-4/5 flex flex-col">
-            <form action="" className="height-[400px]">
-              <div className="flex flex-col w-full items-center gap-8 h-96">
+            <form action="" className="">
+              <div className="flex flex-col w-full items-center gap-8 h-40 ">
               
                 <div>
                   <input
@@ -82,14 +82,9 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
                     onChange={handleTitleChange}
                   />
                 </div>
-                <div>
-                  <Categories />
-                </div>
-              </div>
-            </form>
-          </div>
+               
           <div className="flex flex-col gap-8">
-            <div className="flex flex-wrap w-96 gap-4 font-comic">
+            <div className="flex flex-wrap  gap-4 font-comic">
               {['grammar', 'rewrite', 'improve', 'pdf'].map((type) => (
                 <div key={type}>
                   <button
@@ -106,6 +101,9 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
                 </div>
               ))}
             </div>
+          </div>
+              </div>
+            </form>
           </div>
         </div>
         <div className=" w-full rounded-full">

@@ -1,24 +1,38 @@
 'use client';
 import { Fragment, useState } from 'react';
 import { Dialog, Transition, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface ModalProps {
   setIsModalOpen: (isOpen: boolean) => void;
-  onAddPrompt: (prompt: { id: string; promptText: string; promptCategories: string[] }) => void;
+  onAddPrompt: (prompt: { _id: string; promptText: string; promptCategories: string[] }) => void;
 }
 
 const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
   const [promptTitle, setPromptTitle] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-  const handleAddPrompt = () => {
-    onAddPrompt({
-      id: uuidv4(),
-      promptText: promptTitle,
-      promptCategories: selectedCategories,
-    });
-    setIsModalOpen(false);
+  const handleAddPrompt = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/prompts', {
+        title: promptTitle,
+        promptCategory: selectedCategories,
+        promptType: 'contest',
+      });
+      const { _id } = response.data;
+      onAddPrompt({
+        _id,
+        promptText: promptTitle,
+        promptCategories: selectedCategories,
+      });
+      toast.success("Prompt added successfully!");
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Error adding prompt:', error);
+      toast.error("Failed to add prompt.");
+    }
   };
 
   const toggleCategory = (category: string) => {
@@ -80,13 +94,13 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
                             as={Fragment}
                             enter="transition ease-out duration-100"
                             enterFrom="transform opacity-0 scale-95"
-                            enterTo="transform opacity-100 scale-100"
+                            enterTo="opacity-100 scale-100"
                             leave="transition ease-in duration-75"
                             leaveFrom="transform opacity-100 scale-100"
                             leaveTo="transform opacity-0 scale-95"
                           >
                             <MenuItems className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                              {['Category 1', 'Category 2', 'Category 3'].map((category) => (
+                              {['adventure', 'romance', 'mystery'].map((category) => (
                                 <MenuItem key={category}>
                                   {({ active }) => (
                                     <button

@@ -1,15 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import axios from "axios";
-import Navbar from "../../components/Navbar";
+import Image from "next/image";
 import PromptComponent from "../../components/contest/ContestPrompt";
 import TopWriting from "../../components/Others/TopWriting";
 import WeeklyTest from "../../components/Others/WeeklyTest";
 import Cloud from "@/public/Game/cloud.svg";
 import Cloud2 from "@/public/Game/cloud3.svg";
-import Image from "next/image";
 import Pagination from "@/app/components/Pagination";
 import CreateContest from "./createcontest/page";
 
@@ -25,13 +23,12 @@ interface Contest {
   contestTheme: string;
   submissionDeadline: string;
   prompts: Prompt[];
+  description: string;
 }
 
 interface ContestPageProps {
   params: {
     _id: string;
-    
-   
   };
 }
 
@@ -80,8 +77,8 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
   if (!contest) return <p>No contest available at the moment.</p>;
 
   return (
-    <div className="w-full h-[1300px] mt-6 z-0 relative flex justify-center">
-      <div className="w-10/12 h-screen ms-12">
+    <div className="w-full h-auto mt-6 z-0 relative flex justify-center">
+      <div className="w-10/12 h-auto ms-12">
         {selectedPrompt ? (
           <CreateContest
             contestId={params._id}
@@ -89,10 +86,20 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
           />
         ) : (
           <>
-            <div className="w-full h-10 text-center text-2xl font-comic relative pt-4">
+            <div className="w-full text-center text-2xl font-comic relative pt-4">
               until {new Date(contest.submissionDeadline).toLocaleString()} GMT
             </div>
-            <div className="flex w-full h-auto relative mt-0 items-center justify-around">
+            <div className="flex justify-center mt-8">
+              <div className="  p-6 mb-6">
+                <h2 className="text-4xl font-comic font-bold mb-4">
+                  {contest.contestTheme}
+                </h2>
+                <p className="text-xl w-10/12 ">
+                  {contest.description || "Paragraphs are the building blocks of papers. Many students define paragraphs in terms of length: a paragraph is a group of at least five sentences, a paragraph is half a page long, etc. In reality, though, the unity and coherence of ideas among sentences is what constitutes a paragraph."}
+                </p>
+              </div>
+            </div>
+            <div className="flex w-full h-auto relative mt-0 justify-around">
               <div className="absolute top-0 -left-40">
                 <Image src={Cloud2} alt="cloud" />
               </div>
@@ -101,9 +108,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
                   <h1 className="text-6xl font-comic font-bold p-10">
                     {contest.contestTitle}
                   </h1>
-                  {/* <p className="text-xl">{contest.contestTheme}</p> */}
                 </div>
-                {/* Render Prompts Dynamically */}
                 {contest.prompts.map((prompt) => (
                   <PromptComponent
                     key={prompt._id}
@@ -114,7 +119,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
                     onSelectPrompt={handleSelectPrompt}
                   />
                 ))}
-                <div className="absolute bottom-80 -left-32"  >
+                <div className="absolute bottom-80 -left-32">
                   <Image src={Cloud} alt="Cloud" />
                 </div>
               </div>
@@ -123,7 +128,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
                 <TopWriting />
               </div>
             </div>
-            <div className="w-full ms-28 ">
+            <div className="w-full ms-28">
               <Pagination />
             </div>
           </>

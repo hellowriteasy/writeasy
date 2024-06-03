@@ -43,7 +43,7 @@ const Games: React.FC = () => {
   useEffect(() => {
     const fetchPrompts = async () => {
       try {
-        const response = await axios.get<ApiResponse[]>("http://localhost:5000/api/collaborative_stories");
+        const response = await axios.get<ApiResponse[]>("http://localhost:5000/api/collaborative-stories");
         const formattedPrompts: PromptData[] = response.data.map((story) => ({
           promptText: story.title,
           category: "Collaborative Story",
@@ -89,11 +89,11 @@ const Games: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex w-full h-auto relative mt-0 items-center justify-around">
+        <div className="flex w-full h-auto relative mt-0  justify-around">
           <div className="absolute -top-40 mt-3 -left-32">
             <Image className="w-[12vw]" src={Bee} alt="bee" />
           </div>
-          <div className="gap-8 relative flex flex-col">
+          <div className="gap-8 w-full  relative flex flex-col">
             {currentPrompts.map((prompt) => (
               <Prompt key={prompt.promptId} prompt={prompt} />
             ))}
@@ -101,7 +101,7 @@ const Games: React.FC = () => {
               <Image src={Cloud} alt="Cloud" />
             </div>
           </div>
-          <div className="flex -mt-28 flex-col gap-8">
+          <div className="flex  flex-col gap-8">
             <WeeklyTest />
             <TopWriting />
           </div>

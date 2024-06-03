@@ -12,7 +12,7 @@ import moon from "@/public/Game/moon.svg";
 import book from "@/public/Game/book.svg";
 import pencilman from "@/public/Game/pensilman.svg";
 import Bee from "@/public/Game/Bee.svg";
-
+import { SimpleEditor } from "../components/WriteStory";
 interface PromptData {
   promptText: string;
   promptCategory: string;
@@ -52,7 +52,7 @@ const Page: React.FC = () => {
         <Image className="w-[10vw]" src={moon} alt="moon" />
       </div>
       <div className="w-10/12 h-screen ms-12">
-        <div className="w-full h-60 relative pt-4">
+        <div className="w-full h-80 relative pt-4">
           <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold font-comic">Practice Your Craft</h1>
           <div className="absolute top-10 right-48">
             <Image className="w-[6vw] sm-hide" src={book} alt="group" />
@@ -65,7 +65,7 @@ const Page: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex w-full flex-shrink h-auto relative -mt-10 items-center justify-around">
+        <div className="flex w-full flex-shrink h-auto relative -mt-10  justify-around">
           <div className="absolute -top-28 -left-32">
             <Image className="w-[10vw]" src={Bee} alt="bee" />
           </div>
@@ -82,7 +82,7 @@ const Page: React.FC = () => {
               ))
             )}
           </div>
-          <div className="flex flex-col">
+          <div className="">
             <TopWriting />
           </div>
         </div>

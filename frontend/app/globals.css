@@ -164,3 +164,18 @@ u{
   transform-origin: 0 0;
 }
 .ldio-x2uulkbinbj div { box-sizing: content-box; }
+.bg-lightgreen {
+  background-color: lightgreen;
+}
+
+.bg-lightcoral {
+  background-color: lightcoral;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+.line-through {
+  text-decoration: line-through;
+}

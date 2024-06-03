@@ -26,7 +26,7 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
     <>
       <div className="flex items-center justify-between w-full">
         <Link href="/">
-          <div className="flex cursor-pointer items-center flex-shrink-0 mr-6">
+          <div className="flex w-48 cursor-pointer items-center flex-shrink-0 mr-6">
             <Image src={Logo} alt='logo' />
           </div>
         </Link>
@@ -36,7 +36,7 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
               const isActive = path.startsWith(link.path) || path.includes(link.path);
               return (
                 <li key={`${link.label}-${link.path}`} className={isActive ? 'active w-24 sm:w-32 h-8' : 'px-4 sm:px-6 py-2 text-center hover:text-white'}>
-                  <Link className="pt-5 ps-6 cursor-pointer hover:text-white" href={link.path}>
+                  <Link className="pt-5 ps-6 text-[1.5vw] cursor-pointer hover:text-white" href={link.path}>
                     {link.label}
                   </Link>
                 </li>
@@ -62,7 +62,11 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
       </div>
     </>
   );
-
+   if(path.includes("admin")||path.includes("login")||path.includes("signup")){
+    return(
+      <div className='hidden'></div>
+    )
+   }else
   return (
     <nav className="navbar flex w-screen sticky top-0 h-28 justify-between items-center bg-custom-yellow p-6 z-50">
       {navContent}

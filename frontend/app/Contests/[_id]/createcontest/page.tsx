@@ -23,38 +23,19 @@ interface PromptPageProps {
 
 }
 
-const PromptPage: React.FC<PromptPageProps> = ({contestId,promptId }) => {  
+const CreateContest: React.FC<PromptPageProps> = ({contestId,promptId }) => {  
 
 
-  const [prompt, setPrompt] = useState<Prompt | null>(null);
+  // const [prompt, setPrompt] = useState<Prompt | null>(null);
   const [triggerGrammarCheck, setTriggerGrammarCheck] = useState(false);
   const [taskType, setTaskType] = useState("");
   const [input, setInput] = useState("");
 
-  useEffect(() => {
-    if (!promptId) {
-      return;
-    }
-
-    const fetchPromptById = async () => {
-      try {
-        const response = await axios.post(`http://localhost:5000/api/stories/contests/${contestId}/prompt/${promptId}`);
-        if (response.status !== 200) {
-          throw new Error(`Error: ${response.status}`);
-        }
-        const data: Prompt = response.data;
-        setPrompt(data);
-      } catch (err: any) {
-        console.error(err);
-      }
-    };
-
-    fetchPromptById();
-  }, [contestId, promptId]);
+  
 
   const handleGrammarClick = () => {
     setTriggerGrammarCheck(true);
-  };
+  };  
 
   const handleTaskTypeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { value } = e.currentTarget;
@@ -79,8 +60,8 @@ const PromptPage: React.FC<PromptPageProps> = ({contestId,promptId }) => {
             <Image src={Bee} alt="bee" />
           </div>
           <div className="gap-8 relative w-4/5 flex flex-col">
-            <form action="" className="height-[400px]">
-              <div className="flex flex-col w-full items-center gap-8 h-96">
+            <form action="" className="height-[200px]">
+              <div className="flex flex-col w-full items-center gap-8 h-40">
                 <div>
                   <input
                     className="border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[50vw] h-12 focus:outline-none focus:border-yellow-600"
@@ -114,20 +95,19 @@ const PromptPage: React.FC<PromptPageProps> = ({contestId,promptId }) => {
             </div>
           </div>
         </div>
-        <div className=" w-full rounded-full">
+        <div className=" w-full border-2  rounded-full">
           <SimpleEditor
             triggerGrammarCheck={triggerGrammarCheck}
             title={input}
-            Userid={params.id}
-            type={prompt.promptType}
-            _id={prompt._id}
             taskType={taskType}
-            key={prompt._id}
+            contestId={contestId}
+            promptId={promptId}
           />
         </div>
+       <button onClick={handleGrammarClick} className='w-full h-12 bg-black text-white rounded-3xl '>submit contest</button>
       </div>
     </div>
   );
 };
 
-export default PromptPage;
+export default CreateContest;

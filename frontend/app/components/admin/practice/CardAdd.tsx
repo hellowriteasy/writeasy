@@ -2,6 +2,7 @@ import { useState, Fragment, useRef } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Dialog, Transition, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 interface CardProps {
   title: string;
@@ -25,19 +26,24 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
       });
       console.log('Update response:', response.data);
       setOpen(false);
+      toast.success('Prompt updated successfully!');
     } catch (error) {
       console.error('Error updating prompt:', error);
+      toast.error('Failed to update prompt.');
     }
   };
 
   const handleDelete = async () => {
     try {
       const response = await axios.delete(`http://localhost:5000/api/prompts/${id}`);
-      alert("are you sure you want to delete this prompt?")
-      console.log('Delete response:', response.data);
-      // Optionally, you can also update the UI to remove the card from the list of prompts
+      if (window.confirm("Are you sure you want to delete this prompt?")) {
+        console.log('Delete response:', response.data);
+        toast.success('Prompt deleted successfully!');
+        // Optionally, you can also update the UI to remove the card from the list of prompts
+      }
     } catch (error) {
       console.error('Error deleting prompt:', error);
+      toast.error('Failed to delete prompt.');
     }
   };
 

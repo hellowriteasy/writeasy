@@ -30,7 +30,7 @@ const Card: React.FC<CardProps> = ({ title, description }) => {
         </p>
       </div>
       <div className="flex justify-end space-x-4 mt-4">
-        <button onClick={() => toPDF()} className="bg-white border-2 rounded-2xl border-slate-700 text-black px-4 py-2">
+        <button onClick={() => toPDF()} className="bg-white  border-2 rounded-2xl border-slate-700 text-black px-4 py-2">
           PDF
         </button>
         <button className="bg-white border-2 rounded-2xl border-slate-700 text-black px-4 py-2">

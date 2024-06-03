@@ -21,7 +21,7 @@ const getPracticePrompts = () => {
 };
 
 const getContestPrompts = () => {
-  return getPromptsByType("contestPrompt");
+  return getPromptsByType("contest");
 };
 
 const getGamePrompts = () => {

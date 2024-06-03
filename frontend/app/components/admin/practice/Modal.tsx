@@ -1,6 +1,8 @@
 import { Fragment, useState } from 'react';
 import { Dialog, Transition, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Card from '../../../components/admin/contests/CardAdd'; // Import your Card component
 
 interface ModalProps {
@@ -19,12 +21,13 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
 
   const handleAdd = () => {
     const promptData = {
-      promptText: promptTitle,
+      title: promptTitle,
       promptCategory: selectedCategory,
-      promptType: 'contestPrompt'
+      promptType: 'practice'
     };
-
-    axios.post('http://localhost:5000/api/prompts/practice-prompt', promptData)
+    console.log(promptTitle)
+    console.log(selectedCategory) 
+    axios.post('http://localhost:5000/api/prompts', promptData)
       .then(response => {
         console.log(response.data);
         const newPrompt: CardProps = {
@@ -33,15 +36,17 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
         };
         setPromptCards([...promptCards, newPrompt]); // Add the new prompt card to the state
         setIsModalOpen(false);
+        toast.success('Prompt added successfully!');
       })
       .catch(error => {
         console.error('There was an error posting the data!', error);
+        toast.error('Failed to add prompt.');
       });
   };
 
   return (
     <Transition.Root show={true} as={Fragment}>
-      <Dialog as="div" className="relative z-10 " onClose={() => setIsModalOpen(false)}>
+      <Dialog as="div" className="relative z-10" onClose={() => setIsModalOpen(false)}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
