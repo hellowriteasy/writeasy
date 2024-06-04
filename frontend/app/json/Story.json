@@ -1,0 +1,41 @@
+[
+    {
+        "user": "user12345",
+        "title": "A Journey Through Time",
+        "content": "Once upon a time in a land far away, there was a small village surrounded by lush forests and towering mountains...",
+        "wordCount": 3500,
+        "submissionDateTime": "2024-05-18T14:30:00Z",
+        "score": 85.5,
+        "corrections": "Corrected some grammatical errors and improved sentence structure.",
+        "contest": "contest789",
+        "prompt": "prompt456",
+        "storyType": "contest"
+      },
+      {
+        "user": "user2345",
+        "title": "A Journey Through meme",
+        "content": "Once upon a time in a land far away, there was a small village surrounded by lush forests and towering mountains...",
+        "wordCount": 3500,
+        "submissionDateTime": "2024-04-18T14:30:00Z",
+        "score": 85.5,
+        "corrections": "Corrected some grammatical errors and improved sentence structure.",
+        "contest": "contest7489",
+        "prompt": "prompt4546",
+        "storyType": "contest"
+      },
+      {
+        "user": "user345",
+        "title": "A mourney Through meme",
+        "content": "Once upon a time in a water far away, there was a small village surrounded by lush forests and towering mountains...",
+        "wordCount": 3500,
+        "submissionDateTime": "2024-03-18T14:30:00Z",
+        "score": 85.5,
+        "corrections": "Corrected gum grammatical errors and improved sentence structure.",
+        "contest": "contest7489",
+        "prompt": "prompt4546",
+        "storyType": "contest"
+      }
+      
+      
+      
+]
