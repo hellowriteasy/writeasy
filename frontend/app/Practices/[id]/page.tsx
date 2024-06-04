@@ -117,7 +117,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
             key={prompt._id}
           />
         </div>
-        
+      
       </div>
     </div>
   );

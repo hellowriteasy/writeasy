@@ -414,9 +414,9 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
           <EditorContent className=" scroll-m-2 h-96 mt-10" editor={editor} />
         </div>
       </div>
-      {/* <div className="absolute -left-2/3">
+      <div className="absolute -left-2/3">
         <PDF corrected={correctedText} originals={inputText} />
-      </div> */}
+      </div>
     </>
   );
 }

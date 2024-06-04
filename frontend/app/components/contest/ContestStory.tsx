@@ -147,18 +147,21 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
 
     try {
       const currentContent = editor.getText();
+      console.log(promptId);
+      console.log(contestId);
       console.log(currentContent);
       const payload = {
-        userId: "6640daca328ae758689fcfc1",
+        user: "6640daca328ae758689fcfc1",
         title: title,
         content: currentContent,
         taskType: taskType,
-        storyType: type,
-        prompt: _id
+        storyType:"contestStory",
+        prompt:promptId,
+        contest:contestId 
       };
 
       const { data, status } = await axios.post(
-        `http://localhost:5000/api/stories/contest/${contestId}/prompt/${promptId}`,
+        `http://localhost:5000/api/stories`,
         payload
       );
 

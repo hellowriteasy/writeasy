@@ -22,7 +22,7 @@ const Card: React.FC<CardProps> = ({ title, description }) => {
     : description;
 
   return (
-    <div className="bg-white w-3/4 border-2 border-slate-300 shadow-sm rounded-3xl p-6 transition-all duration-300">
+    <div className="bg-white w-3/5  border-2 border-slate-300 my-5 shadow-sm rounded-3xl p-6 transition-all duration-300">
       <div ref={targetRef} className="flex flex-col mb-4">
         <h2 className="text-xl px-4 py-2 font-bold mb-2">{title}</h2>
         <p className={`text-gray-700 w-[95%] px-4 py-4 transition-all duration-300 ${showFullDescription ? 'max-h-full' : 'max-h-20 overflow-hidden'}`}>
@@ -39,7 +39,7 @@ const Card: React.FC<CardProps> = ({ title, description }) => {
         <button className="bg-white border-2 rounded-2xl border-slate-700 text-black px-4 py-2">
           Delete
         </button>
-        <button onClick={toggleDescription} className="bg-black text-white px-4 py-2 rounded">
+        <button onClick={toggleDescription} className="bg-black text-white px-4 py-2 rounded-2xl">
           {showFullDescription ? 'Show Less' : 'Read More'}
         </button>
       </div>

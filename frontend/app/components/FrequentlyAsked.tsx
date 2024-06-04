@@ -34,7 +34,7 @@ const FrequentlyAsked = () => {
   const [openId, setOpenId] = useState(Questions[0].id); // Initialize with the first question open
 
   return (
-    <div className="relative w-full text-black flex flex-col items-center px-4 md:px-10">
+    <div className="relative w-full h-screen text-black flex flex-col items-center px-4 md:px-10">
       <div className="absolute left-4 md:left-10 vsm-hide top-20 md:top-32">
         <Image className='w-[13vw]' src={Group} alt="group" />
       </div>

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Image from "next/image";
-import Categories from "@/app/components/Categories";
+
 import Bee from "@/public/Game/cloud3.svg";
 import Cloud from "@/public/Game/cloud.svg";
 import { SimpleEditor } from "@/app/components/contest/ContestStory";
@@ -69,14 +69,8 @@ const CreateContest: React.FC<PromptPageProps> = ({contestId,promptId }) => {
                     onChange={handleTitleChange}
                   />
                 </div>
-                <div>
-                  <Categories />
-                </div>
-              </div>
-            </form>
-          </div>
           <div className="flex flex-col gap-8">
-            <div className="flex flex-wrap w-96 gap-4 font-comic">
+            <div className="flex flex-wrap w-full gap-4 font-comic">
               {['grammar', 'rewrite', 'improve', 'pdf'].map((type) => (
                 <div key={type}>
                   <button
@@ -93,6 +87,10 @@ const CreateContest: React.FC<PromptPageProps> = ({contestId,promptId }) => {
                 </div>
               ))}
             </div>
+          </div>
+            
+              </div>
+            </form>
           </div>
         </div>
         <div className=" w-full border-2  rounded-full">

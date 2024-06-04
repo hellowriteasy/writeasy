@@ -27,7 +27,7 @@ export default function RootLayout({
     { label: 'Contests', path: '/Contests' },
     { label: 'Games', path: '/Games' },
     { label: 'Pricing', path: '/Pricing' },
-    { label: 'FAQ', path: '/FAQ' },
+    { label: 'FAQs', path: '/FAQ' },
   ];
   
   return (

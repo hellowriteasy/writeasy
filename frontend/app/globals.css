@@ -52,10 +52,10 @@ h1{
     background-size:cover 
     
 }
-/* .navbar ul li:hover {
+.navbar ul li:hover {
   background-image: url("../public/navbg.svg");
   background-size:cover 
-} */
+}
 button:hover{
   opacity: 80%;
 }

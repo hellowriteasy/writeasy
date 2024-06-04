@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import classNames from "classnames";
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import Document from "@tiptap/extension-document";
@@ -12,16 +12,44 @@ import Strike from "@tiptap/extension-strike";
 import Code from "@tiptap/extension-code";
 import History from "@tiptap/extension-history";
 import * as Icons from "../../../components/Icons";
-
-import TopWriting from "../../../components/Others/TopWriting";
-import WeeklyTest from "../../../components/Others/WeeklyTest";
-import Categories from "@/app/components/Categories";
 import Bee from "@/public/Game/cloud3.svg";
 import Cloud from "@/public/Game/cloud.svg";
 import Image from "next/image";
-import Pagination from "@/app/components/Pagination";
+import axios from "axios"
 
 const Page = () => {
+   const [title,setTitle]=useState("")
+  function submitStory(){
+    const currentContent = editor.getText();
+    console.log(promptId);
+    console.log(contestId);
+    console.log(currentContent);
+    const payload = {
+      user: "6640daca328ae758689fcfc1",
+      title: title,
+      content: currentContent,
+      storyType:"game"
+    
+    };
+
+    const { data, status } = await axios.post(
+      `http://localhost:5000/api/stories`,
+      payload
+    );
+
+    // alert(data.storyId);
+    // console.log(data);
+    // setInputText(currentContent);
+    // setCorrectedText(data.corrections);
+    // setCopied(false);
+    // setIsCheckingGrammer(true);
+
+  } catch (error) {
+    console.log("error", error);
+  }
+  }
+
+   
   const editor = useEditor({
     extensions: [
       Document,
@@ -102,11 +130,10 @@ const Page = () => {
                   <input
                     className="border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[50vw] h-12 focus:outline-none focus:border-yellow-600"
                     placeholder="Untitled Story"
+                    onChange={(e)=>{setTitle(e.target.value)}}
                   />
                 </div>
-                <div>
-                  <Categories />
-                </div>
+              
                 <div className="h-[800px] rounded-full">
                   <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
                     <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
@@ -180,7 +207,9 @@ const Page = () => {
                   </div>
                 </div>
                 <div>
-                  <button className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-[50vw] h-14">
+                  <button
+                  onClick={submitStory}
+                  className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-[50vw] h-14">
                     Submit Story
                   </button>
                 </div>
@@ -189,9 +218,7 @@ const Page = () => {
           </div>
          
         </div>
-        <div className="w-full ms-28 mt-10">
-          <Pagination />
-        </div>
+       
       </div>
     </div>
   );

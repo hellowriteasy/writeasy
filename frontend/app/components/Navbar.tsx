@@ -24,19 +24,19 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
 
   const navContent = (
     <>
-      <div className="flex items-center justify-between w-full">
+      <div className="flex items-center justify-between w-11/12">
         <Link href="/">
           <div className="flex w-48 cursor-pointer items-center flex-shrink-0 mr-6">
             <Image src={Logo} alt='logo' />
           </div>
         </Link>
-        <div className="hidden md:flex md:flex-grow justify-center">
-          <ul className="flex justify-center items-center font-comic text-xl space-x-4">
+        <div className="hidden md:flex md:flex-grow  justify-center">
+          <ul className="flex justify-center w-full items-center font-comic text-xl space-x-4">
             {titles.map(link => {
               const isActive = path.startsWith(link.path) || path.includes(link.path);
               return (
-                <li key={`${link.label}-${link.path}`} className={isActive ? 'active w-24 sm:w-32 h-8' : 'px-4 sm:px-6 py-2 text-center hover:text-white'}>
-                  <Link className="pt-5 ps-6 text-[1.5vw] cursor-pointer hover:text-white" href={link.path}>
+                <li key={`${link.label}-${link.path}`} className={isActive ? 'active sm:px-6 py-2  text-center  ' : ' sm:px-6 py-2 text-center '}>
+                  <Link className="pt-5  text-[1.5vw] cursor-pointer" href={link.path}>
                     {link.label}
                   </Link>
                 </li>
@@ -74,12 +74,12 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
         <button onClick={toggleMenu} className="self-end text-black focus:outline-none mb-4">
           <XMarkIcon className="h-8 w-8" />
         </button>
-        <ul className="flex flex-col items-center font-comic text-xl">
+        <ul className="flex flex-col items-center gap-10 font-comic text-xl">
           {titles.map(link => {
             const isActive = path.startsWith(link.path) || path.includes(link.path);
             return (
-              <li key={`${link.label}-${link.path}`} className={isActive ? 'active w-24 sm:w-32 h-8' : 'px-4 sm:px-6 py-2 text-center hover:text-white'}>
-                <Link className="pt-5 ps-6 cursor-pointer hover:text-white" href={link.path} onClick={toggleMenu}>
+              <li key={`${link.label}-${link.path}`} className={isActive ? 'active sm:px-6 py-2 text-center ' : ' sm:px-6 py-2 text-center '}>
+                <Link className="pt-5  cursor-pointer " href={link.path} onClick={toggleMenu}>
                   {link.label}
                 </Link>
               </li>

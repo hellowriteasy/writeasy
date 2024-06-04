@@ -10,7 +10,7 @@ import Cloud from "@/public/Game/cloud.svg";
 import Cloud2 from "@/public/Game/cloud3.svg";
 import Pagination from "@/app/components/Pagination";
 import CreateContest from "./createcontest/page";
-
+import viewcontest from "./viewcontest/page"
 interface Prompt {
   _id: string;
   promptText: string;
@@ -24,6 +24,7 @@ interface Contest {
   submissionDeadline: string;
   prompts: Prompt[];
   description: string;
+  isActive:boolean
 }
 
 interface ContestPageProps {
