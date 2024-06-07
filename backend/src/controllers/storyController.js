@@ -41,6 +41,21 @@ const getStories = async (req, res) => {
   }
 };
 
+const getStoriesByUserAndType = async (req, res) => {
+  const { userId, storyType } = req.query;
+
+  if (!userId || !storyType) {
+    return res.status(400).json({ message: "userId and storyType are required" });
+  }
+
+  try {
+    const stories = await StoryService.getStoriesByUserAndType(userId, storyType);
+    res.json(stories);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 const getStory = async (req, res) => {
   const storyId = req.params.id;
   try {
@@ -105,7 +120,7 @@ async function submitStoryToContest(req, res) {
       wordCount,
       contest: contestId,
       prompt: promptId,
-      storyType:"contestStory"
+      storyType:"contest"
     });
     res.status(201).json(story);
   } catch (error) {
@@ -130,4 +145,5 @@ module.exports = {
   getStory,
   submitStoryToContest,
   getTopContestStories,
+  getStoriesByUserAndType
 };

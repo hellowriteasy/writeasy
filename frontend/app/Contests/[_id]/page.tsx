@@ -13,7 +13,7 @@ import CreateContest from "./createcontest/page";
 import viewcontest from "./viewcontest/page"
 interface Prompt {
   _id: string;
-  promptText: string;
+   title: string;
   promptCategory: string;
 }
 
@@ -42,6 +42,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
   const [selectedPrompt, setSelectedPrompt] = useState<{
     contestId: string;
     promptId: string;
+    title:string;
   } | null>(null);
 
   useEffect(() => {
@@ -84,6 +85,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
           <CreateContest
             contestId={params._id}
             promptId={selectedPrompt.promptId}
+            Prompttitle={selectedPrompt.title}
           />
         ) : (
           <>
@@ -113,7 +115,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
                 {contest.prompts.map((prompt) => (
                   <PromptComponent
                     key={prompt._id}
-                    promptText={prompt.promptText}
+                    promptText={prompt.title}
                     promptCategory={prompt.promptCategory}
                     contestId={contest._id}
                     promptId={prompt._id}

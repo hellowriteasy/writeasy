@@ -31,36 +31,6 @@ router.get("/", getCollaborativeStories);
 
 /**
  * @openapi
- * /api/collaborative-stories:
- *   post:
- *     tags:
- *       - Collaborative Stories
- *     summary: Create a collaborative story
- *     description: Creates a new collaborative story by the authenticated user (must be a paid user).
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - title
- *             properties:
- *               title:
- *                 type: string
- *                 description: Title of the collaborative story
- *     responses:
- *       201:
- *         description: Successfully created the collaborative story.
- *       400:
- *         description: Data validation errors or missing mandatory fields.
- *       500:
- *         description: Server error when attempting to create a story.
- */
-router.post("/", createCollaborativeStory);
-
-/**
- * @openapi
  * /api/collaborative-stories/invite:
  *   post:
  *     tags:

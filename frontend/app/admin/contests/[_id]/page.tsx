@@ -2,14 +2,14 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Navbar from '../../../components/admin/Navbar';
-import Sidebar from '../../../components/admin/SIdebar';
+import Sidebar from '../../../components/admin/Sidebar';
 import Card from '../../../components/admin/contests/CardUpdate';
 import Modal from '@/app/components/admin/contests/ContestModal';
-
+import ProtectedRoute from '@/app/utils/ProtectedRoute';
 interface Prompt {
   _id: string;
   promptText: string;
-  promptCategories: string[];
+  promptCategory: string[];
 }
 
 interface Contest {
@@ -38,8 +38,7 @@ const Page = ({ params }: PageProps) => {
     const fetchContest = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/api/contests/${_id}`);
-        
-        console.log(response);
+      
         const contest: Contest = response.data;
         setPromptCards(contest.prompts);
         setDeadline(new Date(contest.submissionDeadline).toISOString().split('T')[0]); // Format the date correctly
@@ -65,9 +64,9 @@ const Page = ({ params }: PageProps) => {
         contestTheme: theme,
         submissionDeadline: deadline,
       });
-      console.log('Contest updated successfully:', response.data);
+     
     } catch (error) {
-      console.error('Error updating contest:', error);
+ 
     }
   };
 
@@ -76,6 +75,7 @@ const Page = ({ params }: PageProps) => {
   };
 
   return (
+    <ProtectedRoute>
     <div>
       <Navbar />
       <div className="flex h-screen">
@@ -109,16 +109,16 @@ const Page = ({ params }: PageProps) => {
 
             <button
               onClick={handleAddClick}
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+              className="bg-black text-white px-4 py-2 rounded-lg"
             >
               Add Prompt
             </button>
             {promptCards.map((prompt, index) => (
-              <Card key={index} title={prompt.promptText} id={prompt._id} type={prompt.promptCategories} />
+              <Card key={index} title={prompt.promptText} id={prompt._id} type={prompt.promptCategory} />
             ))}
             <button
               onClick={handleSubmitContest}
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mt-4 w-full"
+              className="bg-black text-white px-4 py-2 rounded-lg  mt-4 w-full"
             >
               Submit Contest
             </button>
@@ -127,6 +127,7 @@ const Page = ({ params }: PageProps) => {
       </div>
       {isModalOpen && <Modal setIsModalOpen={setIsModalOpen} onAddPrompt={handlePromptAdd} />}
     </div>
+    </ProtectedRoute>
   );
 };
 

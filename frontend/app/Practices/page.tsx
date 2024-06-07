@@ -2,20 +2,20 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Image from "next/image";
-import Navbar from "../components/Navbar";
 import Prompt from "../components/Practice/PracticePrompt";
 import TopWriting from "../components/Others/TopWriting";
-import SelectMenu from "@/app/components/Others/TypesButton";
+import SelectMenu from "@/app/components/Others/SelectMenu"; // Ensure correct import path
 import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import moon from "@/public/Game/moon.svg";
 import book from "@/public/Game/book.svg";
 import pencilman from "@/public/Game/pensilman.svg";
 import Bee from "@/public/Game/Bee.svg";
-import { SimpleEditor } from "../components/WriteStory";
+import LoadingAnimation from "../loading";
+
 interface PromptData {
-  promptText: string;
-  promptCategory: string;
+  title: string;
+  promptCategory: string[];
   _id: string;
   promptType: string;
 }
@@ -25,8 +25,10 @@ const Page: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [promptData, setPromptData] = useState<PromptData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedOption, setSelectedOption] = useState<string>("");
 
   useEffect(() => {
+    setIsLoading(true);
     axios.get('http://localhost:5000/api/prompts/practice-prompts')
       .then(response => {
         setPromptData(response.data);
@@ -42,9 +44,19 @@ const Page: React.FC = () => {
     setCurrentPage(event.selected);
   };
 
+  const handleSelectOption = (selectedOption: string) => {
+    console.log(selectedOption)
+    setSelectedOption(selectedOption);
+    setCurrentPage(0); // Reset to the first page whenever a new option is selected
+  };
+
+  const filteredPrompts = selectedOption
+    ? promptData.filter(prompt => prompt.promptCategory.includes(selectedOption))
+    : promptData;
+
   const offset = currentPage * itemsPerPage;
-  const currentPrompts: PromptData[] = promptData.slice(offset, offset + itemsPerPage);
-  const pageCount = Math.ceil(promptData.length / itemsPerPage);
+  const currentPrompts = filteredPrompts.slice(offset, offset + itemsPerPage);
+  const pageCount = Math.ceil(filteredPrompts.length / itemsPerPage);
 
   return (
     <div className="w-full h-[1400px] mt-6 z-0 relative flex justify-center">
@@ -65,17 +77,17 @@ const Page: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex w-full flex-shrink h-auto relative -mt-10  justify-around">
+        <div className="flex w-full flex-shrink h-auto relative -mt-10 justify-around">
           <div className="absolute -top-28 -left-32">
             <Image className="w-[10vw]" src={Bee} alt="bee" />
           </div>
           <div className="gap-8 relative flex flex-col">
             <div className="w-[50vw] flex justify-between items-center h-20">
               <h1 className="text-5xl ps-2 font-comic font-bold">All Prompts</h1>
-              <SelectMenu />
+              <SelectMenu selectedOption={selectedOption} onSelectOption={handleSelectOption} />
             </div>
             {isLoading ? (
-              <p>Loading prompts...</p>
+              <LoadingAnimation />
             ) : (
               currentPrompts.map((prompt) => (
                 <Prompt key={prompt._id} prompt={prompt} />

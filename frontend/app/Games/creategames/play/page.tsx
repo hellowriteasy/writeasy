@@ -15,41 +15,54 @@ import * as Icons from "../../../components/Icons";
 import Bee from "@/public/Game/cloud3.svg";
 import Cloud from "@/public/Game/cloud.svg";
 import Image from "next/image";
-import axios from "axios"
+import Subscription from "@/app/components/Subscription";
+import useAuthStore from "@/app/store/useAuthStore";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
+import axios from "axios";
 const Page = () => {
-   const [title,setTitle]=useState("")
-  function submitStory(){
-    const currentContent = editor.getText();
-    console.log(promptId);
-    console.log(contestId);
-    console.log(currentContent);
-    const payload = {
-      user: "6640daca328ae758689fcfc1",
-      title: title,
-      content: currentContent,
-      storyType:"game"
-    
-    };
-
-    const { data, status } = await axios.post(
-      `http://localhost:5000/api/stories`,
-      payload
-    );
-
-    // alert(data.storyId);
-    // console.log(data);
-    // setInputText(currentContent);
-    // setCorrectedText(data.corrections);
-    // setCopied(false);
-    // setIsCheckingGrammer(true);
-
-  } catch (error) {
-    console.log("error", error);
-  }
-  }
-
+  const [title,setTitle]=useState("")
+  const [content,setcontent]=useState("")
+  const subscriptionType = useAuthStore((state) => state.subscriptionType);
+  const role = useAuthStore((state) => state.role);
+  const {userId}=useAuthStore();
+  async function handleSubmit(e) {
+    e.preventDefault(); // Prevent default form submission behavior
+  
+    try {
+      // Check if title and content are not empty
+      const currentContent = editor.getText();
+      if (!title || !currentContent) {
+        toast.error("Please enter both title and content before submitting.");
+        return;
+      }
+  
+      // Prepare payload
+      const payload = {
+        user: userId, // Replace with actual user ID
+        title: title,
+        content: currentContent,
+        storyType: "game",
+        prompt: "665a07f42d718830c05b29b5"
+      };
+  
+      // Send POST request to backend
+      const { data, status } = await axios.post(
+        `http://localhost:5000/api/stories`,
+        payload
+      );
+      toast.success("Story saved suscessfully");
+  
+    } catch (error) {
    
+      toast.error("An error occurred while submitting the story. Please try again later.");
+    }
+  }
+  
+  
+
+
   const editor = useEditor({
     extensions: [
       Document,
@@ -64,7 +77,7 @@ const Page = () => {
     ],
     editorProps: {
       attributes: {
-        class: 'prose dark:prose-invert prose-sm sm:prose-base inline-block lg:prose-lg xl:prose-2xl m-5 h-full focus:outline-none',
+        class: 'prose dark:prose-invert prose-sm sm:prose-base w-full   inline-block lg:prose-lg xl:prose-2xl outline-none  h-full ',
       },
     },
   }) as Editor;
@@ -121,6 +134,7 @@ const Page = () => {
                   <input
                     className="border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[40vw] h-12 focus:outline-none focus:border-yellow-600"
                     placeholder="Email or Username comma separated"
+                    onChange={(e)=>{setTitle(e.target.value)}}
                   />
                   <button type="submit" className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-40 h-14">
                     Invite
@@ -133,7 +147,7 @@ const Page = () => {
                     onChange={(e)=>{setTitle(e.target.value)}}
                   />
                 </div>
-              
+             
                 <div className="h-[800px] rounded-full">
                   <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
                     <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
@@ -201,14 +215,14 @@ const Page = () => {
                         </button>
                       </div>
                     </div>
-                    <div className="w-[50vw] rounded-3xl">
-                      <EditorContent className="scroll-m-2 h-96 mt-10" editor={editor} />
+                    <div className="w-[50vw]  rounded-3xl">
+                      <EditorContent className="scroll-m-2 w-[100%] h-96 mt-10 " editor={editor} />
                     </div>
                   </div>
                 </div>
                 <div>
                   <button
-                  onClick={submitStory}
+                onClick={handleSubmit}  
                   className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-[50vw] h-14">
                     Submit Story
                   </button>
@@ -218,10 +232,10 @@ const Page = () => {
           </div>
          
         </div>
-       
       </div>
+      {subscriptionType=="free"&&<Subscription/>}
     </div>
   );
-};
+}
 
 export default Page;

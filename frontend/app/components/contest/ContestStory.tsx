@@ -16,6 +16,9 @@ import * as Icons from "../Icons";
 import { diffChars, Change } from "diff";
 import usePdfStore from "@/app/store/usePDFStore";
 import { usePDF } from "react-to-pdf";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import useAuthStore from "@/app/store/useAuthStore";
 
 const Page = ({ inputText, corrected }) => {
   const [improved, setImproved] = useState([]);
@@ -23,7 +26,7 @@ const Page = ({ inputText, corrected }) => {
   const compareSentences = (original, corrected) => {
     original = original.replace(/<\/?p>/g, "");
     corrected = corrected.replace(/<\/?p>/g, "");
-    console.log(original, corrected);
+   
 
     const diff = diffChars(original, corrected);
     const result = [];
@@ -141,21 +144,23 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
       handleClickFeature("grammer", new MouseEvent("click"));
     }
   }, [triggerGrammarCheck]);
-
+  const {userId}=useAuthStore();
   const handleClickFeature = async (type, event) => {
     event.preventDefault();
 
     try {
       const currentContent = editor.getText();
-      console.log(promptId);
-      console.log(contestId);
-      console.log(currentContent);
+      if (!title || !currentContent) {
+        toast.warn("Please enter both title and content before submitting.");
+        return;
+      }
+
       const payload = {
-        user: "6640daca328ae758689fcfc1",
+        user:userId,
         title: title,
         content: currentContent,
         taskType: taskType,
-        storyType:"contestStory",
+        storyType:"contest",
         prompt:promptId,
         contest:contestId 
       };
@@ -164,16 +169,15 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
         `http://localhost:5000/api/stories`,
         payload
       );
-
-      alert(data.storyId);
-      console.log(data);
+      toast.warn("Story saved succesfully");
+  
       setInputText(currentContent);
       setCorrectedText(data.corrections);
       setCopied(false);
       setIsCheckingGrammer(true);
 
     } catch (error) {
-      console.log("error", error);
+   
     }
   };
 
@@ -239,7 +243,7 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
     });
 
     let stringWithoutPTags = text.replace(/<p><\/p>/g, "");
-    console.log(text);
+
 
     return stringWithoutPTags;
   };

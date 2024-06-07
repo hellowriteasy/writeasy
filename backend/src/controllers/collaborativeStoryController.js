@@ -30,6 +30,7 @@ const createCollaborativeStory = [
     try {
       const newStory = new CollaborativeStory({
         title,
+        description,
         creatorUser,
         content: [],
         contributors: [],

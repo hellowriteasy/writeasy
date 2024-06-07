@@ -22,9 +22,9 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
       const response = await axios.put(`http://localhost:5000/api/prompts/${id}`, {
         title: promptTitle,
         promptCategory: selectedType,
-        promptType: 'practicePrompt'
+        promptType: 'practice'
       });
-      console.log('Update response:', response.data);
+
       setOpen(false);
       toast.success('Prompt updated successfully!');
     } catch (error) {
@@ -37,7 +37,7 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
     try {
       const response = await axios.delete(`http://localhost:5000/api/prompts/${id}`);
       if (window.confirm("Are you sure you want to delete this prompt?")) {
-        console.log('Delete response:', response.data);
+        
         toast.success('Prompt deleted successfully!');
         // Optionally, you can also update the UI to remove the card from the list of prompts
       }
@@ -53,10 +53,10 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
         <div className="flex justify-between items-center mb-2">
           <div className="text-xl font-semibold">{title}</div>
           <div className="flex space-x-2 gap-4">
-            <button className="text-blue-500 hover:text-blue-600" onClick={() => setOpen(true)}>
+            <button className="text-black " onClick={() => setOpen(true)}>
               <FaEdit size={30} />
             </button>
-            <button className="text-red-500 text-3xl hover:text-red-600" onClick={handleDelete}>
+            <button className="text-black text-3xl" onClick={handleDelete}>
               <FaTrash size={30} />
             </button>
           </div>
@@ -117,7 +117,7 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
                               leaveTo="transform opacity-0 scale-95"
                             >
                               <MenuItems className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                {["Type 1", "Type 2", "Type 3"].map((type) => (
+                                {["Adventure", "Comic", "Fantasy"].map((type) => (
                                   <MenuItem key={type}>
                                     {({ active }) => (
                                       <button

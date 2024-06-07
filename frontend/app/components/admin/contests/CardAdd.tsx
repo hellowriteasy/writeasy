@@ -27,10 +27,10 @@ const Card: React.FC<CardProps> = ({ title, deadline, id }) => {
         <div className="flex justify-between items-center mb-2">
           <div className="text-xl font-semibold">{title}</div>
           <div className="flex space-x-2 gap-4">
-            <button className="text-blue-500 hover:text-blue-600">
+            <button className="text-black">
               <FaEdit size={20} />
             </button>
-            <button onClick={handleDeleteContest} className="text-red-500 hover:text-red-600">
+            <button onClick={handleDeleteContest} className="text-black">
               <FaTrash size={20} />
             </button>
           </div>

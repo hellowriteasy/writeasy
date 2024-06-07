@@ -17,7 +17,7 @@ const getPromptsByType = async (type) => {
 };
 
 const getPracticePrompts = () => {
-  return getPromptsByType("practicePrompt");
+  return getPromptsByType("practice");
 };
 
 const getContestPrompts = () => {
@@ -25,7 +25,7 @@ const getContestPrompts = () => {
 };
 
 const getGamePrompts = () => {
-  return getPromptsByType("gamePrompt");
+  return getPromptsByType("game");
 };
 
 const getPromptById = async (promptId) => {

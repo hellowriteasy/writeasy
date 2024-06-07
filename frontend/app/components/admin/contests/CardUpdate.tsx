@@ -1,4 +1,3 @@
-'use client';
 import { useState, Fragment } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import axios from "axios";
@@ -8,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 interface CardProps {
   title: string;
-  type: [];
+  type?: string[]; // Make the type prop optional
   id: string;
 }
 
@@ -17,9 +16,10 @@ interface Prompt {
   promptCategories: string[];
 }
 
-const Card: React.FC<CardProps> = ({ title, type, id }) => {
+const Card: React.FC<CardProps> = ({ title, type = [], id }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [Title, setTitle] = useState(title);
+
   const [Categories, setCategories] = useState<string[]>(type);
 
   const handleDeleteContest = async () => {
@@ -27,19 +27,22 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
       await axios.delete(`http://localhost:5000/api/prompts/${id}`);
       toast.success("Contest deleted successfully!");
     } catch (error) {
-      console.error("Error deleting contest:", error);
       toast.error("Failed to delete contest.");
     }
   };
 
   const handleUpdateContest = async () => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/prompts/${id}`, {
-        title: Title,
+      await axios.put(`http://localhost:5000/api/prompts/${id}`, {
+        promptText:Title,
         promptCategory: Categories,
         promptType: 'contest'
       });
-      console.log('Update response:', response.data);
+  
+      // Update title and categories if the response is successful
+      setTitle(Title);
+      setCategories(Categories);
+
       toast.success("Contest updated successfully!");
       setIsModalOpen(false);
     } catch (error) {
@@ -62,18 +65,18 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
     <>
       <div className="bg-white border border-gray-300 shadow-md rounded-lg p-4 mb-4">
         <div className="flex justify-between items-center mb-2">
-          <div className="text-xl font-semibold">{title}</div>
+          <div className="text-xl font-semibold">{title}</div> {/* Use Title state here */}
           <div className="flex space-x-2 gap-4">
-            <button onClick={() => setIsModalOpen(true)} className="text-blue-500 hover:text-blue-600">
+            <button onClick={() => setIsModalOpen(true)} className="text-black">
               <FaEdit size={20} />
             </button>
-            <button onClick={handleDeleteContest} className="text-red-500 hover:text-red-600">
+            <button onClick={handleDeleteContest} className="text-black">
               <FaTrash size={20} />
             </button>
           </div>
         </div>
-        <div className="text-gray-600">Categories: {type.join(', ')}</div>
-      </div>
+        <div className="text-gray-600">Categories: {Categories.join(', ')}</div>
+      </div>    
 
       {isModalOpen && (
         <Transition.Root show={isModalOpen} as={Fragment}>
@@ -109,13 +112,13 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
                             Update Contest
                           </Dialog.Title>
                           <div className="mt-2">
-                            <input
-                              type="text"
-                              className="mt-1 block w-96 h-12 rounded-md border-gray-300 shadow-sm outline-none ps-4 focus:ring-opacity-50"
-                              placeholder="Contest Title"
-                              value={Title}
-                              onChange={(e) => setTitle(e.target.value)}
-                            />
+                          <input
+                          type="text"
+                          className="mt-1 block w-96 h-12 rounded-md border-gray-300 shadow-sm outline-none ps-4 focus:ring-opacity-50"
+                          placeholder="Prompt Title"
+                          value={Title}
+                          onChange={(e) => setTitle(e.target.value)}
+                        />
                             <Menu as="div" className="relative mt-3">
                               <MenuButton className="w-96 text-left rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                                 {Categories.length ? Categories.join(', ') : 'Select Categories'}

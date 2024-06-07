@@ -1,23 +1,20 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation'; // Import 'usePathname' from 'next/navigation'
 import { useRouter } from 'next/navigation';
+import { IoMdArrowRoundBack } from "react-icons/io";
 const Navbar = () => {
   const path = usePathname(); // Get current path
   const router = useRouter();
   return (
-    <nav className="flex justify-around  items-center p-4 bg-gray-800 text-white shadow-lg">
-      <div className="text-2xl font-bold">
-        <Link className="hover:text-gray-300 transition duration-300" href="/">
-        Logo
+    <nav className="flex   items-center p-4 px-28 bg-custom-yellow text-black font-poppins text-3xl shadow-lg">
+      <div className="text-2xl font-bold ">
+        <Link className="hover:opacity-60 transition duration-300 flex gap-2 " href="/">
+        <IoMdArrowRoundBack className='active w-20 h-10' />
+
+     
         </Link>
       </div>
-      <div className="space-x-8 text-lg">
-        <Link className="hover:text-gray-300 transition duration-300" href="/profile">
-          Profile
-        </Link>
-       
-      
-      </div>
+     
     </nav>
   );
 };

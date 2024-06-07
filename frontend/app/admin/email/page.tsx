@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Navbar from "../../components/admin/Navbar";
 import Sidebar from "../../components/admin/Sidebar";
-
+ import ProtectedRoute from "@/app/utils/ProtectedRoute";
 const Email = () => {
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
@@ -16,6 +16,7 @@ const Email = () => {
   };
 
   return (
+    <ProtectedRoute>
     <div>
       <Navbar />
       <div className="flex h-screen">
@@ -53,7 +54,7 @@ const Email = () => {
             </div>
 
             <button
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 w-full"
+              className="bg-black text-white px-4 py-2 rounded-lg  w-full"
               onClick={handleSendClick}
             >
               Send
@@ -62,6 +63,7 @@ const Email = () => {
         </div>
       </div>
     </div>
+    </ProtectedRoute>
   );
 };
 

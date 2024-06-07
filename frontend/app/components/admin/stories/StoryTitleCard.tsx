@@ -41,7 +41,7 @@ const Card: React.FC<CardProps> = ({
         correctionSummary: feedback,
         content: storyDetail,
       });
-      console.log(response.data);
+   
       setOpen(false);
     } catch (error) {
       console.error('There was an error updating the story!', error);
@@ -54,10 +54,10 @@ const Card: React.FC<CardProps> = ({
         <div className="flex justify-between items-center mb-2">
           <div className="text-xl font-semibold">{title}</div>
           <div className="flex space-x-2 gap-4">
-            <button className="text-blue-500 hover:text-blue-600" onClick={() => setOpen(true)}>
+            <button className="text-black" onClick={() => setOpen(true)}>
               <FaEdit size={30} />
             </button>
-            <button className="text-red-500 text-3xl hover:text-red-600">
+            <button className="text-black text-3xl">
               <FaTrash size={30} />
             </button>
           </div>
@@ -140,7 +140,7 @@ const Card: React.FC<CardProps> = ({
                   <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                     <button
                       type="button"
-                      className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
+                      className="inline-flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm sm:ml-3 sm:w-auto"
                       onClick={handleUpdate}
                     >
                       Update

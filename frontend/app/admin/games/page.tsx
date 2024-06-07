@@ -1,51 +1,77 @@
-'use client';
-import { useState } from "react";
+"use client";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import Navbar from "../../components/admin/Navbar";
 import Sidebar from "../../components/admin/Sidebar";
 import CardAdd from "@/app/components/admin/Games/CardAdd";
 import ModalGame from "@/app/components/admin/Games/Modal";
+import ProtectedRoute from "@/app/utils/ProtectedRoute";
+
+interface GamePrompt {
+  _id: string;
+  title: string;
+  description:string;
+  promptType: string;
+}
 
 const Games = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [gamePrompts, setGamePrompts] = useState<GamePrompt[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchGamePrompts = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/prompts/game-prompts");
+        setGamePrompts(response.data);
+        setIsLoading(false);
+      } catch (err) {
+        setError("Error fetching game prompts");
+        setIsLoading(false);
+      }
+    };
+
+    fetchGamePrompts();
+  }, []);
 
   const handleAddClick = () => {
     setIsModalOpen(true);
   };
-   const description="Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit ducimus asperiores ipsa! Maiores corporis nesciunt accusamus obcaecati quibusdam, sunt, asperiores placeat impedit minus architecto illo, facere dignissimos totam dolores saepe?"
-  return (
-    <div>
-      <Navbar />
-      <div className="flex h-screen">
-        <Sidebar />
-        <div className="flex-1 p-6">
-          <div className="flex flex-col space-y-8">
-            <div className="flex justify-between items-center border-e-2 border-slate-300 bg-white shadow p-4 rounded-lg">
-              <div className="text-xl font-semibold">Games</div>
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                onClick={handleAddClick}
-              >
-                Add
-              </button>
-            </div>
 
-            <div className="flex justify-between space-y-4 rounded-lg">
-              <div className="text-xl font-semibold">All Story Titles</div>
-              <div className="text-lg flex gap-4">
-                <i>+</i>
-                <i>#</i>
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
+
+  return (
+    <ProtectedRoute>
+      <div className="bg-white">
+        <Navbar />
+        <div className="flex h-screen">
+          <Sidebar />
+          <div className="flex-1 p-6">
+            <div className="flex flex-col space-y-8">
+              <div className="flex justify-between items-center border-e-2 border-slate-300 bg-white shadow p-4 rounded-lg">
+                <div className="text-xl font-semibold">Games</div>
+                <button
+                  className="bg-black text-white px-4 py-2 rounded-lg"
+                  onClick={handleAddClick}
+                >
+                  Add
+                </button>
               </div>
 
+              <div className="flex justify-between space-y-4 h-12 rounded-lg">
+                <div className="text-xl font-semibold">All Story Titles</div>
+              </div>
             </div>
+            {gamePrompts.map((prompt) => (
+              <CardAdd key={prompt._id} id={prompt._id} title={prompt.title} description={prompt.description} />
+            ))}
           </div>
-          <CardAdd title="Story" description={description} />
-          <CardAdd title="Story2" description={description} />
-          <CardAdd title="Story3" description={description} />
-          <CardAdd title="Story4" description={description} />
+          {isModalOpen && <ModalGame setIsModalOpen={setIsModalOpen} />}
         </div>
-      {isModalOpen && <ModalGame setIsModalOpen={setIsModalOpen} />}
       </div>
-    </div>
+    </ProtectedRoute>
   );
 };
 

@@ -5,6 +5,7 @@ import Navbar from "../../../components/admin/Navbar";
 import Sidebar from "../../../components/admin/Sidebar";
 import Card from "../../../components/admin/stories/contests/VIewContestCard";
 import StoryNav from "@/app/components/admin/stories/StoryNav";
+import ProtectedRoute from "@/app/utils/ProtectedRoute";
 interface Prompt {
   _id: string;
   promptText: string;
@@ -27,11 +28,11 @@ const Page = () => {
   useEffect(() => {
     const fetchContests = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/contests');
+        const response = await axios.get(`http://localhost:5000/api/contests`);
         setContests(response.data);
-        console.log(response.data)
+       
       } catch (error) {
-        console.error('Error fetching contests:', error);
+        
       }
     };
 
@@ -39,6 +40,7 @@ const Page = () => {
   }, []);
 
   return (
+    <ProtectedRoute>
     <div className="bg-gray-50 min-h-screen">
       <Navbar />
       <div className="flex h-screen">
@@ -61,6 +63,7 @@ const Page = () => {
         </div>
       </div>
     </div>
+    </ProtectedRoute>
   );
 };
 

@@ -25,7 +25,7 @@ const WeeklyTest = () => {
     const fetchData = async () => {
       try {
       var response = await axios.get('http://localhost:5000/api/contests/ongoing');
-        setContest(response.data);
+        setContest(response.data[1]);
       } catch (error) {
         console.error("Error fetching contest data:", error);
         // Handle errors gracefully, e.g., display an error message to the user
@@ -43,13 +43,13 @@ const WeeklyTest = () => {
 
       {contest ? ( // Conditionally render content only if contest data is available
         <div className="text-center font-comic w-11/12 text-3xl font-bold">
-          <h2>Enter Our Weekly Contests!</h2>
+          <h2 className="py-5">Enter Our Weekly Contests!</h2>
           <p className="text-sm pt-4">
             <span className="font-bold">CLoses</span> {formattedDate}
           </p>
           
-          <h2>This Week's Prompts:</h2>
-          <ul>
+      
+          <ul className="p-4">
             {prompts?.map((prompt) => (
               <li key={prompt._id}>{prompt.title}</li>
             ))} 
@@ -59,7 +59,7 @@ const WeeklyTest = () => {
         <p>Loading contest data...</p> // Display a loading message while fetching
       )}
 
-      <button className="w-40 h-12 bg-black text-white rounded-2xl "> view details</button>
+      <button className="w-40 h-12 bg-black font-bold font-comic text-white rounded-2xl "> view details</button>
     </div>
   );
 };

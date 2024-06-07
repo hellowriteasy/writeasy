@@ -6,7 +6,7 @@ const Sidebar = () => {
   const path = usePathname();
 
   return (
-    <div className="w-64 h-full bg-gray-800 text-white p-6">
+    <div className="w-64 h-full bg-slate-900 rounded-sm sticky top-0 text-white font-poppins font-bold p-6">
       <ul className="space-y-4">
         {links.map((link) => {
           const isActive = path.startsWith(link) || path.endsWith(link);

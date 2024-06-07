@@ -1,6 +1,5 @@
-// components/Navbar.tsx
 'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Logo from "@/public/Landingpage-img/logo.svg";
 import Image from 'next/image';
 import Link from 'next/link';
@@ -15,18 +14,30 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ titles }) => {
+  const [loading, setLoading] = useState(true); // State to track loading status
   const path = usePathname();
   const router = useRouter();
   const loggedIn = useAuthStore((state) => state.loggedIn);
   const [isOpen, setIsOpen] = useState(false);
 
+  useEffect(() => {
+    // Simulate loading delay
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+
+    // Clean up timeout
+    return () => clearTimeout(timer);
+  }, []);
+
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const navContent = (
+
     <>
       <div className="flex items-center justify-between w-11/12">
         <Link href="/">
-          <div className="flex w-48 cursor-pointer items-center flex-shrink-0 mr-6">
+          <div className="flex w-60 cursor-pointer items-center flex-shrink-0 mr-6">
             <Image src={Logo} alt='logo' />
           </div>
         </Link>
@@ -62,11 +73,18 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
       </div>
     </>
   );
-   if(path.includes("admin")||path.includes("login")||path.includes("signup")){
-    return(
-      <div className='hidden'></div>
-    )
-   }else
+
+  if (loading) {
+    // Show loading effect
+    return (
+      <nav className="navbar flex w-screen sticky top-0 h-28 justify-between items-center bg-custom-yellow p-6 z-50">
+        <div></div>
+      </nav>
+    );
+  }
+
+  // Once loaded, render the actual navbar content
+  if(!path.includes("admin")||path.includes("login")||path.includes("login")){
   return (
     <nav className="navbar flex w-screen sticky top-0 h-28 justify-between items-center bg-custom-yellow p-6 z-50">
       {navContent}
@@ -99,6 +117,6 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
       </div>
     </nav>
   );
-};
+};}
 
 export default Navbar;

@@ -47,26 +47,32 @@ const Contest = () => {
 
   return (
     <div className="w-full h-[1300px] mt-6 z-0 relative flex justify-center">
-      <div className="absolute -top-14 right-0">
+      <div className="absolute sm-hide -top-14 right-0">
         <Image className='w-[9vw]' src={earth} alt="earth" />
       </div>
       <div className="w-10/12 h-screen ms-12">
-        <div className="w-full h-80  relative pt-4">
-          <h1 className="text-6xl font-bold font-comic">Enter the Contest Arena</h1>
-          <div className="absolute top-6 right-20">
-            <Image className='w-[7vw]' src={A} alt="group" />
-          </div>
-          <div className="absolute top-10 right-48">
-            <Image className='w-[12vw]' src={Dumbelman} alt="group" />
-          </div>
-          <p className="text-xl font-comic pt-4">Compete with young writers worldwide and unleash your creativity.</p>
-        </div>
+      <div className="w-full h-60 relative pt-4">
+  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-comic">
+    Enter the Contest Arena
+  </h1>
+  <div className="absolute top-6 md-hide right-20 ">
+    <Image className=" w-[7vw]" src={A} alt="group" />
+  </div>
+  <div className="absolute top-10 md-hide right-48  ">
+    <Image className="w-[12vw]" src={Dumbelman} alt="group" />
+  </div>
+  <p className="text-lg sm:text-xl md:text-2xl font-comic pt-4">
+    Compete with young writers worldwide and unleash your creativity.
+  </p>
+</div>
+
         <div className="flex w-full h-auto relative mt-0 justify-around">
           <div className="absolute -top-40 -left-32">
             <Image className='w-[12vw]' src={Bee} alt="bee" />
           </div>
           <div className="gap-8 relative flex flex-col">
             <Join />
+            if(contest.isActive==true){}
             {currentContests.map((contest, index) => (
               <Contestitle key={index} contest={contest} />
             ))}
@@ -74,7 +80,7 @@ const Contest = () => {
               <Image className='w-[7vw]' src={Cloud} alt="Cloud" />
             </div>
           </div>
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col vsm-hide gap-8">
             <WeeklyTest />
             <TopWriting />
           </div>

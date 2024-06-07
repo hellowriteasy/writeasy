@@ -14,6 +14,7 @@ const collaborativeStorySchema = new mongoose.Schema({
     required: true,
   },
   title: { type: String, required: true },
+  description: { type: String, required: true },
   content: [contentSchema],
   contributors: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   creationDateTime: { type: Date, default: Date.now },

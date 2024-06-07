@@ -34,7 +34,7 @@ const Login = () => {
 
       const { _id: userId, token, username, role, subscriptionType } = response.data;
       login(userId, token, username, role, subscriptionType);
-      console.log(response.data._id)
+     
       router.push('/', { scroll: false });
     } catch (error) {
       setError(error.response?.data?.message || "Login failed");

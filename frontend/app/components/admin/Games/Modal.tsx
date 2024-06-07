@@ -1,22 +1,29 @@
 import { Fragment, useState } from 'react';
-import { Dialog, Transition, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { Dialog, Transition } from '@headlessui/react';
+import axios from 'axios';
 
 interface ModalProps {
   setIsModalOpen: (isOpen: boolean) => void;
 }
-interface CardProps {
-    title: string;
-    description:string;
-  }
+
 const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen }) => {
   const [promptTitle, setPromptTitle] = useState('');
- 
-  const [Description, setDescription] = useState("");
- 
+  const [description, setDescription] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
-  const handleUpdate = () => {
-    // Add your update logic here
-    setIsModalOpen(false);
+  const handleUpdate = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/prompts', {
+        title: promptTitle,
+        description: description,
+        promptType: 'game'
+      });
+      console.log('Response:', response.data);
+      setIsModalOpen(false);
+    } catch (err: any) {
+      setError('Error submitting the prompt');
+      console.error('Error:', err);
+    }
   };
 
   return (
@@ -53,36 +60,35 @@ const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen }) => {
                         Edit Prompt
                       </Dialog.Title>
                       <div className="mt-2">
-                      <input
-                            type="text"
-                            className="mt-1 block w-96 h-12 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
-                            placeholder="Prompt Title"
-                            
-                            onChange={(e) => setPromptTitle(e.target.value)}
-                          />
-                        
+                        <input
+                          type="text"
+                          className="mt-1 block w-96 h-12 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
+                          placeholder="Prompt Title"
+                          value={promptTitle}
+                          onChange={(e) => setPromptTitle(e.target.value)}
+                        />
                       </div>
                       <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
-                Description
-              </label>
-              <textarea
-                id="description"
-                rows={4}
-                className="mt-1 block w-full h-40 rounded-md border p-4 border-gray-300 shadow-sm outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="Description"
-               
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </div>
-                   
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
+                          Description
+                        </label>
+                        <textarea
+                          id="description"
+                          rows={4}
+                          className="mt-1 block w-full h-40 rounded-md border p-4 border-gray-300 shadow-sm outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                          placeholder="Description"
+                          value={description}
+                          onChange={(e) => setDescription(e.target.value)}
+                        />
+                      </div>
+                      {error && <p className="text-red-500">{error}</p>}
                     </div>
                   </div>
                 </div>
                 <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                   <button
                     type="button"
-                    className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
+                    className="inline-flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm sm:ml-3 sm:w-auto"
                     onClick={handleUpdate}
                   >
                     Update

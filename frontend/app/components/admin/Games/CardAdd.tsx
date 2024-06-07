@@ -1,32 +1,58 @@
 import { useState, Fragment, useRef } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import { Dialog, Transition, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { Dialog, Transition } from '@headlessui/react';
+import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface CardProps {
   title: string;
-  description:string;
+  description: string;
+  id: string;
 }
 
-
-const CardAdd: React.FC<CardProps> = ({ title, description }) => {
+const CardAdd: React.FC<CardProps> = ({ title, description, id }) => {
   const [open, setOpen] = useState(false);
   const [promptTitle, setPromptTitle] = useState(title);
-  const [Description, setDescription] = useState("");
- 
-
+  const [Description, setDescription] = useState(description);
   const cancelButtonRef = useRef(null);
- 
+
+  const handleUpdate = async () => {
+    try {
+      await axios.put(`http://localhost:5000/api/prompts/${id}`, {
+        title: promptTitle,
+        description: Description,
+        promptType: 'game',
+      });
+      toast.success('Prompt updated successfully!');
+      setOpen(false);
+    } catch (error) {
+      toast.error('Error updating prompt.');
+      console.error('Error:', error);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await axios.delete(`http://localhost:5000/api/prompts/${id}`);
+      toast.success('Prompt deleted successfully!');
+      // Optionally, remove the prompt from the UI here or refresh the list.
+    } catch (error) {
+      toast.error('Error deleting prompt.');
+      console.error('Error:', error);
+    }
+  };
 
   return (
     <>
       <div className="bg-white shadow-md border border-gray-300 w-5/6 rounded-lg p-4 mb-4">
         <div className="flex justify-between items-center mb-2">
           <div className="text-xl font-semibold">{title}</div>
-          <div className="flex space-x-2 gap-4 ">
-            <button className="text-blue-500  hover:text-blue-600" onClick={() => setOpen(true)}>
+          <div className="flex space-x-2 gap-4">
+            <button className="text-black" onClick={() => setOpen(true)}>
               <FaEdit size={30} />
             </button>
-            <button className="text-red-500 text-3xl hover:text-red-600">
+            <button className="text-black text-3xl" onClick={handleDelete}>
               <FaTrash size={30} />
             </button>
           </div>
@@ -74,21 +100,20 @@ const CardAdd: React.FC<CardProps> = ({ title, description }) => {
                             value={promptTitle}
                             onChange={(e) => setPromptTitle(e.target.value)}
                           />
-                         
                         </div>
                         <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
-                Description
-              </label>
-              <textarea
-                id="description"
-                rows={4}
-                className="mt-1 block w-full h-40 rounded-md border p-4 border-gray-300 shadow-sm outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="Description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </div>
+                          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
+                            Description
+                          </label>
+                          <textarea
+                            id="description"
+                            rows={4}
+                            className="mt-1 block w-full h-40 rounded-md border p-4 border-gray-300 shadow-sm outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                            placeholder="Description"
+                            value={Description}
+                            onChange={(e) => setDescription(e.target.value)}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -96,7 +121,7 @@ const CardAdd: React.FC<CardProps> = ({ title, description }) => {
                     <button
                       type="button"
                       className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
-                      onClick={() => setOpen(false)}
+                      onClick={handleUpdate}
                     >
                       Update
                     </button>
@@ -115,6 +140,7 @@ const CardAdd: React.FC<CardProps> = ({ title, description }) => {
           </div>
         </Dialog>
       </Transition.Root>
+      <ToastContainer />
     </>
   );
 };

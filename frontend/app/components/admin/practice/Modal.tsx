@@ -25,11 +25,11 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
       promptCategory: selectedCategory,
       promptType: 'practice'
     };
-    console.log(promptTitle)
-    console.log(selectedCategory) 
+    
+  
     axios.post('http://localhost:5000/api/prompts', promptData)
       .then(response => {
-        console.log(response.data);
+        
         const newPrompt: CardProps = {
           title: promptTitle,
           type: selectedCategory
@@ -98,7 +98,7 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
                             leaveTo="transform opacity-0 scale-95"
                           >
                             <MenuItems className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                              {["Category 1", "Category 2", "Category 3"].map((category) => (
+                              {["Adventure", "Category 2", "Category 3"].map((category) => (
                                 <MenuItem key={category}>
                                   {({ active }) => (
                                     <button

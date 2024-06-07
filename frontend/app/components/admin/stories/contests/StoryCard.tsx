@@ -18,32 +18,22 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({
-  _id,
-  username,
-  title,
-  content,
-  wordCount,
-  submissionDateTime,
-  prompt,
-  storyType,
-  correctionSummary,
-  corrections,
-  score,
+ contest
 }) => {
   const [open, setOpen] = useState(false);
-  const [feedback, setFeedback] = useState(correctionSummary);
-  const [storyDetail, setStoryDetail] = useState(content);
-  const [grade, setGrade] = useState(score); // Renamed to grade for clarity
+  const [feedback, setFeedback] = useState(contest.correctionSummary);
+  const [storyDetail, setStoryDetail] = useState(contest.content);
+  const [grade, setGrade] = useState(contest.score); // Renamed to grade for clarity
   const cancelButtonRef = useRef(null);
 
   const handleUpdate = async () => {
     try {
-      const response = await axios.put(`http://localhost:5000/api//${_id}`, {
+      const response = await axios.put(`http://localhost:5000/api/stories/${contest._id}`, {
         correctionSummary: feedback,
         content: storyDetail,
         score: grade,
       });
-      console.log(response.data);
+     
       setOpen(false);
     } catch (error) {
       console.error('There was an error updating the story!', error);
@@ -54,19 +44,20 @@ const Card: React.FC<CardProps> = ({
     <>
       <div className="bg-white shadow-md rounded-lg w-5/6 border z-50 border-gray-300 p-4 mb-4">
         <div className="flex justify-between items-center mb-2">
-          <div className="text-xl font-semibold">{title}</div>
+          <div className="text-xl font-semibold">{contest.title}</div>
           <div className="flex space-x-2 gap-4">
-            <button className="text-blue-500 hover:text-blue-600" onClick={() => setOpen(true)}>
+            <button className="text-black" onClick={() => setOpen(true)}>
               <FaEdit size={30} />
             </button>
-            <button className="text-red-500 text-3xl hover:text-red-600">
+            <button className="text-black text-3xl">
               <FaTrash size={30} />
             </button>
           </div>
         </div>
-        <div className="text-gray-600">User: {username}</div>
-        <div className="text-gray-600">Submission Date: {new Date(submissionDateTime).toLocaleString()}</div>
-        <div className="text-gray-600">Score: {score}</div>
+        <div className="text-gray-600">User: {contest.user}</div>
+        <div className="text-gray-600">Submission Date: {new Date(contest.submissionDateTime
+).toLocaleString()}</div>
+        <div className="text-gray-600">Score: {contest.score}</div>
       </div>
 
       <Transition.Root show={open} as={Fragment}>
@@ -99,10 +90,10 @@ const Card: React.FC<CardProps> = ({
                     <div className="sm:flex sm:items-start">
                       <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
                         <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                          {title}
+                          {contest.title}
                         </Dialog.Title>
                         <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                          {username}
+                          {contest.user}
                         </Dialog.Title>
                         <div className="mt-2">
                           <div className="mb-4">

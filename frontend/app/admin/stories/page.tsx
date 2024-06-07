@@ -6,7 +6,7 @@ import Sidebar from "../../components/admin/Sidebar";
 import Card from "../../components/admin/stories/StoryTitleCard";
 import PracticeModal from "../../components/admin/stories/PracticeModal";
 import StoryNav from "@/app/components/admin/stories/StoryNav";
-
+import ProtectedRoute from "@/app/utils/ProtectedRoute";
 // Define the Story interface
 interface Story {
   _id: string;
@@ -56,6 +56,7 @@ const Page: React.FC = () => {
   }
 
   return (
+    <ProtectedRoute>
     <div className="bg-gray-50 min-h-screen">
       <Navbar />
       <div className="flex h-screen">
@@ -80,6 +81,7 @@ const Page: React.FC = () => {
         
       </div>
     </div>
+    </ProtectedRoute>
   );
 };
 

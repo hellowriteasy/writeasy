@@ -18,6 +18,9 @@ import usePdfStore from "@/app/store/usePDFStore";
 import { usePDF } from "react-to-pdf";
 import PDF from "./PDF";
 import { resolve } from "path";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import useAuthStore from "../store/useAuthStore";
 
 const Page = ({ inputText, corrected }: { inputText: string; corrected: string; }) => {
   const [improved, setImproved] = useState<React.ReactNode[]>([]);
@@ -25,7 +28,7 @@ const Page = ({ inputText, corrected }: { inputText: string; corrected: string; 
   const compareSentences = (original: string, corrected: string): React.ReactNode[] => {
     original = original.replace(/<\/?p>/g, "");
     corrected = corrected.replace(/<\/?p>/g, "");
-    console.log(original, corrected);
+   
 
     const diff: Change[] = diffChars(original, corrected);
     const result: React.ReactNode[] = [];
@@ -125,10 +128,10 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
     let text = "";
     diff.forEach((node) => {
       if (node.added) {
-        console.log("added");
+   
         text += `<u>${node.value}</u>`;
       } else if (node.removed) {
-        console.log("removed");
+    
         text += `<del>${node.value}</del>`;
       } else {
         text += node.value;
@@ -136,15 +139,13 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
     });
 
     let stringWithoutPTags = text.replace(/<p><\/p>/g, "");
-    console.log(text);
+   
 
     return stringWithoutPTags;
   };
 
   const compareSentences = (original: string, corrected: string): React.ReactNode[] => {
-    // original = original.replace(/<\/?p>/g, "");
-    // corrected = corrected.replace(/<\/?p>/g, "");
-    // console.log(original, corrected);
+ 
 
     const diff: Change[] = diffChars(original, corrected);
     const result: React.ReactNode[] = [];
@@ -206,7 +207,7 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
     ],
     editorProps: {
       attributes: {
-        class: 'prose dark:prose-invert prose-sm sm:prose-base inline-block lg:prose-lg xl:prose-2xl m-5 h-full focus:outline-none',
+        class: 'prose dark:prose-invert prose-sm sm:prose-base w-full   inline-block lg:prose-lg xl:prose-2xl outline-none  h-full ',
       },
     },
   }) as Editor;
@@ -222,15 +223,19 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
   }, [triggerGrammarCheck]);
 
   type THandleClickFeature = (type: "improve" | "grammer" | "rewrite", event: React.MouseEvent<HTMLButtonElement>) => void;
+  const userId = useAuthStore((state) => state.userId);
 
   const handleClickFeature: THandleClickFeature = async (type, event) => {
     event.preventDefault();
-
     try {
       const currentContent = editor.getText();
-      console.log(currentContent);
+      if (!title || !currentContent) {
+        toast.warn("Please enter both title and content before submitting.");
+        return;
+      }
+    
       const payload = {
-        userId: "6640daca328ae758689fcfc1",
+        userId: userId,
         title: title,
         content: currentContent,
         taskType: taskType,
@@ -243,11 +248,8 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
         "http://localhost:5000/api/stories/score",
         payload
       );
+      toast.success("Story saved succesfully");
       
-   alert(data.storyId);
-     
-     
-       console.log(data);
       setInputText(currentContent);
       setCorrectedText(data.corrections);
       setCopied(false);
@@ -255,7 +257,7 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
     
       
     } catch (error) {
-      console.log("error", error);
+   
     }
   };
 
@@ -410,8 +412,8 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
             </>
           </div>
         </div>
-        <div className=" w-[50vw]  rounded-3xl">
-          <EditorContent className=" scroll-m-2 h-96 mt-10" editor={editor} />
+        <div className=" w-[70vw]  rounded-3xl">
+          <EditorContent className=" scroll-m-2 w-[100%] h-[30vw] mt-10 " editor={editor} />
         </div>
       </div>
       <div className="absolute -left-2/3">

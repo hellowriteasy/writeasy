@@ -50,7 +50,7 @@ const Signup = () => {
         password: data.password,
         username: data.username
       });
-      console.log("User created:", data);
+     
       router.push('/login', { scroll: false });
     } catch (error) {
       console.error("Error:", error);

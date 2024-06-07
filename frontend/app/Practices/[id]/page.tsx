@@ -3,13 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Image from "next/image";
-import TopWriting from "../../components/Others/TopWriting";
-import WeeklyTest from "../../components/Others/WeeklyTest";
-import Categories from "@/app/components/Categories";
 import Bee from "@/public/Game/cloud3.svg";
-import Cloud from "@/public/Game/cloud.svg";
-import Prompt from "@/app/components/Practice/PracticePrompt";
 import { SimpleEditor } from "@/app/components/WriteStory";
+import useAuthStore from '@/app/store/useAuthStore';
+import Subscription from "@/app/components/Subscription"
 
 interface Prompt {
   _id: string;
@@ -31,6 +28,8 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
   const [triggerGrammarCheck, setTriggerGrammarCheck] = useState(false);
   const [taskType, setTaskType] = useState("");
   const [input, setInput] = useState("");
+  const subscriptionType = useAuthStore((state) => state.subscriptionType);
+  const role = useAuthStore((state) => state.role);
 
   useEffect(() => {
     if (params.id) {
@@ -63,7 +62,8 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
 
   return (
     <div className="w-full h-[1900px] mt-6 z-0 relative flex justify-center">
-      <div className="w-10/12 h-screen ms-12">
+     
+      <div className="w-10/12 h-screen ms-12 ">
         <div className="w-full h-32 relative pt-4">
           <h1 className="text-5xl pt-4 ps-16 font-bold font-comic">{prompt.title}</h1>
         </div>
@@ -74,7 +74,6 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
           <div className="gap-8 relative w-4/5 flex flex-col">
             <form action="" className="">
               <div className="flex flex-col w-full items-center gap-8 h-40 ">
-              
                 <div>
                   <input
                     className="border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[50vw] h-12 focus:outline-none focus:border-yellow-600"
@@ -82,31 +81,30 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
                     onChange={handleTitleChange}
                   />
                 </div>
-               
-          <div className="flex flex-col gap-8">
-            <div className="flex flex-wrap  gap-4 font-comic">
-              {['grammar', 'rewrite', 'improve', 'pdf'].map((type) => (
-                <div key={type}>
-                  <button
-                    className="w-40 h-14 bg-black text-white hover:opacity-80 font-bold text-2xl rounded-full"
-                    value={type}
-                    onClick={type !== 'pdf' ? (e) => {
-                      handleTaskTypeClick(e);
-                      handleGrammarClick();
-                    } : undefined}
-                    disabled={type !== 'pdf' && triggerGrammarCheck}
-                  >
-                    {type.charAt(0).toUpperCase() + type.slice(1)}
-                  </button>
+                <div className="flex flex-col gap-8">
+                  <div className="flex flex-wrap gap-4 font-comic">
+                    {['grammar', 'rewrite', 'improve', 'pdf'].map((type) => (
+                      <div key={type}>
+                        <button
+                          className="w-40 h-14 bg-black text-white hover:opacity-80 font-bold text-2xl rounded-full"
+                          value={type}
+                          onClick={type !== 'pdf' ? (e) => {
+                            handleTaskTypeClick(e);
+                            handleGrammarClick();
+                          } : undefined}
+                          disabled={type !== 'pdf' && triggerGrammarCheck}
+                        >
+                          {type.charAt(0).toUpperCase() + type.slice(1)}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
               </div>
             </form>
           </div>
         </div>
-        <div className=" w-full rounded-full">
+        <div className="">
           <SimpleEditor
             triggerGrammarCheck={triggerGrammarCheck}
             title={input}
@@ -117,8 +115,9 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
             key={prompt._id}
           />
         </div>
-      
       </div>
+      
+      {subscriptionType === "free" && <Subscription />}
     </div>
   );
 };

@@ -19,16 +19,17 @@ const storySchema = new mongoose.Schema({
   storyType: {
     // New attribute to specify if it's a practice story or a contest story
     type: String,
-    enum: ["practiceStory", "contestStory"],
+    enum: ["practice", "contest", "game"],
     required: true,
   },
   contest: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Contest",
     required: function () {
-      return this.storyType === "contestStory"; // Only required if it's a contest story
+      return this.storyType === "contest"; // Only required if it's a contest story
     },
   },
+  contributors: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 
 const Story = mongoose.model("Story", storySchema);

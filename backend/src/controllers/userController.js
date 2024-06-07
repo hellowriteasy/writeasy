@@ -16,6 +16,7 @@ const UserController = {
         _id,
         username: user.username,
         role: user.role,
+        subscriptionType: user.subscriptionType,
       });
     } catch (error) {
       res.status(400).json({ msg: error.message });
@@ -35,6 +36,7 @@ const UserController = {
         _id,
         username: user.username,
         role: user.role,
+        subscriptionType: user.subscriptionType,
       });
     } catch (error) {
       res.status(400).json({ msg: error.message });

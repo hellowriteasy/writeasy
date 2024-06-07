@@ -5,10 +5,10 @@ import Navbar from '../../../components/admin/Navbar';
 import Sidebar from '../../../components/admin/Sidebar';
 import Card from '../../../components/admin/contests/CardAdd';
 import Modal from '@/app/components/admin/contests/ContestModal';
-
+import ProtectedRoute from '@/app/utils/ProtectedRoute';
 interface Prompt {
   _id: string;
-  promptText: string;
+  title: string;
   promptCategories: string[];
 }
 
@@ -29,9 +29,9 @@ const Page = () => {
         contestTheme: theme,
         submissionDeadline: deadline,
       });
-      console.log('Contest added successfully:', response.data);
+    
     } catch (error) {
-      console.error('Error adding contest:', error);
+   
     }
   };
 
@@ -40,6 +40,7 @@ const Page = () => {
   };
 
   return (
+    <ProtectedRoute>
     <div>
       <Navbar />
       <div className="flex h-screen">
@@ -71,16 +72,16 @@ const Page = () => {
           
             <button
               onClick={handleAddClick}
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+              className="bg-black text-white px-4 py-2 rounded-lg "
             >
               Add Prompt
             </button>
             {promptCards.map((prompt, index) => (
-              <Card key={index} title={prompt.promptText} type={prompt.promptCategories.join(', ')} />
+              <Card key={index} title={prompt.title} type={prompt.promptCategories.join(', ')} />
             ))}
             <button
               onClick={handleSubmitContest}
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mt-4 w-full"
+              className="bg-black text-white px-4 py-2 rounded-lg  mt-4 w-full"
             >
               Submit Contest
             </button>
@@ -89,6 +90,7 @@ const Page = () => {
       </div>
       {isModalOpen && <Modal setIsModalOpen={setIsModalOpen} onAddPrompt={handlePromptAdd} />}
     </div>
+    </ProtectedRoute>
   );
 };
 

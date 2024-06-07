@@ -4,8 +4,8 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import Navbar from "../../components/admin/Navbar";
 import Card from "../../components/admin/contests/CardAdd";
-import Sidebar from "@/app/components/admin/SIdebar";
-
+import Sidebar from "@/app/components/admin/Sidebar";
+import ProtectedRoute from "@/app/utils/ProtectedRoute";
 interface Contest {
   id: string;
   contestTheme: string;
@@ -43,6 +43,7 @@ const Page: React.FC = () => {
   };
 
   return (
+    <ProtectedRoute>
     <div className="bg-gray-50 min-h-screen">
       <Navbar />
       <div className="flex h-screen">
@@ -51,7 +52,7 @@ const Page: React.FC = () => {
           <div className="flex justify-between w-5/6 items-center bg-white shadow-sm p-4 rounded-lg border border-gray-300">
             <div className="text-2xl font-semibold text-gray-700">Contests</div>
             <button
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+              className="bg-black text-white px-4 py-2 rounded-lg "
               onClick={handleAddClick}
             >
               Add
@@ -86,6 +87,7 @@ const Page: React.FC = () => {
         </div>
       </div>
     </div>
+    </ProtectedRoute>
   );
 };
 

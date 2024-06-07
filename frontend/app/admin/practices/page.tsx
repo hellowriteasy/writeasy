@@ -5,7 +5,7 @@ import Navbar from "../../components/admin/Navbar";
 import Sidebar from "../../components/admin/Sidebar";
 import Card from "../../components/admin/practice/CardAdd";
 import Modal from "../../components/admin/practice/Modal";
-
+import ProtectedRoute from "@/app/utils/ProtectedRoute";
 const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [prompts, setPrompts] = useState([]);
@@ -28,7 +28,8 @@ const Page = () => {
   }, []);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <ProtectedRoute>
+    <div className="bg-gray-50 font-poppins min-h-screen">
       <Navbar />
       <div className="flex h-screen">
         <Sidebar />
@@ -36,7 +37,7 @@ const Page = () => {
           <div className="flex justify-between items-center w-5/6 bg-white shadow-sm p-4 rounded-lg border border-gray-200">
             <div className="text-2xl font-semibold text-gray-700">Practices</div>
             <button
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+              className="bg-black text-white px-4 py-2 rounded-lg "
               onClick={handleAddClick}
             >
               Add
@@ -53,7 +54,7 @@ const Page = () => {
             </div>
             <div className="mt-4 space-y-4">
               {prompts.map((prompt, index) => (
-                <Card key={index} id={prompt._id} title={prompt.promptText} type={prompt.promptCategory} />
+                <Card key={index} id={prompt._id} title={prompt.title} type={prompt.promptCategory} />
               ))}
             </div>
           </div>
@@ -61,6 +62,7 @@ const Page = () => {
         {isModalOpen && <Modal setIsModalOpen={setIsModalOpen} />}
       </div>
     </div>
+    </ProtectedRoute>
   );
 };
 

@@ -5,60 +5,64 @@ import Navbar from "../../../../components/admin/Navbar";
 import Sidebar from "../../../../components/admin/Sidebar";
 import Card from "../../../../components/admin/stories/contests/StoryCard";
 import StoryNav from "@/app/components/admin/stories/StoryNav";
+import ProtectedRoute from "@/app/utils/ProtectedRoute";
 
-interface Prompt {
+interface Story {
   _id: string;
-  promptText: string;
-  promptCategory: string[];
+  user: string;
+  title: string;
+  content: string;
+  wordCount: number;
+  prompt: string;
+  storyType: string;
+  contest: string;
+  submissionDateTime: string;
 }
 
-interface Contest {
-  _id: string;
-  prompts: Prompt[];
-  contestTheme: string;
-  submissionDeadline: string;
-  isActive: boolean;
-}
-
-const Page = () => {
+const Page = ({ params }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [contests, setContests] = useState<Contest[]>([]);
+  const [stories, setStories] = useState<Story[]>([]);
 
   const handleAddClick = () => {
     setIsModalOpen(true);
   };
 
   useEffect(() => {
-    const fetchContests = async () => {
+    const fetchStories = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/contests');
-        setContests(response.data);
+        const response = await axios.get('http://localhost:5000/api/stories/top');
+        setStories(response.data); 
       } catch (error) {
-        console.error('Error fetching contests:', error);
+        console.error('Error fetching stories:', error);
       }
     };
 
-    fetchContests();
+    fetchStories();
   }, []);
 
+  // Filter stories based on contest ID
+  const filteredStories = stories.filter(story => story.contest === params.id);
+
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <Navbar />
-      <div className="flex h-screen">
-        <Sidebar />
-        <div className="flex-1 flex flex-col p-6 space-y-6">
-          <StoryNav />
-          <div className="bg-white shadow-sm p-4 rounded-lg border w-5/6 border-gray-200 space-y-4">
-            {contests.map((contest) => (
-              <Card
-                key={contest._id}
-                contest={contest}
-              />
-            ))}
+    <ProtectedRoute>
+      <div className="bg-gray-50 min-h-screen">
+        <Navbar />
+        <div className="flex h-screen">
+          <Sidebar />
+          <div className="flex-1 flex flex-col p-6 space-y-6">
+            <StoryNav />
+            <div className="bg-white shadow-sm p-4 rounded-lg border w-5/6 border-gray-200 space-y-4">
+              {filteredStories.map((story) => (
+                <Card
+                  key={story._id}
+                  contest={story}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 };
 

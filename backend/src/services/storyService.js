@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Story = require("../models/story");
 
 const createStory = async (data) => {
@@ -8,6 +9,23 @@ const createStory = async (data) => {
 const getAllStories = async () => {
   return await Story.find();
 };
+
+const getStoriesByUserAndType = async (userId, storyType) => {
+  const objectId = new mongoose.Types.ObjectId(userId);
+
+  if (storyType === "practice" || storyType === "contest") {
+    return await Story.find({ user: objectId, storyType: storyType });
+  } else if (storyType === "game") {
+    return await Story.find({
+      storyType: "game",
+      $or: [{ user: objectId }, { contributors: objectId }]
+    });
+  } else {
+    throw new Error("Invalid storyType");
+  }
+};
+
+
 
 const getStoryById = async (storyId) => {
   return await Story.findById(storyId);
@@ -26,7 +44,7 @@ const getTopContestStories = async () => {
   aWeekAgo.setDate(aWeekAgo.getDate() - 7); // Fetches the date 7 days prior from today
 
   const totalContestStories = await Story.countDocuments({
-    storyType: "contestStory",
+    storyType: "contest",
     submissionDateTime: {
       $gte: aWeekAgo, // Compares if the date of story submission falls in the last 7 days
     },
@@ -35,7 +53,7 @@ const getTopContestStories = async () => {
   const top20PercentCount = Math.ceil(totalContestStories * 0.2);
 
   return await Story.find({
-    storyType: "contestStory",
+    storyType: "contest",
     submissionDateTime: {
       $gte: aWeekAgo, // Compares if the date of story submission falls in the last 7 days
     },
@@ -51,4 +69,5 @@ module.exports = {
   deleteStory,
   getStoryById,
   getTopContestStories,
+  getStoriesByUserAndType,
 };

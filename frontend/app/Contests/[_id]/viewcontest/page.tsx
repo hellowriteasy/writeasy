@@ -32,7 +32,7 @@ interface ContestPageProps {
   };
 }
 
-const Page: React.FC<ContestPageProps> = ({ params }) => {
+const ViewContest: React.FC<ContestPageProps> = ({ params }) => {
   const { _id: contestId } = params;
 
   const [contest, setContest] = useState<Contest | null>(null);
@@ -131,4 +131,4 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
   );
 };
 
-export default Page;
+export default ViewContest;

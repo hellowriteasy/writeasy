@@ -8,6 +8,7 @@ const {
   getStory,
   submitStoryToContest,
   getTopContestStories,
+  getStoriesByUserAndType
 } = require("../src/controllers/storyController");
 const { scoreStory } = require("../src/controllers/StoryScoreController");
 
@@ -51,12 +52,47 @@ router.get("/", getStories);
 
 /**
  * @openapi
+ * /api/stories/user:
+ *   get:
+ *     tags:
+ *       - Stories
+ *     summary: Get stories by userId and storyType
+ *     description: Retrieves stories for a specific user and story type.
+ *     parameters:
+ *       - name: userId
+ *         in: query
+ *         required: true
+ *         description: The ID of the user
+ *         schema:
+ *           type: string
+ *       - name: storyType
+ *         in: query
+ *         required: true
+ *         description: The type of the story (practice, contest, game)
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved stories.
+ *       400:
+ *         description: Invalid input.
+ *       500:
+ *         description: Error occurred while fetching the stories.
+ */
+router.get("/user", getStoriesByUserAndType);
+
+module.exports = router;
+
+
+
+/**
+ * @openapi
  * /api/stories/top:
  *   get:
  *     tags:
  *       - Stories
  *     summary: Get top 20% contest stories
- *     description: Retrieves top 20% stories of type 'contestStory' sorted by score.
+ *     description: Retrieves top 20% stories of type 'contest' sorted by score.
  *     responses:
  *       200:
  *         description: Successfully retrieved top stories.
@@ -177,7 +213,7 @@ router.delete("/:id", deleteStory);
  *               storyType:
  *                 type: string
  *                 description: The type of the story
- *                 enum: ["practiceStory", "contestStory"]
+ *                 enum: ["practice", "contest", "game"]
  *               prompt:
  *                 type: string
  *                 description: ID of the prompt associated with the story.
@@ -191,58 +227,5 @@ router.delete("/:id", deleteStory);
  */
 router.post("/score", scoreStory);
 
-/**
- * @openapi
- * /api/stories/contest/{contestId}/prompt/{promptId}:
- *   post:
- *     tags:
- *       - Stories
- *       - Contests
- *     summary: Submit a story to a contest
- *     description: Submits a story to a specific contest tied to a prompt.
- *     parameters:
- *      - in: path
- *        name: contestId
- *        required: true
- *        description: ID of the contest.
- *        schema:
- *          type: string
- *      - in: path
- *        name: promptId
- *        required: true
- *        description: ID of the prompt associated with the contest.
- *        schema:
- *          type: string
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required: [userId, title, content, wordCount]
- *             properties:
- *               userId:
- *                 type: string
- *                 description: ID of the user who is submitting the story.
- *               title:
- *                 type: string
- *                 description: Title of the story.
- *               content:
- *                 type: string
- *                 description: Content of the story.
- *               wordCount:
- *                 type: number
- *                 description: Word count of the story.
- *     responses:
- *       201:
- *         description: Story submitted to the contest successfully.
- *       400:
- *         description: Validation error related to prompt or contest linkage.
- *       404:
- *         description: Contest or prompt not found.
- *       500:
- *         description: Error occurred while submitting the story to the contest.
- */
-router.post("/contest/:contestId/prompt/:promptId", submitStoryToContest);
 
 module.exports = router;
