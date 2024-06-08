@@ -150,7 +150,7 @@ const options = {
             },
             promptType: {
               type: "string",
-              enum: ["practice", "contest","game"],
+              enum: ["practice", "contest", "game"],
               description:
                 "The type of the prompt (practice or contest or game)",
             },
@@ -263,6 +263,28 @@ const options = {
           },
         },
         Content: {
+          type: "object",
+          properties: {
+            author: {
+              type: "string",
+              description: "The ID of the author",
+            },
+            text: {
+              type: "string",
+              description: "The text content",
+            },
+            timestamp: {
+              type: "string",
+              format: "date-time",
+              description: "The timestamp of the content",
+            },
+            approved: {
+              type: "boolean",
+              description: "The approval status of the content",
+            },
+          },
+        },
+        Email: {
           type: "object",
           properties: {
             author: {

@@ -11,6 +11,7 @@ const authRoutes = require("./routes/auth");
 const storyRoutes = require("./routes/storyRoutes");
 const promptRoutes = require("./routes/promptRoutes");
 const contestRoutes = require("./routes/contestRoutes");
+const emailRoutes = require("./routes/emailRoute");
 const collaborativeStoryRoutes = require("./routes/collaborativeStoryRoutes");
 
 dotenv.config();
@@ -32,8 +33,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/stories", storyRoutes);
 app.use("/api/prompts", promptRoutes);
 app.use("/api/contests", contestRoutes);
+app.use("/api/emails", emailRoutes);
 app.use("/api/collaborative-stories", collaborativeStoryRoutes);
-
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/success", (req, res) => {
