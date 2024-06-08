@@ -8,28 +8,28 @@ const gptService = new GptService(process.env.GPT_API_KEY); // Initialize GPT se
 
 const createStory = async (req, res) => {
   try {
-    const { content, user } = req.body;
+    const { content, user, storyType } = req.body;
     // Calculate word count
     const wordCount = content.split(" ").length;
 
     const story = await StoryService.createStory({ ...req.body, wordCount });
 
-    const newStory = new CollaborativeStory({
-      title: story.title,
-      description: story.description,
-      creatorUser: user,
-      content: [],
-      contributors: [],
-    });
-
-    await newStory.save();
-
+    if (storyType === "game") {
+      const newCollaborativeStory = new CollaborativeStory({
+        title: story.title,
+        description: story.description,
+        creatorUser: user,
+        content: [],
+        contributors: [],
+      });
+      await newCollaborativeStory.save();
+    }
 
     res.status(201).json({
       message: "Story has been successfully saved.",
       story: story._id,
     }); // Respond without score
-    
+
     console.log(story);
     // Process the story for scoring in the background
     processStoryForScoring(story._id, story.content, wordCount); // Ensuring 'content' exists in your story model
