@@ -13,7 +13,7 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({ title, deadline, id }) => {
   const handleDeleteContest = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/contests/${id}`);
+      await axios.delete(`http://localhost:8000/api/contests/${id}`);
       toast.success("Contest deleted successfully!");
     } catch (error) {
       console.error("Error deleting contest:", error);

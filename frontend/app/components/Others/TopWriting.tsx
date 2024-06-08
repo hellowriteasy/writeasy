@@ -16,7 +16,7 @@ const TopWriting: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/stories/top')
+    axios.get('http://localhost:8000/api/stories/top')
       .then(response => {
         setTopStories(response.data);
         setIsLoading(false);

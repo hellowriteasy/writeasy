@@ -245,7 +245,7 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
       
       
       const { data, status } = await axios.post(
-        "http://localhost:5000/api/stories/score",
+        "http://localhost:8000/api/stories/score",
         payload
       );
       toast.success("Story saved succesfully");

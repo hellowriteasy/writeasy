@@ -16,7 +16,7 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
 
   const handleAddPrompt = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/prompts', {
+      const response = await axios.post('http://localhost:8000/api/prompts', {
         title: promptTitle,
         promptCategory: selectedCategories,
         promptType: 'contest',

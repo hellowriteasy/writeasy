@@ -37,7 +37,7 @@ const Page = ({ params }: PageProps) => {
   useEffect(() => {
     const fetchContest = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/contests/${_id}`);
+        const response = await axios.get(`http://localhost:8000/api/contests/${_id}`);
       
         const contest: Contest = response.data;
         setPromptCards(contest.prompts);
@@ -59,7 +59,7 @@ const Page = ({ params }: PageProps) => {
 
   const handleSubmitContest = async () => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/contests/${_id}`, {
+      const response = await axios.put(`http://localhost:8000/api/contests/${_id}`, {
         prompts: promptCards.map((prompt) => prompt._id),
         contestTheme: theme,
         submissionDeadline: deadline,

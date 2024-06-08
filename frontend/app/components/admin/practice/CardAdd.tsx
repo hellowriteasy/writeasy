@@ -19,7 +19,7 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
 
   const handleUpdate = async () => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/prompts/${id}`, {
+      const response = await axios.put(`http://localhost:8000/api/prompts/${id}`, {
         title: promptTitle,
         promptCategory: selectedType,
         promptType: 'practice'
@@ -35,7 +35,7 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(`http://localhost:5000/api/prompts/${id}`);
+      const response = await axios.delete(`http://localhost:8000/api/prompts/${id}`);
       if (window.confirm("Are you sure you want to delete this prompt?")) {
         
         toast.success('Prompt deleted successfully!');

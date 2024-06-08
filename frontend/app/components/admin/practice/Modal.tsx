@@ -27,7 +27,7 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
     };
     
   
-    axios.post('http://localhost:5000/api/prompts', promptData)
+    axios.post('http://localhost:8000/api/prompts', promptData)
       .then(response => {
         
         const newPrompt: CardProps = {

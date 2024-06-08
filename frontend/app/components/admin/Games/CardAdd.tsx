@@ -19,7 +19,7 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id }) => {
 
   const handleUpdate = async () => {
     try {
-      await axios.put(`http://localhost:5000/api/prompts/${id}`, {
+      await axios.put(`http://localhost:8000/api/prompts/${id}`, {
         title: promptTitle,
         description: Description,
         promptType: 'game',
@@ -34,7 +34,7 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id }) => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/prompts/${id}`);
+      await axios.delete(`http://localhost:8000/api/prompts/${id}`);
       toast.success('Prompt deleted successfully!');
       // Optionally, remove the prompt from the UI here or refresh the list.
     } catch (error) {

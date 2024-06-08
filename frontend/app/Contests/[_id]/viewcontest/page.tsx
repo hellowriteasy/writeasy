@@ -52,7 +52,7 @@ const ViewContest: React.FC<ContestPageProps> = ({ params }) => {
 
     const fetchContestById = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/contests/${contestId}`);
+        const response = await axios.get(`http://localhost:8000/api/contests/${contestId}`);
         if (response.status !== 200) {
           throw new Error(`Error: ${response.status}`);
         }

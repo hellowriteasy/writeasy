@@ -43,7 +43,7 @@ const Games: React.FC = () => {
   useEffect(() => {
     const fetchPrompts = async () => {
       try {
-        const response = await axios.get<ApiResponse[]>("http://localhost:5000/api/collaborative-stories");
+        const response = await axios.get<ApiResponse[]>("http://localhost:8000/api/collaborative-stories");
         const formattedPrompts: PromptData[] = response.data.map((story) => ({
           promptText: story.title,
           category: "Collaborative Story",

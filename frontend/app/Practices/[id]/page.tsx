@@ -34,7 +34,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
   useEffect(() => {
     if (params.id) {
       // Fetch the specific prompt data based on promptId
-      axios.get(`http://localhost:5000/api/prompts/${params.id}`)
+      axios.get(`http://localhost:8000/api/prompts/${params.id}`)
         .then(response => {
           setPrompt(response.data);
         })

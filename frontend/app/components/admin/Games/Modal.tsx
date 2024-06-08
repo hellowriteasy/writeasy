@@ -13,7 +13,7 @@ const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen }) => {
 
   const handleUpdate = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/prompts', {
+      const response = await axios.post('http://localhost:8000/api/prompts', {
         title: promptTitle,
         description: description,
         promptType: 'game'

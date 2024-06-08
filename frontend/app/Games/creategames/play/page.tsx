@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback, useState } from "react";
+import React, { SyntheticEvent, useCallback, useState } from "react";
 import classNames from "classnames";
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import Document from "@tiptap/extension-document";
@@ -27,7 +27,7 @@ const Page = () => {
   const subscriptionType = useAuthStore((state) => state.subscriptionType);
   const role = useAuthStore((state) => state.role);
   const {userId}=useAuthStore();
-  async function handleSubmit(e) {
+  async function handleSubmit(e:SyntheticEvent) {
     e.preventDefault(); // Prevent default form submission behavior
   
     try {
@@ -49,7 +49,7 @@ const Page = () => {
   
       // Send POST request to backend
       const { data, status } = await axios.post(
-        `http://localhost:5000/api/stories`,
+        `http://localhost:8000/api/stories`,
         payload
       );
       toast.success("Story saved suscessfully");

@@ -64,7 +64,7 @@ const CreateContest: React.FC<PromptPageProps> = ({contestId,promptId,Prompttitl
       };
 
       const { data, status } = await axios.post(
-        `http://localhost:5000/api/stories`,
+        `http://localhost:8000/api/stories`,
         payload
       );
       toast.warn("Story saved succesfully");

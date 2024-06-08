@@ -28,7 +28,7 @@ const Page = () => {
   useEffect(() => {
     const fetchContests = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/contests`);
+        const response = await axios.get(`http://localhost:8000/api/contests`);
         setContests(response.data);
        
       } catch (error) {
