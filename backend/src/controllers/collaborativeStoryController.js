@@ -47,8 +47,9 @@ const inviteCollaborators = [
   authMiddleware,
   async (req, res) => {
     const { storyID, email } = req.body;
+
     try {
-      const story = await CollaborativeStory.findById(storyID);
+      const story = await CollaborativeStory.findOne({ story_id: storyID });
       if (!story) {
         console.log("Story not found with ID:", storyID);
         return res.status(404).json({ message: "Story not found." });
