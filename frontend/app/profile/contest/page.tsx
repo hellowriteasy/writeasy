@@ -5,11 +5,12 @@ import axios from 'axios';
 import UserStory from '@/app/components/profile/UserStory';
 import ReactPaginate from 'react-paginate';
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
-
+import useAuthStore from '@/app/store/useAuthStore';
 interface UserStory {
   _id: string;
   title: string;
   content: string;
+  corrections:string;
 }
 
 const ContestPage: React.FC = () => {
@@ -17,6 +18,7 @@ const ContestPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(0);
+  const {userId}=useAuthStore();
   const itemsPerPage = 5;
 
   useEffect(() => {
@@ -24,7 +26,7 @@ const ContestPage: React.FC = () => {
       try {
         const response = await axios.get('http://localhost:5000/api/stories/user', {
           params: {
-            userId: '6640daca328ae758689fcfc1',
+            userId:userId,
             storyType: 'contest',
             skip: currentPage * itemsPerPage,
             limit: itemsPerPage
@@ -65,6 +67,7 @@ const ContestPage: React.FC = () => {
                 title={story.title}
                 description={story.content}
                 id={story._id}
+                corrections={story.corrections}
               />
             ))}
               <div className="w-full mt-10 text-lg md:text-xl font-comic">

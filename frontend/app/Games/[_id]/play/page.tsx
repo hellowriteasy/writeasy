@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import classNames from "classnames";
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import Document from "@tiptap/extension-document";
@@ -17,52 +17,40 @@ import Cloud from "@/public/Game/cloud.svg";
 import Image from "next/image";
 import Subscription from "@/app/components/Subscription";
 import useAuthStore from "@/app/store/useAuthStore";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 import axios from "axios";
-const Page = () => {
-  const [title,setTitle]=useState("")
-  const [content,setcontent]=useState("")
+
+interface Story {
+  user: string;
+  title: string;
+  content: string;
+  wordCount: number;
+  submissionDateTime: string;
+  score: number;
+  corrections: string;
+  contest: string;
+  prompt: string;
+  storyType: string;
+}
+
+interface StoryEditorProps {
+  story: Story;
+  id: string;
+}
+
+const StoryEditor: React.FC<StoryEditorProps> = ({ story, id }) => {
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [email, setEmail] = useState("");
+  const [wordCount, setWordCount] = useState(0);
+  const [wordLimitExceeded, setWordLimitExceeded] = useState(false);
+  const [storyId, setStoryId] = useState(null);
   const subscriptionType = useAuthStore((state) => state.subscriptionType);
   const role = useAuthStore((state) => state.role);
-  const {userId}=useAuthStore();
-  async function handleSubmit(e) {
-    e.preventDefault(); // Prevent default form submission behavior
-  
-    try {
-      // Check if title and content are not empty
-      const currentContent = editor.getText();
-      if (!title || !currentContent) {
-        toast.error("Please enter both title and content before submitting.");
-        return;
-      }
-  
-      // Prepare payload
-      const payload = {
-        user: userId, // Replace with actual user ID
-        title: title,
-        content: currentContent,
-        storyType: "game",
-        prompt: "665a07f42d718830c05b29b5"
-      };
-  
-      // Send POST request to backend
-      const { data, status } = await axios.post(
-        `http://localhost:5000/api/stories`,
-        payload
-      );
-      toast.success("Story saved suscessfully");
-  
-    } catch (error) {
-   
-      toast.error("An error occurred while submitting the story. Please try again later.");
-    }
-  }
-  
-  
-
-
+  const { userId } = useAuthStore();
+  const { token } = useAuthStore();
+ 
   const editor = useEditor({
     extensions: [
       Document,
@@ -77,10 +65,88 @@ const Page = () => {
     ],
     editorProps: {
       attributes: {
-        class: 'prose dark:prose-invert prose-sm sm:prose-base w-full   inline-block lg:prose-lg xl:prose-2xl outline-none  h-full ',
+        class: 'prose dark:prose-invert prose-sm sm:prose-base w-full inline-block lg:prose-lg xl:prose-2xl outline-none h-full',
       },
     },
+    content: content,
+    onUpdate: ({ editor }) => {
+      const textContent = editor.getText();
+      const words = textContent.split(/\s+/).filter(Boolean).length;
+      setWordCount(words);
+      setWordLimitExceeded(words > 1000);
+    }
   }) as Editor;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const currentContent = editor.getText();
+      if (!title || !currentContent) {
+        toast.error("Please enter both title and content before submitting.");
+        return;
+      }
+      if (wordLimitExceeded) {
+        toast.error("Word limit exceeded. Please reduce the number of words.");
+        return;
+      }
+
+      const payload = {
+        user: userId,
+        title: title,
+        content: currentContent,
+        storyType: "game",
+        prompt: id
+      };
+      const { data, status } = await axios.post(
+        `http://localhost:5000/api/stories`,
+        payload
+      );
+       console.log(data.story)
+        toast.success("Story saved successfully");
+        setStoryId(data.story); // Assume the API returns the story ID in the response
+      
+    } catch (error) {
+      toast.error("An error occurred while submitting the story. Please try again later.");
+    }
+  };
+
+  const handleInvite = async (e) => {
+    e.preventDefault();
+
+    if (!email) {
+      toast.error("Please enter an email address.");
+      return;
+    }
+
+    if (!storyId) {
+      toast.error("Please submit the story before inviting a collaborator.");
+      return;
+    }
+
+    try {
+      console.log(token)
+      const invitePayload = {
+        storyID: storyId,
+        email: email,
+      };
+      const { data, status } = await axios.post(
+        `http://localhost:5000/api/collaborative-stories/invite`,
+        invitePayload,
+        {
+          headers: {
+            'x-auth-token': token
+          }
+        }
+      );
+      console.log(data)
+      
+      }
+     catch (error) {
+      console.log(error)
+      toast.error(error.response?.data?.message || "An error occurred while sending the invitation. Please try again later.");
+    }
+  };
 
   const toggleBold = useCallback(() => {
     editor.chain().focus().toggleBold().run();
@@ -118,9 +184,6 @@ const Page = () => {
             <div className="w-10 h-10 absolute left-8 bg-slate-500 rounded-full border">
               <Image src="" alt="" />
             </div>
-            <h5 className="absolute left-20 pt-2">
-              Story by <span className="font-bold">Alice, Bob</span> and <span className="font-bold">2 others</span>
-            </h5>
           </div>
         </div>
         <div className="flex w-[100%] relative mt-0">
@@ -133,10 +196,14 @@ const Page = () => {
                 <div>
                   <input
                     className="border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[40vw] h-12 focus:outline-none focus:border-yellow-600"
-                    placeholder="Email or Username comma separated"
-                    onChange={(e)=>{setTitle(e.target.value)}}
+                    placeholder="Email to invite"
+                    onChange={(e) => { setEmail(e.target.value) }}
                   />
-                  <button type="submit" className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-40 h-14">
+                  <button
+                    type="button"
+                    onClick={handleInvite}
+                    className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-40 h-14 ml-4"
+                  >
                     Invite
                   </button>
                 </div>
@@ -144,10 +211,9 @@ const Page = () => {
                   <input
                     className="border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[50vw] h-12 focus:outline-none focus:border-yellow-600"
                     placeholder="Untitled Story"
-                    onChange={(e)=>{setTitle(e.target.value)}}
+                    onChange={(e) => { setTitle(e.target.value) }}
                   />
                 </div>
-             
                 <div className="h-[800px] rounded-full">
                   <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
                     <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
@@ -213,29 +279,36 @@ const Page = () => {
                         >
                           <Icons.Code />
                         </button>
+                        <div className="w-60 h-7 bg-white flex flex-col justify-center rounded-2xl shadow-sm ">
+                          <p className="text-center font-comic">Word count: {wordCount} / 1000</p>
+                          {wordLimitExceeded && (
+                            <p className="text-red-500">Word limit exceeded. Please reduce the number of words.</p>
+                          )}
+                        </div>
                       </div>
                     </div>
-                    <div className="w-[50vw]  rounded-3xl">
-                      <EditorContent className="scroll-m-2 w-[100%] h-96 mt-10 " editor={editor} />
+                    <div className="w-[50vw] rounded-3xl">
+                      <EditorContent className="scroll-m-2 w-[100%] h-96 mt-10" editor={editor} />
                     </div>
                   </div>
                 </div>
-                <div>
+                <div className="">
                   <button
-                onClick={handleSubmit}  
-                  className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-[50vw] h-14">
+                    onClick={handleSubmit}
+                    className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-[50vw] h-14"
+                  >
                     Submit Story
                   </button>
                 </div>
               </div>
             </form>
           </div>
-         
         </div>
       </div>
-      {subscriptionType=="free"&&<Subscription/>}
+      {subscriptionType === "free" && <Subscription />}
+      <ToastContainer />
     </div>
   );
-}
+};
 
-export default Page;
+export default StoryEditor;

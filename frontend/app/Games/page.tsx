@@ -12,45 +12,20 @@ import Bee from "@/public/Game/Bee.svg";
 import Cloud from "@/public/Game/cloud.svg";
 import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
-
-interface PromptData {
-  promptText: string;
-  category: string;
-  contestId: string;
-  promptId: string;
-}
-
-interface ApiResponse {
-  creatorUser: string;
-  title: string;
-  content: {
-    author: string;
-    text: string;
-    timestamp: string;
-    approved: boolean;
-  }[];
-  contributors: string[];
-  creationDateTime: string;
-}
+import Page from "./[_id]/page"
 
 const Games: React.FC = () => {
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(0);
-  const [prompts, setPrompts] = useState<PromptData[]>([]);
+  const [prompts, setPrompts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPrompts = async () => {
       try {
-        const response = await axios.get<ApiResponse[]>("http://localhost:5000/api/collaborative-stories");
-        const formattedPrompts: PromptData[] = response.data.map((story) => ({
-          promptText: story.title,
-          category: "Collaborative Story",
-          contestId: story.creatorUser, // Assuming contestId is based on creatorUser
-          promptId: story.creatorUser,  // Assuming promptId is based on creatorUser
-        }));
-        setPrompts(formattedPrompts);
+        const response = await axios.get("http://localhost:5000/api/prompts/game-prompts");
+        setPrompts(response.data)
         setLoading(false);
       } catch (error: any) {
         setError(error.message);
@@ -70,7 +45,11 @@ const Games: React.FC = () => {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
+  function handlePromptClick(){
+    
 
+    }
+  
   return (
     <div className="w-full h-[1300px] mt-6 z-0 relative flex justify-center">
       <div className="absolute -top-14 right-0">
@@ -95,7 +74,7 @@ const Games: React.FC = () => {
           </div>
           <div className="gap-8 w-full  relative flex flex-col">
             {currentPrompts.map((prompt) => (
-              <Prompt key={prompt.promptId} prompt={prompt} />
+              <Prompt  key={prompt.promptId} prompt={prompt} />
             ))}
             <div className="absolute bottom-1/3 -left-32">
               <Image src={Cloud} alt="Cloud" />

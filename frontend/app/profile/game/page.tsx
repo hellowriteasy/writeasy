@@ -5,11 +5,12 @@ import UserStory from "@/app/components/profile/UserStory";
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
-
+import useAuthStore from '@/app/store/useAuthStore';
 interface UserStory {
   _id: string;
   title: string;
   content: string;
+  corrections:string
 }
 
 const Page: React.FC = () => {
@@ -17,7 +18,7 @@ const Page: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
-
+  const userId = useAuthStore((state) => state.userId);
   const itemsPerPage = 5;
 
   useEffect(() => {
@@ -25,13 +26,14 @@ const Page: React.FC = () => {
       try {
         const response = await axios.get<UserStory[]>('http://localhost:5000/api/stories/user', {
           params: {
-            userId: '6640daca328ae758689fcfc1',
+            userId:userId,
             storyType: 'game',
             skip: currentPage * itemsPerPage,
             limit: itemsPerPage
           }
         });
         setUserStories(response.data);
+        console.log(response.data.corrections)
         setLoading(false);
       } catch (error) {
         setError('Error fetching user stories: ' + error.message);
@@ -51,7 +53,7 @@ const Page: React.FC = () => {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
-
+ 
   return (
     <div className='font-poppins'>
       <Navbar />
@@ -62,6 +64,7 @@ const Page: React.FC = () => {
             title={story.title}
             description={story.content}
             id={story._id}
+            corrections={story.corrections}
           />
         ))}
       </div>

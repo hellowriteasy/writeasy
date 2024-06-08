@@ -5,11 +5,12 @@ import UserStory from "@/app/components/profile/UserStory";
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
-
+import useAuthStore from '../store/useAuthStore';
 interface UserStory {
   _id: string;
   title: string;
   content: string;
+  corrections:string;
 }
 
 const Page: React.FC = () => {
@@ -17,7 +18,7 @@ const Page: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
-
+  const { userId } = useAuthStore();
   const itemsPerPage = 5;
 
   useEffect(() => {
@@ -25,12 +26,13 @@ const Page: React.FC = () => {
       try {
         const response = await axios.get<UserStory[]>('http://localhost:5000/api/stories/user', {
           params: {
-            userId: '665f1357995568b8058c950e',
+            userId:userId,
             storyType: 'practice',
             skip: currentPage * itemsPerPage, // Calculate the number of items to skip
             limit: itemsPerPage // Limit the number of items per page
           }
         });
+       
         setUserStories(response.data);
         setLoading(false);
       } catch (error) {
@@ -57,11 +59,13 @@ const Page: React.FC = () => {
       <Navbar />
       <div className='flex flex-col items-center gap-10'>
         {userStories.map((story) => (
+        
           <UserStory
             key={story._id}
             title={story.title}
             description={story.content}
             id={story._id}
+            corrections={story.corrections}
           />
         ))}
       </div>

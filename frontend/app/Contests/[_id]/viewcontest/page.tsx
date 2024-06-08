@@ -80,7 +80,7 @@ const ViewContest: React.FC<ContestPageProps> = ({ params }) => {
     <div className="w-full h-auto mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 h-auto ms-12">
         {selectedPrompt ? (
-          <CreateContest
+          <ViewContest
             contestId={params._id}
             promptId={selectedPrompt.promptId}
           />

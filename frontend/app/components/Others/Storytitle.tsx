@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 
 interface StoryProps {
@@ -17,8 +17,22 @@ interface StoryProps {
 }
 
 const Storytitle: React.FC<StoryProps> = ({ story }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  const getPreviewContent = (content: string, wordLimit: number) => {
+    const words = content.split(' ');
+    if (words.length <= wordLimit) return content;
+    return words.slice(0, wordLimit).join(' ') + '...';
+  };
+
+  const previewContent = getPreviewContent(story.content, 50);
+
   return (
-    <div className="w-full mx-auto border-2 border-gray-200 white rounded-3xl overflow-hidden">
+    <div className="w-full mx-auto border-2 border-gray-200 rounded-3xl overflow-hidden">
       {/* Card title and image */}
       <div className="flex items-center justify-between px-4 md:px-6 py-4">
         <div className="flex items-center">
@@ -36,11 +50,16 @@ const Storytitle: React.FC<StoryProps> = ({ story }) => {
       </div>
       {/* Paragraph */}
       <div className="text-xs md:text-sm lg:text-base text-gray-900 p-4">
-        {story.content}
+        {isExpanded ? story.content : previewContent}
       </div>
       {/* Read more button */}
       <div className="px-4 md:px-6 py-4 flex justify-end">
-        <button className="bg-black text-white py-2 w-24 md:w-32 lg:w-40 h-10 md:h-12 px-4 rounded-3xl">Read more</button>
+        <button 
+          onClick={toggleExpand} 
+          className="bg-black text-white py-2 w-24 md:w-32 lg:w-40 h-10 md:h-12 px-4 rounded-3xl"
+        >
+          {isExpanded ? 'Show less' : 'Read more'}
+        </button>
       </div>
     </div>
   );
