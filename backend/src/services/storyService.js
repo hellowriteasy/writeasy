@@ -18,8 +18,16 @@ const getStoriesByUserAndType = async (userId, storyType) => {
   } else if (storyType === "game") {
     return await Story.find({
       storyType: "game",
-      $or: [{ user: objectId }, { contributors: objectId }]
+      $or: [
+        { user: objectId },
+        {
+          contributors: {
+            in: [objectId],
+          },
+        },
+      ],
     });
+    
   } else {
     throw new Error("Invalid storyType");
   }
