@@ -12,20 +12,21 @@ const createStory = async (req, res) => {
 
     const story = await StoryService.createStory({ ...req.body, wordCount });
 
-    res.status(201).json({ message: "Story has been successfully saved." }); // Respond without score
-
+    res.status(201).json({ message: "Story has been successfully saved.",story:story._id }); // Respond without score
+   console.log(story)
     // Process the story for scoring in the background
-    processStoryForScoring(story._id, story.content); // Ensuring 'content' exists in your story model
+    processStoryForScoring(story._id, story.content,wordCount); // Ensuring 'content' exists in your story model
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
 // Function to handle scoring
-async function processStoryForScoring(storyId, content) {
+async function processStoryForScoring(storyId, content,wordCount) {
   try {
     const score = await gptService.generateScore(content); // Get score from GPT API
-    await StoryService.updateStory(storyId, { score }); // Update the story with the score
+    const correctionSummary = await gptService.generateCorrectionSummary(content, score.corrections, wordCount);
+    await StoryService.updateStory(storyId, { score:score.score,corrections:score.corrections,correctionSummary:correctionSummary}); // Update the story with the score
     console.log(`Score updated for story ${storyId}.`);
   } catch (error) {
     console.error(`Failed to score story ${storyId}:`, error);

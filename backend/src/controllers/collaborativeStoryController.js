@@ -68,11 +68,11 @@ const inviteCollaborators = [
           .json({ message: "Internal error: User ID is null." });
       }
 
-      if (user.subscriptionType !== "paid") {
-        return res
-          .status(403)
-          .json({ message: "User does not have a paid subscription." });
-      }
+      // if (user.subscriptionType !== "paid") {
+      //   return res
+      //     .status(403)
+      //     .json({ message: "User does not have a paid subscription." });
+      // }
 
       const isAlreadyContributor = story.contributors.some((contributorId) => {
         return contributorId && contributorId.toString() === userId.toString();

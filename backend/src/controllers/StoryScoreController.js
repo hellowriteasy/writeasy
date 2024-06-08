@@ -6,12 +6,12 @@ const gptService = new GptService(process.env.GPT_API_KEY);
 exports.scoreStory = async function (req, res) {
   const { userId, title, content, taskType, storyType, prompt } = req.body;
   const wordCount = content.split(" ").length; // Calculate word count
-
+console.log("debug 1");
   try {
     // Check if a practice story exists for the same user and prompt
     if (storyType === "practice") {
       const existingPracticeStory = await Story.findOne({ user: userId, prompt: prompt, storyType: "practice" });
-
+  console.log("debug 2 ",existingPracticeStory)
       if (existingPracticeStory) {
         // Update the existing practice story
         existingPracticeStory.title = title;
@@ -20,11 +20,11 @@ exports.scoreStory = async function (req, res) {
         existingPracticeStory.submissionDateTime = new Date();
 
         // Get corrections and correction summary
-        const corrections = await gptService.generateCorrections(existingPracticeStory.content, taskType);
+        const corrections = await gptService.generateScore(existingPracticeStory.content, taskType,existingPracticeStory.wordCount);
         const correctionSummary = await gptService.generateCorrectionSummary(existingPracticeStory.content, corrections, 0);
-
+   console.log("debug 3",corrections)
         // Update the existing practice story with corrections and correction summary
-        existingPracticeStory.corrections = corrections;
+        existingPracticeStory.corrections = corrections.corrections;
         existingPracticeStory.correctionSummary = correctionSummary;
         existingPracticeStory.score = 0; // Score is set to 0 for practice stories
 
@@ -34,13 +34,13 @@ exports.scoreStory = async function (req, res) {
           success: true,
           message: "Practice story updated successfully",
           storyId: updatedPracticeStory._id,
-          score: 0,
-          corrections,
+          score:corrections.score,
+          corrections:corrections.corrections,
           correctionSummary
         });
       }
     }
-
+  console.log("debug 4");
     // Save the new story to the database without score and corrections
     const newStory = new Story({
       user: userId,
@@ -59,8 +59,9 @@ exports.scoreStory = async function (req, res) {
     let correctionSummary = null;
 
     // Generate corrections for all story types
-    corrections = await gptService.generateCorrections(savedStory.content, taskType);
-    correctionSummary = await gptService.generateCorrectionSummary(savedStory.content, corrections, score);
+    corrections = await gptService.generateScore(savedStory.content, taskType);
+    correctionSummary = await gptService.generateCorrectionSummary(savedStory.content, corrections.corrections, corrections.score);
+    console.log("debug 5",corrections)
 
     if (storyType !== "practice") {
       // Call the GPT service to score the story
@@ -68,20 +69,20 @@ exports.scoreStory = async function (req, res) {
       score = result.score;
       savedStory.score = score;
     } else {
-      savedStory.score = 0; // Score is set to 0 for practice stories
+      savedStory.score =0; // Score is set to 0 for practice stories
     }
-
+     console.log("debug 6 ",corrections);
     // Update the story with the score, corrections, and correction summary
-    savedStory.corrections = corrections;
+    savedStory.corrections = corrections.corrections;
     savedStory.correctionSummary = correctionSummary;
-    
+   
     await savedStory.save();
 
     return res.status(201).json({
       success: true,
       message: "Story scored and corrected successfully",
       storyId: savedStory._id,
-      score,
+      score:corrections.score,
       corrections,
       correctionSummary
     });

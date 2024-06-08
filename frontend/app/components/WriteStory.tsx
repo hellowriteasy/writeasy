@@ -239,7 +239,7 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
         title: title,
         content: currentContent,
         taskType: taskType,
-        storyType: "practiceStory",
+        storyType: "practice",
         prompt: _id
       };
       
