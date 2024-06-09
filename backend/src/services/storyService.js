@@ -7,14 +7,21 @@ const createStory = async (data) => {
 };
 
 const getAllStories = async () => {
-  return await Story.find();
+  return await Story.find().populate({
+    select: {
+      password:0
+    },
+    model: "User",
+    path:"user"
+  });
 };
 
 const getStoriesByUserAndType = async (userId, storyType) => {
   const objectId = new mongoose.Types.ObjectId(userId);
-
   if (storyType === "practice" || storyType === "contest") {
-    return await Story.find({ user: objectId, storyType: storyType });
+    return await Story.find({ user: objectId, storyType: storyType }).populate(
+      "user"
+    );
   } else if (storyType === "game") {
     return await Story.find({
       storyType: "game",
@@ -26,14 +33,11 @@ const getStoriesByUserAndType = async (userId, storyType) => {
           },
         },
       ],
-    });
-    
+    }).populate("user");
   } else {
     throw new Error("Invalid storyType");
   }
 };
-
-
 
 const getStoryById = async (storyId) => {
   return await Story.findById(storyId);
