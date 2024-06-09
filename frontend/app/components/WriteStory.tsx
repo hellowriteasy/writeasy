@@ -17,7 +17,6 @@ import { diffChars, Change } from "diff";
 import usePdfStore from "@/app/store/usePDFStore";
 import { usePDF } from "react-to-pdf";
 import PDF from "./PDF";
-import { resolve } from "path";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useAuthStore from "../store/useAuthStore";
@@ -29,7 +28,6 @@ const Page = ({ inputText, corrected }: { inputText: string; corrected: string; 
     original = original.replace(/<\/?p>/g, "");
     corrected = corrected.replace(/<\/?p>/g, "");
    
-
     const diff: Change[] = diffChars(original, corrected);
     const result: React.ReactNode[] = [];
 
@@ -99,12 +97,13 @@ const getAiPrompt = (type: TWriteEasyFeature, userInput: string) => {
 };
 
 interface SimpleEditorProps {
-
+  triggerGrammarCheck: boolean;
   taskType: string;
   title: string;
   Userid: string;
   _id: string;
   type: string;
+  wordcount:number;
 }
 
 export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id, type }: SimpleEditorProps) {
@@ -128,10 +127,8 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
     let text = "";
     diff.forEach((node) => {
       if (node.added) {
-   
         text += `<u>${node.value}</u>`;
       } else if (node.removed) {
-    
         text += `<del>${node.value}</del>`;
       } else {
         text += node.value;
@@ -139,14 +136,10 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
     });
 
     let stringWithoutPTags = text.replace(/<p><\/p>/g, "");
-   
-
     return stringWithoutPTags;
   };
 
   const compareSentences = (original: string, corrected: string): React.ReactNode[] => {
- 
-
     const diff: Change[] = diffChars(original, corrected);
     const result: React.ReactNode[] = [];
 
@@ -184,7 +177,7 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
 
     return result;
   };
-
+  
   useEffect(() => {
     handleUpdate();
   }, [correctedText]);
@@ -193,6 +186,9 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
     setImproved(compareSentences(inputText, correctedText));
   }, [inputText, correctedText]);
 
+  const [wordCount, setWordCount] = useState(0);
+  const [wordLimitExceeded, setWordLimitExceeded] = useState(false);
+  
   const editor = useEditor({
     extensions: [
       Document,
@@ -207,9 +203,15 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
     ],
     editorProps: {
       attributes: {
-        class: 'prose dark:prose-invert prose-sm sm:prose-base w-full   inline-block lg:prose-lg xl:prose-2xl outline-none  h-full ',
+        class: 'prose dark:prose-invert prose-sm sm:prose-base w-full inline-block lg:prose-lg xl:prose-2xl outline-none h-full',
       },
-    },
+    }, 
+    onUpdate: ({ editor }) => {
+      const textContent = editor.getText();
+      const words = textContent.split(/\s+/).filter(Boolean).length;
+      setWordCount(words);
+      setWordLimitExceeded(words > 1000);
+    }
   }) as Editor;
 
   const handleExport = () => {
@@ -222,18 +224,22 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
     }
   }, [triggerGrammarCheck]);
 
-  type THandleClickFeature = (type: "improve" | "grammer" | "rewrite", event: React.MouseEvent<HTMLButtonElement>) => void;
+  type THandleClickFeature = (type: "improve" | "grammer" | "rewrite", event: React.MouseEvent<HTMLButtonElement> | MouseEvent) => void;
   const userId = useAuthStore((state) => state.userId);
 
   const handleClickFeature: THandleClickFeature = async (type, event) => {
     event.preventDefault();
     try {
       const currentContent = editor.getText();
+
       if (!title || !currentContent) {
         toast.warn("Please enter both title and content before submitting.");
         return;
       }
-    
+      if (wordLimitExceeded) {
+        toast.error("Word limit exceeded. Please reduce the number of words.");
+        return;
+      }
       const payload = {
         userId: userId,
         title: title,
@@ -242,7 +248,6 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
         storyType: "practice",
         prompt: _id
       };
-      
       
       const { data, status } = await axios.post(
         "http://localhost:8000/api/stories/score",
@@ -255,9 +260,8 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
       setCopied(false);
       setIsCheckingGrammer(true);
     
-      
     } catch (error) {
-   
+      toast.error("An error occurred while checking grammar.");
     }
   };
 
@@ -409,6 +413,13 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
               >
                 Export pdf
               </button>
+              <div className="w-60 h-7 bg-white flex flex-col justify-center rounded-2xl shadow-sm ">
+
+                <p className="text-center font-comic">Word count: {wordCount} / 1000</p>
+                {wordLimitExceeded && (
+               <p className="text-red-500">Word limit exceeded. Please reduce the number of words.</p>
+                  )}
+             </div>
             </>
           </div>
         </div>
@@ -419,6 +430,7 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
       <div className="absolute -left-2/3">
         <PDF corrected={correctedText} originals={inputText} />
       </div>
+      <ToastContainer />
     </>
   );
 }

@@ -35,6 +35,7 @@ const createStory = async (req, res) => {
     // Process the story for scoring in the background
     processStoryForScoring(story._id, story.content, wordCount); // Ensuring 'content' exists in your story model
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -87,6 +88,7 @@ const getStoriesByUserAndType = async (req, res) => {
     );
     res.json(stories);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: error.message });
   }
 };

@@ -52,7 +52,7 @@ const ViewContest: React.FC<ContestPageProps> = ({ params }) => {
 
     const fetchContestById = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/contests/${contestId}`);
+        const response = await axios.get(`http://localhost:5000/api/stories`);
         if (response.status !== 200) {
           throw new Error(`Error: ${response.status}`);
         }
@@ -80,7 +80,7 @@ const ViewContest: React.FC<ContestPageProps> = ({ params }) => {
     <div className="w-full h-auto mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 h-auto ms-12">
         {selectedPrompt ? (
-          <CreateContest
+          <ViewContest
             contestId={params._id}
             promptId={selectedPrompt.promptId}
           />
@@ -113,7 +113,7 @@ const ViewContest: React.FC<ContestPageProps> = ({ params }) => {
                   </h1>
                 </div>
                 
-                 <Storycard/>
+                 <Storycard />
                 
                 <div className="absolute bottom-80 -left-32">
                   <Image src={Cloud} alt="Cloud" />
