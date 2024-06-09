@@ -30,7 +30,7 @@ const Page = ({ params }) => {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/stories/top');
+        const response = await axios.get('http://localhost:8000/api/stories/top');
         setStories(response.data); 
       } catch (error) {
         console.error('Error fetching stories:', error);

@@ -22,7 +22,7 @@ const getStoriesByUserAndType = async (userId, storyType) => {
         { user: objectId },
         {
           contributors: {
-            $in: [userId],
+            $in: [objectId],
           },
         },
       ],

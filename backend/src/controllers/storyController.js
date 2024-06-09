@@ -14,17 +14,17 @@ const createStory = async (req, res) => {
 
     const story = await StoryService.createStory({ ...req.body, wordCount });
 
-    if (storyType === "game") {
-      const newCollaborativeStory = new CollaborativeStory({
-        title: story.title,
-        story_id:story._id,
-        description: story.description,
-        creatorUser: user,
-        content: [],
-        contributors: [],
-      });
-      await newCollaborativeStory.save();
-    }
+    // if (storyType === "game") {
+    //   const newCollaborativeStory = new CollaborativeStory({
+    //     title: story.title,
+    //     description: story.description,
+    //     creatorUser: user,
+    //     story_id:story._id,
+    //     content: [],
+    //     contributors: [],
+    //   });
+    //   await newCollaborativeStory.save();
+    // }
 
     res.status(201).json({
       message: "Story has been successfully saved.",
@@ -43,12 +43,15 @@ const createStory = async (req, res) => {
 // Function to handle scoring
 async function processStoryForScoring(storyId, content, wordCount) {
   try {
+    console.log("processing scroring", storyId,content,wordCount);
+
     const score = await gptService.generateScore(content); // Get score from GPT API
     const correctionSummary = await gptService.generateCorrectionSummary(
       content,
       score.corrections,
       wordCount
     );
+    console.log("correction summmary",correctionSummary)
     await StoryService.updateStory(storyId, {
       score: score.score,
       corrections: score.corrections,

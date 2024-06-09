@@ -9,6 +9,7 @@ const {
 const {
   checkInviteStatus,
 } = require("../../middleware/inviteStatusMiddleware");
+const Story = require("../models/story");
 
 const getCollaborativeStories = async (req, res) => {
   try {
@@ -47,9 +48,8 @@ const inviteCollaborators = [
   authMiddleware,
   async (req, res) => {
     const { storyID, email } = req.body;
-
     try {
-      const story = await CollaborativeStory.findOne({ story_id: storyID });
+      const story = await Story.findById(storyID);
       if (!story) {
         console.log("Story not found with ID:", storyID);
         return res.status(404).json({ message: "Story not found." });
@@ -74,15 +74,20 @@ const inviteCollaborators = [
       //     .status(403)
       //     .json({ message: "User does not have a paid subscription." });
       // }
+      console.log("debug 1", story);
 
       const isAlreadyContributor = story.contributors.some((contributorId) => {
         return contributorId && contributorId.toString() === userId.toString();
       });
+      console.log("debug ", story.contributors);
 
       if (isAlreadyContributor) {
         res.status(400).json({ message: "User is already a contributor." });
       } else {
+        console.log("debug 2", story.contributors);
+
         story.contributors.push(userId);
+        console.log("debug 3", story.contributors);
         await story.save();
         res
           .status(200)

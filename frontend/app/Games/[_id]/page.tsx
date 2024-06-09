@@ -38,7 +38,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/stories");
+        const response = await axios.get("http://localhost:8000/api/stories");
         const fetchedStories: Story[] = response.data;
         setStories(fetchedStories);
         setLoading(false);

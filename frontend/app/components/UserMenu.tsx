@@ -16,7 +16,7 @@ const UserMenu = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post("http://localhost:5000/api/auth/logout");
+      await axios.post("http://localhost:8000/api/auth/logout");
       logout();
     } catch (error) {
       console.error("Failed to logout", error);

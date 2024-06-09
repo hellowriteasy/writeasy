@@ -37,7 +37,7 @@ const Card: React.FC<CardProps> = ({ id, title, description = '' }) => {
       progress: undefined,
       onClose: () => {
         // If user confirms deletion, make the delete request
-        axios.delete(`http://localhost:5000/api/stories/${id}`)
+        axios.delete(`http://localhost:8000/api/stories/${id}`)
           .then(() => {
             toast.success('Item deleted successfully!', {
               position: toast.POSITION.TOP_CENTER,

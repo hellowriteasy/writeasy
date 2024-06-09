@@ -24,7 +24,7 @@ const WeeklyTest = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-      var response = await axios.get('http://localhost:5000/api/contests/ongoing');
+      var response = await axios.get('http://localhost:8000/api/contests/ongoing');
         setContest(response.data[1]);
       } catch (error) {
         console.error("Error fetching contest data:", error);

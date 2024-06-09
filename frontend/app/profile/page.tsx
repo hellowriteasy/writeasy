@@ -24,7 +24,7 @@ const Page: React.FC = () => {
   useEffect(() => {
     const fetchUserStories = async () => {
       try {
-        const response = await axios.get<UserStory[]>('http://localhost:5000/api/stories/user', {
+        const response = await axios.get<UserStory[]>('http://localhost:8000/api/stories/user', {
           params: {
             userId:userId,
             storyType: 'practice',

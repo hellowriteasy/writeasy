@@ -99,12 +99,12 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ story, id }) => {
         prompt: id
       };
       const { data, status } = await axios.post(
-        `http://localhost:5000/api/stories`,
+        `http://localhost:8000/api/stories`,
         payload
       );
-       console.log(data.story)
+      setStoryId(data.story); // Assume the API returns the story ID in the response
         toast.success("Story saved successfully");
-        setStoryId(data.story); // Assume the API returns the story ID in the response
+        return toast;
       
     } catch (error) {
       toast.error("An error occurred while submitting the story. Please try again later.");
@@ -131,7 +131,7 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ story, id }) => {
         email: email,
       };
       const { data, status } = await axios.post(
-        `http://localhost:5000/api/collaborative-stories/invite`,
+        `http://localhost:8000/api/collaborative-stories/invite`,
         invitePayload,
         {
           headers: {

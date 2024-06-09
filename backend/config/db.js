@@ -12,6 +12,9 @@ const connectDB = async () => {
       console.log("Connected to MongoDB");
       break;
     } catch (error) {
+
+      
+
       if (retryCount >= maxRetries) {
         console.error("MongoDB connection error after retries:", error.message);
         process.exit(1);

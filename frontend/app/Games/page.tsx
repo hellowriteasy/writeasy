@@ -24,8 +24,10 @@ const Games: React.FC = () => {
   useEffect(() => {
     const fetchPrompts = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/prompts/game-prompts");
+
+        const response = await axios.get("http://localhost:8000/api/prompts/game-prompts");
         setPrompts(response.data)
+
         setLoading(false);
       } catch (error: any) {
         setError(error.message);

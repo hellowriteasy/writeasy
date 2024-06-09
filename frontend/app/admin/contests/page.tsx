@@ -22,7 +22,7 @@ const Page: React.FC = () => {
   useEffect(() => {
     const fetchContests = async () => {
       try {
-        const response = await axios.get<Contest[]>("http://localhost:5000/api/contests");
+        const response = await axios.get<Contest[]>("http://localhost:8000/api/contests");
         setContests(response.data);
         setLoading(false);
       } catch (error) {

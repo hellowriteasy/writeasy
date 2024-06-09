@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { SyntheticEvent, useState } from 'react';
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
@@ -24,10 +24,10 @@ const Login = () => {
   const login = useAuthStore((state) => state.login);
   const router = useRouter();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e:SyntheticEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:5000/api/auth/login`, {
+      const response = await axios.post(`http://localhost:8000/api/auth/login`, {
         email,
         password
       });
@@ -36,7 +36,7 @@ const Login = () => {
       login(userId, token, username, role, subscriptionType);
      
       router.push('/', { scroll: false });
-    } catch (error) {
+    } catch (error:any) {
       setError(error.response?.data?.message || "Login failed");
     }
   };

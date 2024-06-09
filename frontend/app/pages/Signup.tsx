@@ -45,7 +45,7 @@ const Signup = () => {
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      await axios.post("http://localhost:5000/api/auth/register", {
+      await axios.post("http://localhost:8000/api/auth/register", {
         email: data.email,
         password: data.password,
         username: data.username

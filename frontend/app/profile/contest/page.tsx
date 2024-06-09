@@ -24,7 +24,7 @@ const ContestPage: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/stories/user', {
+        const response = await axios.get('http://localhost:8000/api/stories/user', {
           params: {
             userId:userId,
             storyType: 'contest',

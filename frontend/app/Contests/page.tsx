@@ -23,7 +23,7 @@ const Contest = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/contests')
+    axios.get('http://localhost:8000/api/contests')
       .then(response => {
         setContests(response.data);
         setLoading(false);

@@ -17,7 +17,7 @@ const Page = () => {
   useEffect(() => {
     const fetchPrompts = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/prompts/practice-prompts');
+        const response = await axios.get('http://localhost:8000/api/prompts/practice-prompts');
         setPrompts(response.data);
       } catch (error) {
         console.error('Error fetching prompts:', error);

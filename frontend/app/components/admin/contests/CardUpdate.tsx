@@ -24,7 +24,7 @@ const Card: React.FC<CardProps> = ({ title, type = [], id }) => {
 
   const handleDeleteContest = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/prompts/${id}`);
+      await axios.delete(`http://localhost:8000/api/prompts/${id}`);
       toast.success("Contest deleted successfully!");
     } catch (error) {
       toast.error("Failed to delete contest.");
@@ -33,7 +33,7 @@ const Card: React.FC<CardProps> = ({ title, type = [], id }) => {
 
   const handleUpdateContest = async () => {
     try {
-      await axios.put(`http://localhost:5000/api/prompts/${id}`, {
+      await axios.put(`http://localhost:8000/api/prompts/${id}`, {
         promptText:Title,
         promptCategory: Categories,
         promptType: 'contest'

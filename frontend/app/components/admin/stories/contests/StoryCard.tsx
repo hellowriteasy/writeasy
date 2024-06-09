@@ -28,7 +28,7 @@ const Card: React.FC<CardProps> = ({
 
   const handleUpdate = async () => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/stories/${contest._id}`, {
+      const response = await axios.put(`http://localhost:8000/api/stories/${contest._id}`, {
         correctionSummary: feedback,
         content: storyDetail,
         score: grade,

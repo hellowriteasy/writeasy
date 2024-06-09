@@ -23,7 +23,7 @@ const Games = () => {
   useEffect(() => {
     const fetchGamePrompts = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/prompts/game-prompts");
+        const response = await axios.get("http://localhost:8000/api/prompts/game-prompts");
         setGamePrompts(response.data);
         setIsLoading(false);
       } catch (err) {

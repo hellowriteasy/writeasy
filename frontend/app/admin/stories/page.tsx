@@ -31,7 +31,7 @@ const Page: React.FC = () => {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const response = await axios.get<Story[]>("http://localhost:5000/api/stories");
+        const response = await axios.get<Story[]>("http://localhost:8000/api/stories");
         setStories(response.data);
         setLoading(false);
       } catch (error) {

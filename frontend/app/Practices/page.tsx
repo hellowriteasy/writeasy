@@ -29,7 +29,7 @@ const Page: React.FC = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    axios.get('http://localhost:5000/api/prompts/practice-prompts')
+    axios.get('http://localhost:8000/api/prompts/practice-prompts')
       .then(response => {
         setPromptData(response.data);
         setIsLoading(false);
