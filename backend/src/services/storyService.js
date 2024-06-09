@@ -7,13 +7,20 @@ const createStory = async (data) => {
 };
 
 const getAllStories = async () => {
-  return await Story.find().populate({
-    select: {
-      password:0
-    },
-    model: "User",
-    path:"user"
-  });
+  return await Story.find()
+    .populate({
+      select: {
+        password: 0,
+      },
+      model: "User",
+      path: "user",
+    })
+    .populate({
+      select: {
+        password: 0,
+      },
+      path: "contributors",
+    });
 };
 
 const getStoriesByUserAndType = async (userId, storyType) => {

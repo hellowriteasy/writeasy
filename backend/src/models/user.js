@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
       return !this.googleId;
     },
   }, // Make password required only if googleId isn't set
+  
   googleId: { type: String, unique: true, sparse: true }, // For users registering through Google
   subscriptionType: { type: String, enum: ["free", "paid"], default: "free" },
   lastLogin: { type: Date, default: Date.now },
