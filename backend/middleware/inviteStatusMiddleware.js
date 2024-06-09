@@ -1,5 +1,6 @@
 const User = require("../src/models/user");
 const CollaborativeStory = require("../src/models/collaborativeStory");
+const Story = require("../src/models/story");
 
 // Function to check paid status for any given user ID
 const checkPaidStatusForUserId = async (userId) => {
@@ -48,9 +49,7 @@ const checkInviteStatus = async (req, res, next) => {
   const storyId = req.body.storyID; // Assuming the story ID is part of the request body
 
   try {
-    const story = await CollaborativeStory.findById(storyId)
-      .populate("creatorUser")
-      .populate("contributors");
+    const story = await Story.findById(storyId)
 
     if (!story) {
       return res.status(404).json({ msg: "Story not found." });
@@ -58,7 +57,8 @@ const checkInviteStatus = async (req, res, next) => {
 
     // Check if the user is the creator or a contributor
     const isCreator =
-      story.creatorUser && story.creatorUser._id.toString() === userId;
+      story.user && story.user._id.toString() === userId;
+    
     const isContributor = story.contributors.some(
       (contributor) => contributor._id.toString() === userId
     );

@@ -10,6 +10,9 @@ const {
   checkInviteStatus,
 } = require("../../middleware/inviteStatusMiddleware");
 const Story = require("../models/story");
+const GptService = require("../services/gptService");
+
+const gptService = new GptService(process.env.GPT_API_KEY);
 
 const getCollaborativeStories = async (req, res) => {
   try {
@@ -105,10 +108,29 @@ const submitCollaborativePart = [
   checkInviteStatus,
   async (req, res) => {
     const { storyID, text } = req.body;
-    const userID = req.user.id; // Using user id from auth token
+    const wordCount = text.split(" ").length; // Calculate word count
+    // const userID = req.user.id; // Using user id from auth token
     try {
-      const story = await CollaborativeStory.findById(storyID);
-      story.content.push({ author: userID, text, approved: false });
+      const story = await Story.findById(storyID);
+      if (!story) {
+        return res.status(404).json({ message: "Story not found." });
+      }
+      story.content = text;
+      const correctionRes = await gptService.generateScore(
+        text,
+        "grammar",
+        wordCount
+      );
+
+      const correctionSummary = await gptService.generateCorrectionSummary(
+        text,
+        correctionRes.corrections,
+        0
+      );
+
+      story.correctionSummary = correctionSummary;
+      story.corrections = correctionRes.corrections;
+
       await story.save();
       res.status(200).json({ message: "Story part submitted successfully." });
     } catch (error) {
