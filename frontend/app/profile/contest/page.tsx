@@ -11,6 +11,7 @@ interface UserStory {
   title: string;
   content: string;
   corrections:string;
+  storyType:string
 }
 
 const ContestPage: React.FC = () => {
@@ -68,6 +69,7 @@ const ContestPage: React.FC = () => {
                 description={story.content}
                 id={story._id}
                 corrections={story.corrections}
+                type={story.storyType}
               />
             ))}
               <div className="w-full mt-10 text-lg md:text-xl font-comic">

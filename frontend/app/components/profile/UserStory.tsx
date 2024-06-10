@@ -5,18 +5,22 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { diffChars } from 'diff';
 import 'react-toastify/dist/ReactToastify.css';
+import StoryEditor from './Editor'; // Adjust the import path as necessary
 
 interface CardProps {
   id: string;
   title: string;
   description?: string;
   corrections: string;
+  type: string;
+  Username: { username: string }[]; 
 }
 
-const Card: React.FC<CardProps> = ({ id, title, corrections, description = '' }) => {
+const Card: React.FC<CardProps> = ({ id, title, corrections, description = '', type, Username }) => {
   const { toPDF, targetRef } = usePDF({ filename: 'page.pdf' });
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [showDiff, setShowDiff] = useState(false);
+  const [showEditor, setShowEditor] = useState(false);
   const toggleDescription = () => setShowFullDescription(!showFullDescription);
 
   const previewWords = 50;
@@ -61,13 +65,18 @@ const Card: React.FC<CardProps> = ({ id, title, corrections, description = '' })
       const color = part.added ? 'green' : part.removed ? 'red' : 'black';
       return <span key={index} style={{ color }}>{part.value}</span>;
     });
-  };
+  }; 
+  
+
+  if (showEditor) {
+    return <StoryEditor story={{ id }} Content={descriptionText} Id={id} Title={title} username={Username} />;
+  }
 
   return (
-    <div className="bg-white w-3/4 border-2 border-slate-300 shadow-sm rounded-3xl p-6 transition-all duration-300">
+    <div className="bg-white w-full sm:w-3/4 border-2 border-slate-300 shadow-sm rounded-3xl p-6 transition-all duration-300">
       <div ref={targetRef} className="flex flex-col mb-4">
         <h2 className="text-xl px-4 py-2 font-bold mb-2">{title}</h2>
-        <p className={`text-gray-700 w-[95%] px-4 py-4 transition-all duration-300 ${showFullDescription ? 'max-h-full' : 'max-h-20 overflow-hidden'}`}>
+        <p className={`text-gray-700 px-4 py-4 transition-all duration-300 ${showFullDescription ? 'max-h-full' : 'max-h-20 overflow-hidden'}`}>
           {showFullDescription ? descriptionText : truncatedDescription}
         </p>
         {showDiff && (
@@ -77,10 +86,15 @@ const Card: React.FC<CardProps> = ({ id, title, corrections, description = '' })
           </div>
         )}
       </div>
-      <div className="flex justify-end space-x-4 mt-4">
+      <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4 mt-4">
         <button onClick={() => { setShowFullDescription(true); toPDF(); }} className="bg-white border-2 rounded-2xl border-slate-700 text-black px-4 py-2">
           PDF
         </button>
+        {type === 'game' && (
+          <button onClick={() => setShowEditor(true)} className="bg-white border-2 rounded-2xl border-slate-700 text-black px-4 py-2">
+            Contribute
+          </button>
+        )}
         <button onClick={() => setShowDiff(!showDiff)} className="bg-white border-2 rounded-2xl border-slate-700 text-black px-4 py-2">
           {showDiff ? 'Original' : 'Marked'}
         </button>

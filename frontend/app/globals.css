@@ -85,9 +85,18 @@ u{
 @media (max-width: 800px) {
   .vsm-hide {
     display: none;
+  }}
+  @media (max-width: 700px) {
+    .vvsm-hide {
+      display: none;
+    }
+    .practice-mobile-view{
+      width: 100vw;
+    }
+  
   }
  
-}
+
 .paid-card{
   background-image: url("../public/Landingpage-img/Group\ \(15\).svg");
   

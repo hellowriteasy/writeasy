@@ -77,7 +77,7 @@ const Page: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex w-full flex-shrink h-auto relative -mt-10 justify-around">
+        <div className="flex w-full  h-auto relative -mt-10 justify-around sm:justify-start">
           <div className="absolute -top-28 -left-32">
             <Image className="w-[10vw]" src={Bee} alt="bee" />
           </div>
@@ -94,7 +94,7 @@ const Page: React.FC = () => {
               ))
             )}
           </div>
-          <div className="">
+          <div className="vvsm-hide">
             <TopWriting />
           </div>
         </div>

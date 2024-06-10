@@ -11,6 +11,7 @@ interface UserStory {
   title: string;
   content: string;
   corrections:string;
+  storyType:string
 }
 
 const Page: React.FC = () => {
@@ -66,6 +67,7 @@ const Page: React.FC = () => {
             description={story.content}
             id={story._id}
             corrections={story.corrections}
+            type={story.storyType}
           />
         ))}
       </div>

@@ -5,12 +5,19 @@ import cloud2 from '@/public/Game/cloud2.svg';
 import shootingstar from '@/public/Game/shotting_star.svg';
 import Storytitle from '@/app/components/Others/Storytitle';
 import Pagination from '@/app/components/Pagination';
-import Link from 'next/link';
 import axios from "axios";
 import StoryEditor from '../[_id]/play/page';
 
 interface Story {
-  user: string;
+  user: {
+    _id: string;
+    username: string;
+    email: string;
+    subscriptionType: string;
+    role: string;
+    lastLogin: string;
+    __v: number;
+  };
   title: string;
   content: string;
   wordCount: number;
@@ -54,10 +61,10 @@ const Page: React.FC<PageProps> = ({ params }) => {
   
   useEffect(() => {
     if (!loading) {
-      const filtered = stories.filter(story => story.storyType === 'game' && story.prompt === "665a07f42d718830c05b29b5");
+      const filtered = stories.filter(story => story.storyType === 'game' && story.prompt === params._id);
       setFilteredStories(filtered);
     }
-  }, [loading, stories, params.id]);
+  }, [loading, stories, params._id]);
 
   const handleReadMore = (story: Story) => {
     setSelectedStory(story);

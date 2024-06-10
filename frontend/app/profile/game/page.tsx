@@ -11,6 +11,9 @@ interface UserStory {
   title: string;
   content: string;
   corrections:string
+  storyType:string
+  username:string;
+  contributors:string
 }
 
 const Page: React.FC = () => {
@@ -32,8 +35,8 @@ const Page: React.FC = () => {
             limit: itemsPerPage
           }
         });
+        
         setUserStories(response.data);
-        console.log(response.data.corrections)
         setLoading(false);
       } catch (error) {
         setError('Error fetching user stories: ' + error.message);
@@ -47,8 +50,9 @@ const Page: React.FC = () => {
   const handlePageClick = (data) => {
     const selectedPage = data.selected;
     setCurrentPage(selectedPage);
-  };
+    };
 
+   
   const pageCount = Math.ceil(userStories.length / itemsPerPage);
 
   if (loading) return <p>Loading...</p>;
@@ -65,6 +69,8 @@ const Page: React.FC = () => {
             description={story.content}
             id={story._id}
             corrections={story.corrections}
+            type={story.storyType}
+            Username={story.contributors}
           />
         ))}
       </div>

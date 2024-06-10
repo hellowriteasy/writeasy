@@ -23,9 +23,13 @@ const Prompt: React.FC<PromptProps> = ({ prompt }) => {
         
       </div>
       <Link href={`/Games/${prompt._id}`}>
-        <div className="absolute right-10 top-10 flex cursor-pointer justify-end">
-          <Image src={Pencil} alt='Pencil' />
-        </div>
+      <div className="absolute right-10 top-10 flex cursor-pointer justify-end">
+      <Image
+        src={Pencil}
+        alt='Pencil'
+        className="w-10 h-10 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12"
+      />
+    </div>
       </Link>
     </div>
   );

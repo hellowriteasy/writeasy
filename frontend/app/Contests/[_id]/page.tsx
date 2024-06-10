@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -10,10 +10,11 @@ import Cloud from "@/public/Game/cloud.svg";
 import Cloud2 from "@/public/Game/cloud3.svg";
 import Pagination from "@/app/components/Pagination";
 import CreateContest from "./createcontest/page";
-import viewcontest from "./viewcontest/page"
+import ViewContest from "./viewcontest/page";
+
 interface Prompt {
   _id: string;
-   title: string;
+  title: string;
   promptCategory: string;
 }
 
@@ -24,7 +25,7 @@ interface Contest {
   submissionDeadline: string;
   prompts: Prompt[];
   description: string;
-  isActive:boolean
+  isActive: boolean;
 }
 
 interface ContestPageProps {
@@ -42,7 +43,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
   const [selectedPrompt, setSelectedPrompt] = useState<{
     contestId: string;
     promptId: string;
-    title:string;
+    title: string;
   } | null>(null);
 
   useEffect(() => {
@@ -70,8 +71,8 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
     fetchContestById();
   }, [contestId]);
 
-  const handleSelectPrompt = (contestId: string, promptId: string) => {
-    setSelectedPrompt({ contestId, promptId });
+  const handleSelectPrompt = (contestId: string, promptId: string, title: string) => {
+    setSelectedPrompt({ contestId, promptId, title });
   };
 
   if (loading) return <p>Loading...</p>;
@@ -82,18 +83,22 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
     <div className="w-full h-auto mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 h-auto ms-12">
         {selectedPrompt ? (
-          <CreateContest
-            contestId={params._id}
-            promptId={selectedPrompt.promptId}
-            Prompttitle={selectedPrompt.title}
-          />
+          contest.isActive ? (
+            <CreateContest
+              contestId={selectedPrompt.contestId}
+              promptId={selectedPrompt.promptId}
+              Prompttitle={selectedPrompt.title}
+            />
+          ) : (
+            <ViewContest />
+          )
         ) : (
           <>
             <div className="w-full text-center text-2xl font-comic relative pt-4">
               until {new Date(contest.submissionDeadline).toLocaleString()} GMT
             </div>
             <div className="flex justify-center mt-8">
-              <div className="  p-6 mb-6">
+              <div className="p-6 mb-6">
                 <h2 className="text-4xl font-comic font-bold mb-4">
                   {contest.contestTheme}
                 </h2>
@@ -119,7 +124,9 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
                     promptCategory={prompt.promptCategory}
                     contestId={contest._id}
                     promptId={prompt._id}
-                    onSelectPrompt={handleSelectPrompt}
+                    onSelectPrompt={(contestId, promptId) =>
+                      handleSelectPrompt(contestId, promptId, prompt.title)
+                    }
                   />
                 ))}
                 <div className="absolute bottom-80 -left-32">

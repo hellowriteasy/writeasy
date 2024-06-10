@@ -43,7 +43,7 @@ const createStory = async (req, res) => {
 // Function to handle scoring
 async function processStoryForScoring(storyId, content, wordCount) {
   try {
-    console.log("processing scroring", storyId,content,wordCount);
+    console.log("processing scoring", storyId,content,wordCount);
 
     const score = await gptService.generateScore(content); // Get score from GPT API
     const correctionSummary = await gptService.generateCorrectionSummary(

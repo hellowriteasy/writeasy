@@ -82,7 +82,7 @@ const Games: React.FC = () => {
               <Image src={Cloud} alt="Cloud" />
             </div>
           </div>
-          <div className="flex  flex-col gap-8">
+          <div className="flex vvsm-hide flex-col gap-8">
             <WeeklyTest />
             <TopWriting />
           </div>

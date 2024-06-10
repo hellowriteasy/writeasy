@@ -1,26 +1,30 @@
 // components/Navbar.tsx
 'use client'
-import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
 const Navbar = () => {
-  var router = useRouter();
-
-  
+  const pathname = usePathname();
 
   return (
-    <nav className="border-b-4 border-gray-300 bg-slate-50">
+    <nav className="border-b-4 border-gray-300 sticky top-24 z-10 bg-slate-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-end h-16">
           <div className="flex text-center text-[2vw] gap-10 space-x-4">
-            <Link className={` border-b-4  border-slate-400 rounded-sm`} href="/profile">
-               Practice
+            <Link className={`border-b-4 rounded-sm ${pathname === '/profile' ? 'border-slate-400' : 'border-transparent'}`} href="/profile">
+              
+                Practice
+              
             </Link>
-            <Link className={``} href="/profile/contest">
-              Contest
+            <Link className={`border-b-4 rounded-sm ${pathname === '/profile/contest' ? 'border-slate-400' : 'border-transparent'}`} href="/profile/contest">
+             
+                Contest
+              
             </Link>
-            <Link className={``} href="/profile/game">
-              Game
+            <Link className={`border-b-4 rounded-sm ${pathname === '/profile/game' ? 'border-slate-400' : 'border-transparent'}`} href="/profile/game">
+              
+                Game
+              
             </Link>
           </div>
         </div>

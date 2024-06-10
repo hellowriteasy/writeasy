@@ -9,13 +9,16 @@ const Sidebar = () => {
     <div className="w-64 h-full bg-slate-900 rounded-sm sticky top-0 text-white font-poppins font-bold p-6">
       <ul className="space-y-4">
         {links.map((link) => {
-          const isActive = path.startsWith(link) || path.endsWith(link);
+          const isActive = path.startsWith(`/admin/${link}`);
           return (
             <li key={link} className="text-center">
-              <Link className={`block text-lg font-medium py-2 rounded transition duration-300 ${isActive ? 'bg-gray-700' : 'hover:bg-gray-700 hover:text-white'}`} href={`/admin/${link}`}>
-                 
-                  {link.charAt(0).toUpperCase() + link.slice(1)}
-                
+              <Link
+                className={`block text-lg font-medium py-2 rounded transition duration-300 ${
+                  isActive ? 'bg-gray-700' : 'hover:bg-gray-700 hover:text-white'
+                }`}
+                href={`/admin/${link}`}
+              >
+                {link.charAt(0).toUpperCase() + link.slice(1)}
               </Link>
             </li>
           );
