@@ -13,6 +13,7 @@ const promptRoutes = require("./routes/promptRoutes");
 const contestRoutes = require("./routes/contestRoutes");
 const emailRoutes = require("./routes/emailRoute");
 const collaborativeStoryRoutes = require("./routes/collaborativeStoryRoutes");
+const paymentRoutes=require("./routes/paymentRoute")
 const scheduleJob = require("./config/cron");
 
 dotenv.config();
@@ -36,6 +37,7 @@ app.use("/api/stories", storyRoutes);
 app.use("/api/prompts", promptRoutes);
 app.use("/api/contests", contestRoutes);
 app.use("/api/emails", emailRoutes);
+app.use("/api/payments", paymentRoutes);
 app.use("/api/collaborative-stories", collaborativeStoryRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
