@@ -1,3 +1,4 @@
+const Subscription = require("../models/subscription");
 const User = require("../models/user");
 const AuthService = require("../services/AuthService");
 const authService = new AuthService();
@@ -6,8 +7,12 @@ const UserController = {
   async register(req, res) {
     const { username, email, password } = req.body;
     try {
-      const { token, _id } = await authService.registerUser(username, email, password);
-      
+      const { token, _id } = await authService.registerUser(
+        username,
+        email,
+        password
+      );
+
       // Fetch the new user information from the database
       const user = await User.findById(_id);
 
@@ -24,22 +29,47 @@ const UserController = {
   },
 
   async login(req, res) {
-    const { email, password } = req.body;
+    const { email, password:userPassword } = req.body;
     try {
-      const { token, _id } = await authService.loginUser(email, password);
-      
+      const { token, _id } = await authService.loginUser(email, userPassword);
+
       // Fetch the user information from the database
       const user = await User.findById(_id);
 
+      const subscription = await Subscription.findOne({
+        userId:_id
+      })
+      const { password, ...others } = user._doc;
+      const isSubcriptionActive = !!subscription?.isActive;
       res.json({
+        ...others,
         token,
-        _id,
-        username: user.username,
-        role: user.role,
-        subscriptionType: user.subscriptionType,
+        isSubcriptionActive,
       });
     } catch (error) {
       res.status(400).json({ msg: error.message });
+    }
+  },
+  async getUserById(req, res) {
+    const { id :user_id} = req.params;
+    try {
+      if (!user_id) {
+        throw new Error("Please provide user id");
+      }
+      const user = await User.findById(user_id);
+      const subscription = await Subscription.findOne({
+        userId:user_id
+      })
+      const { password, ...others } = user._doc;
+      const isSubcriptionActive = !!subscription?.isActive;
+
+      return res.status(200).json({message:{...others,isSubcriptionActive}})
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        message: error.message || "Internal server error",
+        success: false,
+      });
     }
   },
 };

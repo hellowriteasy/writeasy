@@ -18,9 +18,6 @@ const subscriptionSchema = new mongoose.Schema(
     paidAt: {
       type: Date,
     },
-    expiresAt: {
-      type: Date,
-    },
   },
   {
     timestamps: true,

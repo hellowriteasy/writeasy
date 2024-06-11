@@ -2,23 +2,15 @@ export type TUser = {
   _id: string;
   username: string;
   email: string;
-  subscriptionType: string;
   role: string;
   lastLogin: string;
+  isSubcriptionActive:boolean,
   __v: number;
 };
 
 export type TStory = {
   _id: string;
-  user: {
-    _id: string;
-    username: string;
-    email: string;
-    subscriptionType: string;
-    role: string;
-    lastLogin: string;
-    __v: number;
-  };
+  user: TUser;
   title: string;
   content: string;
   wordCount: number;

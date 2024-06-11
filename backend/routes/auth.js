@@ -17,6 +17,34 @@ const client = new OAuth2Client(
   `${process.env.SERVER_URL}/api/auth/google/callback`
 );
 
+
+/**
+ * @openapi
+ * /api/auth/user/{id}:
+ *   get:
+ *     tags:
+ *       - Authentication
+ *     summary: Get user details
+ *     description: Retrieve user data by id
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The user ID
+ *     responses:
+ *       200:
+ *         description: Sends user data 
+ *       404: 
+ *         description: User not found 
+ *       500:
+ *         description: Internal server error
+ */
+
+router.get("/user/:id",UserController.getUserById);
+
+
 /**
  * @openapi
  * /api/auth/register:
