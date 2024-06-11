@@ -53,20 +53,23 @@ const Card: React.FC<CardProps> = ({ id, title, corrections, description = '', t
 
   const compareSentences = (description = '', corrections = '') => {
     if (!description) {
-      return <span style={{ color: 'red' }}>No original description provided.</span>;
+      return <span style={{ color: 'red', backgroundColor: 'lightcoral' }}>No original description provided.</span>;
     }
 
     if (!corrections) {
-      return <span style={{ color: 'green' }}>No corrections provided.</span>;
+      return <span style={{ color: 'green', backgroundColor: 'lightgreen' }}>No corrections provided.</span>;
     }
 
     const diff = diffChars(description, corrections);
     return diff.map((part, index) => {
-      const color = part.added ? 'green' : part.removed ? 'red' : 'black';
-      return <span key={index} style={{ color }}>{part.value}</span>;
+      const style = {
+        backgroundColor: part.added ? 'lightgreen' : part.removed ? 'lightcoral' : 'transparent',
+        textDecoration: part.removed ? 'line-through' : 'none',
+        color: part.added ? 'green' : part.removed ? 'red' : 'black'
+      };
+      return <span key={index} style={style}>{part.value}</span>;
     });
   }; 
-  
 
   if (showEditor) {
     return <StoryEditor story={{ id }} Content={descriptionText} Id={id} Title={title} username={Username} />;

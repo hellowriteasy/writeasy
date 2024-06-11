@@ -73,7 +73,6 @@ const Contest = () => {
           </div>
           <div className="gap-8 relative flex flex-col">
             <Join />
-            if(contest.isActive==true){}
             {currentContests.map((contest, index) => (
               <Contestitle key={index} contest={contest} />
             ))}
