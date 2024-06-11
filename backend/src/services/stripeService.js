@@ -26,8 +26,8 @@ const createStripeCheckout = async () => {
         },
       ],
 
-      success_url: `${process.env.FRONTEND_BASE_URL}/dashboard/agency/compare-policy/details/successfull/?session_id={CHECKOUT_SESSION_ID}&customer-id=1234&type=stripe`,
-      cancel_url: `${process.env.FRONTEND_BASE_URL}/dashboard/agency/compare-policy/purchase/cancel/?session_id={CHECKOUT_SESSION_ID}&customer-id=123`,
+      success_url: `${process.env.FRONTEND_BASE_URL}/Pricing?session_id={CHECKOUT_SESSION_ID}&type=stripe`,
+      cancel_url: `${process.env.FRONTEND_BASE_URL}/Pricing?session_id={CHECKOUT_SESSION_ID}&type=string`,
     });
 
     return session;
