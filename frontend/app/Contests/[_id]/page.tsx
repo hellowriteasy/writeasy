@@ -90,7 +90,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
               Prompttitle={selectedPrompt.title}
             />
           ) : (
-            <ViewContest />
+            <ViewContest contestId={selectedPrompt.contestId} />
           )
         ) : (
           <>
@@ -124,9 +124,8 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
                     promptCategory={prompt.promptCategory}
                     contestId={contest._id}
                     promptId={prompt._id}
-                    onSelectPrompt={(contestId, promptId) =>
-                      handleSelectPrompt(contestId, promptId, prompt.title)
-                    }
+                    onSelectPrompt={handleSelectPrompt}
+                    isActive={contest.isActive}
                   />
                 ))}
                 <div className="absolute bottom-80 -left-32">
