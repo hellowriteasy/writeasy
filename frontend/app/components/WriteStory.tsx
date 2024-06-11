@@ -97,13 +97,13 @@ const getAiPrompt = (type: TWriteEasyFeature, userInput: string) => {
 };
 
 interface SimpleEditorProps {
-  triggerGrammarCheck: boolean;
+  triggerGrammarCheck: any;
   taskType: string;
   title: string;
   Userid: string;
   _id: string;
   type: string;
-  wordcount:number;
+  wordcount?:number;
 }
 
 export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id, type }: SimpleEditorProps) {

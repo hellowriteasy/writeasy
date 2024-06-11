@@ -1,19 +1,10 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { TStory } from '@/app/utils/types';
 
 interface StoryProps {
-  story: {
-    user: string;
-    title: string;
-    content: string;
-    wordCount: number;
-    submissionDateTime: string;
-    score: number;
-    corrections: string;
-    contest: string;
-    prompt: string;
-    storyType: string;
-  };
+  story: TStory;
+  onReadMore:()=>void
 }
 
 const Storytitle: React.FC<StoryProps> = ({ story }) => {
@@ -46,7 +37,7 @@ const Storytitle: React.FC<StoryProps> = ({ story }) => {
         <div className='w-8 md:w-10 h-8 md:h-10 absolute left-8 bg-slate-500 rounded-full border'>
           <Image src="" alt="" />
         </div>
-        <h5 className='absolute left-24 pt-2 text-xs md:text-sm lg:text-base'>Story by <span className='font-bold'>{story.user}</span></h5>
+        <h5 className='absolute left-24 pt-2 text-xs md:text-sm lg:text-base'>Story by <span className='font-bold'>{story.user?.username}</span></h5>
       </div>
       {/* Paragraph */}
       <div className="text-xs md:text-sm lg:text-base text-gray-900 p-4">

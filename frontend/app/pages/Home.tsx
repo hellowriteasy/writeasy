@@ -50,14 +50,17 @@ const Hero = () => {
           </div>
         </div>
         <div>
-          <Image  src={HeroImage} alt="video" />
+          <Image src={HeroImage} alt="video" />
         </div>
         <div className="sm-hide">
           <Image src={heroMan} alt="man" />
         </div>
       </div>
       <div className="w-full mt-40 text-xl text-center">
-        <h2>"The writer is by nature a dreamer - a conscious dreamer."</h2>
+        <h2>
+          &ldquo;The writer is by nature a dreamer - a conscious dreamer.
+          &rdquo;
+        </h2>
         <h2 className="font-bold">- Carson McCullers</h2>
       </div>
       <div className="w-full h-[610px] flex relative  flex-col justify-center items-center">
@@ -77,15 +80,13 @@ const Hero = () => {
           <Image className="w-[7vw]" src={Group6} alt="Group6" />
         </div>
         <div className="absolute sm-hide top-60 z-10 left-1/3">
-          
           <Image className="w-[14vw] absolute z-10" src={Group8} alt="Group8" />
-          
+
           <div className="relative ms-20 top-0">
-          <Image className="w-[22vw]" src={Note} alt="Note" />
+            <Image className="w-[22vw]" src={Note} alt="Note" />
+          </div>
         </div>
-        </div>
-        
-       
+
         <div className="absolute sm-hide top-96 left-0">
           <Image src={Paperplane} alt="Paperplane" />
         </div>
@@ -98,7 +99,7 @@ const Hero = () => {
           <Image className="w-[20vw]" src={Note2} alt="Note2" />
         </div>
         <div className="absolute left-14 top-48">
-          <Image className="w-[9vw]"  src={Group13} alt="Group13" />
+          <Image className="w-[9vw]" src={Group13} alt="Group13" />
         </div>
         <div className="absolute right-28 top-8">
           <Image className="w-[20vw]" src={Note3} alt="Note3" />
@@ -114,10 +115,10 @@ const Hero = () => {
             <Image className="w-[9vw]" src={Bulb} alt="Bulb" />
           </div>
           <div className="left-1/3 ms-10 top-28 absolute">
-            <Image className="w-[8vw]"   src={Arrow2} alt="Arrow2" />
+            <Image className="w-[8vw]" src={Arrow2} alt="Arrow2" />
           </div>
           <div className="right-1/3 top-32 absolute">
-            <Image  className="w-[8vw]" src={Arrow3} alt="Arrow3" />
+            <Image className="w-[8vw]" src={Arrow3} alt="Arrow3" />
           </div>
         </div>
       </div>

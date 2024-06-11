@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect, SyntheticEvent } from "react";
 import classNames from "classnames";
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import Document from "@tiptap/extension-document";
@@ -13,33 +13,33 @@ import Code from "@tiptap/extension-code";
 import History from "@tiptap/extension-history";
 import * as Icons from "../../../components/Icons";
 import Bee from "@/public/Game/cloud3.svg";
-import Cloud from "@/public/Game/cloud.svg";
 import Image from "next/image";
 import Subscription from "@/app/components/Subscription";
 import useAuthStore from "@/app/store/useAuthStore";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
+import { TStory } from "@/app/utils/types";
 
-interface Story {
-  user: string;
-  title: string;
-  content: string;
-  wordCount: number;
-  submissionDateTime: string;
-  score: number;
-  corrections: string;
-  contest: string;
-  prompt: string;
-  storyType: string;
-}
+// interface Story {
+//   user: string;
+//   title: string;
+//   content: string;
+//   wordCount: number;
+//   submissionDateTime: string;
+//   score: number;
+//   corrections: string;
+//   contest: string;
+//   prompt: string;
+//   storyType: string;
+// }
 
 interface StoryEditorProps {
-  story: Story;
+  story?: TStory;
   id: string;
 }
 
-const StoryEditor: React.FC<StoryEditorProps> = ({ story, id }) => {
+const StoryEditor: React.FC<StoryEditorProps> = ({  id }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [email, setEmail] = useState("");
@@ -77,7 +77,7 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ story, id }) => {
     }
   }) as Editor;
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e:SyntheticEvent) => {
     e.preventDefault();
 
     try {
@@ -98,7 +98,7 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ story, id }) => {
         storyType: "game",
         prompt: id
       };
-      const { data, status } = await axios.post(
+      const { data } = await axios.post(
         `http://localhost:8000/api/stories`,
         payload
       );
@@ -111,7 +111,7 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ story, id }) => {
     }
   };
 
-  const handleInvite = async (e) => {
+  const handleInvite = async (e:SyntheticEvent) => {
     e.preventDefault();
 
     if (!email) {
@@ -142,7 +142,7 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ story, id }) => {
       console.log(data)
       
       }
-     catch (error) {
+     catch (error:any) {
       console.log(error)
       toast.error(error.response?.data?.message || "An error occurred while sending the invitation. Please try again later.");
     }

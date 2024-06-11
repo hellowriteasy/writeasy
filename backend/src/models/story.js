@@ -7,6 +7,7 @@ const storySchema = new mongoose.Schema({
   wordCount: { type: Number, required: true },
   submissionDateTime: { type: Date, default: Date.now },
   score: { type: Number },
+  hasEnded:{type:Boolean,default:false},
   corrections: {
     type: String,
   },

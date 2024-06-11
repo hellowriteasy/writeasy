@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback, useState } from "react";
+import React, { SyntheticEvent, useCallback, useState } from "react";
 import classNames from "classnames";
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import Document from "@tiptap/extension-document";
@@ -13,21 +13,13 @@ import Code from "@tiptap/extension-code";
 import History from "@tiptap/extension-history";
 import * as Icons from "../../../components/Icons";
 import Bee from "@/public/Game/cloud3.svg";
-import Cloud from "@/public/Game/cloud.svg";
 import Image from "next/image";
 import Subscription from "@/app/components/Subscription";
 import useAuthStore from "@/app/store/useAuthStore";
-import { ToastContainer, toast } from 'react-toastify';
+import {  toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 import axios from "axios";
-interface Prompt {
-  _id: string;
-  title: string;
-  promptType: string;
-  Userid: string;
-  type: string;
-}
+
 
 interface PromptPageProps {
   
@@ -43,7 +35,7 @@ const CreateContest: React.FC<PromptPageProps> = ({contestId,promptId,Prompttitl
   const subscriptionType = useAuthStore((state) => state.subscriptionType);
   const role = useAuthStore((state) => state.role);
   const {userId}=useAuthStore();
-  async function handleSubmit(e) {
+  async function handleSubmit(e:SyntheticEvent) {
     e.preventDefault(); // Prevent default form submission behavior
   
     try {

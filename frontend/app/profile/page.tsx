@@ -6,18 +6,13 @@ import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import useAuthStore from '../store/useAuthStore';
-interface UserStory {
-  _id: string;
-  title: string;
-  content: string;
-  corrections:string;
-  storyType:string
-}
+import { TStory } from '../utils/types';
+
 
 const Page: React.FC = () => {
-  const [userStories, setUserStories] = useState<UserStory[]>([]);
+  const [userStories, setUserStories] = useState<TStory[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string|null>(null);
   const [currentPage, setCurrentPage] = useState(0);
   const { userId } = useAuthStore();
   const itemsPerPage = 5;
@@ -25,7 +20,7 @@ const Page: React.FC = () => {
   useEffect(() => {
     const fetchUserStories = async () => {
       try {
-        const response = await axios.get<UserStory[]>('http://localhost:8000/api/stories/user', {
+        const response = await axios.get<TStory[]>('http://localhost:8000/api/stories/user', {
           params: {
             userId:userId,
             storyType: 'practice',
@@ -36,7 +31,7 @@ const Page: React.FC = () => {
        
         setUserStories(response.data);
         setLoading(false);
-      } catch (error) {
+      } catch (error:any) {
         setError('Error fetching user stories: ' + error.message);
         setLoading(false);
       }
@@ -45,7 +40,7 @@ const Page: React.FC = () => {
     fetchUserStories();
   }, [currentPage]); // Fetch user stories whenever currentPage changes
 
-  const handlePageClick = (data) => {
+  const handlePageClick = (data:{selected:number}) => {
     const selectedPage = data.selected;
     setCurrentPage(selectedPage);
   };
@@ -68,6 +63,7 @@ const Page: React.FC = () => {
             id={story._id}
             corrections={story.corrections}
             type={story.storyType}
+            contributors={story.contributors}
           />
         ))}
       </div>

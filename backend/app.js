@@ -6,13 +6,14 @@ const errorHandlingMiddleware = require("./middleware/errorHandlingMiddleware");
 const bodyParser = require("body-parser");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swaggerConfig");
-
+const cron = require("node-cron")
 const authRoutes = require("./routes/auth");
 const storyRoutes = require("./routes/storyRoutes");
 const promptRoutes = require("./routes/promptRoutes");
 const contestRoutes = require("./routes/contestRoutes");
 const emailRoutes = require("./routes/emailRoute");
 const collaborativeStoryRoutes = require("./routes/collaborativeStoryRoutes");
+const scheduleJob = require("./config/cron");
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use(
 );
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+cron.schedule("*/3 * * * * *", () => scheduleJob());
 
 // Use routes
 app.use("/api/auth", authRoutes);
@@ -53,3 +55,5 @@ const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+

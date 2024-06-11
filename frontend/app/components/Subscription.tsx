@@ -1,13 +1,20 @@
 'use client';
-import { Fragment, useState } from 'react';
-import { Dialog, Transition, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { Fragment } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
 import { useRouter } from 'next/navigation';
-const Subscription: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
- const router=useRouter();
+type TsubscriptionProps = {
+  setIsModalOpen?: (value:boolean) => void;
+}
+const Subscription: React.FC<TsubscriptionProps> = ({ setIsModalOpen }) => {
+  const router = useRouter();
 
   return (
     <Transition.Root show={true} as={Fragment}>
-      <Dialog as="div" className="relative z-10 " onClose={() => setIsModalOpen(false)}>
+      <Dialog
+        as="div"
+        className="relative z-10 "
+        onClose={() =>{ setIsModalOpen&&  setIsModalOpen(false)}}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -32,8 +39,12 @@ const Subscription: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => 
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-black h-14 text-left shadow-xl transition-all  sm:my-8 sm:w-full sm:max-w-lg">
-                <button onClick={()=>router.push(`/Pricing`)} className='h-14 w-full bg-custom-yellow text-slate-950 text-3xl font-bold font-comic rounded-3xl '>Upgrade to premium</button>
-                
+                <button
+                  onClick={() => router.push(`/Pricing`)}
+                  className="h-14 w-full bg-custom-yellow text-slate-950 text-3xl font-bold font-comic rounded-3xl "
+                >
+                  Upgrade to premium
+                </button>
               </Dialog.Panel>
             </Transition.Child>
           </div>

@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect, SyntheticEvent } from "react";
 import classNames from "classnames";
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import Document from "@tiptap/extension-document";
@@ -20,28 +20,17 @@ import useAuthStore from "@/app/store/useAuthStore";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
+import { TUser } from "@/app/utils/types";
 
-interface Story {
-  user: string;
-  title: string;
-  content: string;
-  wordCount: number;
-  submissionDateTime: string;
-  score: number;
-  corrections: string;
-  contest: string;
-  prompt: string;
-  storyType: string;
-}
 
 interface StoryEditorProps {
   id: string;
   Content: string;
   Title: string;
-  username: { username: string }[]; 
+  contributors: TUser[]; 
 }
 
-const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,username }) => {
+const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,contributors }) => {
    
   const [title, setTitle] = useState(Title || "");
   const [content, setContent] = useState(Content || "");
@@ -79,7 +68,9 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,username }
     }
   }) as Editor;
 
-  const handleSubmit = async (e) => {
+  console.log("story id",id)
+
+  const handleSubmit = async (e:SyntheticEvent) => {
     e.preventDefault();
 
     try {
@@ -146,8 +137,11 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,username }
             <div className="w-10 h-10 absolute left-8 bg-slate-500 rounded-full border">
               <Image src="" alt="" />
             </div>
-            {username.map((user, index) => (
-              <div key={index} className="w-10 h-10 bg-slate-500 rounded-full border ml-2">
+            {contributors.map((user, index) => (
+              <div
+                key={index}
+                className="w-10 h-10 bg-slate-500 rounded-full border ml-2"
+              >
                 <p className="text-center text-white">{user.username}</p>
               </div>
             ))}
@@ -165,7 +159,9 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,username }
                     className="border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[50vw] h-12 focus:outline-none focus:border-yellow-600"
                     placeholder="Untitled Story"
                     value={title}
-                    onChange={(e) => { setTitle(e.target.value) }}
+                    onChange={(e) => {
+                      setTitle(e.target.value);
+                    }}
                   />
                 </div>
                 <div className="h-[800px] rounded-full">
@@ -175,7 +171,10 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,username }
                         <button
                           className="menu-button mr-2"
                           type="button"
-                          onClick={(e) => { e.preventDefault(); editor.chain().focus().undo().run(); }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            editor.chain().focus().undo().run();
+                          }}
                           disabled={!editor.can().undo()}
                         >
                           <Icons.RotateLeft />
@@ -183,7 +182,10 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,username }
                         <button
                           className="menu-button mr-2"
                           type="button"
-                          onClick={(e) => { e.preventDefault(); editor.chain().focus().redo().run(); }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            editor.chain().focus().redo().run();
+                          }}
                           disabled={!editor.can().redo()}
                         >
                           <Icons.RotateRight />
@@ -193,7 +195,10 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,username }
                             "is-active": editor.isActive("bold"),
                           })}
                           type="button"
-                          onClick={(e) => { e.preventDefault(); toggleBold(); }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toggleBold();
+                          }}
                         >
                           <Icons.Bold />
                         </button>
@@ -202,7 +207,10 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,username }
                             "is-active": editor.isActive("underline"),
                           })}
                           type="button"
-                          onClick={(e) => { e.preventDefault(); toggleUnderline(); }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toggleUnderline();
+                          }}
                         >
                           <Icons.Underline />
                         </button>
@@ -211,7 +219,10 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,username }
                             "is-active": editor.isActive("italic"),
                           })}
                           type="button"
-                          onClick={(e) => { e.preventDefault(); toggleItalic(); }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toggleItalic();
+                          }}
                         >
                           <Icons.Italic />
                         </button>
@@ -220,7 +231,10 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,username }
                             "is-active": editor.isActive("strike"),
                           })}
                           type="button"
-                          onClick={(e) => { e.preventDefault(); toggleStrike(); }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toggleStrike();
+                          }}
                         >
                           <Icons.Strikethrough />
                         </button>
@@ -229,20 +243,31 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,username }
                             "is-active": editor.isActive("code"),
                           })}
                           type="button"
-                          onClick={(e) => { e.preventDefault(); toggleCode(); }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toggleCode();
+                          }}
                         >
                           <Icons.Code />
                         </button>
                         <div className="w-60 h-7 bg-white flex flex-col justify-center rounded-2xl shadow-sm ">
-                          <p className="text-center font-comic">Word count: {wordCount} / 1000</p>
+                          <p className="text-center font-comic">
+                            Word count: {wordCount} / 1000
+                          </p>
                           {wordLimitExceeded && (
-                            <p className="text-red-500">Word limit exceeded. Please reduce the number of words.</p>
+                            <p className="text-red-500">
+                              Word limit exceeded. Please reduce the number of
+                              words.
+                            </p>
                           )}
                         </div>
                       </div>
                     </div>
                     <div className="w-[50vw] rounded-3xl">
-                      <EditorContent className="scroll-m-2 w-[100%] h-96 mt-10" editor={editor} />
+                      <EditorContent
+                        className="scroll-m-2 w-[100%] h-96 mt-10"
+                        editor={editor}
+                      />
                     </div>
                   </div>
                 </div>

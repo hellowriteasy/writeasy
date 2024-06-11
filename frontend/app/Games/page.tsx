@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Image from "next/image";
-import Navbar from "../components/Navbar";
 import Prompt from "../components/Others/Prompt";
 import TopWriting from "../components/Others/TopWriting";
 import WeeklyTest from "../components/Others/WeeklyTest";
@@ -12,12 +11,12 @@ import Bee from "@/public/Game/Bee.svg";
 import Cloud from "@/public/Game/cloud.svg";
 import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
-import Page from "./[_id]/page"
+import { TPrompt } from "../utils/types";
 
 const Games: React.FC = () => {
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(0);
-  const [prompts, setPrompts] = useState([]);
+  const [prompts, setPrompts] = useState<TPrompt[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -50,7 +49,9 @@ const Games: React.FC = () => {
   function handlePromptClick(){
     
 
-    }
+  }
+  
+  console.log("user",prompts)
   
   return (
     <div className="w-full h-[1300px] mt-6 z-0 relative flex justify-center">
@@ -76,7 +77,7 @@ const Games: React.FC = () => {
           </div>
           <div className="gap-8 w-full  relative flex flex-col">
             {currentPrompts.map((prompt) => (
-              <Prompt  key={prompt.promptId} prompt={prompt} />
+              <Prompt  key={prompt._id} prompt={prompt} />
             ))}
             <div className="absolute bottom-1/3 -left-32">
               <Image src={Cloud} alt="Cloud" />

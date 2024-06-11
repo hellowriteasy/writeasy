@@ -4,7 +4,7 @@ import React from "react";
 import Google from "../../public/Loginsignup-img/Googlelogo.svg"
 import Image from "next/image";
 interface ButtonProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   type?: "google" | "login" | "signup"; // Define the type prop
   onClick?: () => void;
 }

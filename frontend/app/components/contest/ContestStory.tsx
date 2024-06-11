@@ -20,85 +20,85 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useAuthStore from "@/app/store/useAuthStore";
 
-const Page = ({ inputText, corrected }) => {
-  const [improved, setImproved] = useState([]);
+// const Page = ({ inputText, corrected }) => {
+//   const [improved, setImproved] = useState([]);
 
-  const compareSentences = (original, corrected) => {
-    original = original.replace(/<\/?p>/g, "");
-    corrected = corrected.replace(/<\/?p>/g, "");
+//   const compareSentences = (original, corrected) => {
+//     original = original.replace(/<\/?p>/g, "");
+//     corrected = corrected.replace(/<\/?p>/g, "");
    
 
-    const diff = diffChars(original, corrected);
-    const result = [];
+//     const diff = diffChars(original, corrected);
+//     const result = [];
 
-    diff.forEach((part, index) => {
-      let style = {};
-      if (part.added) {
-        style = {
-          color: "green",
-          backgroundColor: "lightgreen",
-          textDecoration: "none",
-        };
-      } else if (part.removed) {
-        style = {
-          color: "red",
-          backgroundColor: "lightcoral",
-          textDecoration: "line-through",
-        };
-      } else {
-        style = {
-          color: "black",
-          backgroundColor: "transparent",
-          textDecoration: "none",
-        };
-      }
+//     diff.forEach((part, index) => {
+//       let style = {};
+//       if (part.added) {
+//         style = {
+//           color: "green",
+//           backgroundColor: "lightgreen",
+//           textDecoration: "none",
+//         };
+//       } else if (part.removed) {
+//         style = {
+//           color: "red",
+//           backgroundColor: "lightcoral",
+//           textDecoration: "line-through",
+//         };
+//       } else {
+//         style = {
+//           color: "black",
+//           backgroundColor: "transparent",
+//           textDecoration: "none",
+//         };
+//       }
 
-      const span = (
-        <div key={index} style={style}>
-          {part.value}
-        </div>
-      );
-      result.push(span);
-    });
+//       const span = (
+//         <div key={index} style={style}>
+//           {part.value}
+//         </div>
+//       );
+//       result.push(span);
+//     });
 
-    return result;
-  };
+//     return result;
+//   };
 
-  useEffect(() => {
-    setImproved(compareSentences(inputText, corrected));
-  }, [inputText, corrected]);
+//   useEffect(() => {
+//     setImproved(compareSentences(inputText, corrected));
+//   }, [inputText, corrected]);
 
-  return <div className="mt-4">{improved}</div>;
-};
+//   return <div className="mt-4">{improved}</div>;
+// };
 
-const getAiPrompt = (type, userInput) => {
-  const AiFeatureTextMapping = {
-    improve: "Proofread this improving clarity and flow",
-    grammer: "Proofread this but only fix grammar",
-    rewrite: "Rewrite this improving clarity and flow",
-  };
+// const getAiPrompt = (type, userInput) => {
+//   const AiFeatureTextMapping = {
+//     improve: "Proofread this improving clarity and flow",
+//     grammer: "Proofread this but only fix grammar",
+//     rewrite: "Rewrite this improving clarity and flow",
+//   };
 
-  let task = AiFeatureTextMapping[type];
+//   let task = AiFeatureTextMapping[type];
 
-  const messages = [
-    {
-      role: "system",
-      content:
-        "You are a master proofreader. Only proofread the given text, don't add new text to the document. The instructions are often in English, but keep prompt in the same language as the language being asked to proofread.",
-    },
-    {
-      role: "user",
-      content: `${task} : ${userInput}`,
-    },
-  ];
-  return messages;
-};
+//   const messages = [
+//     {
+//       role: "system",
+//       content:
+//         "You are a master proofreader. Only proofread the given text, don't add new text to the document. The instructions are often in English, but keep prompt in the same language as the language being asked to proofread.",
+//     },
+//     {
+//       role: "user",
+//       content: `${task} : ${userInput}`,
+//     },
+//   ];
+//   return messages;
+// };
 
-export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id, contestId,promptId }) {
+export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id, contestId, promptId }: { triggerGrammarCheck: string, taskType: string; title: string; Userid: string; _id: string; contestId: string; promptId:string}) {
   const [inputText, setInputText] = useState("");
   const [correctedText, setCorrectedText] = useState("");
   const [copied, setCopied] = useState(false);
-  const [improved, setImproved] = useState([]);
+  const [improved, setImproved] = useState<React.ReactNode[]>([]);
   const [isCheckingGrammer, setIsCheckingGrammer] = useState(false);
   const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
   const setStoredFunction = usePdfStore((state) => state.setPdfExportFunction);
@@ -145,7 +145,7 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
     }
   }, [triggerGrammarCheck]);
   const {userId}=useAuthStore();
-  const handleClickFeature = async (type, event) => {
+  const handleClickFeature = async (type:string, event:any) => {
     event.preventDefault();
 
     try {
@@ -228,7 +228,7 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
     setCopied(true);
   };
 
-  const getCorrectedContent = (original, corrected) => {
+  const getCorrectedContent = (original:string, corrected:string) => {
     original = original.replace(/<\/?p>/g, "");
     const diff = diffChars(original, corrected);
     let text = "";
@@ -248,9 +248,9 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
     return stringWithoutPTags;
   };
 
-  const compareSentences = (original, corrected) => {
+  const compareSentences = (original:string, corrected:string) => {
     const diff = diffChars(original, corrected);
-    const result = [];
+    const result:React.ReactNode[] = [];
 
     diff.forEach((part, index) => {
       let style = {};

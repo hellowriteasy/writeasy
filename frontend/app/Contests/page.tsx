@@ -20,7 +20,7 @@ const Contest = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [contests, setContests] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string|null>(null);
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/contests')
@@ -34,7 +34,7 @@ const Contest = () => {
       });
   }, []);
 
-  const handlePageClick = (event) => {
+  const handlePageClick = (event:{selected:number}) => {
     setCurrentPage(event.selected);
   };
 
@@ -73,7 +73,6 @@ const Contest = () => {
           </div>
           <div className="gap-8 relative flex flex-col">
             <Join />
-            if(contest.isActive==true){}
             {currentContests.map((contest, index) => (
               <Contestitle key={index} contest={contest} />
             ))}

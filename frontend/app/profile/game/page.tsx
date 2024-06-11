@@ -6,20 +6,21 @@ import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import useAuthStore from '@/app/store/useAuthStore';
+import { TUser } from '@/app/utils/types';
 interface UserStory {
   _id: string;
   title: string;
   content: string;
-  corrections:string
-  storyType:string
-  username:string;
-  contributors:string
+  corrections: string;
+  storyType: string;
+  username: string;
+  contributors: TUser[];
 }
 
 const Page: React.FC = () => {
   const [userStories, setUserStories] = useState<UserStory[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string|null>(null);
   const [currentPage, setCurrentPage] = useState(0);
   const userId = useAuthStore((state) => state.userId);
   const itemsPerPage = 5;
@@ -38,8 +39,8 @@ const Page: React.FC = () => {
         
         setUserStories(response.data);
         setLoading(false);
-      } catch (error) {
-        setError('Error fetching user stories: ' + error.message);
+      } catch (error:any) {
+        setError(`Error fetching user stories:  + ${error.message||""}`);
         setLoading(false);
       }
     };
@@ -47,7 +48,7 @@ const Page: React.FC = () => {
     fetchUserStories();
   }, [currentPage]);
 
-  const handlePageClick = (data) => {
+  const handlePageClick = (data:{selected:number}) => {
     const selectedPage = data.selected;
     setCurrentPage(selectedPage);
     };
@@ -70,7 +71,7 @@ const Page: React.FC = () => {
             id={story._id}
             corrections={story.corrections}
             type={story.storyType}
-            Username={story.contributors}
+            contributors={story.contributors}
           />
         ))}
       </div>

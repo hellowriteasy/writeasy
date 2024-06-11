@@ -31,7 +31,7 @@ const FrequentlyAsked = () => {
     }
   ];
 
-  const [openId, setOpenId] = useState(Questions[0].id); // Initialize with the first question open
+  const [openId, setOpenId] = useState<number|null>(Questions[0].id); // Initialize with the first question open
 
   return (
     <div className="relative w-full h-screen text-black flex flex-col items-center px-4 md:px-10">

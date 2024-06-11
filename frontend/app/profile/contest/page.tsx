@@ -6,16 +6,11 @@ import UserStory from '@/app/components/profile/UserStory';
 import ReactPaginate from 'react-paginate';
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import useAuthStore from '@/app/store/useAuthStore';
-interface UserStory {
-  _id: string;
-  title: string;
-  content: string;
-  corrections:string;
-  storyType:string
-}
+import { TStory } from '@/app/utils/types';
+
 
 const ContestPage: React.FC = () => {
-  const [userStories, setUserStories] = useState<UserStory[]>([]);
+  const [userStories, setUserStories] = useState<TStory[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(0);
@@ -45,7 +40,7 @@ const ContestPage: React.FC = () => {
     fetchData();
   }, [currentPage]);
 
-  const handlePageClick = (data) => {
+  const handlePageClick = (data:{selected:number}) => {
     const selectedPage = data.selected;
     setCurrentPage(selectedPage);
   };
@@ -70,6 +65,7 @@ const ContestPage: React.FC = () => {
                 id={story._id}
                 corrections={story.corrections}
                 type={story.storyType}
+                contributors={story.contributors}
               />
             ))}
               <div className="w-full mt-10 text-lg md:text-xl font-comic">

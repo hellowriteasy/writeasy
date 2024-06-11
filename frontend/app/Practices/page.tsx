@@ -12,18 +12,14 @@ import book from "@/public/Game/book.svg";
 import pencilman from "@/public/Game/pensilman.svg";
 import Bee from "@/public/Game/Bee.svg";
 import LoadingAnimation from "../loading";
+import { TPrompt } from "../utils/types";
 
-interface PromptData {
-  title: string;
-  promptCategory: string[];
-  _id: string;
-  promptType: string;
-}
+
 
 const Page: React.FC = () => {
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(0);
-  const [promptData, setPromptData] = useState<PromptData[]>([]);
+  const [promptData, setPromptData] = useState<TPrompt[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedOption, setSelectedOption] = useState<string>("");
 

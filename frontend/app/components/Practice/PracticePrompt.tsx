@@ -3,14 +3,10 @@ import React from "react";
 import Pencil from "@/public/Game/Pencil.svg";
 import Image from "next/image";
 import Link from "next/link";
+import { TPrompt } from "@/app/utils/types";
 
 interface PromptProps {
-  prompt: {
-    title: string;
-    promptCategory: string;
-    promptType: string;
-    _id: string;
-  };
+  prompt: TPrompt
 }
 
 const Prompt: React.FC<PromptProps> = ({ prompt }) => {

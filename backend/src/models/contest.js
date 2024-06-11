@@ -7,5 +7,20 @@ const contestSchema = new mongoose.Schema({
   isActive: { type: Boolean, default: true },
 });
 
+
+
+
+// 5 june
+// 7 june dead  isActive false
+// 8
+// 9 june
+// functionToCloseTheContestWhenItDEad   false 
+
+
+
 const Contest = mongoose.model("Contest", contestSchema);
 module.exports = Contest;
+
+
+
+
