@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import axios from "axios";
 
 interface AuthState {
   loggedIn: boolean;
@@ -7,7 +8,7 @@ interface AuthState {
   username: string | null;
   role: string | null;
   subscriptionType: string | null;
-  login: (userId: string, token: string, username: string, role: string, subscriptionType: string) => void;
+  login: (userId: string, token: string) => void;
   logout: () => void;
 }
 
@@ -15,34 +16,43 @@ const useAuthStore = create<AuthState>((set) => {
   // Check if window is defined to ensure code runs only on the client-side
   if (typeof window !== "undefined") {
     const storedUserId = localStorage.getItem("userId");
-    const storedToken = localStorage.getItem("token");
-    const storedUsername = localStorage.getItem("username");
-    const storedRole = localStorage.getItem("role");
-    const storedSubscriptionType = localStorage.getItem("subscriptionType");
-    const loggedIn = storedUserId !== null && storedToken !== null;
+    const loggedIn = storedUserId !== null;
+
+    const fetchUserDetails = async (userId: string) => {
+      try {
+        const response = await axios.get(`http://localhost:8000/api/auth/user/${userId}`);
+        if (response.status === 200) {
+          const { username, role, subscriptionType } = response.data.message;
+          set({ username, role, subscriptionType });
+        } else {
+          throw new Error(`Error: ${response.status}`);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user details", error);
+      }
+    };
+
+    if (loggedIn && storedUserId) {
+      fetchUserDetails(storedUserId);
+    }
 
     return {
       loggedIn,
       userId: storedUserId,
-      token: storedToken,
-      username: storedUsername,
-      role: storedRole,
-      subscriptionType: storedSubscriptionType,
-      login: (userId: string, token: string, username: string, role: string, subscriptionType: string) => {
-        set({ loggedIn: true, userId, token, username, role, subscriptionType });
+      token: null,
+      username: null,
+      role: null,
+      subscriptionType: null,
+      login: async (userId: string, token: string) => {
         localStorage.setItem("userId", userId);
-        localStorage.setItem("token", token);
-        localStorage.setItem("username", username);
-        localStorage.setItem("role", role);
-        localStorage.setItem("subscriptionType", subscriptionType);
+        set({ loggedIn: true, userId, token });
+
+        // Fetch user details
+        await fetchUserDetails(userId);
       },
       logout: () => {
         set({ loggedIn: false, userId: null, token: null, username: null, role: null, subscriptionType: null });
         localStorage.removeItem("userId");
-        localStorage.removeItem("token");
-        localStorage.removeItem("username");
-        localStorage.removeItem("role");
-        localStorage.removeItem("subscriptionType");
       },
     };
   } else {

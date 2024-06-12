@@ -30,7 +30,6 @@ const Join = () => {
         setLoading(false);
       }
     };
-
     fetchContests();
   }, []);
 

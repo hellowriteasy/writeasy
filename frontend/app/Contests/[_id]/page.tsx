@@ -90,7 +90,11 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
               Prompttitle={selectedPrompt.title}
             />
           ) : (
-            <ViewContest contestId={selectedPrompt.contestId} />
+            <ViewContest
+              contestId={selectedPrompt.contestId}
+              promptId={selectedPrompt.promptId}
+              Prompttitle={selectedPrompt.title}
+            />
           )
         ) : (
           <>

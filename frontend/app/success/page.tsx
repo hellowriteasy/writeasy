@@ -1,7 +1,26 @@
 import Link from 'next/link';
 import { FaCheckCircle } from 'react-icons/fa';
-
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import axios from 'axios'
 const Success = () => {
+  const router = useRouter();
+  const { session_id } = router.query;
+
+  useEffect(() => {
+    if (session_id) {
+      axios.post('http://localhost:8000/api/payments/confirm-checkout-session', {
+        stripe_session_id: session_id
+      })
+      .then(response => {
+        console.log(response.data);
+        // Handle success response
+      })
+      .catch(error => {
+        console.error("Error confirming checkout session", error);
+      });
+    }
+  }, [session_id]);
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-lg shadow-lg">

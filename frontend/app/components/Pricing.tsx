@@ -1,10 +1,29 @@
+'use client'
 import Image from "next/image";
 import Group14 from "../../public/Landingpage-img/Group (15).svg";
 import Group15 from "../../public/Landingpage-img/Group (16).svg";
 import Group16 from "../../public/Landingpage-img/Group (17).svg";
 import { TbCurrencyPound } from "react-icons/tb";
+import Link from "next/link";
+import useAuthStore from "../store/useAuthStore";
+import axios from "axios";
 
 const Pricing = () => {
+  const { userId } = useAuthStore();
+  console.log(userId)
+  const handleSignUp = async () => {
+    try {
+      const response = await axios.post('http://localhost:8000/api/payments/checkout', {
+        user_id: userId
+      });
+      
+      const { url } = response.data;
+      window.location.href = url;  // Redirect to Stripe Checkout
+    } catch (error) {
+      console.error("Error creating checkout session", error);
+    }
+  };
+
   return (
     <div className="w-full h-auto py-10">
       <h1 className="text-center text-4xl font-crayon pt-10 font-bold">Pricing</h1>
@@ -20,9 +39,11 @@ const Pricing = () => {
               <h2 className="text-4xl font-bold">Free</h2>
             </div>
             <div className="text-center absolute bottom-32 ">
-              <button className="border-2 font-comic text-3xl hover:bg-slate-200 border-slate-700 bg-white rounded-3xl text-black w-60 h-14">
-                Sign up
-              </button>
+              <Link href="/signup">
+                <button className="border-2 font-comic text-3xl hover:bg-slate-200 border-slate-700 bg-white rounded-3xl text-black w-60 h-14">
+                  Sign up
+                </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -36,7 +57,9 @@ const Pricing = () => {
               <span className="pt-4">/month</span>
             </div>
             <div className="text-center absolute bottom-32">
-              <button className="border text-3xl font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl text-white w-60 h-14">Sign up</button>
+              <button onClick={handleSignUp} className="border text-3xl font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl text-white w-60 h-14">
+                Sign up
+              </button>
             </div>
           </div>
         </div>

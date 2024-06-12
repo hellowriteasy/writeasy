@@ -10,6 +10,7 @@ import Cloud from "@/public/Game/cloud.svg";
 import Cloud2 from "@/public/Game/cloud3.svg";
 import Pagination from "@/app/components/Pagination";
 import Storycard from "@/app/components/Storycard";
+
 interface Prompt {
   _id: string;
   promptText: string;
@@ -23,23 +24,18 @@ interface Contest {
   submissionDeadline: string;
   prompts: Prompt[];
   description: string;
-  promptId:string
+  promptId: string;
 }
 
 interface ContestPageProps {
-  
-   
-    contestId:string;
-    promptId:string;
-    Prompttitle:string;
-
+  contestId: string;
+  promptId: string;
+  Prompttitle: string;
 }
 
-const ViewContest: React.FC<ContestPageProps> = (contestId,promptId,Prompttitle) => {
-
-
+const ViewContest: React.FC<ContestPageProps> = ({ contestId, promptId, Prompttitle }) => {
   const [contest, setContest] = useState<Contest | null>(null);
-  // const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedPrompt, setSelectedPrompt] = useState<{
     contestId: string;
@@ -71,56 +67,50 @@ const ViewContest: React.FC<ContestPageProps> = (contestId,promptId,Prompttitle)
     fetchContestById();
   }, [contestId]);
 
-
-
-  // if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
+  if (loading) return <p>Loading...</p>;
+  // if (error) return <p>{error}</p>;
   if (!contest) return <p>No contest available at the moment.</p>;
 
   return (
     <div className="w-full h-auto mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 h-auto ms-12">
-          <>
-            <div className="w-full text-center text-2xl font-comic relative pt-4">
-              until {new Date(contest.submissionDeadline).toLocaleString()} GMT
+        <>
+          <div className="w-full text-center text-2xl font-comic relative pt-4">
+            until {new Date(contest.submissionDeadline).toLocaleString()} GMT
+          </div>
+          <div className="flex justify-center mt-8">
+            <div className="p-6 mb-6">
+              <h2 className="text-4xl font-comic font-bold mb-4">
+                {contest.contestTheme}
+              </h2>
+              <p className="text-xl w-10/12 ">
+                {contest.description || "Paragraphs are the building blocks of papers. Many students define paragraphs in terms of length: a paragraph is a group of at least five sentences, a paragraph is half a page long, etc. In reality, though, the unity and coherence of ideas among sentences is what constitutes a paragraph."}
+              </p>
             </div>
-            <div className="flex justify-center mt-8">
-              <div className="  p-6 mb-6">
-                <h2 className="text-4xl font-comic font-bold mb-4">
-                  {contest.contestTheme}
-                </h2>
-                <p className="text-xl w-10/12 ">
-                  {contest.description || "Paragraphs are the building blocks of papers. Many students define paragraphs in terms of length: a paragraph is a group of at least five sentences, a paragraph is half a page long, etc. In reality, though, the unity and coherence of ideas among sentences is what constitutes a paragraph."}
-                </p>
+            <div>
+              <WeeklyTest />
+            </div>
+          </div>
+          <div className="flex w-full h-auto relative mt-0 justify-around">
+            <div className="absolute top-0 -left-40">
+              <Image src={Cloud2} alt="cloud" />
+            </div>
+            <div className="gap-8 relative flex flex-col">
+              <div className="w-[53vw]">
+                <h1 className="text-6xl font-comic font-bold p-10">
+                  {Prompttitle}
+                </h1>
               </div>
-              <div className=" ">
-                <WeeklyTest />
+              <Storycard />
+              <div className="absolute bottom-80 -left-32">
+                <Image src={Cloud} alt="Cloud" />
               </div>
             </div>
-            <div className="flex w-full h-auto relative mt-0 justify-around">
-              <div className="absolute top-0 -left-40">
-                <Image src={Cloud2} alt="cloud" />
-              </div>
-              <div className="gap-8 relative flex flex-col">
-                <div className="w-[53vw]">
-                  <h1 className="text-6xl font-comic font-bold p-10">
-                    {Prompttitle}
-                  </h1>
-                </div>
-                
-                 <Storycard />
-                
-                <div className="absolute bottom-80 -left-32">
-                  <Image src={Cloud} alt="Cloud" />
-                </div>
-              </div>
-             
-            </div>
-            <div className="w-full ms-28">
-              <Pagination />
-            </div>
-          </>
-        
+          </div>
+          <div className="w-full ms-28">
+            <Pagination />
+          </div>
+        </>
       </div>
     </div>
   );

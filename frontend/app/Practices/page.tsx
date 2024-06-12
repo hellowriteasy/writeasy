@@ -73,11 +73,11 @@ const Page: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex w-full  h-auto relative -mt-10 justify-around sm:justify-start">
+        <div className="flex w-full  h-auto relative -mt-10 justify-around sm:justify-start ">
           <div className="absolute -top-28 -left-32">
             <Image className="w-[10vw]" src={Bee} alt="bee" />
           </div>
-          <div className="gap-8 relative flex flex-col">
+          <div className="gap-8 practice-mobile-view relative flex flex-col">
             <div className="w-[50vw] flex justify-between items-center h-20">
               <h1 className="text-5xl ps-2 font-comic font-bold">All Prompts</h1>
               <SelectMenu selectedOption={selectedOption} onSelectOption={handleSelectOption} />
