@@ -79,7 +79,9 @@ const Page: React.FC = () => {
           </div>
           <div className="gap-8 practice-mobile-view relative flex flex-col">
             <div className="w-[50vw] flex justify-between items-center h-20">
-              <h1 className="text-5xl ps-2 font-comic font-bold">All Prompts</h1>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl ps-2 sm:ps-4 md:ps-6 lg:ps-8 xl:ps-10 font-comic font-bold">
+      All Prompts
+    </h1>
               <SelectMenu selectedOption={selectedOption} onSelectOption={handleSelectOption} />
             </div>
             {isLoading ? (

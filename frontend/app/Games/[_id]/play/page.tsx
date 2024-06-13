@@ -342,7 +342,9 @@ const StoryEditor: React.FC<StoryEditorProps> = ({  id }) => {
           </div>
         </div>
       </div>
-      {!isSubcriptionActive && <Subscription />}
+      {!isSubcriptionActive && role != "admin" ? <Subscription /> : null}
+
+
       <ToastContainer />
     </div>
   );

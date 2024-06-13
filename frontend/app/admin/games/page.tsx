@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Navbar from "../../components/admin/Navbar";
-import Sidebar from "../../components/admin/Sidebar";
+
+
 import CardAdd from "@/app/components/admin/Games/CardAdd";
 import ModalGame from "@/app/components/admin/Games/Modal";
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
@@ -45,9 +45,9 @@ const Games = () => {
   return (
     <ProtectedRoute>
       <div className="bg-white">
-        <Navbar />
+   
         <div className="flex h-screen">
-          <Sidebar />
+ 
           <div className="flex-1 p-6">
             <div className="flex flex-col space-y-8">
               <div className="flex justify-between items-center border-e-2 border-slate-300 bg-white shadow p-4 rounded-lg">

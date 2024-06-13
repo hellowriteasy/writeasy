@@ -1,8 +1,8 @@
 'use client';
 import { useState } from "react";
 import axios from 'axios';
-import Navbar from "../../components/admin/Navbar";
-import Sidebar from "../../components/admin/Sidebar";
+
+
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
 
 const Email = () => {
@@ -26,9 +26,9 @@ const Email = () => {
   return (
     <ProtectedRoute>
       <div>
-        <Navbar />
+    
         <div className="flex h-screen">
-          <Sidebar />
+   
           <div className="flex-1 p-6">
             <div className="bg-white shadow-md rounded-lg p-4 mb-4">
               <h2 className="text-2xl font-semibold mb-6">Email</h2>

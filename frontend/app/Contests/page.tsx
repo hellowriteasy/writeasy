@@ -19,18 +19,18 @@ const Contest = () => {
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(0);
   const [contests, setContests] = useState([]);
-  const [loading, setLoading] = useState(true);
+ 
   const [error, setError] = useState<string|null>(null);
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/contests')
       .then(response => {
         setContests(response.data);
-        setLoading(false);
+       
       })
       .catch(error => {
         setError('Error fetching contest data: ' + error.message);
-        setLoading(false);
+     
       });
   }, []);
 
@@ -42,7 +42,7 @@ const Contest = () => {
   const currentContests = contests.slice(offset, offset + itemsPerPage);
   const pageCount = Math.ceil(contests.length / itemsPerPage);
 
-  if (loading) return <p>Loading...</p>;
+  
   if (error) return <p>{error}</p>;
 
   return (

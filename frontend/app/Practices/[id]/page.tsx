@@ -28,10 +28,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
   const [triggerGrammarCheck, setTriggerGrammarCheck] = useState(false);
   const [taskType, setTaskType] = useState("");
   const [input, setInput] = useState("");
-  const isSubcriptionActive = useAuthStore(
-    (state) => state.isSubcriptionActive
-  );
-  const role = useAuthStore((state) => state.role);
+  const {role, isSubcriptionActive}=useAuthStore();
 
   useEffect(() => {
     if (params.id) {
@@ -124,7 +121,8 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
         </div>
       </div>
 
-      {!isSubcriptionActive && <Subscription />}
+      {!isSubcriptionActive && role != "admin" ? <Subscription /> : null}
+
     </div>
   );
 };

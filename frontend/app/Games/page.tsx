@@ -17,7 +17,6 @@ const Games: React.FC = () => {
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(0);
   const [prompts, setPrompts] = useState<TPrompt[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -27,10 +26,10 @@ const Games: React.FC = () => {
         const response = await axios.get("http://localhost:8000/api/prompts/game-prompts");
         setPrompts(response.data)
 
-        setLoading(false);
+      
       } catch (error: any) {
         setError(error.message);
-        setLoading(false);
+       
       }
     };
     fetchPrompts();
@@ -44,7 +43,7 @@ const Games: React.FC = () => {
   const currentPrompts = prompts.slice(offset, offset + itemsPerPage);
   const pageCount = Math.ceil(prompts.length / itemsPerPage);
 
-  if (loading) return <p>Loading...</p>;
+
   if (error) return <p>Error: {error}</p>;
   function handlePromptClick(){
     

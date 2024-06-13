@@ -2,10 +2,10 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import Navbar from "../../components/admin/Navbar";
+
 import Card from "../../components/admin/contests/CardAdd";
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
-import Sidebar from "@/app/components/admin/Sidebar";
+
 interface Contest {
   id: string;
   contestTheme: string;
@@ -45,9 +45,9 @@ const Page: React.FC = () => {
   return (
     <ProtectedRoute>
     <div className="bg-gray-50 min-h-screen">
-      <Navbar />
+     
       <div className="flex h-screen">
-        <Sidebar />
+       
         <div className="flex-1 flex flex-col p-6 space-y-6">
           <div className="flex justify-between w-5/6 items-center bg-white shadow-sm p-4 rounded-lg border border-gray-300">
             <div className="text-2xl font-semibold text-gray-700">Contests</div>

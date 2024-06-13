@@ -1,7 +1,7 @@
 import React from "react";
 
 import Navbar from "@/app/components/admin/Navbar";
-import Sidebar from "../components/admin/Sidebar";
+import Sidebar from "../components/admin/SIdebar";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
   return (

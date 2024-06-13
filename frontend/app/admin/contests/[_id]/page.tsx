@@ -1,8 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import Navbar from '../../../components/admin/Navbar';
-import Sidebar from '../../../components/admin/Sidebar';
+
+
 import Card from '../../../components/admin/contests/CardUpdate';
 import Modal from '@/app/components/admin/contests/ContestModal';
 import ProtectedRoute from '@/app/utils/ProtectedRoute';
@@ -77,9 +77,9 @@ const Page = ({ params }: PageProps) => {
   return (
     <ProtectedRoute>
     <div>
-      <Navbar />
+
       <div className="flex h-screen">
-        <Sidebar />
+       
         <div className="flex-1 p-6">
           <div className="bg-white shadow-md rounded-lg p-4 mb-4">
             <div className="mb-4">

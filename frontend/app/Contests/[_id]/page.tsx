@@ -38,7 +38,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
   const { _id: contestId } = params;
 
   const [contest, setContest] = useState<Contest | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+ 
   const [error, setError] = useState<string | null>(null);
   const [selectedPrompt, setSelectedPrompt] = useState<{
     contestId: string;
@@ -49,7 +49,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
   useEffect(() => {
     if (!contestId) {
       setError("Contest ID is missing.");
-      setLoading(false);
+   
       return;
     }
 
@@ -64,7 +64,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
       } catch (err: any) {
         setError(err.message);
       } finally {
-        setLoading(false);
+     
       }
     };
 
@@ -75,7 +75,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
     setSelectedPrompt({ contestId, promptId, title });
   };
 
-  if (loading) return <p>Loading...</p>;
+  
   if (error) return <p>{error}</p>;
   if (!contest) return <p>No contest available at the moment.</p>;
 

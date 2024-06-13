@@ -35,7 +35,7 @@ interface ContestPageProps {
 
 const ViewContest: React.FC<ContestPageProps> = ({ contestId, promptId, Prompttitle }) => {
   const [contest, setContest] = useState<Contest | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+
   const [error, setError] = useState<string | null>(null);
   const [selectedPrompt, setSelectedPrompt] = useState<{
     contestId: string;
@@ -45,7 +45,7 @@ const ViewContest: React.FC<ContestPageProps> = ({ contestId, promptId, Promptti
   useEffect(() => {
     if (!contestId) {
       setError("Contest ID is missing.");
-      setLoading(false);
+    
       return;
     }
 
@@ -60,14 +60,14 @@ const ViewContest: React.FC<ContestPageProps> = ({ contestId, promptId, Promptti
       } catch (err: any) {
         setError(err.message);
       } finally {
-        setLoading(false);
+
       }
     };
 
     fetchContestById();
   }, [contestId]);
 
-  if (loading) return <p>Loading...</p>;
+
   // if (error) return <p>{error}</p>;
   if (!contest) return <p>No contest available at the moment.</p>;
 

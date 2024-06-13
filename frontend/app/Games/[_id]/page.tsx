@@ -1,14 +1,14 @@
-'use client'
+'use client';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import cloud2 from '@/public/Game/cloud2.svg';
 import shootingstar from '@/public/Game/shotting_star.svg';
 import Storytitle from '@/app/components/Others/Storytitle';
-import Pagination from '@/app/components/Pagination';
-import axios from "axios";
+import axios from 'axios';
 import StoryEditor from '../[_id]/play/page';
 import { TStory } from '@/app/utils/types';
-
+import ReactPaginate from 'react-paginate';
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 
 interface PageProps {
   params: {
@@ -16,37 +16,35 @@ interface PageProps {
   };
 }
 
+const itemsPerPage = 5; // Adjust this value to the number of items per page you want
+
 const Page: React.FC<PageProps> = ({ params }) => {
   const [stories, setStories] = useState<TStory[]>([]);
   const [filteredStories, setFilteredStories] = useState<TStory[]>([]);
-  const [loading, setLoading] = useState(true);
   const [selectedStory, setSelectedStory] = useState<TStory | null>(null);
   const [isCreating, setIsCreating] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0); // State to track the current page
 
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/stories");
+        const response = await axios.get('http://localhost:8000/api/stories');
         const fetchedStories: TStory[] = response.data;
         setStories(fetchedStories);
-        setLoading(false);
-        
       } catch (error) {
-        console.error("Error fetching stories:", error);
-        setLoading(false);
+        console.error('Error fetching stories:', error);
       }
     };
 
     fetchStories();
   }, []);
-  console.log("stories",stories)
-  
+
   useEffect(() => {
-    if (!loading) {
-      const filtered = stories.filter(story => story.storyType === 'game' && story.prompt === params._id);
-      setFilteredStories(filtered);
-    }
-  }, [loading, stories, params._id]);
+    const filtered = stories.filter(
+      (story) => story.storyType === 'game' && story.prompt === params._id
+    );
+    setFilteredStories(filtered);
+  }, [stories, params._id]);
 
   const handleReadMore = (story: TStory) => {
     setSelectedStory(story);
@@ -58,15 +56,20 @@ const Page: React.FC<PageProps> = ({ params }) => {
     setIsCreating(true);
   };
 
-  if (loading) return <p>Loading...</p>;
+  const handlePageClick = (event: { selected: number }) => {
+    setCurrentPage(event.selected);
+  };
+
+  const offset = currentPage * itemsPerPage;
+  const currentStories = filteredStories.slice(offset, offset + itemsPerPage);
+  const pageCount = Math.ceil(filteredStories.length / itemsPerPage);
 
   if (selectedStory || isCreating) {
-    return <StoryEditor id={params._id}  />;
+    return <StoryEditor id={params._id} />;
   }
 
-  console.log("prompt",filteredStories)
   return (
-    <div className="w-screen font-comic h-[1750px] flex flex-col">
+    <div className="w-screen font-comic h-auto flex flex-col">
       <div className="h-80 border-game relative w-full flex items-center flex-col">
         <div className="absolute left-0">
           <Image className="w-[9vw]" src={shootingstar} alt="shootingstar" />
@@ -90,7 +93,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
         <div className="w-4/5">
           <h1 className="font-bold text-7xl pt-5 font-comic">Stories</h1>
           <div className="mt-4 flex flex-col gap-8">
-            {filteredStories.map((story: TStory, index) => (
+            {currentStories.map((story: TStory, index) => (
               <Storytitle
                 key={index}
                 story={story}
@@ -98,8 +101,29 @@ const Page: React.FC<PageProps> = ({ params }) => {
               />
             ))}
           </div>
-          <div className="w-full ms-28 mt-10">
-            <Pagination />
+          <div className="w-full mt-10 text-lg md:text-xl font-comic">
+            <ReactPaginate
+              previousLabel={
+                <FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+              }
+              nextLabel={
+                <FaAngleRight className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+              }
+              breakLabel="..."
+              breakClassName="break-me"
+              pageCount={pageCount}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={handlePageClick}
+              containerClassName="flex justify-center gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
+              pageClassName=""
+              pageLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+              previousClassName=""
+              previousLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+              nextClassName=""
+              nextLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+              activeClassName="bg-black text-white rounded-full"
+            />
           </div>
         </div>
       </div>

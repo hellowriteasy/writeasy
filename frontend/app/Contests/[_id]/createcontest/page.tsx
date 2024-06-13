@@ -32,10 +32,7 @@ interface PromptPageProps {
 const CreateContest: React.FC<PromptPageProps> = ({contestId,promptId,Prompttitle}) => {  
   const [title,setTitle]=useState("")
   const [content,setcontent]=useState("")
-  const isSubcriptionActive = useAuthStore(
-    (state) => state.isSubcriptionActive
-  );
-  const role = useAuthStore((state) => state.role);
+const {role,isSubcriptionActive}=useAuthStore()
   const {userId}=useAuthStore();
   async function handleSubmit(e:SyntheticEvent) {
     e.preventDefault(); // Prevent default form submission behavior
@@ -248,7 +245,7 @@ const CreateContest: React.FC<PromptPageProps> = ({contestId,promptId,Prompttitl
           </div>
         </div>
       </div>
-      {!isSubcriptionActive && <Subscription />}
+      {!isSubcriptionActive && role != "admin" ? <Subscription /> : null}
     </div>
   );
 }

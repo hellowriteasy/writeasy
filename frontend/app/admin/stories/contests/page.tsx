@@ -1,8 +1,7 @@
 'use client';
 import { useState, useEffect } from "react";
 import axios from 'axios';
-import Navbar from "../../../components/admin/Navbar";
-import Sidebar from "../../../components/admin/Sidebar";
+
 import Card from "../../../components/admin/stories/contests/VIewContestCard";
 import StoryNav from "@/app/components/admin/stories/StoryNav";
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
@@ -42,9 +41,9 @@ const Page = () => {
   return (
     <ProtectedRoute>
     <div className="bg-gray-50 min-h-screen">
-      <Navbar />
+  
       <div className="flex h-screen">
-        <Sidebar />
+     
         <div className="flex-1 flex flex-col p-6 space-y-6">
           <StoryNav />
 
