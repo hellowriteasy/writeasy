@@ -32,7 +32,9 @@ interface PromptPageProps {
 const CreateContest: React.FC<PromptPageProps> = ({contestId,promptId,Prompttitle}) => {  
   const [title,setTitle]=useState("")
   const [content,setcontent]=useState("")
-  const subscriptionType = useAuthStore((state) => state.subscriptionType);
+  const isSubcriptionActive = useAuthStore(
+    (state) => state.isSubcriptionActive
+  );
   const role = useAuthStore((state) => state.role);
   const {userId}=useAuthStore();
   async function handleSubmit(e:SyntheticEvent) {
@@ -115,8 +117,9 @@ const CreateContest: React.FC<PromptPageProps> = ({contestId,promptId,Prompttitl
     <div className="w-full  mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 h-screen ms-12">
         <div className="w-full h-32 relative pt-4">
-        
-          <h1 className="text-6xl font-comic font-bold py-4">Selected Prompt Title</h1>
+          <h1 className="text-6xl font-comic font-bold py-4">
+            Selected Prompt Title
+          </h1>
         </div>
         <div className="flex w-[100%] relative mt-0">
           <div className="absolute -top-40 mt-3 -left-60">
@@ -125,15 +128,17 @@ const CreateContest: React.FC<PromptPageProps> = ({contestId,promptId,Prompttitl
           <div className="gap-8 relative w-4/5 flex flex-col">
             <form action="" className="height-[100px]">
               <div className="flex flex-col w-full items-center gap-4 h-96">
-                 {/* <h2> prompt {Prompttitle}</h2> */}
+                {/* <h2> prompt {Prompttitle}</h2> */}
                 <div>
                   <input
                     className="border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[70vw] h-12 focus:outline-none focus:border-yellow-600"
                     placeholder="Untitled Story"
-                    onChange={(e)=>{setTitle(e.target.value)}}
+                    onChange={(e) => {
+                      setTitle(e.target.value);
+                    }}
                   />
                 </div>
-             
+
                 <div className="h-[800px] rounded-full">
                   <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
                     <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
@@ -141,7 +146,10 @@ const CreateContest: React.FC<PromptPageProps> = ({contestId,promptId,Prompttitl
                         <button
                           className="menu-button mr-2"
                           type="button"
-                          onClick={(e) => { e.preventDefault(); editor.chain().focus().undo().run(); }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            editor.chain().focus().undo().run();
+                          }}
                           disabled={!editor.can().undo()}
                         >
                           <Icons.RotateLeft />
@@ -149,7 +157,10 @@ const CreateContest: React.FC<PromptPageProps> = ({contestId,promptId,Prompttitl
                         <button
                           className="menu-button mr-2"
                           type="button"
-                          onClick={(e) => { e.preventDefault(); editor.chain().focus().redo().run(); }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            editor.chain().focus().redo().run();
+                          }}
                           disabled={!editor.can().redo()}
                         >
                           <Icons.RotateRight />
@@ -159,7 +170,10 @@ const CreateContest: React.FC<PromptPageProps> = ({contestId,promptId,Prompttitl
                             "is-active": editor.isActive("bold"),
                           })}
                           type="button"
-                          onClick={(e) => { e.preventDefault(); toggleBold(); }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toggleBold();
+                          }}
                         >
                           <Icons.Bold />
                         </button>
@@ -168,7 +182,10 @@ const CreateContest: React.FC<PromptPageProps> = ({contestId,promptId,Prompttitl
                             "is-active": editor.isActive("underline"),
                           })}
                           type="button"
-                          onClick={(e) => { e.preventDefault(); toggleUnderline(); }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toggleUnderline();
+                          }}
                         >
                           <Icons.Underline />
                         </button>
@@ -177,7 +194,10 @@ const CreateContest: React.FC<PromptPageProps> = ({contestId,promptId,Prompttitl
                             "is-active": editor.isActive("italic"),
                           })}
                           type="button"
-                          onClick={(e) => { e.preventDefault(); toggleItalic(); }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toggleItalic();
+                          }}
                         >
                           <Icons.Italic />
                         </button>
@@ -186,7 +206,10 @@ const CreateContest: React.FC<PromptPageProps> = ({contestId,promptId,Prompttitl
                             "is-active": editor.isActive("strike"),
                           })}
                           type="button"
-                          onClick={(e) => { e.preventDefault(); toggleStrike(); }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toggleStrike();
+                          }}
                         >
                           <Icons.Strikethrough />
                         </button>
@@ -195,31 +218,37 @@ const CreateContest: React.FC<PromptPageProps> = ({contestId,promptId,Prompttitl
                             "is-active": editor.isActive("code"),
                           })}
                           type="button"
-                          onClick={(e) => { e.preventDefault(); toggleCode(); }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toggleCode();
+                          }}
                         >
                           <Icons.Code />
                         </button>
                       </div>
                     </div>
                     <div className="w-[70vw]  rounded-3xl">
-                      <EditorContent className="scroll-m-2 w-[100%] h-[30vw] mt-10 " editor={editor} />
+                      <EditorContent
+                        className="scroll-m-2 w-[100%] h-[30vw] mt-10 "
+                        editor={editor}
+                      />
                     </div>
                   </div>
                 </div>
                 <div>
                   <button
-                onClick={handleSubmit}  
-                  className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-[50vw] h-14">
+                    onClick={handleSubmit}
+                    className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-[50vw] h-14"
+                  >
                     Submit Story
                   </button>
                 </div>
               </div>
             </form>
           </div>
-         
         </div>
       </div>
-      {subscriptionType=="free"&&<Subscription/>}
+      {!isSubcriptionActive && <Subscription />}
     </div>
   );
 }

@@ -28,7 +28,9 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
   const [triggerGrammarCheck, setTriggerGrammarCheck] = useState(false);
   const [taskType, setTaskType] = useState("");
   const [input, setInput] = useState("");
-  const subscriptionType = useAuthStore((state) => state.subscriptionType);
+  const isSubcriptionActive = useAuthStore(
+    (state) => state.isSubcriptionActive
+  );
   const role = useAuthStore((state) => state.role);
 
   useEffect(() => {
@@ -62,10 +64,11 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
 
   return (
     <div className="w-full h-[1900px] mt-6 z-0 relative flex justify-center">
-     
       <div className="w-10/12 h-screen ms-12 ">
         <div className="w-full h-32 relative pt-4">
-          <h1 className="text-5xl pt-4 ps-16 font-bold font-comic">{prompt.title}</h1>
+          <h1 className="text-5xl pt-4 ps-16 font-bold font-comic">
+            {prompt.title}
+          </h1>
         </div>
         <div className="flex w-[100%] relative mt-0">
           <div className="absolute -top-40 mt-3 -left-48">
@@ -83,16 +86,20 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
                 </div>
                 <div className="flex flex-col gap-8">
                   <div className="flex flex-wrap gap-4 font-comic">
-                    {['grammar', 'rewrite', 'improve', 'pdf'].map((type) => (
+                    {["grammar", "rewrite", "improve", "pdf"].map((type) => (
                       <div key={type}>
                         <button
                           className="w-40 h-14 bg-black text-white hover:opacity-80 font-bold text-2xl rounded-full"
                           value={type}
-                          onClick={type !== 'pdf' ? (e) => {
-                            handleTaskTypeClick(e);
-                            handleGrammarClick();
-                          } : undefined}
-                          disabled={type !== 'pdf' && triggerGrammarCheck}
+                          onClick={
+                            type !== "pdf"
+                              ? (e) => {
+                                  handleTaskTypeClick(e);
+                                  handleGrammarClick();
+                                }
+                              : undefined
+                          }
+                          disabled={type !== "pdf" && triggerGrammarCheck}
                         >
                           {type.charAt(0).toUpperCase() + type.slice(1)}
                         </button>
@@ -116,8 +123,8 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
           />
         </div>
       </div>
-      
-      {subscriptionType === "free" && <Subscription />}
+
+      {!isSubcriptionActive && <Subscription />}
     </div>
   );
 };

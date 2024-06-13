@@ -1,3 +1,4 @@
+"use client"
 import Link from 'next/link';
 import { usePathname } from 'next/navigation'; // Import 'usePathname' from 'next/navigation'
 import { useRouter } from 'next/navigation';

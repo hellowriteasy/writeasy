@@ -46,7 +46,9 @@ const StoryEditor: React.FC<StoryEditorProps> = ({  id }) => {
   const [wordCount, setWordCount] = useState(0);
   const [wordLimitExceeded, setWordLimitExceeded] = useState(false);
   const [storyId, setStoryId] = useState(null);
-  const subscriptionType = useAuthStore((state) => state.subscriptionType);
+  const isSubcriptionActive = useAuthStore(
+    (state) => state.isSubcriptionActive
+  );
   const role = useAuthStore((state) => state.role);
   const { userId } = useAuthStore();
   const { token } = useAuthStore();
@@ -176,7 +178,9 @@ const StoryEditor: React.FC<StoryEditorProps> = ({  id }) => {
     <div className="w-full h-[1300px] mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 h-screen ms-12">
         <div className="w-full h-60 relative pt-4">
-          <h1 className="text-6xl pt-4 font-bold font-comic">Setting text of this story</h1>
+          <h1 className="text-6xl pt-4 font-bold font-comic">
+            Setting text of this story
+          </h1>
           <div className="w-full relative pt-6 flex h-20">
             <div className="w-10 absolute h-10 left-3 bg-slate-500 rounded-full border">
               <Image src="" alt="" />
@@ -197,7 +201,9 @@ const StoryEditor: React.FC<StoryEditorProps> = ({  id }) => {
                   <input
                     className="border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[40vw] h-12 focus:outline-none focus:border-yellow-600"
                     placeholder="Email to invite"
-                    onChange={(e) => { setEmail(e.target.value) }}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                    }}
                   />
                   <button
                     type="button"
@@ -211,7 +217,9 @@ const StoryEditor: React.FC<StoryEditorProps> = ({  id }) => {
                   <input
                     className="border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[50vw] h-12 focus:outline-none focus:border-yellow-600"
                     placeholder="Untitled Story"
-                    onChange={(e) => { setTitle(e.target.value) }}
+                    onChange={(e) => {
+                      setTitle(e.target.value);
+                    }}
                   />
                 </div>
                 <div className="h-[800px] rounded-full">
@@ -221,7 +229,10 @@ const StoryEditor: React.FC<StoryEditorProps> = ({  id }) => {
                         <button
                           className="menu-button mr-2"
                           type="button"
-                          onClick={(e) => { e.preventDefault(); editor.chain().focus().undo().run(); }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            editor.chain().focus().undo().run();
+                          }}
                           disabled={!editor.can().undo()}
                         >
                           <Icons.RotateLeft />
@@ -229,7 +240,10 @@ const StoryEditor: React.FC<StoryEditorProps> = ({  id }) => {
                         <button
                           className="menu-button mr-2"
                           type="button"
-                          onClick={(e) => { e.preventDefault(); editor.chain().focus().redo().run(); }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            editor.chain().focus().redo().run();
+                          }}
                           disabled={!editor.can().redo()}
                         >
                           <Icons.RotateRight />
@@ -239,7 +253,10 @@ const StoryEditor: React.FC<StoryEditorProps> = ({  id }) => {
                             "is-active": editor.isActive("bold"),
                           })}
                           type="button"
-                          onClick={(e) => { e.preventDefault(); toggleBold(); }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toggleBold();
+                          }}
                         >
                           <Icons.Bold />
                         </button>
@@ -248,7 +265,10 @@ const StoryEditor: React.FC<StoryEditorProps> = ({  id }) => {
                             "is-active": editor.isActive("underline"),
                           })}
                           type="button"
-                          onClick={(e) => { e.preventDefault(); toggleUnderline(); }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toggleUnderline();
+                          }}
                         >
                           <Icons.Underline />
                         </button>
@@ -257,7 +277,10 @@ const StoryEditor: React.FC<StoryEditorProps> = ({  id }) => {
                             "is-active": editor.isActive("italic"),
                           })}
                           type="button"
-                          onClick={(e) => { e.preventDefault(); toggleItalic(); }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toggleItalic();
+                          }}
                         >
                           <Icons.Italic />
                         </button>
@@ -266,7 +289,10 @@ const StoryEditor: React.FC<StoryEditorProps> = ({  id }) => {
                             "is-active": editor.isActive("strike"),
                           })}
                           type="button"
-                          onClick={(e) => { e.preventDefault(); toggleStrike(); }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toggleStrike();
+                          }}
                         >
                           <Icons.Strikethrough />
                         </button>
@@ -275,20 +301,31 @@ const StoryEditor: React.FC<StoryEditorProps> = ({  id }) => {
                             "is-active": editor.isActive("code"),
                           })}
                           type="button"
-                          onClick={(e) => { e.preventDefault(); toggleCode(); }}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            toggleCode();
+                          }}
                         >
                           <Icons.Code />
                         </button>
                         <div className="w-60 h-7 bg-white flex flex-col justify-center rounded-2xl shadow-sm ">
-                          <p className="text-center font-comic">Word count: {wordCount} / 1000</p>
+                          <p className="text-center font-comic">
+                            Word count: {wordCount} / 1000
+                          </p>
                           {wordLimitExceeded && (
-                            <p className="text-red-500">Word limit exceeded. Please reduce the number of words.</p>
+                            <p className="text-red-500">
+                              Word limit exceeded. Please reduce the number of
+                              words.
+                            </p>
                           )}
                         </div>
                       </div>
                     </div>
                     <div className="w-[50vw] rounded-3xl">
-                      <EditorContent className="scroll-m-2 w-[100%] h-96 mt-10" editor={editor} />
+                      <EditorContent
+                        className="scroll-m-2 w-[100%] h-96 mt-10"
+                        editor={editor}
+                      />
                     </div>
                   </div>
                 </div>
@@ -305,7 +342,7 @@ const StoryEditor: React.FC<StoryEditorProps> = ({  id }) => {
           </div>
         </div>
       </div>
-      {subscriptionType === "free" && <Subscription />}
+      {!isSubcriptionActive && <Subscription />}
       <ToastContainer />
     </div>
   );

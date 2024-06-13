@@ -26,8 +26,8 @@ const createStripeCheckout = async () => {
         },
       ],
 
-      success_url: `${process.env.FRONTEND_BASE_URL}/Pricing?session_id={CHECKOUT_SESSION_ID}&type=stripe`,
-      cancel_url: `${process.env.FRONTEND_BASE_URL}/Pricing?session_id={CHECKOUT_SESSION_ID}&type=string`,
+      success_url: `${process.env.FRONTEND_BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}&type=stripe`,
+      cancel_url: `${process.env.FRONTEND_BASE_URL}/failure?session_id={CHECKOUT_SESSION_ID}&type=string`,
     });
 
     return session;

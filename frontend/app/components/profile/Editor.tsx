@@ -37,11 +37,12 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,contributo
   const [wordCount, setWordCount] = useState(0);
   const [wordLimitExceeded, setWordLimitExceeded] = useState(false);
   const [storyId, setStoryId] = useState(id || null);
-  const subscriptionType = useAuthStore((state) => state.subscriptionType);
+  const isSubcriptionActive = useAuthStore(
+    (state) => state.isSubcriptionActive
+  );
   const role = useAuthStore((state) => state.role);
   const { userId } = useAuthStore();
   const { token } = useAuthStore();
-
   const editor = useEditor({
     extensions: [
       Document,
@@ -284,7 +285,7 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,contributo
           </div>
         </div>
       </div>
-      {subscriptionType === "free" && <Subscription />}
+      {!isSubcriptionActive  && <Subscription />}
       <ToastContainer />
     </div>
   );

@@ -32,6 +32,5 @@ const storySchema = new mongoose.Schema({
   },
   contributors: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
-
 const Story = mongoose.model("Story", storySchema);
 module.exports = Story;

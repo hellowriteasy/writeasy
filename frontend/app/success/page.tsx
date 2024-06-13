@@ -1,26 +1,33 @@
+"use client"
 import Link from 'next/link';
 import { FaCheckCircle } from 'react-icons/fa';
-import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import axios from 'axios'
 const Success = () => {
-  const router = useRouter();
-  const { session_id } = router.query;
+  // Get the current URL
+  const currentUrl = window.location.href;
+
+  // Extract query parameters using URLSearchParams
+  const queryParams = new URLSearchParams(currentUrl.split("?")[1]);
+
+  // Get the session_id parameter
+  const sessionId = queryParams.get("session_id");
 
   useEffect(() => {
-    if (session_id) {
-      axios.post('http://localhost:8000/api/payments/confirm-checkout-session', {
-        stripe_session_id: session_id
-      })
-      .then(response => {
-        console.log(response.data);
-        // Handle success response
-      })
-      .catch(error => {
-        console.error("Error confirming checkout session", error);
-      });
+    if (sessionId) {
+      axios
+        .post("http://localhost:8000/api/payments/confirm-checkout-session", {
+          stripe_session_id: sessionId,
+        })
+        .then((response) => {
+          console.log(response.data);
+          // Handle success response
+        })
+        .catch((error) => {
+          console.error("Error confirming checkout session", error);
+        });
     }
-  }, [session_id]);
+  }, [sessionId]);
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-lg shadow-lg">
@@ -34,10 +41,11 @@ const Success = () => {
           </p>
         </div>
         <div className="mt-8">
-          <Link href="/" className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-            
-              Go to Homepage
-            
+          <Link
+            href="/"
+            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-black hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            Go to Homepage
           </Link>
         </div>
       </div>

@@ -1,3 +1,4 @@
+"use client"
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -6,7 +7,7 @@ const Sidebar = () => {
   const path = usePathname();
 
   return (
-    <div className="w-64 h-full bg-slate-900 rounded-sm sticky top-0 text-white font-poppins font-bold p-6">
+    <div className="w-64 h-screen bg-white shadow-md rounded-sm sticky top-0 text-white font-poppins font-bold p-6">
       <ul className="space-y-4">
         {links.map((link) => {
           const isActive = path.startsWith(`/admin/${link}`);

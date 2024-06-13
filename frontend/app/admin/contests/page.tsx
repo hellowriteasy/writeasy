@@ -4,8 +4,8 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import Navbar from "../../components/admin/Navbar";
 import Card from "../../components/admin/contests/CardAdd";
-import Sidebar from "@/app/components/admin/Sidebar";
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
+import Sidebar from "@/app/components/admin/Sidebar";
 interface Contest {
   id: string;
   contestTheme: string;

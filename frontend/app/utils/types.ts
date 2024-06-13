@@ -32,3 +32,9 @@ export type TPrompt = {
   __v: number;
   description: string;
 };
+
+
+export type TContest = {
+  
+  // 
+}
