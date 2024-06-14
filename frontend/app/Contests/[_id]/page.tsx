@@ -11,7 +11,7 @@ import Cloud2 from "@/public/Game/cloud3.svg";
 import Pagination from "@/app/components/Pagination";
 import CreateContest from "./createcontest/page";
 import ViewContest from "./viewcontest/page";
-import { TContest } from "@/app/utils/types";
+import { TContest, TPrompt } from "@/app/utils/types";
 import moment from "moment";
 import PromptNotPublished from "@/app/components/Others/PromptNotPublished";
 
@@ -25,7 +25,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
   const { _id: contestId } = params;
 
   const [contest, setContest] = useState<TContest | null>(null);
-
+  const [promptList, setPromptList] = useState<TPrompt[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [hasPromptPublished, setHasPromptPublished] = useState(false);
   const [selectedPrompt, setSelectedPrompt] = useState<{
@@ -33,6 +33,30 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
     promptId: string;
     title: string;
   } | null>(null);
+
+  useEffect(() => {
+    if (!contestId) {
+      setError("Contest ID is missing.");
+      return;
+    }
+
+    const fetchPromptsOfContest = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/prompts/list/${contestId}`
+        );
+        if (response.status !== 200) {
+          throw new Error(`Error: ${response.status}`);
+        }
+        setPromptList(response.data);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        //
+      }
+    };
+    fetchPromptsOfContest();
+  }, [contestId]);
 
   useEffect(() => {
     if (!contestId) {
@@ -78,6 +102,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
   if (error) return <p>{error}</p>;
   if (!contest) return <p>No contest available at the moment.</p>;
 
+  console.log("selected prompt", selectedPrompt);
   return (
     <div className="w-full h-auto mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 h-auto ms-12">
@@ -86,19 +111,19 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
             <CreateContest
               contestId={selectedPrompt.contestId}
               promptId={selectedPrompt.promptId}
-              Prompttitle={selectedPrompt.title}
+              prompt_title={selectedPrompt.title}
             />
           ) : (
             <ViewContest
               contestId={selectedPrompt.contestId}
               promptId={selectedPrompt.promptId}
-              Prompttitle={selectedPrompt.title}
+              prompt_title={selectedPrompt.title}
             />
           )
         ) : (
           <>
-            <div className="flex justify-center mt-8">
-              <div className="p-6 mb-6 flex flex-col gap-y-4">
+            <div className="flex mt-8 ">
+              <div className="p-6 mb-6 flex flex-col gap-y-4 ">
                 <div className="flex gap-x-7  items-center">
                   <h2 className="text-4xl font-comic font-bold  ">
                     {contest.contestTheme}
@@ -114,17 +139,17 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
                 </p>
               </div>
             </div>
-            <div className="flex w-full h-auto relative mt-0 justify-around">
+            <div className="flex w-full h-auto relative mt-0 justify-around gap-x-7">
               <div className="absolute top-0 -left-40">
                 <Image src={Cloud2} alt="cloud" />
               </div>
-              <div className="gap-8 relative flex flex-col items-center">
-                  {/* <h1 className="text-6xl font-comic font-bold p-10">
+              <div className="gap-8 relative flex flex-col ">
+                {/* <h1 className="text-6xl font-comic font-bold p-10">
                     {contest.contestTheme}
                   </h1> */}
                 {hasPromptPublished ? (
-                  contest.prompts.length > 0 ? (
-                    contest.prompts.map((prompt) => (
+                  promptList.length > 0 ? (
+                    promptList.map((prompt) => (
                       <>
                         <PromptComponent
                           key={prompt._id}
@@ -135,9 +160,6 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
                           onSelectPrompt={handleSelectPrompt}
                           isActive={contest.isActive}
                         />
-                        <div className="w-full ms-28">
-                          <Pagination />
-                        </div>
                       </>
                     ))
                   ) : null
@@ -148,7 +170,9 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
                     )}
                   />
                 )}
-
+                <div className="w-full ms-28">
+                  <Pagination />
+                </div>
                 <div className="absolute bottom-80 -left-32">
                   <Image src={Cloud} alt="Cloud" />
                 </div>

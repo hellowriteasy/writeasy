@@ -52,7 +52,9 @@ const getPromptsByContestId = async (contestId) => {
 
   return contest.prompts; // Return prompts belonging to the contest
 };
-
+const getPromptsOfContestId = async (contestId) => {
+  return await Prompt.find({contestId})
+}
 module.exports = {
   createPrompt,
   getPracticePrompts,
@@ -62,4 +64,5 @@ module.exports = {
   updatePrompt,
   deletePrompt,
   getPromptsByContestId,
+  getPromptsOfContestId,
 };

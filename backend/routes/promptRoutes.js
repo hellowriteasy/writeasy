@@ -8,7 +8,8 @@ const {
   getPrompt,
   updatePrompt,
   deletePrompt,
-  getPromptsByContestId
+  getPromptsByContestId,
+  getAllPromptsOfContest
 } = require("../src/controllers/promptController");
 
 /**
@@ -186,5 +187,10 @@ router.delete("/:id", deletePrompt);
  *         description: Server error when fetching contest prompts.
  */
 router.get("/contest/:contestId", getPromptsByContestId);
+
+
+
+router.get("/list/:contestId",getAllPromptsOfContest)
+
 
 module.exports = router;

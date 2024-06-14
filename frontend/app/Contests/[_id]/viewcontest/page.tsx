@@ -30,10 +30,10 @@ interface Contest {
 interface ContestPageProps {
   contestId: string;
   promptId: string;
-  Prompttitle: string;
+  prompt_title: string;
 }
 
-const ViewContest: React.FC<ContestPageProps> = ({ contestId, promptId, Prompttitle }) => {
+const ViewContest: React.FC<ContestPageProps> = ({ contestId, promptId, prompt_title }) => {
   const [contest, setContest] = useState<Contest | null>(null);
 
   const [error, setError] = useState<string | null>(null);
@@ -98,7 +98,7 @@ const ViewContest: React.FC<ContestPageProps> = ({ contestId, promptId, Promptti
             <div className="gap-8 relative flex flex-col">
               <div className="w-[53vw]">
                 <h1 className="text-6xl font-comic font-bold p-10">
-                  {Prompttitle}
+                  {prompt_title}
                 </h1>
               </div>
               <Storycard />

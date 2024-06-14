@@ -11,10 +11,7 @@ interface CardProps {
   id: string;
 }
 
-interface Prompt {
-  promptText: string;
-  promptCategories: string[];
-}
+
 
 const Card: React.FC<CardProps> = ({ title, type = [], id }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);

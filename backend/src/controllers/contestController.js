@@ -1,8 +1,17 @@
+const Prompt = require("../models/prompt");
 const ContestService = require("../services/contestService");
 
 const createContest = async (req, res) => {
   try {
     const contest = await ContestService.createContest(req.body);
+    await Prompt.updateMany(
+      {
+        _id: { $in: contest.prompts },
+      },
+      {
+        contestId: contest._id,
+      }
+    );
     res.status(201).json(contest);
   } catch (error) {
     res.status(500).json({ message: error.message });

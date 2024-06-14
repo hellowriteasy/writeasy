@@ -1,6 +1,7 @@
 import React from "react";
 import Pencil from "@/public/Game/Pencil.svg";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface PromptProps {
   promptText: string;
@@ -19,13 +20,15 @@ const ContestPrompt: React.FC<PromptProps> = ({
   onSelectPrompt,
   isActive,
 }) => {
+  const router = useRouter()
   const handleClick = () => {
-    onSelectPrompt(contestId, promptId,"");
+    router.push(`/Contests/${contestId}/prompt/${promptId}/story/create`);
+    // onSelectPrompt(contestId, promptId,"");
   };
 
   return (
-    <div className="flex justify-center px-4 md:px-0">
-      <div className="w-full max-w-3xl h-auto md:h-40 flex relative bg-white border-2 border-gray-300 rounded-3xl overflow-hidden mb-4">
+    <div className="flex justify-center px-4 md:px-0 w-full   bg-white border-2 border-gray-300 rounded-3xl ">
+      <div className="w-full  h-auto md:h-40 flex relativeoverflow-hidden mb-4">
         <div className="px-4 py-4 md:px-6 md:py-4 w-full md:w-10/12">
           <div className="font-bold font-comic text-wrap text-base md:text-xl mb-2 overflow-hidden overflow-ellipsis whitespace-nowrap">
             {promptText}
@@ -34,15 +37,20 @@ const ContestPrompt: React.FC<PromptProps> = ({
             Category: {promptCategory.join(",")}
           </p>
         </div>
-    
-             {/* {isActive && */}
-              {/* ( */}
-                 <div
-            onClick={handleClick}
-            className="absolute right-4 top-4 md:right-10 md:top-10 flex cursor-pointer justify-end"
-          >
-            <Image src={Pencil} alt="Pencil" width={24} height={24} className="md:w-auto md:h-auto" />
-          </div>
+
+     
+        <div
+          onClick={handleClick}
+          className="absolute right-4 top-4 md:right-10 md:top-10 flex cursor-pointer justify-end"
+        >
+          <Image
+            src={Pencil}
+            alt="Pencil"
+            width={24}
+            height={24}
+            className="md:w-auto md:h-auto"
+          />
+        </div>
         {/* )} */}
       </div>
     </div>

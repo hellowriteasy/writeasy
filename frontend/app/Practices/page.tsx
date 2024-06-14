@@ -13,8 +13,7 @@ import pencilman from "@/public/Game/pensilman.svg";
 import Bee from "@/public/Game/Bee.svg";
 import LoadingAnimation from "../loading";
 import { TPrompt } from "../utils/types";
-
-
+import NotFound from "../components/Others/NotFound";
 
 const Page: React.FC = () => {
   const itemsPerPage = 5;
@@ -25,12 +24,13 @@ const Page: React.FC = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    axios.get('http://localhost:8000/api/prompts/practice-prompts')
-      .then(response => {
+    axios
+      .get("http://localhost:8000/api/prompts/practice-prompts")
+      .then((response) => {
         setPromptData(response.data);
         setIsLoading(false);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("There was an error fetching the data!", error);
         setIsLoading(false);
       });
@@ -41,13 +41,15 @@ const Page: React.FC = () => {
   };
 
   const handleSelectOption = (selectedOption: string) => {
-    console.log(selectedOption)
+    console.log(selectedOption);
     setSelectedOption(selectedOption);
     setCurrentPage(0); // Reset to the first page whenever a new option is selected
   };
 
   const filteredPrompts = selectedOption
-    ? promptData.filter(prompt => prompt.promptCategory.includes(selectedOption))
+    ? promptData.filter((prompt) =>
+        prompt.promptCategory.includes(selectedOption)
+      )
     : promptData;
 
   const offset = currentPage * itemsPerPage;
@@ -61,7 +63,9 @@ const Page: React.FC = () => {
       </div>
       <div className="w-10/12 h-screen ms-12">
         <div className="w-full h-80 relative pt-4">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold font-comic">Practice Your Craft</h1>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold font-comic">
+            Practice Your Craft
+          </h1>
           <div className="absolute top-10 right-48">
             <Image className="w-[6vw] sm-hide" src={book} alt="group" />
           </div>
@@ -73,45 +77,54 @@ const Page: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex w-full  h-auto relative -mt-10 justify-around sm:justify-start ">
+        <div className="flex w-full gap-x-5 h-auto relative -mt-10 justify-around sm:justify-start ">
           <div className="absolute -top-28 -left-32">
             <Image className="w-[10vw]" src={Bee} alt="bee" />
           </div>
           <div className="gap-8 practice-mobile-view relative flex flex-col">
             <div className="w-[50vw] flex justify-between items-center h-20">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl ps-2 sm:ps-4 md:ps-6 lg:ps-8 xl:ps-10 font-comic font-bold">
-      All Prompts
-    </h1>
-              <SelectMenu selectedOption={selectedOption} onSelectOption={handleSelectOption} />
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl ps-2 sm:ps-4 md:ps-6 lg:ps-8 xl:ps-10 font-comic font-bold">
+                All Prompts
+              </h1>
+              <SelectMenu
+                selectedOption={selectedOption}
+                onSelectOption={handleSelectOption}
+              />
             </div>
             {isLoading ? (
               <LoadingAnimation />
-            ) : (
+            ) : currentPrompts.length > 0 ? (
               currentPrompts.map((prompt) => (
                 <Prompt key={prompt._id} prompt={prompt} />
               ))
+            ) : (
+              <NotFound text={`Nothing to show for ${selectedOption} `} />
             )}
+            <div className="w-full mt-10 text-lg md:text-xl font-comic ">
+              <ReactPaginate
+                previousLabel={
+                  <FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+                }
+                nextLabel={
+                  <FaAngleRight className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+                }
+                breakLabel="..."
+                breakClassName="break-me"
+                pageCount={pageCount}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                onPageChange={handlePageClick}
+                containerClassName="flex justify-center gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
+                pageLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                previousLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                nextLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                activeClassName="bg-black text-white rounded-full"
+              />
+            </div>
           </div>
           <div className="vvsm-hide">
             <TopWriting />
           </div>
-        </div>
-        <div className="w-full mt-10 text-lg md:text-xl font-comic">
-          <ReactPaginate
-            previousLabel={<FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />}
-            nextLabel={<FaAngleRight className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />}
-            breakLabel="..."
-            breakClassName="break-me"
-            pageCount={pageCount}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
-            onPageChange={handlePageClick}
-            containerClassName="flex justify-center gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
-            pageLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
-            previousLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
-            nextLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
-            activeClassName="bg-black text-white rounded-full"
-          />
         </div>
       </div>
     </div>

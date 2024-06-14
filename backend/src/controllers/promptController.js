@@ -71,13 +71,28 @@ const deletePrompt = async (req, res) => {
 
 const getPromptsByContestId = async (req, res) => {
   try {
-    const prompts = await PromptService.getPromptsByContestId(req.params.contestId);
+    const prompts = await PromptService.getPromptsByContestId(
+      req.params.contestId
+    );
     if (!prompts) {
       return res.status(404).json({ message: "Contest not found" });
     }
     res.json(prompts);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+const getAllPromptsOfContest = async (req, res) => {
+  try {
+    const { contestId } = req.params;
+    if (!contestId) {
+      return res.status(400).json({ message: "Please provide contest id" });
+    }
+    const listOfPrompts = await PromptService.getPromptsOfContestId(contestId);
+    return res.status(200).json(listOfPrompts)
+  } catch (error) {
+    res.status(500).json({ message: error.message||"Internal server error" });
   }
 };
 
@@ -90,4 +105,5 @@ module.exports = {
   updatePrompt,
   deletePrompt,
   getPromptsByContestId,
+  getAllPromptsOfContest,
 };

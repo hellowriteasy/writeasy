@@ -13,8 +13,12 @@ const promptSchema = new mongoose.Schema({
   },
   promptType: {
     type: String,
-    enum: ["practice", "contest","game"],
+    enum: ["practice", "contest", "game"],
     required: true, // Assuming each prompt must explicitly be identified as practice or contest
+  },
+  contestId: {
+    type: mongoose.Types.ObjectId,
+    ref: "Contest",
   },
 });
 
