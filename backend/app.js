@@ -6,15 +6,16 @@ const errorHandlingMiddleware = require("./middleware/errorHandlingMiddleware");
 const bodyParser = require("body-parser");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swaggerConfig");
-const cron = require("node-cron")
+const cron = require("node-cron");
 const authRoutes = require("./routes/auth");
 const storyRoutes = require("./routes/storyRoutes");
 const promptRoutes = require("./routes/promptRoutes");
 const contestRoutes = require("./routes/contestRoutes");
 const emailRoutes = require("./routes/emailRoute");
 const collaborativeStoryRoutes = require("./routes/collaborativeStoryRoutes");
-const paymentRoutes=require("./routes/paymentRoute")
+const paymentRoutes = require("./routes/paymentRoute");
 const scheduleJob = require("./config/cron");
+const Subscription = require("./src/models/subscription");
 
 dotenv.config();
 
@@ -57,5 +58,3 @@ const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
-

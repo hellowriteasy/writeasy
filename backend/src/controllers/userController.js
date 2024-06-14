@@ -1,6 +1,7 @@
 const Subscription = require("../models/subscription");
 const User = require("../models/user");
 const AuthService = require("../services/AuthService");
+const { calculateSubscriptionRemainingDays} = require("../utils/methods");
 const authService = new AuthService();
 
 const UserController = {
@@ -29,7 +30,7 @@ const UserController = {
   },
 
   async login(req, res) {
-    const { email, password:userPassword } = req.body;
+    const { email, password: userPassword } = req.body;
     try {
       const { token, _id } = await authService.loginUser(email, userPassword);
 
@@ -37,33 +38,58 @@ const UserController = {
       const user = await User.findById(_id);
 
       const subscription = await Subscription.findOne({
-        userId:_id
-      })
+        userId: _id,
+      });
+
       const { password, ...others } = user._doc;
       const isSubcriptionActive = !!subscription?.isActive;
+      let subscriptionRemainingDays = null;
+      if (isSubcriptionActive) {
+        subscriptionRemainingDays = calculateSubscriptionRemainingDays(
+          subscription.paidAt,
+          subscription.expiresAt
+        );
+      }
+
       res.json({
         ...others,
         token,
         isSubcriptionActive,
+        subscriptionRemainingDays,
       });
     } catch (error) {
       res.status(400).json({ msg: error.message });
     }
   },
   async getUserById(req, res) {
-    const { id :user_id} = req.params;
+    const { id: user_id } = req.params;
     try {
       if (!user_id) {
         throw new Error("Please provide user id");
       }
       const user = await User.findById(user_id);
       const subscription = await Subscription.findOne({
-        userId:user_id
-      })
+        userId: user_id,
+      });
       const { password, ...others } = user._doc;
       const isSubcriptionActive = !!subscription?.isActive;
+      let subscriptionRemainingDays = null;
+      if (isSubcriptionActive) {
+        subscriptionRemainingDays = calculateSubscriptionRemainingDays(
+          subscription.paidAt,
+          subscription.expiresAt
+        );
+      }
 
-      return res.status(200).json({message:{...others,isSubcriptionActive}})
+      return res
+        .status(200)
+        .json({
+          message: {
+            ...others,
+            isSubcriptionActive,
+            subscriptionRemainingDays,
+          },
+        });
     } catch (error) {
       console.log(error);
       return res.status(500).json({

@@ -4,6 +4,7 @@ const Contest = require("../models/contest");
 const Prompt = require("../models/prompt");
 const { createCollaborativeStory } = require("./collaborativeStoryController");
 const CollaborativeStory = require("../models/collaborativeStory");
+const Story = require("../models/story");
 const gptService = new GptService(process.env.GPT_API_KEY); // Initialize GPT service
 
 const createStory = async (req, res) => {
@@ -43,7 +44,7 @@ const createStory = async (req, res) => {
 // Function to handle scoring
 async function processStoryForScoring(storyId, content, wordCount) {
   try {
-    console.log("processing scoring", storyId,content,wordCount);
+    console.log("processing scoring", storyId, content, wordCount);
 
     const score = await gptService.generateScore(content); // Get score from GPT API
     const correctionSummary = await gptService.generateCorrectionSummary(
@@ -51,7 +52,7 @@ async function processStoryForScoring(storyId, content, wordCount) {
       score.corrections,
       wordCount
     );
-    console.log("correction summmary",correctionSummary)
+    console.log("correction summmary", correctionSummary);
     await StoryService.updateStory(storyId, {
       score: score.score,
       corrections: score.corrections,
@@ -88,7 +89,7 @@ const getStoriesByUserAndType = async (req, res) => {
     );
     res.json(stories);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({ message: error.message });
   }
 };
@@ -174,6 +175,44 @@ const getTopContestStories = async (req, res) => {
   }
 };
 
+const getTopStoriesByPrompt = async (req, res) => {
+  const { prompt_id } = req.params;
+  const page = req.query.page || 1; // Default page is 1
+  const perPage = req.query.perPage || 10; // Default page size is 10
+  const skip = (page - 1) * perPage;
+  try {
+    const topStories = await Story.find({
+      prompt: prompt_id,
+    })
+      .populate("user")
+      .populate("contest")
+      .populate("contributors")
+      .sort({ score: "desc" })
+      .skip(skip)
+      .limit(perPage);
+
+    const total = await Story.countDocuments({
+      prompt: prompt_id,
+    });
+
+    return res.status(200).json({
+      data: topStories,
+      pageData: {
+        page,
+        total,
+        perPage,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error?.message || "Internal server error",
+      success: false,
+    });
+  }
+};
+
+
+
 module.exports = {
   createStory,
   getStories,
@@ -183,4 +222,5 @@ module.exports = {
   submitStoryToContest,
   getTopContestStories,
   getStoriesByUserAndType,
+  getTopStoriesByPrompt,
 };

@@ -6,9 +6,9 @@ const {
   updateStory,
   deleteStory,
   getStory,
-  submitStoryToContest,
   getTopContestStories,
-  getStoriesByUserAndType
+  getStoriesByUserAndType,
+  getTopStoriesByPrompt,
 } = require("../src/controllers/storyController");
 const { scoreStory } = require("../src/controllers/StoryScoreController");
 
@@ -80,10 +80,6 @@ router.get("/", getStories);
  *         description: Error occurred while fetching the stories.
  */
 router.get("/user", getStoriesByUserAndType);
-
-module.exports = router;
-
-
 
 /**
  * @openapi
@@ -226,6 +222,52 @@ router.delete("/:id", deleteStory);
  *         description: Error occurred while processing the story.
  */
 router.post("/score", scoreStory);
+
+/**
+ * @openapi
+ * /api/stories/top-story/prompt/{prompt_id}:
+ *   get:
+ *     tags:
+ *       - Stories
+ *     summary: Get top stories by prompt ID
+ *     description: Retrieves the top stories associated with a specified prompt ID.
+ *     parameters:
+ *       - in: path
+ *         name: prompt_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the prompt to retrieve top stories for.
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         description: The page number for pagination (default is 1).
+ *       - in: query
+ *         name: perPage
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         description: The number of stories per page for pagination (default is 10).
+ *     responses:
+ *       '200':
+ *         description: Successful response with top stories.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Story'
+ *       '400':
+ *         description: Invalid request parameters.
+ *       '404':
+ *         description: Prompt not found or no stories associated with the prompt.
+ *       '500':
+ *         description: Error occurred while processing the request.
+ */
+
+router.get("/top-story/prompt/:prompt_id", getTopStoriesByPrompt);
 
 
 module.exports = router;

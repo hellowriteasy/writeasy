@@ -24,7 +24,6 @@ const closeContestAfterDeadline = async () => {
       );
     }
   } catch (error) {
-    //
     console.log(error);
     console.log(`Error while closing the contest Cron Job `, error?.message);
   }

@@ -1,11 +1,11 @@
-'use client';
-import { useState } from 'react';
-import axios from 'axios';
+"use client";
+import { useState } from "react";
+import axios from "axios";
 
-
-import Card from '../../../components/admin/contests/CardAdd';
-import Modal from '@/app/components/admin/contests/ContestModal';
-import ProtectedRoute from '@/app/utils/ProtectedRoute';
+import Card from "../../../components/admin/contests/CardAdd";
+import Modal from "@/app/components/admin/contests/ContestModal";
+import ProtectedRoute from "@/app/utils/ProtectedRoute";
+import { useCustomToast } from "@/app/utils/hooks/useToast";
 
 interface Prompt {
   _id: string;
@@ -17,76 +17,188 @@ interface Prompt {
 const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [promptCards, setPromptCards] = useState<Prompt[]>([]);
-  const [deadline, setDeadline] = useState('');
-  const [theme, setTheme] = useState('');
-  const [error, setError] = useState('');
+  const [contestDetails, setContestDetails] = useState({
+    promptPublishDate: new Date(),
+    submissionDeadline: new Date(),
+    topWritingPublishDate: new Date(),
+    description: "",
+    contestTheme: "",
+  });
 
+  const toast = useCustomToast();
   const handleAddClick = () => {
     setIsModalOpen(true);
   };
 
   const handleSubmitContest = async () => {
     // Validation for deadline
-    const currentDate = new Date().toISOString().split('T')[0];
-    if (deadline < currentDate) {
-      setError('Deadline cannot be earlier than today.');
-      return;
-    }
+    // const currentDate = new Date().toISOString().split("T")[0];
+    // if (deadline < currentDate) {
+    //   setError("Deadline cannot be earlier than today.");
+    //   return;
+    // }
 
     try {
-      const response = await axios.post('http://localhost:8000/api/contests', {
-        prompts: promptCards.map((prompt) => prompt._id),
-        contestTheme: theme,
-        submissionDeadline: deadline,
-      });
-      // Reset form and error after successful submission
-      setDeadline('');
-      setTheme('');
-      setPromptCards([]);
-      setError('');
+      const { status } = await axios.post(
+        "http://localhost:8000/api/contests",
+        {
+          prompts: promptCards.map((prompt) => prompt._id),
+          ...contestDetails,
+        }
+      );
+      if (status === 201) {
+        setContestDetails((_) => ({
+          submissionDeadline: new Date(),
+          promptPublishDate: new Date(),
+          topWritingPublishDate: new Date(),
+          description: "",
+          contestTheme: "",
+        }));
+        toast("Contest created successfully.", "success");
+      }
     } catch (error) {
-      setError('An error occurred while submitting the contest.');
+      toast("Faield to create contest.", "error");
     }
+  };
+
+  const handleInputChange = (name: string, value: string | Date) => {
+    // Validate the entered dates
+    // Validate the entered dates
+    let warning = "";
+    if (name === "submissionDeadline") {
+      // Ensure submissionDeadline is before topWritingPublishDate
+      if (value >= contestDetails.topWritingPublishDate) {
+        warning =
+          "Submission deadline must be before top writing publish date.";
+      }
+    } else if (name === "promptPublishDate") {
+      // Ensure promptPublishDate is before submissionDeadline
+      if (value >= contestDetails.submissionDeadline) {
+        warning = "Prompt publish date must be before submission deadline.";
+      }
+    } else if (name === "topWritingPublishDate") {
+      // Ensure topWritingPublishDate is after submissionDeadline
+      if (value <= contestDetails.submissionDeadline) {
+        warning = "Top writing publish date must be after submission deadline.";
+      }
+    }
+    if (warning) {
+      return toast(warning, "warning");
+    }
+
+    setContestDetails((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handlePromptAdd = (prompt: Prompt) => {
     setPromptCards([...promptCards, prompt]);
   };
 
+  console.log(contestDetails);
+
   return (
     <ProtectedRoute>
       <div>
-
         <div className="flex h-screen">
-    
           <div className="flex-1 p-6">
             <div className="bg-white shadow-md rounded-lg p-4 mb-4">
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="deadline">
-                  Deadline
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="deadline"
+                >
+                  Submission Deadline
+                </label>
+                <input
+                  id="submissionDeadline"
+                  name="submissionDeadline"
+                  type="date"
+                  className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                  onChange={(e) =>
+                    handleInputChange(e.target.name, e.target.value)
+                  }
+                  value={contestDetails.submissionDeadline}
+                />
+                <i>Deadline for story submission / contest end time</i>
+              </div>
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="deadline"
+                >
+                  Prompt Publish Date
                 </label>
                 <input
                   id="deadline"
                   type="date"
+                  name="promptPublishDate"
                   className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                  onChange={(e) => setDeadline(e.target.value)}
-                  value={deadline}
+                  onChange={(e) =>
+                    handleInputChange(e.target.name, e.target.value)
+                  }
+                  value={contestDetails.promptPublishDate}
                 />
+                <i>Time to publish the prompt in a contest</i>
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="theme">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="deadline"
+                >
+                  Top writing publish date
+                </label>
+                <input
+                  id="promptPublishDate"
+                  type="date"
+                  name="topWritingPublishDate"
+                  className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                  onChange={(e) =>
+                    handleInputChange(e.target.name, e.target.value)
+                  }
+                  value={contestDetails.topWritingPublishDate}
+                />
+                <i>Date to publish the top writings of a contest</i>
+              </div>
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="theme"
+                >
                   Theme
                 </label>
                 <input
                   id="theme"
                   type="text"
+                  name="contestTheme"
                   className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                  onChange={(e) => setTheme(e.target.value)}
-                  value={theme}
+                  onChange={(e) =>
+                    handleInputChange(e.target.name, e.target.value)
+                  }
+                  value={contestDetails.contestTheme}
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="theme"
+                >
+                  Description
+                </label>
+                <input
+                  id="theme"
+                  type="text"
+                  name="description"
+                  className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                  onChange={(e) =>
+                    handleInputChange(e.target.name, e.target.value)
+                  }
+                  value={contestDetails.description}
                 />
               </div>
 
-              {error && <div className="text-red-500 mb-4">{error}</div>}
+              {/* {error && <div className="text-red-500 mb-4">{error}</div>} */}
 
               <button
                 onClick={handleAddClick}
@@ -95,7 +207,11 @@ const Page = () => {
                 Add Prompt
               </button>
               {promptCards.map((prompt, index) => (
-                <Card key={index} title={prompt.title} type={prompt.promptCategories.join(', ')} />
+                <Card
+                  key={index}
+                  title={prompt.title}
+                  type={prompt.promptCategories.join(", ")}
+                />
               ))}
               <button
                 onClick={handleSubmitContest}
@@ -106,7 +222,12 @@ const Page = () => {
             </div>
           </div>
         </div>
-        {isModalOpen && <Modal setIsModalOpen={setIsModalOpen} onAddPrompt={handlePromptAdd} />}
+        {isModalOpen && (
+          <Modal
+            setIsModalOpen={setIsModalOpen}
+            onAddPrompt={handlePromptAdd}
+          />
+        )}
       </div>
     </ProtectedRoute>
   );

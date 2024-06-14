@@ -4,7 +4,8 @@ export type TUser = {
   email: string;
   role: string;
   lastLogin: string;
-  isSubcriptionActive:boolean,
+  isSubcriptionActive: boolean;
+  subscriptionRemainingDays: number | null;
   __v: number;
 };
 
@@ -33,8 +34,14 @@ export type TPrompt = {
   description: string;
 };
 
-
 export type TContest = {
-  
-  // 
-}
+  _id: string;
+  contestTheme: string;
+  description: string;
+  isActive: boolean;
+  prompts: TPrompt[];
+  promptPublishDate: string; // Assuming ISO 8601 format
+  submissionDeadline: string; // Assuming ISO 8601 format
+  topWritingPublishDate: string; // Assuming ISO 8601 format
+  __v: number;
+};

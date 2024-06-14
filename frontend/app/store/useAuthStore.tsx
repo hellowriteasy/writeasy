@@ -8,6 +8,7 @@ interface AuthState {
   username: string | null;
   role: string | null;
   subscriptionType: string | null;
+  subscriptionRemainingDays?: number | null;
   isSubcriptionActive?: boolean;
   login: (userId: string, token: string) => void;
   logout: () => void;
@@ -23,8 +24,21 @@ const useAuthStore = create<AuthState>((set) => {
       try {
         const response = await axios.get(`http://localhost:8000/api/auth/user/${userId}`);
         if (response.status === 200) {
-          const { username, role, subscriptionType ,isSubcriptionActive} = response.data.message;
-          set({ username, role, subscriptionType, isSubcriptionActive });
+          const {
+            username,
+            role,
+            subscriptionType,
+            isSubcriptionActive,
+            subscriptionRemainingDays,
+          } = response.data.message;
+          set({
+            username,
+            role,
+            subscriptionType,
+            isSubcriptionActive,
+            subscriptionRemainingDays,
+
+          });
         } else {
           throw new Error(`Error: ${response.status}`);
         }
@@ -44,6 +58,7 @@ const useAuthStore = create<AuthState>((set) => {
       token: null,
       username: null,
       role: null,
+      
       subscriptionType: null,
       login: async (userId: string, token: string) => {
         localStorage.setItem("userId", userId);

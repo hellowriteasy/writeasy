@@ -26,12 +26,12 @@ const getAllStories = async () => {
 const getStoriesByUserAndType = async (userId, storyType) => {
   const objectId = new mongoose.Types.ObjectId(userId);
   if (storyType === "practice" || storyType === "contest") {
-    return await Story.find({ user: objectId, storyType: storyType }).populate(
-      "user"
-    ).populate({
-      path: "contributors",
-      select:{password:0}
-    })
+    return await Story.find({ user: objectId, storyType: storyType })
+      .populate("user")
+      .populate({
+        path: "contributors",
+        select: { password: 0 },
+      });
   } else if (storyType === "game") {
     return await Story.find({
       storyType: "game",

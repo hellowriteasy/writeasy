@@ -4,10 +4,10 @@ import Image from "next/image";
 
 interface PromptProps {
   promptText: string;
-  promptCategory: string;
+  promptCategory: string[];
   contestId: string;
   promptId: string;
-  onSelectPrompt: (contestId: string, promptId: string) => void;
+  onSelectPrompt: (contestId: string, promptId: string,title:string) => void;
   isActive: boolean;
 }
 
@@ -20,7 +20,7 @@ const ContestPrompt: React.FC<PromptProps> = ({
   isActive,
 }) => {
   const handleClick = () => {
-    onSelectPrompt(contestId, promptId);
+    onSelectPrompt(contestId, promptId,"");
   };
 
   return (
@@ -31,7 +31,7 @@ const ContestPrompt: React.FC<PromptProps> = ({
             {promptText}
           </div>
           <p className="text-gray-700 font-bold text-wrap font-comic pt-4 md:pt-8 text-sm md:text-base">
-            Category: {promptCategory}
+            Category: {promptCategory.join(",")}
           </p>
         </div>
     

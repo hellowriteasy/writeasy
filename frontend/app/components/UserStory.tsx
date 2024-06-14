@@ -27,7 +27,7 @@ const Card: React.FC<CardProps> = ({ id, title, description = '' }) => {
   function deleteClick() {
     // Show confirmation message using React Toastify
     toast.warn('Are you sure you want to delete this item?', {
-      position: toast.POSITION.TOP_CENTER,
+      position: "top-center",
       autoClose: false,
       closeOnClick: false,
       draggable: true,
@@ -40,12 +40,12 @@ const Card: React.FC<CardProps> = ({ id, title, description = '' }) => {
         axios.delete(`http://localhost:8000/api/stories/${id}`)
           .then(() => {
             toast.success('Item deleted successfully!', {
-              position: toast.POSITION.TOP_CENTER,
+              position: "top-center",
             });
           })
           .catch((error) => {
             toast.error('Failed to delete item.', {
-              position: toast.POSITION.TOP_CENTER,
+              position: "top-center",
             });
             console.error('Error deleting item:', error);
           });
