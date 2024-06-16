@@ -9,6 +9,7 @@ const {
   getTopContestStories,
   getStoriesByUserAndType,
   getTopStoriesByPrompt,
+  getStoryOfAuserByPrompt,
 } = require("../src/controllers/storyController");
 const { scoreStory } = require("../src/controllers/StoryScoreController");
 
@@ -267,7 +268,6 @@ router.post("/score", scoreStory);
  *         description: Error occurred while processing the request.
  */
 
-router.get("/top-story/prompt/:prompt_id", getTopStoriesByPrompt);
-
+router.get("/user/:prompt_id/:user_id", getStoryOfAuserByPrompt);
 
 module.exports = router;

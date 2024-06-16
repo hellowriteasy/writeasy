@@ -50,52 +50,65 @@ const createCollaborativeStory = [
 const inviteCollaborators = [
   authMiddleware,
   async (req, res) => {
-    const { storyID, email } = req.body;
+    let { storyID, email, promptID, userID } = req.body;
+    let story;
     try {
-      const story = await Story.findById(storyID);
-      if (!story) {
-        console.log("Story not found with ID:", storyID);
-        return res.status(404).json({ message: "Story not found." });
+      if (storyID) {
+        story = await Story.findById(storyID);
+        if (!story) {
+          console.log("Story not found with ID:", storyID);
+          return res.status(404).json({ message: "Story not found." });
+        }
+      } else {
+        story = await Story.create({
+          prompt: promptID,
+          storyType: "game",
+          user: userID,
+        });
       }
 
-      const user = await User.findOne({ email: email });
-      if (!user) {
-        console.log("User not found with email:", email);
-        return res.status(404).json({ message: "User not found." });
+      console.log("story", story);
+
+      const newContributorUsers = await User.find({
+        email: {
+          $in: email,
+        },
+      });
+
+      console.log("new contributors", newContributorUsers);
+
+      if (newContributorUsers.length !== email.length) {
+        return res.status(400).json({
+          message:
+            "Please check the email is valid . Some of the user not found with given email. ",
+        });
       }
 
-      const userId = user._id;
-      if (!userId) {
-        console.error("User ID is null for user with email:", email);
-        return res
-          .status(500)
-          .json({ message: "Internal error: User ID is null." });
-      }
-
-      // if (user.subscriptionType !== "paid") {
-      //   return res
-      //     .status(403)
-      //     .json({ message: "User does not have a paid subscription." });
-      // }
-      console.log("debug 1", story);
+      console.log("new contributors", newContributorUsers);
 
       const isAlreadyContributor = story.contributors.some((contributorId) => {
-        return contributorId && contributorId.toString() === userId.toString();
+        return newContributorUsers.some(
+          (user) => user._id.toString() === contributorId.toString()
+        );
       });
-      console.log("debug ", story.contributors);
+
+      console.log(" prev contributors ", story.contributors);
 
       if (isAlreadyContributor) {
-        res.status(400).json({ message: "User is already a contributor." });
-      } else {
-        console.log("debug 2", story.contributors);
-
-        story.contributors.push(userId);
-        console.log("debug 3", story.contributors);
-        await story.save();
-        res
-          .status(200)
-          .json({ message: "User invited successfully as contributor." });
+        return res.status(400).json({
+          message: "One of the user of these email is already a contributor.",
+        });
       }
+      story.contributors.push(
+        newContributorUsers.map((user) => user._id.toString())
+      );
+
+      console.log(" new  story ", story);
+
+      await story.save();
+      res
+        .status(200)
+        .json({ message: "User invited successfully as contributor." });
     } catch (error) {
       console.error("Error inviting collaborator:", error);
       res.status(500).json({ message: "Server error occurred." });

@@ -1,14 +1,15 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
-import cloud2 from '@/public/Game/cloud2.svg';
-import shootingstar from '@/public/Game/shotting_star.svg';
-import Storytitle from '@/app/components/Others/Storytitle';
-import axios from 'axios';
-import StoryEditor from '../[_id]/play/page';
-import { TStory } from '@/app/utils/types';
-import ReactPaginate from 'react-paginate';
-import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
+"use client";
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import cloud2 from "@/public/Game/cloud2.svg";
+import shootingstar from "@/public/Game/shotting_star.svg";
+import Storytitle from "@/app/components/Others/Storytitle";
+import axios from "axios";
+import StoryEditor from "../[_id]/play/page";
+import { TStory } from "@/app/utils/types";
+import ReactPaginate from "react-paginate";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 interface PageProps {
   params: {
@@ -24,15 +25,15 @@ const Page: React.FC<PageProps> = ({ params }) => {
   const [selectedStory, setSelectedStory] = useState<TStory | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [currentPage, setCurrentPage] = useState(0); // State to track the current page
-
+  const router = useRouter();
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/stories');
+        const response = await axios.get("http://localhost:8000/api/stories");
         const fetchedStories: TStory[] = response.data;
         setStories(fetchedStories);
       } catch (error) {
-        console.error('Error fetching stories:', error);
+        console.error("Error fetching stories:", error);
       }
     };
 
@@ -41,7 +42,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
 
   useEffect(() => {
     const filtered = stories.filter(
-      (story) => story.storyType === 'game' && story.prompt === params._id
+      (story) => story.storyType === "game" && story.prompt === params._id
     );
     setFilteredStories(filtered);
   }, [stories, params._id]);
@@ -52,6 +53,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
   };
 
   const handleCreateStory = () => {
+    router.push(`/Games/${params._id}/play`);
     setSelectedStory(null);
     setIsCreating(true);
   };
@@ -64,9 +66,9 @@ const Page: React.FC<PageProps> = ({ params }) => {
   const currentStories = filteredStories.slice(offset, offset + itemsPerPage);
   const pageCount = Math.ceil(filteredStories.length / itemsPerPage);
 
-  if (selectedStory || isCreating) {
-    return <StoryEditor id={params._id} />;
-  }
+  // if (selectedStory || isCreating) {
+  //   return <StoryEditor id={params._id} />;
+  // }
 
   return (
     <div className="w-screen font-comic h-auto flex flex-col">

@@ -88,6 +88,21 @@ const getTopContestStories = async () => {
     .sort({ score: -1 })
     .limit(top20PercentCount);
 };
+const getStoryofUserByPromptId = async (user_id, prompt_id) => {
+  return await Story.findOne({
+    prompt: prompt_id,
+    $or: [
+      {
+        user: user_id,
+      },
+      {
+        contributors: {
+          $in: [user_id],
+        },
+      },
+    ],
+  });
+};
 
 module.exports = {
   createStory,
@@ -97,4 +112,5 @@ module.exports = {
   getStoryById,
   getTopContestStories,
   getStoriesByUserAndType,
+  getStoryofUserByPromptId,
 };
