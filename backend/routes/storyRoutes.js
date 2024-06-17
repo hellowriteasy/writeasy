@@ -10,6 +10,7 @@ const {
   getStoriesByUserAndType,
   getTopStoriesByPrompt,
   getStoryOfAuserByPrompt,
+  getStoriesByContentAndPrompt,
 } = require("../src/controllers/storyController");
 const { scoreStory } = require("../src/controllers/StoryScoreController");
 
@@ -270,4 +271,60 @@ router.post("/score", scoreStory);
 
 router.get("/user/:prompt_id/:user_id", getStoryOfAuserByPrompt);
 
+/**
+ * @swagger
+ * /api/stories/contest/prompt:
+ *   get:
+ *     summary: Retrieve stories filtered by contest ID and/or prompt ID
+ *     tags: [Stories]
+ *     parameters:
+ *       - in: query
+ *         name: prompt_id
+ *         schema:
+ *           type: string
+ *         description: Optional. Filter stories by prompt ID.
+ *       - in: query
+ *         name: contest_id
+ *         schema:
+ *           type: string
+ *         description: Optional. Filter stories by contest ID.
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Optional. The page number of results to retrieve.
+ *       - in: query
+ *         name: perPage
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 10
+ *         description: Optional. Number of stories per page.
+ *     responses:
+ *       200:
+ *         description: A list of stories that match the query parameters.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Story'
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Error message.
+ */
+
+
+router.get("/contest/prompt", getStoriesByContentAndPrompt);
+
 module.exports = router;
+

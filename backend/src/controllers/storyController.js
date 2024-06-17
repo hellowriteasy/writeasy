@@ -8,7 +8,7 @@ const gptService = new GptService(process.env.GPT_API_KEY); // Initialize GPT se
 
 const createStory = async (req, res) => {
   try {
-    const { content, user, storyType } = req.body;
+    const { content } = req.body;
     // Calculate word count
     const wordCount = content.split(" ").length;
 
@@ -223,6 +223,27 @@ const getStoryOfAuserByPrompt = async (req, res) => {
   }
 };
 
+const getStoriesByContentAndPrompt = async (req, res) => {
+  const { prompt_id, contest_id } = req.query;
+  const page = req.query.page || 1; // Default page is 1
+  const perPage = req.query.perPage || 10; // Default page size is 10
+  const skip = (page - 1) * perPage;
+
+  try {
+    const stories = await Story.find({
+      ...(contest_id ? { contest: contest_id } : null),
+      ...(prompt_id ? { prompt: prompt_id } : null),
+    })
+      .sort({ createdAt: "desc" })
+      .skip(skip)
+      .limit(perPage);
+
+    return res.status(200).json(stories);
+  } catch (error) {
+    res.status(500).json({ message: error?.message || "Something went wrong" });
+  }
+};
+
 module.exports = {
   createStory,
   getStories,
@@ -234,4 +255,5 @@ module.exports = {
   getStoriesByUserAndType,
   getTopStoriesByPrompt,
   getStoryOfAuserByPrompt,
+  getStoriesByContentAndPrompt,
 };
