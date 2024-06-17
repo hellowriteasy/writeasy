@@ -7,6 +7,7 @@ import Bee from "@/public/Game/cloud3.svg";
 import { SimpleEditor } from "@/app/components/WriteStory";
 import useAuthStore from '@/app/store/useAuthStore';
 import Subscription from "@/app/components/Subscription"
+import { axiosInstance } from '@/app/utils/config/axios';
 
 interface Prompt {
   _id: string;
@@ -29,11 +30,11 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
   const [taskType, setTaskType] = useState("");
   const [input, setInput] = useState("");
   const {role, isSubcriptionActive}=useAuthStore();
-
+  const AxiosIns=axiosInstance("")
   useEffect(() => {
     if (params.id) {
       // Fetch the specific prompt data based on promptId
-      axios.get(`http://localhost:8000/api/prompts/${params.id}`)
+      AxiosIns.get(`http://localhost:8000/api/prompts/${params.id}`)
         .then(response => {
           setPrompt(response.data);
         })

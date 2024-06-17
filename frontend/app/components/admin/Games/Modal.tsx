@@ -1,6 +1,7 @@
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import axios from 'axios';
+import { axiosInstance } from '@/app/utils/config/axios';
 
 interface ModalProps {
   setIsModalOpen: (isOpen: boolean) => void;
@@ -10,10 +11,10 @@ const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen }) => {
   const [promptTitle, setPromptTitle] = useState('');
   const [description, setDescription] = useState('');
   const [error, setError] = useState<string | null>(null);
-
+  const AxiosIns=axiosInstance("")
   const handleUpdate = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/api/prompts', {
+      const response = await AxiosIns.post('/prompts', {
         title: promptTitle,
         description: description,
         promptType: 'game'

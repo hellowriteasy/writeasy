@@ -20,6 +20,7 @@ import PDF from "./PDF";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useAuthStore from "../store/useAuthStore";
+import { axiosInstance } from "../utils/config/axios";
 
 const Page = ({ inputText, corrected }: { inputText: string; corrected: string; }) => {
   const [improved, setImproved] = useState<React.ReactNode[]>([]);
@@ -226,7 +227,7 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
 
   type THandleClickFeature = (type: "improve" | "grammer" | "rewrite", event: React.MouseEvent<HTMLButtonElement> | MouseEvent) => void;
   const userId = useAuthStore((state) => state.userId);
-
+   const AxiosIns=axiosInstance("")
   const handleClickFeature: THandleClickFeature = async (type, event) => {
     event.preventDefault();
     try {
@@ -249,8 +250,8 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
         prompt: _id
       };
       
-      const { data, status } = await axios.post(
-        "http://localhost:8000/api/stories/score",
+      const { data, status } = await AxiosIns.post(
+        "stories/score",
         payload
       );
       toast.success("Story saved succesfully");
@@ -424,7 +425,7 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
           </div>
         </div>
         <div className=" w-[70vw]  rounded-3xl">
-          <EditorContent className=" scroll-m-2 w-[100%] h-[30vw] mt-10 " editor={editor} />
+          <EditorContent className=" scroll-m-2 w-[100%] h-[40vw] mt-10 " editor={editor} />
         </div>
       </div>
       <div className="absolute -left-2/3">

@@ -6,6 +6,7 @@ import Card from "../../../components/admin/contests/CardAdd";
 import Modal from "@/app/components/admin/contests/ContestModal";
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
 import { useCustomToast } from "@/app/utils/hooks/useToast";
+import { axiosInstance } from "@/app/utils/config/axios";
 
 interface Prompt {
   _id: string;
@@ -37,10 +38,10 @@ const Page = () => {
     //   setError("Deadline cannot be earlier than today.");
     //   return;
     // }
-
+  const AxiosIns=axiosInstance("")
     try {
-      const { status } = await axios.post(
-        "http://localhost:8000/api/contests",
+      const { status } = await AxiosIns.post(
+      "/api/contests",
         {
           prompts: promptCards.map((prompt) => prompt._id),
           ...contestDetails,

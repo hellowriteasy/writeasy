@@ -17,6 +17,7 @@ import Sun from "../../public/Loginsignup-img/sun.svg";
 import logo from "../../public/Landingpage-img/logo.svg";
 import InputField from "../components/InputFIelds";
 import Link from "next/link";
+import { axiosInstance } from "../utils/config/axios";
 
 const schema = z.object({
   email: z.string().email(),
@@ -42,10 +43,10 @@ const Signup = () => {
   } = useForm<FormFields>({
     resolver: zodResolver(schema),
   });
-
+  const AxiosIns=axiosInstance("")
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      await axios.post("http://localhost:8000/api/auth/register", {
+      await AxiosIns.post("/auth/register", {
         email: data.email,
         password: data.password,
         username: data.username
@@ -60,11 +61,11 @@ const Signup = () => {
   return (
     <div className="overflow-y-hidden two-line-bg">
       <Link href="/">
-        <div className="ms-10 mt-10">
+        <div className="ms-10 sm-hide mt-10">
           <Image src={logo} alt="logo" />
         </div>
       </Link>
-      <div className="flex flex-col -mt-20  items-center overflow-hidden">
+      <div className="flex flex-col   items-center overflow-hidden">
         <h1 className="text-center text-4xl pt-6 font-comic">
           <span className="font-bold">Hello!</span> Welcome to Writeasy
         </h1>
@@ -104,30 +105,30 @@ const Signup = () => {
           <h1 className="text-center font-comic pt-6">
             Already have an account? <Link href="/login" className="font-bold underline">Login</Link>
           </h1>
-          <div className="absolute w-32 h-16 -top-4 -right-28">
+          <div className="absolute w-32 h-16 vvsm-hide -top-4 -right-28">
             <Image src={Rocket} alt="rocket" />
           </div>
         </form>
-        <div className="absolute top-60 w-20 h-10 left-10">
+        <div className="absolute top-60 w-20 vsm-hide h-10 left-10">
           <Image src={Group2} alt="group" />
         </div>
-        <div className="absolute top-20 right-0">
+        <div className="absolute top-20 sm-hide right-0">
           <Image src={Vector} alt="vector" />
         </div>
 
-        <div className="absolute left-80 top-28">
+        <div className="absolute md-hide left-80 top-28">
           <Image src={Sun} alt="sun" />
         </div>
       </div>
 
       <div className="relative">
-        <div className="absolute left-80 bottom-24">
+        <div className="absolute md-hide left-80 bottom-24">
           <Image src={Group} height={200} alt="group" />
         </div>
-        <div className="absolute right-60 bottom-24">
+        <div className="absolute md-hide right-60 bottom-24">
           <Image src={Group3} height={200} alt="group3" />
         </div>
-        <div className="absolute right-6 bottom-20">
+        <div className="absolute vsm-hide right-6 bottom-20">
           <Image src={Vector1} height={300} alt="vector1" />
         </div>
         <Image className="w-screen mt-10"  alt="earth" src={Earth} />

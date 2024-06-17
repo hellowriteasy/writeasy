@@ -6,24 +6,20 @@ import axios from "axios";
 import CardAdd from "@/app/components/admin/Games/CardAdd";
 import ModalGame from "@/app/components/admin/Games/Modal";
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
+import {TPrompt} from "@/app/utils/types"
+import { axiosInstance } from "@/app/utils/config/axios";
 
-interface GamePrompt {
-  _id: string;
-  title: string;
-  description:string;
-  promptType: string;
-}
 
 const Games = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [gamePrompts, setGamePrompts] = useState<GamePrompt[]>([]);
+  const [gamePrompts, setGamePrompts] = useState<TPrompt[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  const AxiosIns=axiosInstance("")
   useEffect(() => {
     const fetchGamePrompts = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/prompts/game-prompts");
+        const response = await AxiosIns.get("prompts/game-prompts");
         setGamePrompts(response.data);
         setIsLoading(false);
       } catch (err) {

@@ -27,7 +27,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
     return (
       <div className="relative w-full flex flex-col justify-center items-center mt-4">
         <input
-          className="border border-gray-500 w-96 z-10 rounded-3xl indent-7 h-12 focus:outline-none focus:border-yellow-600"
+          className="border border-gray-500   w-96 z-10 rounded-3xl indent-7 h-12  focus:outline-none focus:border-yellow-600"
           type={showPassword ? "text" : types}
           placeholder={placeholder}
           ref={ref}

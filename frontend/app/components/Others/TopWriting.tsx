@@ -3,6 +3,7 @@ import axios from 'axios';
 import Image from 'next/image';
 import Crown from '@/public/Game/Crown.svg';
 import Link from 'next/link';
+import { axiosInstance } from '@/app/utils/config/axios';
 interface Story {
   _id: string;
   title: string;
@@ -14,9 +15,9 @@ const TopWriting: React.FC = () => {
   const [topStories, setTopStories] = useState<Story[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  const AxiosIns=axiosInstance("")
   useEffect(() => {
-    axios.get('http://localhost:8000/api/stories/top')
+    AxiosIns.get('/stories/top')
       .then(response => {
         setTopStories(response.data);
         setIsLoading(false);

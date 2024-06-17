@@ -4,6 +4,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Card from '../../../components/admin/contests/CardAdd'; // Import your Card component
+import { axiosInstance } from '@/app/utils/config/axios';
 
 interface ModalProps {
   setIsModalOpen: (isOpen: boolean) => void;
@@ -18,7 +19,7 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
   const [promptTitle, setPromptTitle] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [promptCards, setPromptCards] = useState<CardProps[]>([]); // State to store added prompt cards
-
+ const AxiosIns=axiosInstance("")
   const handleAdd = () => {
     const promptData = {
       title: promptTitle,
@@ -27,7 +28,7 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
     };
     
   
-    axios.post('http://localhost:8000/api/prompts', promptData)
+    AxiosIns.post('/prompts', promptData)
       .then(response => {
         
         const newPrompt: CardProps = {

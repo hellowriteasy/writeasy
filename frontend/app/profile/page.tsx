@@ -8,6 +8,7 @@ import useAuthStore from '../store/useAuthStore';
 import { TStory } from '../utils/types';
 import NotFound from '../components/Others/NotFound';
 import ProfileTabs from '../components/profile/ProfileTabs';
+import { axiosInstance } from '../utils/config/axios';
 
 
 const Page: React.FC = () => {
@@ -17,11 +18,11 @@ const Page: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const { userId } = useAuthStore();
   const itemsPerPage = 5;
-
+ const AxiosIns=axiosInstance("")
   useEffect(() => {
     const fetchUserStories = async () => {
       try {
-        const response = await axios.get<TStory[]>('http://localhost:8000/api/stories/user', {
+        const response = await AxiosIns.get<TStory[]>('/stories/user', {
           params: {
             userId:userId,
             storyType: 'practice',

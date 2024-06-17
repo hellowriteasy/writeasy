@@ -3,6 +3,7 @@ import axios from "axios";
 import Link from "next/link";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { axiosInstance } from "@/app/utils/config/axios";
 
 interface CardProps {
   title: string;
@@ -11,9 +12,10 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ title, deadline, id }) => {
+  const AxiosIns=axiosInstance("")
   const handleDeleteContest = async () => {
     try {
-      await axios.delete(`http://localhost:8000/api/contests/${id}`);
+      await AxiosIns.delete(`/contests/${id}`);
       toast.success("Contest deleted successfully!");
     } catch (error) {
       console.error("Error deleting contest:", error);

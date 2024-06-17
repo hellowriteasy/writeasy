@@ -1,27 +1,11 @@
 'use client';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-
-
+import { Params,TPrompt,TContest } from '@/app/utils/types';
+import { axiosInstance } from '@/app/utils/config/axios';
 import Card from '../../../components/admin/contests/CardUpdate';
 import Modal from '@/app/components/admin/contests/ContestModal';
 import ProtectedRoute from '@/app/utils/ProtectedRoute';
-interface Prompt {
-  _id: string;
-  promptText: string;
-  promptCategory: string[];
-}
-
-interface Contest {
-  _id: string;
-  contestTheme: string;
-  submissionDeadline: string;
-  prompts: Prompt[];
-}
-
-interface Params {
-  _id: string;
-}
 
 interface PageProps {
   params: Params;
@@ -30,16 +14,16 @@ interface PageProps {
 const Page = ({ params }: PageProps) => {
   const { _id } = params;
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [promptCards, setPromptCards] = useState<Prompt[]>([]);
+  const [promptCards, setPromptCards] = useState<TPrompt[]>([]);
   const [deadline, setDeadline] = useState('');
   const [theme, setTheme] = useState('');
-
+ const AxiosIns=axiosInstance("")
   useEffect(() => {
     const fetchContest = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/contests/${_id}`);
+        const response = await AxiosIns.get(`/contests/${_id}`);
       
-        const contest: Contest = response.data;
+        const contest: TContest = response.data;
         setPromptCards(contest.prompts);
         setDeadline(new Date(contest.submissionDeadline).toISOString().split('T')[0]); // Format the date correctly
         setTheme(contest.contestTheme);
@@ -59,7 +43,7 @@ const Page = ({ params }: PageProps) => {
 
   const handleSubmitContest = async () => {
     try {
-      const response = await axios.put(`http://localhost:8000/api/contests/${_id}`, {
+      const response = await AxiosIns.put(`/contests/${_id}`, {
         prompts: promptCards.map((prompt) => prompt._id),
         contestTheme: theme,
         submissionDeadline: deadline,
@@ -70,7 +54,7 @@ const Page = ({ params }: PageProps) => {
     }
   };
 
-  const handlePromptAdd = (prompt: Prompt) => {
+  const handlePromptAdd = (prompt: TPrompt) => {
     setPromptCards([...promptCards, prompt]);
   };
 
@@ -114,7 +98,7 @@ const Page = ({ params }: PageProps) => {
               Add Prompt
             </button>
             {promptCards.map((prompt, index) => (
-              <Card key={index} title={prompt.promptText} id={prompt._id} type={prompt.promptCategory} />
+              <Card key={index} title={prompt.title} id={prompt._id} type={prompt.promptCategory} />
             ))}
             <button
               onClick={handleSubmitContest}

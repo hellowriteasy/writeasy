@@ -84,7 +84,7 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
   }
 
   // Once loaded, render the actual navbar content
-  if(!path.includes("admin")||path.includes("login")||path.includes("login")){
+  if(!path.includes("admin")|| path.includes("signup")|| path.includes("login")){
   return (
     <nav className="navbar flex w-screen sticky top-0 h-28 justify-between items-center bg-custom-yellow p-6 z-50">
       {navContent}

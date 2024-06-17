@@ -4,31 +4,21 @@ import axios from 'axios';
 import Card from "../../../../components/admin/stories/contests/StoryCard";
 import StoryNav from "@/app/components/admin/stories/StoryNav";
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
+import { TStory,Params } from "@/app/utils/types";
+import { axiosInstance } from "@/app/utils/config/axios";
 
-interface Story {
-  _id: string;
-  user: string;
-  title: string;
-  content: string;
-  wordCount: number;
-  prompt: string;
-  storyType: string;
-  contest: string;
-  submissionDateTime: string;
-}
-
-const Page = ({ params }) => {
+const Page =({ params }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [stories, setStories] = useState<Story[]>([]);
+  const [stories, setStories] = useState<TStory[]>([]);
 
   const handleAddClick = () => {
     setIsModalOpen(true);
   };
-
+  const AxiosIns=axiosInstance("")
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/stories/top');
+        const response = await AxiosIns.get('/stories/top');
         setStories(response.data); 
       } catch (error) {
         console.error('Error fetching stories:', error);

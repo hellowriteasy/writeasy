@@ -7,6 +7,7 @@ import { diffChars } from 'diff';
 import 'react-toastify/dist/ReactToastify.css';
 import StoryEditor from './Editor'; // Adjust the import path as necessary
 import { TUser } from '@/app/utils/types';
+import { axiosInstance } from '@/app/utils/config/axios';
 
 interface CardProps {
   id: string;
@@ -31,7 +32,7 @@ const Card: React.FC<CardProps> = ({
   const [showDiff, setShowDiff] = useState(false);
   const [showEditor, setShowEditor] = useState(false);
   const toggleDescription = () => setShowFullDescription(!showFullDescription);
-
+ const AxiosIns=axiosInstance("")
   const previewWords = 50;
   const descriptionText = description || "";
   const descriptionWords = descriptionText.split(" ");
@@ -51,8 +52,8 @@ const Card: React.FC<CardProps> = ({
       pauseOnHover: true,
       progress: undefined,
       onClose: () => {
-        axios
-          .delete(`http://localhost:5000/api/stories/${id}`)
+        AxiosIns
+          .delete(`/stories/${id}`)
           .then(() =>
             toast.success("Item deleted successfully!", {
               position: "top-center",

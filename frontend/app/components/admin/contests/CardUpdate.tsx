@@ -4,6 +4,7 @@ import axios from "axios";
 import { Dialog, Transition, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { axiosInstance } from "@/app/utils/config/axios";
 
 interface CardProps {
   title: string;
@@ -16,12 +17,12 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({ title, type = [], id }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [Title, setTitle] = useState(title);
-
+  const AxiosIns=axiosInstance("")
   const [Categories, setCategories] = useState<string[]>(type);
 
   const handleDeleteContest = async () => {
     try {
-      await axios.delete(`http://localhost:8000/api/prompts/${id}`);
+      await AxiosIns.delete(`/prompts/${id}`);
       toast.success("Contest deleted successfully!");
     } catch (error) {
       toast.error("Failed to delete contest.");
@@ -30,7 +31,7 @@ const Card: React.FC<CardProps> = ({ title, type = [], id }) => {
 
   const handleUpdateContest = async () => {
     try {
-      await axios.put(`http://localhost:8000/api/prompts/${id}`, {
+      await AxiosIns.put(`/prompts/${id}`, {
         promptText:Title,
         promptCategory: Categories,
         promptType: 'contest'

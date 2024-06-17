@@ -10,7 +10,8 @@ import { TStory } from "@/app/utils/types";
 import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-
+import { Params } from "@/app/utils/types";
+import { axiosInstance } from "@/app/utils/config/axios";
 interface PageProps {
   params: {
     _id: string;
@@ -26,10 +27,11 @@ const Page: React.FC<PageProps> = ({ params }) => {
   const [isCreating, setIsCreating] = useState(false);
   const [currentPage, setCurrentPage] = useState(0); // State to track the current page
   const router = useRouter();
+  const AxiosIns=axiosInstance("")
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/stories");
+        const response = await AxiosIns.get("/stories");
         const fetchedStories: TStory[] = response.data;
         setStories(fetchedStories);
       } catch (error) {

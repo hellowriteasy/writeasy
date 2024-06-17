@@ -7,19 +7,20 @@ import { TbCurrencyPound } from "react-icons/tb";
 import Link from "next/link";
 import useAuthStore from "../store/useAuthStore";
 import axios from "axios";
+import { axiosInstance } from "../utils/config/axios";
 
 const Pricing = () => {
   const { userId, isSubcriptionActive ,subscriptionRemainingDays} = useAuthStore();
-
+  const AxiosIns=axiosInstance("")
   const handleSignUp = async () => {
     try {
-      const response = await axios.post(
+      const response = await AxiosIns.post(
         "http://localhost:8000/api/payments/checkout",
         {
           user_id: userId,
         }
       );
-
+      
       const { url } = response.data;
       window.location.href = url; // Redirect to Stripe Checkout
     } catch (error) {
@@ -47,7 +48,7 @@ const Pricing = () => {
             <div className="text-center flex flex-col gap-y-10 absolute top-52">
               <div>
                 <ul>
-                  <li className="text-[18px]">View all writings</li>
+                  <li className="text-[18px]">•⁠ View all writings</li>
                 </ul>
               </div>
               {!userId && (
@@ -82,7 +83,7 @@ const Pricing = () => {
                     </h2>
                     <span className="pt-4">/month</span>
                   </div>
-                  <div className="text-center font-comic font-bold text-2xl ">
+                  <div className="text-center py-4 font-comic font-bold text-2xl ">
                     {subscriptionRemainingDays} days left
                   </div>
                 </div>
@@ -90,7 +91,8 @@ const Pricing = () => {
             </div>
             <div className="text-center flex flex-col gap-y-10 absolute top-60 w-10/12 mx-auto">
               <div>
-                <ul className="flex flex-col items-start gap-y-2">
+                <h2 className="p-4 text-2xl font-black underline ">Subscirption benefit</h2>
+                <ul className="flex flex-col px-4 py-4 items-start gap-y-2">
                   <li className="text-[18px] text-start">
                     •⁠ ⁠Unlimited writing practices with immediate GPT markings
                   </li>

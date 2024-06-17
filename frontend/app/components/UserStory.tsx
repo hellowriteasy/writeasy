@@ -4,6 +4,7 @@ import { usePDF } from 'react-to-pdf';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { axiosInstance } from '../utils/config/axios';
 
 interface CardProps {
   id: string; // Add id property to CardProps interface
@@ -14,7 +15,7 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({ id, title, description = '' }) => {
   const { toPDF, targetRef } = usePDF({ filename: 'page.pdf' });
   const [showFullDescription, setShowFullDescription] = useState(false);
-
+  const AxiosIns=axiosInstance("")
   const toggleDescription = () => {
     setShowFullDescription(!showFullDescription);
   };
@@ -37,7 +38,7 @@ const Card: React.FC<CardProps> = ({ id, title, description = '' }) => {
       progress: undefined,
       onClose: () => {
         // If user confirms deletion, make the delete request
-        axios.delete(`http://localhost:8000/api/stories/${id}`)
+        AxiosIns.delete(`http://localhost:8000/api/stories/${id}`)
           .then(() => {
             toast.success('Item deleted successfully!', {
               position: "top-center",

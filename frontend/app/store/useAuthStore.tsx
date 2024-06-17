@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
+import { axiosInstance } from "../utils/config/axios";
 
 interface AuthState {
   loggedIn: boolean;
@@ -13,16 +14,16 @@ interface AuthState {
   login: (userId: string, token: string) => void;
   logout: () => void;
 }
-
+ 
 const useAuthStore = create<AuthState>((set) => {
   // Check if window is defined to ensure code runs only on the client-side
   if (typeof window !== "undefined") {
     const storedUserId = localStorage.getItem("userId");
     const loggedIn = storedUserId !== null;
-
+   const AxiosIns=axiosInstance("")
     const fetchUserDetails = async (userId: string) => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/auth/user/${userId}`);
+        const response = await AxiosIns.get(`/auth/user/${userId}`);
         if (response.status === 200) {
           const {
             username,

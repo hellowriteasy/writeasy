@@ -16,7 +16,7 @@ import Bee from "@/public/Game/cloud3.svg";
 import Image from "next/image";
 import Subscription from "@/app/components/Subscription";
 import useAuthStore from "@/app/store/useAuthStore";
-import { toast, ToastContainer } from "react-toastify";
+import { toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useParams } from "next/navigation";
@@ -427,7 +427,6 @@ const StoryEditor: React.FC<StoryEditorProps> = ({}) => {
       </div>
       {!isSubcriptionActive && role != "admin" ? <Subscription /> : null}
 
-      <ToastContainer />
     </div>
   );
 };

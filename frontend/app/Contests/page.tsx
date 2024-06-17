@@ -13,6 +13,7 @@ import Contestitle from "../components/contest/Contestitle";
 import axios from "axios";
 import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
+import { axiosInstance } from "../utils/config/axios";
 
 const Contest = () => {
   const itemsPerPage = 5;
@@ -20,10 +21,10 @@ const Contest = () => {
   const [contests, setContests] = useState([]);
 
   const [error, setError] = useState<string | null>(null);
-
+ const AxiosIns=axiosInstance("")
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/contests")
+    AxiosIns
+      .get("/contests")
       .then((response) => {
         setContests(response.data);
       })

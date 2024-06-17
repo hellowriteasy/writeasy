@@ -64,12 +64,12 @@ const PDF: React.FC<Props> = ({ originals, corrected }) => {
 
   return (
     <div className="w-full  relative  z-[-5] bg-black">
-      {/* <button
+      <button
         className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
         onClick={() => toPDF()}
       >
         PDF
-      </button> */}
+      </button>
       <div
         className="flex items-center   h-[100vh] flex-col w-full "
         ref={targetRef}

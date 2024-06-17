@@ -16,6 +16,7 @@ import InputField from "../components/InputFIelds";
 import useAuthStore from "../store/useAuthStore";
 import { useRouter } from "next/navigation";
 import Earth from "../../public/Landingpage-img/earth.svg";
+import { axiosInstance } from "../utils/config/axios";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -23,12 +24,12 @@ const Login = () => {
   const [error, setError] = useState("");
   const login = useAuthStore((state) => state.login);
   const router = useRouter();
-
+  const AxiosIns=axiosInstance("")
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        `http://localhost:8000/api/auth/login`,
+      const response = await AxiosIns.post(
+        `/auth/login`,
         {
           email,
           password,
@@ -42,7 +43,7 @@ const Login = () => {
         role,
         subscriptionType,
       } = response.data;
-      login(userId, token, username, role, subscriptionType);
+      login(userId);
 
       router.push("/", { scroll: false });
     } catch (error: any) {
@@ -51,14 +52,14 @@ const Login = () => {
   };
 
   return (
-    <div className="overflow-hidden two-line-bg">
+    <div className="overflow-hidden  two-line-bg">
       <Link href="/">
-        <div className="ms-10 mt-10">
+        <div className="ms-10 md-hide mt-10">
           <Image src={logo} alt="logo" />
         </div>
       </Link>
-      <div className="flex flex-col -mt-20 h-full items-center">
-        <h1 className="text-center font-comic text-4xl pt-6">
+      <div className="flex flex-col w-full  h-full items-center">
+        <h1 className="text-center font-comic sm:text-2xl lg:text-4xl md:text-5xl pt-6">
           <span className="font-bold">Hello!</span> Welcome to Writeasy
         </h1>
         <form
@@ -95,29 +96,29 @@ const Login = () => {
               Signup
             </Link>
           </h1>
-          <div className="absolute w-32 h-16 -top-4 -right-28">
+          <div className="absolute w-32 h-16 vvsm-hide -top-4 -right-28">
             <Image src={Rocket} alt="rocket" />
           </div>
         </form>
-        <div className="absolute top-60 w-20 h-10 left-10">
+        <div className="absolute top-60 w-20 vsm-hide h-10 left-10">
           <Image src={Group2} alt="group2" />
         </div>
-        <div className="absolute top-20 right-0">
+        <div className="absolute sm-hide top-20 right-0">
           <Image src={yellowvector} alt="yellow vector" />
         </div>
-        <div className="absolute left-80 top-28">
+        <div className="absolute md-hide left-80 top-28">
           <Image src={Sun} alt="sun" />
         </div>
       </div>
 
       <div className="relative">
-        <div className="absolute left-80 bottom-24">
+        <div className="absolute md-hide left-80 bottom-24">
           <Image src={Group} height={200} alt="group" />
         </div>
-        <div className="absolute right-60 bottom-24">
+        <div className="absolute md-hide right-60 bottom-24">
           <Image src={Group3} height={200} alt="group3" />
         </div>
-        <div className="absolute right-6 bottom-20">
+        <div className="absolute vsm-hide right-6 bottom-20">
           <Image src={Vector1} height={300} alt="vector1" />
         </div>
         <Image className="w-screen mt-10" alt="earth" src={Earth} />

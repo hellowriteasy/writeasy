@@ -21,6 +21,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
 import { TUser } from "@/app/utils/types";
+import { axiosInstance } from "@/app/utils/config/axios";
 
 
 interface StoryEditorProps {
@@ -40,6 +41,7 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,contributo
   const isSubcriptionActive = useAuthStore(
     (state) => state.isSubcriptionActive
   );
+  const AxiosIns=axiosInstance("")
   const role = useAuthStore((state) => state.role);
   const { userId } = useAuthStore();
   const { token } = useAuthStore();
@@ -85,8 +87,8 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,contributo
         storyID: storyId,
         text: currentContent
         };
-        const { data, status } = await axios.post(
-          `http://localhost:8000/api/collaborative-stories/submit`,
+        const { data, status } = await AxiosIns.post(
+          `/collaborative-stories/submit`,
           payload,
           {
             headers: {

@@ -3,11 +3,12 @@ import mic from "@/public/Game/Clip path group.svg";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { TContest } from "@/app/utils/types";
+import { axiosInstance } from "@/app/utils/config/axios";
 
 const WeeklyTest = () => {
   const [contest, setContest] = useState<TContest | null>(null);
   const { submissionDeadline, prompts } = contest || {}; // Use default values if contest is null
-
+ const AxiosIns=axiosInstance("")
   const formattedDate = submissionDeadline
     ? new Date(submissionDeadline).toLocaleDateString("en-US", {
         year: "numeric",
@@ -19,13 +20,13 @@ const WeeklyTest = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        var response = await axios.get(
-          "http://localhost:8000/api/contests/ongoing"
+        var response = await AxiosIns.get(
+          "/contests/ongoing"
         );
         setContest(response.data[1]);
       } catch (error) {
         console.error("Error fetching contest data:", error);
-        // Handle errors gracefully, e.g., display an error message to the user
+
       }
     };
 
@@ -42,7 +43,7 @@ const WeeklyTest = () => {
         <div className="text-center font-comic w-11/12 text-3xl font-bold">
           <h2 className="py-5">Enter Our Weekly Contests!</h2>
           <p className="text-sm pt-4">
-            <span className="font-bold">CLoses</span> {formattedDate}
+            <span className="font-bold">CLoses</span>{new Date(contest.submissionDeadline).toLocaleString()}
           </p>
 
           <ul className="p-4">

@@ -2,6 +2,7 @@ import { useState, Fragment, useRef } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Dialog, Transition } from '@headlessui/react';
 import axios from 'axios';
+import { axiosInstance } from '@/app/utils/config/axios';
 
 interface CardProps {
   _id: string;
@@ -34,10 +35,10 @@ const Card: React.FC<CardProps> = ({
   const [feedback, setFeedback] = useState(correctionSummary);
   const [storyDetail, setStoryDetail] = useState(content);
   const cancelButtonRef = useRef(null);
-
+  const AxiosIns=axiosInstance("")
   const handleUpdate = async () => {
     try {
-      const response = await axios.put(`http://localhost:8000/api/stories/${_id}`, {
+      const response = await AxiosIns.put(`http://localhost:8000/api/stories/${_id}`, {
         correctionSummary: feedback,
         content: storyDetail,
       });

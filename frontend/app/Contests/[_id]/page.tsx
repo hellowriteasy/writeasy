@@ -14,6 +14,7 @@ import ViewContest from "./viewcontest/page";
 import { TContest, TPrompt } from "@/app/utils/types";
 import moment from "moment";
 import PromptNotPublished from "@/app/components/Others/PromptNotPublished";
+import { axiosInstance } from "@/app/utils/config/axios";
 
 interface ContestPageProps {
   params: {
@@ -33,7 +34,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
     promptId: string;
     title: string;
   } | null>(null);
-
+  const AxiosIns=axiosInstance("")
   useEffect(() => {
     if (!contestId) {
       setError("Contest ID is missing.");
@@ -42,8 +43,8 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
 
     const fetchPromptsOfContest = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/prompts/list/${contestId}`
+        const response = await AxiosIns.get(
+          `/prompts/list/${contestId}`
         );
         if (response.status !== 200) {
           throw new Error(`Error: ${response.status}`);

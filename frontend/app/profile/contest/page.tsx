@@ -8,6 +8,7 @@ import useAuthStore from '@/app/store/useAuthStore';
 import { TStory } from '@/app/utils/types';
 import NotFound from '@/app/components/Others/NotFound';
 import ProfileTabs from '@/app/components/profile/ProfileTabs';
+import { axiosInstance } from '@/app/utils/config/axios';
 
 
 const ContestPage: React.FC = () => {
@@ -17,11 +18,11 @@ const ContestPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const {userId}=useAuthStore();
   const itemsPerPage = 5;
-
+ const AxiosIns=axiosInstance("")
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/stories/user', {
+        const response = await AxiosIns.get('/api/stories/user', {
           params: {
             userId:userId,
             storyType: 'contest',

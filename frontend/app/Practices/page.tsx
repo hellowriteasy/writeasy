@@ -14,6 +14,7 @@ import Bee from "@/public/Game/Bee.svg";
 import LoadingAnimation from "../loading";
 import { TPrompt } from "../utils/types";
 import NotFound from "../components/Others/NotFound";
+import { axiosInstance } from "../utils/config/axios";
 
 const Page: React.FC = () => {
   const itemsPerPage = 5;
@@ -21,11 +22,11 @@ const Page: React.FC = () => {
   const [promptData, setPromptData] = useState<TPrompt[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedOption, setSelectedOption] = useState<string>("");
-
+  const AxiosIns=axiosInstance("")
   useEffect(() => {
     setIsLoading(true);
-    axios
-      .get("http://localhost:8000/api/prompts/practice-prompts")
+    AxiosIns
+      .get("/prompts/practice-prompts")
       .then((response) => {
         setPromptData(response.data);
         setIsLoading(false);

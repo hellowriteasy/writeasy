@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-
+import { axiosInstance } from "@/app/utils/config/axios";
 import Card from "../../components/admin/contests/CardAdd";
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
 
@@ -13,16 +13,17 @@ interface Contest {
   _id: string;
 }
 
+
 const Page: React.FC = () => {
   const router = useRouter();
   const [contests, setContests] = useState<Contest[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
-
+const AxiosIns=axiosInstance("");
   useEffect(() => {
     const fetchContests = async () => {
       try {
-        const response = await axios.get<Contest[]>("http://localhost:8000/api/contests");
+        const response = await AxiosIns.get<Contest[]>("/api/contests");
         setContests(response.data);
         setLoading(false);
       } catch (error) {

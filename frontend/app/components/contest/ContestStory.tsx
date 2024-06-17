@@ -19,6 +19,7 @@ import { usePDF } from "react-to-pdf";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useAuthStore from "@/app/store/useAuthStore";
+import { axiosInstance } from "@/app/utils/config/axios";
 
 // const Page = ({ inputText, corrected }) => {
 //   const [improved, setImproved] = useState([]);
@@ -103,7 +104,7 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
   const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
   const setStoredFunction = usePdfStore((state) => state.setPdfExportFunction);
   const pdfExportFunction = usePdfStore((state) => state.pdfExportFunction);
-
+ const AxiosIns=axiosInstance("")
   useEffect(() => {
     setStoredFunction(toPDF);
   }, [toPDF, setStoredFunction]);
@@ -165,8 +166,8 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
         contest:contestId 
       };
 
-      const { data, status } = await axios.post(
-        `http://localhost:8000/api/stories`,
+      const { data, status } = await AxiosIns.post(
+        `/stories`,
         payload
       );
       toast.warn("Story saved succesfully");

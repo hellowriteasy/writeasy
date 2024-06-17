@@ -4,6 +4,7 @@ import { Dialog, Transition, Menu, MenuButton, MenuItem, MenuItems } from '@head
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { axiosInstance } from '@/app/utils/config/axios';
 
 interface ModalProps {
   setIsModalOpen: (isOpen: boolean) => void;
@@ -13,10 +14,10 @@ interface ModalProps {
 const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
   const [promptTitle, setPromptTitle] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-
+  const AxiosIns=axiosInstance("")
   const handleAddPrompt = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/api/prompts', {
+      const response = await AxiosIns.post('/prompts', {
         title: promptTitle,
         promptCategory: selectedCategories,
         promptType: 'contest',

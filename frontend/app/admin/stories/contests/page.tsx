@@ -5,6 +5,7 @@ import axios from 'axios';
 import Card from "../../../components/admin/stories/contests/VIewContestCard";
 import StoryNav from "@/app/components/admin/stories/StoryNav";
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
+import { axiosInstance } from "@/app/utils/config/axios";
 interface Prompt {
   _id: string;
   promptText: string;
@@ -22,12 +23,12 @@ interface Contest {
 const Page = () => {
  
   const [contests, setContests] = useState<Contest[]>([]);
-
+const AxiosIns=axiosInstance("")
  
   useEffect(() => {
     const fetchContests = async () => {
       try {
-        const response = await axios.get(`http://localhost:8000/api/contests`);
+        const response = await AxiosIns.get(`/contests`);
         setContests(response.data);
        
       } catch (error) {

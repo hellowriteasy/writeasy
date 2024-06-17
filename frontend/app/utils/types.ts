@@ -32,6 +32,7 @@ export type TPrompt = {
   promptType: string;
   __v: number;
   description: string;
+  type:string
 };
 
 export type TContest = {
@@ -45,3 +46,7 @@ export type TContest = {
   topWritingPublishDate: string; // Assuming ISO 8601 format
   __v: number;
 };
+
+ export interface Params {
+  _id: string;
+}

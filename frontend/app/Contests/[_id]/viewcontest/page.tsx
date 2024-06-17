@@ -10,6 +10,7 @@ import Cloud from "@/public/Game/cloud.svg";
 import Cloud2 from "@/public/Game/cloud3.svg";
 import Pagination from "@/app/components/Pagination";
 import Storycard from "@/app/components/Storycard";
+import { axiosInstance } from "@/app/utils/config/axios";
 
 interface Prompt {
   _id: string;
@@ -35,7 +36,7 @@ interface ContestPageProps {
 
 const ViewContest: React.FC<ContestPageProps> = ({ contestId, promptId, prompt_title }) => {
   const [contest, setContest] = useState<Contest | null>(null);
-
+  const AxiosIns=axiosInstance("")
   const [error, setError] = useState<string | null>(null);
   const [selectedPrompt, setSelectedPrompt] = useState<{
     contestId: string;
@@ -51,7 +52,7 @@ const ViewContest: React.FC<ContestPageProps> = ({ contestId, promptId, prompt_t
 
     const fetchContestById = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/stories/top`);
+        const response = await AxiosIns.get(`/stories/top`);
         if (response.status !== 200) {
           throw new Error(`Error: ${response.status}`);
         }

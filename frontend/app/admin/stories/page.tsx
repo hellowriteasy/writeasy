@@ -4,6 +4,7 @@ import axios from "axios";
 import Card from "../../components/admin/stories/StoryTitleCard";
 import StoryNav from "@/app/components/admin/stories/StoryNav";
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
+import { axiosInstance } from "@/app/utils/config/axios";
 
 // Define the Story interface
 interface Story {
@@ -25,11 +26,11 @@ const Page: React.FC = () => {
   const [stories, setStories] = useState<Story[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  const AxiosIns=axiosInstance("")
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const response = await axios.get<Story[]>("http://localhost:8000/api/stories");
+        const response = await AxiosIns.get<Story[]>("/stories");
         setStories(response.data);
         setLoading(false);
       } catch (error: any) {

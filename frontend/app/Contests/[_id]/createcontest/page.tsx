@@ -17,8 +17,9 @@ import Image from "next/image";
 import Subscription from "@/app/components/Subscription";
 import useAuthStore from "@/app/store/useAuthStore";
 import {  toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
 import axios from "axios";
+import { axiosInstance } from "@/app/utils/config/axios";
 
 
 interface PromptPageProps {
@@ -43,7 +44,7 @@ const {role,isSubcriptionActive}=useAuthStore()
         return;
       }
       
-
+      const AxiosIns=axiosInstance("")
       const payload = {
         user:userId,
         title: title,
@@ -53,11 +54,11 @@ const {role,isSubcriptionActive}=useAuthStore()
         contest:contestId 
       };
 
-      const { data, status } = await axios.post(
-        `http://localhost:8000/api/stories`,
+      const { data, status } = await AxiosIns.post(
+        `/stories`,
         payload
       );
-      toast.warn("Story saved succesfully");
+      toast.success("contest submited successfully");
     } catch (error) {
    
     }
@@ -110,7 +111,7 @@ const {role,isSubcriptionActive}=useAuthStore()
   }
 
   return (
-    <div className="w-full  mt-6 z-0 relative flex justify-center">
+    <div className="w-full h-[1000px]  mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 h-screen ms-12">
         <div className="w-full h-32 relative pt-4">
           <h1 className="text-6xl font-comic font-bold py-4">

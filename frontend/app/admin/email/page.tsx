@@ -1,25 +1,24 @@
 'use client';
 import { useState } from "react";
 import axios from 'axios';
-
-
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
+import { toast } from 'react-toastify';
+import { axiosInstance } from "@/app/utils/config/axios";
 
 const Email = () => {
   const [subject, setSubject] = useState("");
-  const [message, setMessage] = useState("");
-
+  const [content, setContent] = useState("");
+  const AxiosIns=axiosInstance("")
   const handleSendClick = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/api/emails/all', {
-        subject: subject,
-        content: message
+      const response = await AxiosIns.post('/emails/all', {
+        subject,
+        content
       });
-      console.log('Email sent successfully:', response.data);
-      // You can add more logic here, such as showing a success message or clearing the form
+    toast.success("Email sent succesfully to all user")
     } catch (error) {
       console.error('Error sending email:', error);
-      // Handle the error, for example, show an error message to the user
+      toast.error("failed to send email");
     }
   };
 
@@ -56,8 +55,8 @@ const Email = () => {
                   rows={10}
                   className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm outline-none p-4 focus:ring-indigo-500 focus:border-indigo-500"
                   placeholder="Enter your message"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
                 />
               </div>
 

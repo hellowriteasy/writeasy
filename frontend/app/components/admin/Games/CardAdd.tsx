@@ -4,6 +4,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { axiosInstance } from '@/app/utils/config/axios';
 
 interface CardProps {
   title: string;
@@ -16,10 +17,10 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id }) => {
   const [promptTitle, setPromptTitle] = useState(title);
   const [Description, setDescription] = useState(description);
   const cancelButtonRef = useRef(null);
-
+ const AxiosIns=axiosInstance("")
   const handleUpdate = async () => {
     try {
-      await axios.put(`http://localhost:8000/api/prompts/${id}`, {
+      await AxiosIns.put(`/prompts/${id}`, {
         title: promptTitle,
         description: Description,
         promptType: 'game',
@@ -34,7 +35,7 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id }) => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:8000/api/prompts/${id}`);
+      await AxiosIns.delete(`/prompts/${id}`);
       toast.success('Prompt deleted successfully!');
       // Optionally, remove the prompt from the UI here or refresh the list.
     } catch (error) {

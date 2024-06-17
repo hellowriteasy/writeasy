@@ -12,18 +12,19 @@ import Cloud from "@/public/Game/cloud.svg";
 import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { TPrompt } from "../utils/types";
+import { axiosInstance } from "../utils/config/axios";
 
 const Games: React.FC = () => {
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(0);
   const [prompts, setPrompts] = useState<TPrompt[]>([]);
   const [error, setError] = useState<string | null>(null);
-
+  const AxiosIns=axiosInstance("")
   useEffect(() => {
     const fetchPrompts = async () => {
       try {
 
-        const response = await axios.get("http://localhost:8000/api/prompts/game-prompts");
+        const response = await AxiosIns.get("/prompts/game-prompts");
         setPrompts(response.data)
 
       

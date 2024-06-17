@@ -6,6 +6,7 @@ import { IoPersonSharp } from "react-icons/io5";
 import axios from "axios";
 import useAuthStore from '../store/useAuthStore';
 import Link from "next/link";
+import { axiosInstance } from "../utils/config/axios";
 
 const UserMenu = () => {
   const [selectedOption, setSelectedOption] = useState('');
@@ -13,10 +14,10 @@ const UserMenu = () => {
   const logout = useAuthStore((state) => state.logout);
   const username = useAuthStore((state) => state.username);
   const role = useAuthStore((state) => state.role); // Get the user's role
-
+  const AxiosIns=axiosInstance("")
   const handleLogout = async () => {
     try {
-      await axios.post("http://localhost:8000/api/auth/logout");
+      await AxiosIns.post("http://localhost:8000/api/auth/logout");
       logout();
     } catch (error) {
       console.error("Failed to logout", error);

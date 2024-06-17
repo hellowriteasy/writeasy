@@ -1,8 +1,10 @@
-import { useState, Fragment, useRef } from 'react';
+import { useState, Fragment, useRef, useEffect } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Dialog, Transition } from '@headlessui/react';
 import axios from 'axios';
-
+import { diffChars } from 'diff';
+import { toast } from 'react-toastify';
+import { axiosInstance } from '@/app/utils/config/axios';
 interface CardProps {
   _id: string;
   username: string;
@@ -15,30 +17,61 @@ interface CardProps {
   correctionSummary: string;
   corrections: string;
   score: number;
+  
 }
 
-const Card: React.FC<CardProps> = ({
- contest
-}) => {
+const Card: React.FC<CardProps> = ({ contest }) => {
   const [open, setOpen] = useState(false);
+  const [Edit,setEdit]=useState(true)
+  const [showDiff, setShowDiff] = useState(false);
   const [feedback, setFeedback] = useState(contest.correctionSummary);
   const [storyDetail, setStoryDetail] = useState(contest.content);
+  const [corrections, setCorrections] = useState(contest.corrections);
   const [grade, setGrade] = useState(contest.score); // Renamed to grade for clarity
   const cancelButtonRef = useRef(null);
+ const AxiosIns=axiosInstance("")
+  useEffect(() => {
+    setFeedback(contest.correctionSummary);
+    setStoryDetail(contest.content);
+    setCorrections(contest.corrections);
+    setGrade(contest.score);
+  }, [contest]);
 
   const handleUpdate = async () => {
     try {
-      const response = await axios.put(`http://localhost:8000/api/stories/${contest._id}`, {
+      const response = await AxiosIns.put(`http://localhost:8000/api/stories/${contest._id}`, {
         correctionSummary: feedback,
         content: storyDetail,
         score: grade,
       });
-     
+      toast.success("contest updated successfully")
       setOpen(false);
     } catch (error) {
       console.error('There was an error updating the story!', error);
+      toast.error("failed to update contest")
     }
   };
+
+  const compareSentences = (description = "", corrections = "") => {
+    if (!description) {
+      return <span style={{ color: 'red', backgroundColor: 'lightcoral' }}>No original description provided.</span>;
+    }
+
+    if (!corrections) {
+      return <span style={{ color: 'green', backgroundColor: 'lightgreen' }}>No corrections provided.</span>;
+    }
+
+    const diff = diffChars(description, corrections);
+    return diff.map((part, index) => {
+      const style = {
+        backgroundColor: part.added ? 'lightgreen' : part.removed ? 'lightcoral' : 'transparent',
+        textDecoration: part.removed ? 'line-through' : 'none',
+        color: part.added ? 'green' : part.removed ? 'red' : 'black'
+      };
+      return <span key={index} style={style}>{part.value}</span>;
+    });
+  };
+ 
 
   return (
     <>
@@ -54,14 +87,13 @@ const Card: React.FC<CardProps> = ({
             </button>
           </div>
         </div>
-        <div className="text-gray-600">User: {contest.user}</div>
-        <div className="text-gray-600">Submission Date: {new Date(contest.submissionDateTime
-).toLocaleString()}</div>
+        <div className="text-gray-600">User: {contest.username}</div>
+        <div className="text-gray-600">Submission Date: {new Date(contest.submissionDateTime).toLocaleString()}</div>
         <div className="text-gray-600">Score: {contest.score}</div>
       </div>
 
       <Transition.Root show={open} as={Fragment}>
-        <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
+        <Dialog as="div" className="relative font-poppins z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -93,7 +125,7 @@ const Card: React.FC<CardProps> = ({
                           {contest.title}
                         </Dialog.Title>
                         <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                          {contest.user}
+                          {contest.username}
                         </Dialog.Title>
                         <div className="mt-2">
                           <div className="mb-4">
@@ -111,7 +143,7 @@ const Card: React.FC<CardProps> = ({
                               Feedback
                             </label>
                             <textarea
-                              className="mt-1 block w-full h-80 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
+                              className="mt-1 block w-full p-8 h-80 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
                               placeholder="Enter your feedback"
                               value={feedback}
                               onChange={(e) => setFeedback(e.target.value)}
@@ -122,20 +154,28 @@ const Card: React.FC<CardProps> = ({
                               Story Details
                             </label>
                             <textarea
-                              className="mt-1 block w-full h-96 p-4 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
+                              className="mt-1 block w-full h-96 p-8 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
                               placeholder="Story details"
                               value={storyDetail}
                               onChange={(e) => setStoryDetail(e.target.value)}
+                              disabled={Edit}
                             />
                           </div>
-                          <div className="mb-4 flex space-x-2">
-                            <button className="bg-gray-200 text-gray-800 px-3 py-2 rounded-l-lg border-r-0">
-                              Marked
-                            </button>
-                            <button className="bg-gray-200 text-gray-800 px-3 py-2 rounded-r-lg border-l-0">
-                              Original
-                            </button>
-                          </div>
+                          <button
+                      type="button"
+                      className="inline-flex w-full mx-4 justify-center rounded-md bg-black font-poppins px-4 py-2 font-semibold text-white shadow-sm  sm:ml-3 sm:w-auto"
+                      onClick={() => setEdit(false)}
+                      disabled={!Edit}
+                    >
+                      Edit
+                    </button>
+                          <button
+                            onClick={() => setShowDiff(!showDiff)}
+                            className="bg-white border-2 rounded-2xl border-slate-700 text-black px-4 py-2"
+                          >
+                            {showDiff ? "Original" : "Marked"}
+                          </button>
+                          {showDiff && <div className="mt-4 p-8 bg-white rounded-xl border border-slate-300">{compareSentences(storyDetail, corrections)}</div>}
                         </div>
                       </div>
                     </div>
@@ -143,7 +183,7 @@ const Card: React.FC<CardProps> = ({
                   <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                     <button
                       type="button"
-                      className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
+                      className="inline-flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm  sm:ml-3 sm:w-auto"
                       onClick={handleUpdate}
                     >
                       Update
