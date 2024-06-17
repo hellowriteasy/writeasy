@@ -1,7 +1,7 @@
 const Subscription = require("../models/subscription");
 const User = require("../models/user");
 const AuthService = require("../services/AuthService");
-const { calculateSubscriptionRemainingDays} = require("../utils/methods");
+const { calculateSubscriptionRemainingDays } = require("../utils/methods");
 const authService = new AuthService();
 
 const UserController = {
@@ -81,17 +81,39 @@ const UserController = {
         );
       }
 
-      return res
-        .status(200)
-        .json({
-          message: {
-            ...others,
-            isSubcriptionActive,
-            subscriptionRemainingDays,
-          },
-        });
+      return res.status(200).json({
+        message: {
+          ...others,
+          isSubcriptionActive,
+          subscriptionRemainingDays,
+        },
+      });
     } catch (error) {
       console.log(error);
+      return res.status(500).json({
+        message: error.message || "Internal server error",
+        success: false,
+      });
+    }
+  },
+  async updateProfile(req, res) {
+    const { user_id } = req.params;
+
+    try {
+      const userExist = await User.findById(user_id);
+      if (!userExist) {
+        throw new Error("User not found ");
+      }
+
+      await User.findByIdAndUpdate(user_id, {
+        $set: {
+          ...req.body,
+        },
+      });
+      res
+        .status(201)
+        .json({ message: "Profile updated successfully", success: true });
+    } catch (error) {
       return res.status(500).json({
         message: error.message || "Internal server error",
         success: false,

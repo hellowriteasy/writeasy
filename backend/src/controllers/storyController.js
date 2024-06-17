@@ -228,19 +228,36 @@ const getStoriesByContentAndPrompt = async (req, res) => {
   const page = req.query.page || 1; // Default page is 1
   const perPage = req.query.perPage || 10; // Default page size is 10
   const skip = (page - 1) * perPage;
+  const sortKey = req.query.sortKey || "createdAt";
 
   try {
     const stories = await Story.find({
       ...(contest_id ? { contest: contest_id } : null),
       ...(prompt_id ? { prompt: prompt_id } : null),
     })
-      .sort({ createdAt: "desc" })
+      .sort(getSortInputForStoriesByContestAndPrompt(sortKey, "desc"))
       .skip(skip)
       .limit(perPage);
 
     return res.status(200).json(stories);
   } catch (error) {
     res.status(500).json({ message: error?.message || "Something went wrong" });
+  }
+};
+
+const getSortInputForStoriesByContestAndPrompt = (sortKey, direction) => {
+  if (sortKey === "createdAt") {
+    return {
+      createdAt: direction,
+    };
+  } else if (sortKey === "score") {
+    return {
+      score: direction,
+    };
+  } else {
+    return {
+      createdAt: direction,
+    };
   }
 };
 

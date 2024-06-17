@@ -171,4 +171,83 @@ router.get("/google/callback", async (req, res) => {
     res.status(500).send("An error occurred during Google authentication");
   }
 });
+
+/**
+ * @swagger
+ * /api/auth/users/profile/{user_id}:
+ *   put:
+ *     summary: Update a user's profile
+ *     tags: [Authentication]
+ *     parameters:
+ *       - in: path
+ *         name: user_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the user to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 description: The new username of the user
+ *               email:
+ *                 type: string
+ *                 description: The new email of the user
+ *               password:
+ *                 type: string
+ *                 description: The new password of the user
+ *               profile_picture:
+ *                 type: string
+ *                 description: The new profile picture URL of the user
+ *     responses:
+ *       201:
+ *         description: Profile updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Profile updated successfully
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: User not found
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Internal server error
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ */
+router.put("/users/profile/:user_id", UserController.updateProfile);
+
+
+
+
 module.exports = router;

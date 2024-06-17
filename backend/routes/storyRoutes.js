@@ -270,7 +270,6 @@ router.post("/score", scoreStory);
  */
 
 router.get("/user/:prompt_id/:user_id", getStoryOfAuserByPrompt);
-
 /**
  * @swagger
  * /api/stories/contest/prompt:
@@ -295,6 +294,15 @@ router.get("/user/:prompt_id/:user_id", getStoryOfAuserByPrompt);
  *           minimum: 1
  *           default: 1
  *         description: Optional. The page number of results to retrieve.
+ *       - in: query
+ *         name: sortKey
+ *         schema:
+ *           type: string
+ *           enum:
+ *             - createdAt
+ *             - score
+ *         description: Optional. Sort by the sort key.
+ *         required: false
  *       - in: query
  *         name: perPage
  *         schema:
@@ -323,8 +331,6 @@ router.get("/user/:prompt_id/:user_id", getStoryOfAuserByPrompt);
  *                   description: Error message.
  */
 
-
 router.get("/contest/prompt", getStoriesByContentAndPrompt);
 
 module.exports = router;
-
