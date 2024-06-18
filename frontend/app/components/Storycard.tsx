@@ -1,36 +1,70 @@
-import Image from "next/image";
-import SecButton from "./SecButton";
-const Storycard = () => {
+import React, { useState } from 'react';
+import Image from 'next/image';
+import SecButton from './SecButton';
+import mainstar from "@/public/others/main_star.svg";
+import secondstar from "@/public/others/2ndstar.svg";
+
+interface StorycardProps {
+  title: string;
+  content: string;
+  corrections: string;
+  starType: 'main' | 'second' | 'none';
+}
+
+const Storycard: React.FC<StorycardProps> = ({ title, content, corrections, starType }) => {
+  const [showFullContent, setShowFullContent] = useState(false);
+
+  const getStarImage = () => {
+    switch (starType) {
+      case 'main':
+        return <Image src={mainstar} alt='main star' />;
+      case 'second':
+        return <Image src={secondstar} alt='second star' />;
+      case 'none':
+      default:
+        return null;
+    }
+  };
+
+  const getShortContent = (text: string, wordLimit: number) => {
+    const words = text.split(' ');
+    return words.length > wordLimit ? words.slice(0, wordLimit).join(' ') + '...' : text;
+  };
 
   return (
-    <div className="w-full mx-auto border-2 border-gray-200 white rounded-2xl h-[fit-content] overflow-hidden ">
-      {/* Card title and image */}
-      <div className="flex items-center justify-between px-6 py-4">
-        <div className="flex items-center px-6 py-4" >
-
-        
-        <div className="mr-4 rounded-full ">
-          {/* Add your image source */}
-          <Image src="" alt="Image" width={50} height={50} />
+    <div className='relative my-6'>
+       <div className='absolute  -top-12 -left-5'>
+        {getStarImage()}
+      </div>
+    <div className="w-full  mx-auto border-2  font-comic border-gray-200 white rounded-2xl h-[fit-content] overflow-hidden">
+     
+      <div className="flex items-center my-8 justify-between px-6 py-4">
+        <div className="flex items-center px-6 py-4">
+          <div className="mr-4 rounded-full">
+           
+            <Image src="" alt="Image" width={50} height={50} />
+          </div>
+          <h2 className="text-xl font-bold">{title}</h2>
         </div>
-        <h2 className="text-4xl font-bold">{}</h2>
-
-      </div>
-      <h2 className="text-4xl text-custom-yellow font-bold">Winner</h2>
       </div>
 
-      {/* Paragraph */}
-      <div className=" px-6 ">
-        <p className="text-sm text-gray-900">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quo totam possimus laborum optio iusto consequatur, accusamus deserunt, delectus consequuntur laudantium unde labore? Odit maiores dicta cupiditate architecto temporibus, ab neque. Quaerat tempore nemo exercitationem blanditiis consequatur alias id consectetur dolorem ducimus. Ex nemo obcaecati cupiditate dolorem nostrum nesciunt vitae, fuga asperiores unde reprehenderit, repudiandae animi. Quasi possimus doloremque necessitatibus exercitationem? Incidunt qui commodi laboriosam, laudantium eum quidem sequi saepe! Dolorum quo hic minus, iure vero doloremque excepturi illum eaque consectetur modi veritatis quia dolor quis unde non! Ullam, veritatis dignissimos!
+
+      <div className="px-6">
+        <p className="text-md text-gray-900">
+          {showFullContent ? content : getShortContent(content, 75)}
         </p>
       </div>
 
-      {/* Read more button */}
+      
       <div className="px-6 py-4 flex justify-end">
-        <button className="bg-black text-white py-2  px-4 rounded-3xl">Read more</button>
-       
+        <button
+          onClick={() => setShowFullContent(!showFullContent)}
+          className="bg-black text-white py-2 px-4 rounded-3xl"
+        >
+          {showFullContent ? 'Show less' : 'Read more'}
+        </button>
       </div>
+    </div>
     </div>
   );
 };

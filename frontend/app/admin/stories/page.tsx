@@ -31,7 +31,7 @@ const Page: React.FC = () => {
     const fetchStories = async () => {
       try {
         const response = await AxiosIns.get<Story[]>("/stories");
-        setStories(response.data);
+        setStories(response.data.reverse());
         setLoading(false);
       } catch (error: any) {
         setError(error.message);

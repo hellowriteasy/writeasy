@@ -1,6 +1,7 @@
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { axiosInstance } from '@/app/utils/config/axios';
 
 interface ModalProps {
@@ -10,22 +11,36 @@ interface ModalProps {
 const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen }) => {
   const [promptTitle, setPromptTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const AxiosIns=axiosInstance("")
+  const AxiosIns = axiosInstance("");
+
   const handleUpdate = async () => {
     try {
       const response = await AxiosIns.post('/prompts', {
         title: promptTitle,
         description: description,
-        promptType: 'game'
+        promptType: 'game',
+        promptCategory: selectedCategories,
       });
       console.log('Response:', response.data);
+      toast.success('Prompt added successfully!');
       setIsModalOpen(false);
     } catch (err: any) {
       setError('Error submitting the prompt');
       console.error('Error:', err);
     }
   };
+
+  const toggleCategory = (category: string) => {
+    setSelectedCategories((prevCategories) =>
+      prevCategories.includes(category)
+        ? prevCategories.filter((cat) => cat !== category)
+        : [...prevCategories, category]
+    );
+  };
+
+  const categoryOptions = ['adventure', 'romance', 'mystery'];
 
   return (
     <Transition.Root show={true} as={Fragment}>
@@ -58,7 +73,7 @@ const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen }) => {
                   <div className="sm:flex sm:items-start">
                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                       <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                        Edit Prompt
+                        Add Prompt
                       </Dialog.Title>
                       <div className="mt-2">
                         <input
@@ -68,6 +83,26 @@ const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen }) => {
                           value={promptTitle}
                           onChange={(e) => setPromptTitle(e.target.value)}
                         />
+                      </div>
+                      <div className="mt-4">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="categories">
+                          Categories
+                        </label>
+                        <div className="flex flex-wrap gap-2">
+                          {categoryOptions.map((category) => (
+                            <button
+                              key={category}
+                              className={`px-3 py-1 rounded-full border ${
+                                selectedCategories.includes(category)
+                                  ? 'bg-black text-white'
+                                  : 'bg-gray-200 text-gray-700'
+                              }`}
+                              onClick={() => toggleCategory(category)}
+                            >
+                              {category}
+                            </button>
+                          ))}
+                        </div>
                       </div>
                       <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
@@ -92,7 +127,7 @@ const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen }) => {
                     className="inline-flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm sm:ml-3 sm:w-auto"
                     onClick={handleUpdate}
                   >
-                    Update
+                    Add
                   </button>
                   <button
                     type="button"

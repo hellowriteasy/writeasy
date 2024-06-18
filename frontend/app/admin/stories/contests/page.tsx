@@ -29,7 +29,7 @@ const AxiosIns=axiosInstance("")
     const fetchContests = async () => {
       try {
         const response = await AxiosIns.get(`/contests`);
-        setContests(response.data);
+        setContests(response.data.reverse());
        
       } catch (error) {
         

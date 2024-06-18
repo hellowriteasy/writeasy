@@ -1,6 +1,6 @@
 import { useState, Fragment, useRef } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import { Dialog, Transition } from '@headlessui/react';
+import { Dialog, Transition, Menu, MenuItem } from '@headlessui/react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -10,20 +10,24 @@ interface CardProps {
   title: string;
   description: string;
   id: string;
+  categories: string[];
 }
 
-const CardAdd: React.FC<CardProps> = ({ title, description, id }) => {
+const CardAdd: React.FC<CardProps> = ({ title, description, id, categories }) => {
   const [open, setOpen] = useState(false);
   const [promptTitle, setPromptTitle] = useState(title);
-  const [Description, setDescription] = useState(description);
+  const [promptDescription, setPromptDescription] = useState(description);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(categories);
   const cancelButtonRef = useRef(null);
- const AxiosIns=axiosInstance("")
+  const AxiosIns = axiosInstance("");
+
   const handleUpdate = async () => {
     try {
       await AxiosIns.put(`/prompts/${id}`, {
         title: promptTitle,
-        description: Description,
+        description: promptDescription,
         promptType: 'game',
+        promptCategory: selectedCategories,
       });
       toast.success('Prompt updated successfully!');
       setOpen(false);
@@ -43,6 +47,16 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id }) => {
       console.error('Error:', error);
     }
   };
+
+  const toggleCategory = (category: string) => {
+    setSelectedCategories((prevCategories) =>
+      prevCategories.includes(category)
+        ? prevCategories.filter((cat) => cat !== category)
+        : [...prevCategories, category]
+    );
+  };
+
+  const categoryOptions = ['adventure', 'romance', 'mystery'];
 
   return (
     <>
@@ -87,7 +101,7 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id }) => {
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
                 <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                  <div className="bg-white h-96 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                  <div className="bg-white h-auto px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                     <div className="sm:flex sm:items-start">
                       <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                         <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
@@ -96,13 +110,33 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id }) => {
                         <div className="mt-2">
                           <input
                             type="text"
-                            className="mt-1 block w-96 h-12 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
+                            className="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
                             placeholder="Prompt Title"
                             value={promptTitle}
                             onChange={(e) => setPromptTitle(e.target.value)}
                           />
                         </div>
-                        <div className="mb-4">
+                        <div className="mt-4">
+                          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="categories">
+                            Categories
+                          </label>
+                          <div className="flex flex-wrap gap-2">
+                            {categoryOptions.map((category) => (
+                              <button
+                                key={category}
+                                className={`px-3 py-1 rounded-full border ${
+                                  selectedCategories.includes(category)
+                                    ? 'bg-black text-white'
+                                    : 'bg-gray-200 text-gray-700'
+                                }`}
+                                onClick={() => toggleCategory(category)}
+                              >
+                                {category}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="mt-4">
                           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
                             Description
                           </label>
@@ -111,8 +145,8 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id }) => {
                             rows={4}
                             className="mt-1 block w-full h-40 rounded-md border p-4 border-gray-300 shadow-sm outline-none focus:ring-indigo-500 focus:border-indigo-500"
                             placeholder="Description"
-                            value={Description}
-                            onChange={(e) => setDescription(e.target.value)}
+                            value={promptDescription}
+                            onChange={(e) => setPromptDescription(e.target.value)}
                           />
                         </div>
                       </div>
@@ -121,7 +155,7 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id }) => {
                   <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                     <button
                       type="button"
-                      className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
+                      className="inline-flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm  sm:ml-3 sm:w-auto"
                       onClick={handleUpdate}
                     >
                       Update

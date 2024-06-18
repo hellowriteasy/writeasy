@@ -18,7 +18,7 @@ const Page = () => {
     const fetchPrompts = async () => {
       try {
         const response = await AxiosIns.get('/prompts/practice-prompts');
-        setPrompts(response.data);
+        setPrompts(response.data.reverse());
       } catch (error) {
         console.error('Error fetching prompts:', error);
       }

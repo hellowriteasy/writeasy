@@ -17,23 +17,22 @@ interface CardProps {
 
 const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
   const [promptTitle, setPromptTitle] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]); // State for selected categories
   const [promptCards, setPromptCards] = useState<CardProps[]>([]); // State to store added prompt cards
- const AxiosIns=axiosInstance("")
+  const AxiosIns = axiosInstance('');
+
   const handleAdd = () => {
     const promptData = {
       title: promptTitle,
-      promptCategory: selectedCategory,
+      promptCategories: selectedCategories, // Use selectedCategories array
       promptType: 'practice'
     };
-    
-  
+
     AxiosIns.post('/prompts', promptData)
       .then(response => {
-        
         const newPrompt: CardProps = {
           title: promptTitle,
-          type: selectedCategory
+          type: selectedCategories.join(', ') // Concatenate selected categories for display
         };
         setPromptCards([...promptCards, newPrompt]); // Add the new prompt card to the state
         setIsModalOpen(false);
@@ -43,6 +42,14 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
         console.error('There was an error posting the data!', error);
         toast.error('Failed to add prompt.');
       });
+  };
+
+  const toggleCategory = (category: string) => {
+    if (selectedCategories.includes(category)) {
+      setSelectedCategories(selectedCategories.filter(cat => cat !== category));
+    } else {
+      setSelectedCategories([...selectedCategories, category]);
+    }
   };
 
   return (
@@ -83,11 +90,12 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
                           type="text"
                           className="mt-1 block w-96 h-12 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
                           placeholder="Prompt Title"
+                          value={promptTitle}
                           onChange={(e) => setPromptTitle(e.target.value)}
                         />
                         <Menu as="div" className="relative h-40 mt-3">
                           <MenuButton className="w-96 text-left rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                            {selectedCategory || "Select Category"}
+                            {selectedCategories.length === 0 ? 'Select Category' : selectedCategories.join(', ')}
                           </MenuButton>
                           <Transition
                             as={Fragment}
@@ -99,14 +107,16 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
                             leaveTo="transform opacity-0 scale-95"
                           >
                             <MenuItems className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                              {["Adventure", "Category 2", "Category 3"].map((category) => (
+                              {["Adventure", "Fiction", "Romance","comic"].map((category) => (
                                 <MenuItem key={category}>
                                   {({ active }) => (
                                     <button
                                       className={`${
-                                        active ? "bg-indigo-600 text-white" : "text-gray-900"
+                                        selectedCategories.includes(category)
+                                          ? "bg-indigo-600 text-white"
+                                          : "text-gray-900"
                                       } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                      onClick={() => setSelectedCategory(category)}
+                                      onClick={() => toggleCategory(category)}
                                     >
                                       {category}
                                     </button>
@@ -123,7 +133,7 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
                 <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                   <button
                     type="button"
-                    className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
+                    className="inline-flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm  sm:ml-3 sm:w-auto"
                     onClick={handleAdd}
                   >
                     Add

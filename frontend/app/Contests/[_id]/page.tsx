@@ -10,7 +10,7 @@ import Cloud from "@/public/Game/cloud.svg";
 import Cloud2 from "@/public/Game/cloud3.svg";
 import Pagination from "@/app/components/Pagination";
 import CreateContest from "./createcontest/page";
-import ViewContest from "./viewcontest/page";
+import ViewContest from "./[id]/page";
 import { TContest, TPrompt } from "@/app/utils/types";
 import moment from "moment";
 import PromptNotPublished from "@/app/components/Others/PromptNotPublished";
@@ -107,21 +107,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
   return (
     <div className="w-full h-auto mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 h-auto ms-12">
-        {selectedPrompt ? (
-          contest.isActive ? (
-            <CreateContest
-              contestId={selectedPrompt.contestId}
-              promptId={selectedPrompt.promptId}
-              prompt_title={selectedPrompt.title}
-            />
-          ) : (
-            <ViewContest
-              contestId={selectedPrompt.contestId}
-              promptId={selectedPrompt.promptId}
-              prompt_title={selectedPrompt.title}
-            />
-          )
-        ) : (
+       
           <>
             <div className="flex mt-8 ">
               <div className="p-6 mb-6 flex flex-col gap-y-4 ">
@@ -184,7 +170,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
               </div>
             </div>
           </>
-        )}
+        
       </div>
     </div>
   );

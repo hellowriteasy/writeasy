@@ -123,17 +123,11 @@ const Card: React.FC<CardProps> = ({
                               className="mt-1 block w-full h-96 p-4 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
                               placeholder="Story details"
                               value={storyDetail}
+                              disabled
                              
                             />
                           </div>
-                          <div className="mb-4 flex space-x-2">
-                            <button className="bg-gray-200 text-gray-800 px-3 py-2 rounded-l-lg border-r-0">
-                              Marked
-                            </button>
-                            <button className="bg-gray-200 text-gray-800 px-3 py-2 rounded-r-lg border-l-0">
-                              Original
-                            </button>
-                          </div>
+                          
                         </div>
                       </div>
                     </div>

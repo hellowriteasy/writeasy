@@ -20,7 +20,7 @@ const Games = () => {
     const fetchGamePrompts = async () => {
       try {
         const response = await AxiosIns.get("prompts/game-prompts");
-        setGamePrompts(response.data);
+        setGamePrompts(response.data.reverse());
         setIsLoading(false);
       } catch (err) {
         setError("Error fetching game prompts");
@@ -61,7 +61,7 @@ const Games = () => {
               </div>
             </div>
             {gamePrompts.map((prompt) => (
-              <CardAdd key={prompt._id} id={prompt._id} title={prompt.title} description={prompt.description} />
+              <CardAdd key={prompt._id} id={prompt._id} title={prompt.title} categories={prompt.promptCategory} description={prompt.description} />
             ))}
           </div>
           {isModalOpen && <ModalGame setIsModalOpen={setIsModalOpen} />}

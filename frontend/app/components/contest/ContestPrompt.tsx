@@ -22,7 +22,11 @@ const ContestPrompt: React.FC<PromptProps> = ({
 }) => {
   const router = useRouter()
   const handleClick = () => {
+    if(isActive){
     router.push(`/Contests/${contestId}/prompt/${promptId}/story/create`);
+    }else{
+      router.push(`/Contests/${contestId}/${promptId}`);
+    }
     // onSelectPrompt(contestId, promptId,"");
   };
 

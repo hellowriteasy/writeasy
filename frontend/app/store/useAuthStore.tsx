@@ -10,6 +10,7 @@ interface AuthState {
   role: string | null;
   subscriptionType: string | null;
   subscriptionRemainingDays?: number | null;
+  profile_picture?:string | null;
   isSubcriptionActive?: boolean;
   login: (userId: string, token: string) => void;
   logout: () => void;
@@ -31,6 +32,7 @@ const useAuthStore = create<AuthState>((set) => {
             subscriptionType,
             isSubcriptionActive,
             subscriptionRemainingDays,
+            profile_picture
           } = response.data.message;
           set({
             username,
@@ -38,6 +40,7 @@ const useAuthStore = create<AuthState>((set) => {
             subscriptionType,
             isSubcriptionActive,
             subscriptionRemainingDays,
+            profile_picture
 
           });
         } else {

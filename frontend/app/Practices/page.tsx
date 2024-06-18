@@ -28,7 +28,7 @@ const Page: React.FC = () => {
     AxiosIns
       .get("/prompts/practice-prompts")
       .then((response) => {
-        setPromptData(response.data);
+        setPromptData(response.data.reverse());
         setIsLoading(false);
       })
       .catch((error) => {

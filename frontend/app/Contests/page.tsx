@@ -26,7 +26,7 @@ const Contest = () => {
     AxiosIns
       .get("/contests")
       .then((response) => {
-        setContests(response.data);
+        setContests(response.data.reverse());
       })
       .catch((error) => {
         setError("Error fetching contest data: " + error.message);

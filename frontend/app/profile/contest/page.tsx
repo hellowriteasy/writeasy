@@ -30,11 +30,10 @@ const ContestPage: React.FC = () => {
             limit: itemsPerPage
           }
         });
-        setUserStories(response.data);
+        setUserStories(response.data.reverse());
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching user stories:', error);
-        setError('Error fetching user stories');
+   
         setLoading(false);
       }
     };

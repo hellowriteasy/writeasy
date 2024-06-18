@@ -39,10 +39,10 @@ const Page: React.FC = () => {
           }
         });
         
-        setUserStories(response.data);
+        setUserStories(response.data.reverse());
         setLoading(false);
       } catch (error:any) {
-        setError(`Error fetching user stories:  + ${error.message||""}`);
+    
         setLoading(false);
       }
     };

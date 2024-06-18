@@ -6,7 +6,7 @@ import StoryNav from "@/app/components/admin/stories/StoryNav";
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
 import { TStory,Params } from "@/app/utils/types";
 import { axiosInstance } from "@/app/utils/config/axios";
-
+ 
 const Page =({ params }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [stories, setStories] = useState<TStory[]>([]);
@@ -18,7 +18,8 @@ const Page =({ params }) => {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const response = await AxiosIns.get('/stories/top');
+        console.log(params.id)
+        const response = await AxiosIns.get(`/stories/contest/prompt?contest_id=${params.id}&sortKey=score`);
         setStories(response.data); 
       } catch (error) {
         console.error('Error fetching stories:', error);

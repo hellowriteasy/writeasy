@@ -1,4 +1,4 @@
-import { useState, Fragment, useRef } from 'react';
+import { useState, Fragment, useRef, useEffect } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Dialog, Transition, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import axios from 'axios';
@@ -14,16 +14,26 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({ title, type, id }) => {
   const [open, setOpen] = useState(false);
   const [promptTitle, setPromptTitle] = useState(title);
-  const [selectedType, setSelectedType] = useState(type);
-  const AxiosIns=axiosInstance("")
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+
+  // Split initial type into array if it's a comma-separated string
+  useEffect(() => {
+    if (typeof type === 'string') {
+      setSelectedTypes(type.split(','));
+    } else {
+      setSelectedTypes([]);
+    }
+  }, [type]);
+
+  const AxiosIns = axiosInstance('');
   const cancelButtonRef = useRef(null);
 
   const handleUpdate = async () => {
     try {
       const response = await AxiosIns.put(`/prompts/${id}`, {
         title: promptTitle,
-        promptCategory: selectedType,
-        promptType: 'practice'
+        promptCategory: selectedTypes.join(','), // Join selected types into a comma-separated string for backend
+        promptType: 'practice',
       });
 
       setOpen(false);
@@ -37,8 +47,7 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
   const handleDelete = async () => {
     try {
       const response = await AxiosIns.delete(`/prompts/${id}`);
-      if (window.confirm("Are you sure you want to delete this prompt?")) {
-        
+      if (window.confirm('Are you sure you want to delete this prompt?')) {
         toast.success('Prompt deleted successfully!');
         // Optionally, you can also update the UI to remove the card from the list of prompts
       }
@@ -50,7 +59,7 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
 
   return (
     <>
-      <div className="bg-white border border-gray-300 w-5/6 shadow-md rounded-lg p-4 mb-4">
+      <div className="bg-white border font-poppins border-gray-300 w-5/6 shadow-md rounded-lg p-4 mb-4">
         <div className="flex justify-between items-center mb-2">
           <div className="text-xl font-semibold">{title}</div>
           <div className="flex space-x-2 gap-4">
@@ -106,7 +115,7 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
                           />
                           <Menu as="div" className="relative mt-3">
                             <MenuButton className="w-96 text-left rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                              {selectedType || "Select Type"}
+                              {selectedTypes.length > 0 ? selectedTypes.join(', ') : 'Select Type'}
                             </MenuButton>
                             <Transition
                               as={Fragment}
@@ -118,14 +127,22 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
                               leaveTo="transform opacity-0 scale-95"
                             >
                               <MenuItems className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                {["Adventure", "Comic", "Fantasy"].map((type) => (
+                                {['Adventure', 'Comic', 'Fantasy','Romance'].map((type) => (
                                   <MenuItem key={type}>
                                     {({ active }) => (
                                       <button
                                         className={`${
-                                          active ? "bg-indigo-600 text-white" : "text-gray-900"
+                                          selectedTypes.includes(type)
+                                            ? 'bg-black text-white'
+                                            : 'text-gray-900'
                                         } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                        onClick={() => setSelectedType(type)}
+                                        onClick={() =>
+                                          setSelectedTypes((prevTypes) =>
+                                            prevTypes.includes(type)
+                                              ? prevTypes.filter((t) => t !== type)
+                                              : [...prevTypes, type]
+                                          )
+                                        }
                                       >
                                         {type}
                                       </button>
@@ -142,7 +159,7 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
                   <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                     <button
                       type="button"
-                      className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
+                      className="inline-flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm sm:ml-3 sm:w-auto"
                       onClick={handleUpdate}
                     >
                       Update

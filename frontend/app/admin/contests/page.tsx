@@ -23,8 +23,8 @@ const AxiosIns=axiosInstance("");
   useEffect(() => {
     const fetchContests = async () => {
       try {
-        const response = await AxiosIns.get<Contest[]>("/api/contests");
-        setContests(response.data);
+        const response = await AxiosIns.get<Contest[]>("/contests");
+        setContests(response.data.reverse());
         setLoading(false);
       } catch (error) {
         if (axios.isAxiosError(error)) {
