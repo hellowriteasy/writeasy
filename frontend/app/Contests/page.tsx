@@ -17,17 +17,16 @@ import { axiosInstance } from "../utils/config/axios";
 
 const Contest = () => {
   const itemsPerPage = 5;
-  const [page, setPage] = useState(1);
 
   const [currentPage, setCurrentPage] = useState(0);
-  const [contests, setContests] = useState([]);
+  const [endedContests, setEndedContests] = useState([]);
 
   const [error, setError] = useState<string | null>(null);
   const AxiosIns = axiosInstance("");
   useEffect(() => {
     AxiosIns.get("/contests/ended")
       .then((response) => {
-        setContests(response.data.reverse());
+        setEndedContests(response.data.reverse());
       })
       .catch((error) => {
         setError("Error fetching contest data: " + error.message);
@@ -39,12 +38,8 @@ const Contest = () => {
   };
 
   const offset = currentPage * itemsPerPage;
-  const currentContests = contests.slice(offset, offset + itemsPerPage);
-  const pageCount = Math.ceil(contests.length / itemsPerPage);
 
-
-  // infite scrolll library 
-
+  // infite scrolll library
 
   if (error) return <p>{error}</p>;
 
@@ -70,16 +65,16 @@ const Contest = () => {
         </div>
 
         <div className="flex w-full h-auto relative mt-0 justify-around gap-x-5">
-          <div>
+          <div className="w-full">
             <div className="absolute top-40 -left-32">
               <Image className="w-[12vw]" src={Bee} alt="bee" />
             </div>
-            <div className="gap-8 relative flex flex-col gap-y-20 w-full  ">
+            <div className="gap-8 relative flex flex-col gap-y-20 w-full ">
               <div className="flex flex-col gap-y-3">
                 <Join />
               </div>
-              <div className="flex flex-col gap-y-3">
-                {currentContests.map((contest, index) => (
+              <div className="flex flex-col gap-y-3 w-full ">
+                {endedContests.map((contest, index) => (
                   <Contestitle key={index} contest={contest} />
                 ))}
               </div>

@@ -38,7 +38,7 @@ const getGamePrompts = async (req, res) => {
 
 const getPrompt = async (req, res) => {
   try {
-    const prompt = await PromptService.getPromptById(req.params.id);
+    let prompt = await PromptService.getPromptById(req.params.id);
     if (!prompt) {
       return res.status(404).json({ message: "Prompt not found" });
     }
@@ -90,9 +90,9 @@ const getAllPromptsOfContest = async (req, res) => {
       return res.status(400).json({ message: "Please provide contest id" });
     }
     const listOfPrompts = await PromptService.getPromptsOfContestId(contestId);
-    return res.status(200).json(listOfPrompts)
+    return res.status(200).json(listOfPrompts);
   } catch (error) {
-    res.status(500).json({ message: error.message||"Internal server error" });
+    res.status(500).json({ message: error.message || "Internal server error" });
   }
 };
 

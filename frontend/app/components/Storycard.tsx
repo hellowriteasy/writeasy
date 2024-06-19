@@ -1,70 +1,81 @@
-import React, { useState } from 'react';
-import Image from 'next/image';
-import SecButton from './SecButton';
+import React, { useState } from "react";
+import Image from "next/image";
+import SecButton from "./SecButton";
 import mainstar from "@/public/others/main_star.svg";
 import secondstar from "@/public/others/2ndstar.svg";
+import Logo from "@/public/Landingpage-img/logo.svg";
 
 interface StorycardProps {
   title: string;
   content: string;
   corrections: string;
-  starType: 'main' | 'second' | 'none';
+  starType: "main" | "second" | "none";
+  username: string;
+  email: string;
 }
 
-const Storycard: React.FC<StorycardProps> = ({ title, content, corrections, starType }) => {
+const Storycard: React.FC<StorycardProps> = ({
+  title,
+  content,
+  corrections,
+  username,
+  email,
+  starType,
+}) => {
   const [showFullContent, setShowFullContent] = useState(false);
 
   const getStarImage = () => {
     switch (starType) {
-      case 'main':
-        return <Image src={mainstar} alt='main star' />;
-      case 'second':
-        return <Image src={secondstar} alt='second star' />;
-      case 'none':
+      case "main":
+        return <Image src={mainstar} alt="main star" />;
+      case "second":
+        return <Image src={secondstar} alt="second star" />;
+      case "none":
       default:
         return null;
     }
   };
 
   const getShortContent = (text: string, wordLimit: number) => {
-    const words = text.split(' ');
-    return words.length > wordLimit ? words.slice(0, wordLimit).join(' ') + '...' : text;
+    const words = text.split(" ");
+    return words.length > wordLimit
+      ? words.slice(0, wordLimit).join(" ") + "..."
+      : text;
   };
 
   return (
-    <div className='relative my-6'>
-       <div className='absolute  -top-12 -left-5'>
-        {getStarImage()}
-      </div>
-    <div className="w-full  mx-auto border-2  font-comic border-gray-200 white rounded-2xl h-[fit-content] overflow-hidden">
-     
-      <div className="flex items-center my-8 justify-between px-6 py-4">
-        <div className="flex items-center px-6 py-4">
-          <div className="mr-4 rounded-full">
-           
-            <Image src="" alt="Image" width={50} height={50} />
+    <div className="relative my-6">
+      <div className="absolute  -top-12 -left-5">{getStarImage()}</div>
+      <div className="w-full  mx-auto border-2  font-comic border-gray-200 white rounded-2xl h-[fit-content] overflow-hidden">
+        <div className="flex items-center my-8 justify-between px-6 py-4">
+          <div className="flex items-center px-6 py-4">
+            <div className="mr-4 rounded-full border border-gray-400 h-12 w-12 overflow-hidden flex items-center content-center">
+              <Image src={Logo} alt="Image" width={50} height={50} />
+            </div>
+            {/* username  */}
+            <div>
+              <h1>{username}</h1>
+              <p>{email}</p>
+            </div>
           </div>
+        </div>
+
+        <div className="px-6 flex flex-col gap-y-2">
           <h2 className="text-xl font-bold">{title}</h2>
+          <p className="text-md text-gray-900">
+            {showFullContent ? content : getShortContent(content, 75)}
+          </p>
+        </div>
+
+        <div className="px-6 py-4 flex justify-end">
+          <button
+            onClick={() => setShowFullContent(!showFullContent)}
+            className="bg-black text-white py-2 px-4 rounded-3xl"
+          >
+            {showFullContent ? "Show less" : "Read more"}
+          </button>
         </div>
       </div>
-
-
-      <div className="px-6">
-        <p className="text-md text-gray-900">
-          {showFullContent ? content : getShortContent(content, 75)}
-        </p>
-      </div>
-
-      
-      <div className="px-6 py-4 flex justify-end">
-        <button
-          onClick={() => setShowFullContent(!showFullContent)}
-          className="bg-black text-white py-2 px-4 rounded-3xl"
-        >
-          {showFullContent ? 'Show less' : 'Read more'}
-        </button>
-      </div>
-    </div>
     </div>
   );
 };

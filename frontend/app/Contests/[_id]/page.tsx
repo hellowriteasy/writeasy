@@ -9,8 +9,6 @@ import WeeklyTest from "../../components/Others/WeeklyTest";
 import Cloud from "@/public/Game/cloud.svg";
 import Cloud2 from "@/public/Game/cloud3.svg";
 import Pagination from "@/app/components/Pagination";
-import CreateContest from "./createcontest/page";
-import ViewContest from "./[id]/page";
 import { TContest, TPrompt } from "@/app/utils/types";
 import moment from "moment";
 import PromptNotPublished from "@/app/components/Others/PromptNotPublished";

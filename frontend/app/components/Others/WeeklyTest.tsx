@@ -64,7 +64,14 @@ const WeeklyTest = () => {
           </Link>
         </div>
       ) : (
-        <p>Loading contest data...</p> // Display a loading message while fetching
+        <div className="flex flex-col items-center gap-y-3">
+          <p className="font-comic  ">
+            No Ongoing Contest !
+          </p>
+          <h1 className="font-comic text-[2vw] py-1 font-bold ">
+            Contest will be started soon ...
+          </h1>
+        </div> // Display a loading message while fetching
       )}
     </div>
   );

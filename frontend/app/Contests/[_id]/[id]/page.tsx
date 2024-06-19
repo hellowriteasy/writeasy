@@ -3,12 +3,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
-import WeeklyTest from "../../../components/Others/WeeklyTest";
 import Cloud from "@/public/Game/cloud.svg";
 import Cloud2 from "@/public/Game/cloud3.svg";
 import Pagination from "@/app/components/Pagination";
 import Storycard from "@/app/components/Storycard";
 import { axiosInstance } from "@/app/utils/config/axios";
+import NotFound from "@/app/components/Others/NotFound";
+import { TStory } from "@/app/utils/types";
 
 interface Prompt {
   _id: string;
@@ -30,14 +31,16 @@ interface ViewContestProps {
 }
 
 const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
-  const [stories, setStories] = useState<Contest[]>([]);
+  const [stories, setStories] = useState<TStory[]>([]);
   const AxiosIns = axiosInstance("");
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const response = await AxiosIns.get(`/stories/contest/prompt?prompt_id=${params.id}&sortKey=score`);
+        const response = await AxiosIns.get(
+          `/stories/contest/prompt?prompt_id=${params.id}&sortKey=score`
+        );
         setStories(response.data);
       } catch (err: any) {
         setError(err.message);
@@ -48,7 +51,7 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
   }, [params.id]);
 
   if (error) return <p>{error}</p>;
-  if (stories.length === 0) return <p>No Stories Available</p>;
+  if (stories.length === 0) return <NotFound text="No Stories to show !!" />;
 
   return (
     <div className="w-full h-auto mt-6 z-0 relative flex justify-center">
@@ -56,9 +59,7 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
         <div className="w-full text-center text-2xl font-comic relative pt-4">
           CONTEST ENDED
         </div>
-        <div className="flex justify-center mt-8">
-         
-        </div>
+        <div className="flex justify-center mt-8"></div>
         <div className="flex w-full h-auto relative mt-0 justify-around">
           <div className="absolute top-0 -left-40">
             <Image src={Cloud2} alt="cloud" />
@@ -70,20 +71,21 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
               </h1> */}
             </div>
             {stories.map((story, index) => {
-              let starType: 'main' | 'second' | 'none' = 'none';
+              let starType: "main" | "second" | "none" = "none";
               if (index === 0) {
-                starType = 'main';
+                starType = "main";
               } else if (index === 1 || index === 2) {
-                starType = 'second';
+                starType = "second";
               }
-
               return (
-                <Storycard 
+                <Storycard
                   key={story._id}
-                  title={story.title} 
-                  content={story.content} 
-                  corrections={story.corrections} 
+                  title={story.title}
+                  content={story.content}
+                  corrections={story.corrections}
                   starType={starType}
+                  username={story.user.username}
+                  email={story.user.email}
                 />
               );
             })}
@@ -92,7 +94,6 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
             </div>
           </div>
         </div>
-       
       </div>
     </div>
   );
