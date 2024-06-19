@@ -235,6 +235,14 @@ const getStoriesByContentAndPrompt = async (req, res) => {
       ...(contest_id ? { contest: contest_id } : null),
       ...(prompt_id ? { prompt: prompt_id } : null),
     })
+      .populate({
+        select: {
+          username: 1,
+          email: 1,
+          profile_picture: 1,
+        },
+        path: "user",
+      })
       .sort(getSortInputForStoriesByContestAndPrompt(sortKey, "desc"))
       .skip(skip)
       .limit(perPage);
