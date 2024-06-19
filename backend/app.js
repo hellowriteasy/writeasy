@@ -13,6 +13,7 @@ const promptRoutes = require("./routes/promptRoutes");
 const contestRoutes = require("./routes/contestRoutes");
 const emailRoutes = require("./routes/emailRoute");
 const collaborativeStoryRoutes = require("./routes/collaborativeStoryRoutes");
+const faqRoutes=require('./routes/faq')
 const paymentRoutes = require("./routes/paymentRoute");
 const scheduleJob = require("./config/cron");
 const Subscription = require("./src/models/subscription");
@@ -36,6 +37,7 @@ cron.schedule("*/3 * * * * *", () => scheduleJob());
 // Use routes
 app.use("/api/auth", authRoutes);
 app.use("/api/stories", storyRoutes);
+app.use("/api/faq", faqRoutes);
 app.use("/api/prompts", promptRoutes);
 app.use("/api/contests", contestRoutes);
 app.use("/api/emails", emailRoutes);

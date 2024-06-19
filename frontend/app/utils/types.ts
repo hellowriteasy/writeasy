@@ -47,6 +47,12 @@ export type TContest = {
   __v: number;
 };
 
- export interface Params {
+ export type Params= {
   _id: string;
+};
+
+export type TFAQ ={
+  _id: string;
+  question: string;
+  answer: string;
 }
