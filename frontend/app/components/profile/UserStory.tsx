@@ -1,7 +1,6 @@
 'use client';
 import React, { useState } from 'react';
 import { usePDF } from 'react-to-pdf';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { diffChars } from 'diff';
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,6 +14,8 @@ interface CardProps {
   description?: string;
   corrections: string;
   type: string;
+  promptTitle: string;
+  contestTitle: string;
   contributors: TUser[]; 
 }
 
@@ -24,6 +25,8 @@ const Card: React.FC<CardProps> = ({
   corrections,
   description = "",
   type,
+  contestTitle,
+  promptTitle,
   contributors,
 }) => {
   console.log("the story id ", id);
@@ -101,9 +104,12 @@ const Card: React.FC<CardProps> = ({
   return (
     <div className="bg-white w-full sm:w-3/4 border-2 border-slate-300 shadow-sm rounded-3xl p-6 transition-all duration-300">
       <div ref={targetRef} className="flex flex-col mb-4">
-        <h2 className="text-xl px-4 py-2 font-bold mb-2">{title}</h2>
+        <h2 className="text-xlpy-2 font-bold mb-2">{title}</h2>
+        <p>
+          {contestTitle} &gt; {promptTitle}
+        </p>
         <p
-          className={`text-gray-700 px-4 py-4 transition-all duration-300 ${
+          className={`text-gray-700 py-4 transition-all duration-300 ${
             showFullDescription ? "max-h-full" : "max-h-20 overflow-hidden"
           }`}
         >

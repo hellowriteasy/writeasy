@@ -28,6 +28,8 @@ const getStoriesByUserAndType = async (userId, storyType) => {
   if (storyType === "practice" || storyType === "contest") {
     return await Story.find({ user: objectId, storyType: storyType })
       .populate("user")
+      .populate("contest")
+      .populate("prompt")
       .populate({
         path: "contributors",
         select: { password: 0 },
@@ -45,6 +47,8 @@ const getStoriesByUserAndType = async (userId, storyType) => {
       ],
     })
       .populate("user")
+      .populate("prompt")
+      .populate("contest")
       .populate({
         path: "contributors",
         select: { password: 0 },

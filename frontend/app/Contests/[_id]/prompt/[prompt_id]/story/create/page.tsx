@@ -45,6 +45,7 @@ const CreateContest = () => {
     }
     // eslintreact - hooks / exhaustive - deps;
   }, [promptId]);
+
   const getPromptById = async () => {
     try {
       const { data } = await axiosIns.get(`/prompts/${promptId}`);
@@ -54,9 +55,8 @@ const CreateContest = () => {
     }
   };
   const [title, setTitle] = useState("");
-  const [content, setcontent] = useState("");
-  const { role, isSubcriptionActive } = useAuthStore();
-  const { userId } = useAuthStore();
+  const router = useRouter();
+  const { role, isSubcriptionActive, userId } = useAuthStore();
   async function handleSubmit(e: SyntheticEvent) {
     e.preventDefault(); // Prevent default form submission behavior
 
@@ -79,6 +79,7 @@ const CreateContest = () => {
       const { status } = await axiosIns.post("/stories", payload);
       if (status === 201) {
         toast.success("Story saved succesfully");
+        router.push(`/profile/contest?search=${promptId}`);
       }
     } catch (error) {
       toast.error("Story failed to save.");
@@ -142,7 +143,7 @@ const CreateContest = () => {
           <div className="gap-8 relative w-4/5 flex flex-col">
             <form action="" className="height-[100px]">
               <div className="flex flex-col w-full items-center gap-4 h-96">
-                <h2 className="text-3xl"> {promptDetails?.title} </h2>
+                <h2 className="text-3xl uppercase" > {promptDetails?.contestId.contestTheme} &gt; {promptDetails?.title} </h2>
                 <div>
                   <input
                     className="border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[70vw] h-12 focus:outline-none focus:border-yellow-600"

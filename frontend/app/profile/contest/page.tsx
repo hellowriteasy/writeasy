@@ -50,46 +50,57 @@ const ContestPage: React.FC = () => {
 
   
   return (
-    <div className='font-poppins'>
+    <div className="font-poppins">
       <ProfileTabs />
-      <div className='flex flex-col items-center gap-10 min-h-[500px]'>
+      <div className="flex flex-col items-center gap-10 min-h-[500px]">
         {loading ? (
           <p>Loading...</p>
         ) : error ? (
           <p>{error}</p>
         ) : (
           <>
-            { userStories.length >0 ? userStories.map((story, index) => (
-              <UserStory
-                key={index}
-                title={story.title}
-                description={story.content}
-                id={story._id}
-                corrections={story.corrections}
-                type={story.storyType}
-                contributors={story.contributors}
-              />
-            )):<NotFound text='No Contest To Show !!'/>}
-                { 
-                  userStories.length >0 ?     <div className="w-full mt-10 text-lg md:text-xl font-comic">
-          <ReactPaginate
-            previousLabel={<FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />}
-            nextLabel={<FaAngleRight className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />}
-            breakLabel="..."
-            breakClassName="break-me"
-            pageCount={pageCount}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
-            onPageChange={handlePageClick}
-            containerClassName="flex justify-center gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
-            pageLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
-            previousLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
-            nextLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
-            activeClassName="bg-black text-white rounded-full"
-          />
-        </div>:""
-                }
-         
+            {userStories.length > 0 ? (
+              userStories.map((story, index) => (
+                <UserStory
+                  key={index}
+                  title={story.title}
+                  description={story.content}
+                  id={story._id}
+                  corrections={story.corrections}
+                  type={story.storyType}
+                  contributors={story.contributors}
+                  promptTitle={story.prompt.title}
+                  contestTitle={story.contest.contestTheme}
+                />
+              ))
+            ) : (
+              <NotFound text="No Contest To Show !!" />
+            )}
+            {userStories.length > 0 ? (
+              <div className="w-full mt-10 text-lg md:text-xl font-comic">
+                <ReactPaginate
+                  previousLabel={
+                    <FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+                  }
+                  nextLabel={
+                    <FaAngleRight className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+                  }
+                  breakLabel="..."
+                  breakClassName="break-me"
+                  pageCount={pageCount}
+                  marginPagesDisplayed={2}
+                  pageRangeDisplayed={5}
+                  onPageChange={handlePageClick}
+                  containerClassName="flex justify-center gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
+                  pageLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                  previousLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                  nextLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                  activeClassName="bg-black text-white rounded-full"
+                />
+              </div>
+            ) : (
+              ""
+            )}
           </>
         )}
       </div>

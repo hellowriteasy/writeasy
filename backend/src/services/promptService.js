@@ -29,7 +29,7 @@ const getGamePrompts = () => {
 };
 
 const getPromptById = async (promptId) => {
-  return await Prompt.findById(promptId);
+  return await Prompt.findById(promptId).populate("contestId");
 };
 
 const updatePrompt = async (id, data) => {
