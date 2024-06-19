@@ -17,14 +17,15 @@ import { axiosInstance } from "../utils/config/axios";
 
 const Contest = () => {
   const itemsPerPage = 5;
+  const [page, setPage] = useState(1);
+
   const [currentPage, setCurrentPage] = useState(0);
   const [contests, setContests] = useState([]);
 
   const [error, setError] = useState<string | null>(null);
- const AxiosIns=axiosInstance("")
+  const AxiosIns = axiosInstance("");
   useEffect(() => {
-    AxiosIns
-      .get("/contests")
+    AxiosIns.get("/contests/ended")
       .then((response) => {
         setContests(response.data.reverse());
       })
@@ -40,6 +41,10 @@ const Contest = () => {
   const offset = currentPage * itemsPerPage;
   const currentContests = contests.slice(offset, offset + itemsPerPage);
   const pageCount = Math.ceil(contests.length / itemsPerPage);
+
+
+  // infite scrolll library 
+
 
   if (error) return <p>{error}</p>;
 
@@ -71,15 +76,9 @@ const Contest = () => {
             </div>
             <div className="gap-8 relative flex flex-col gap-y-20 w-full  ">
               <div className="flex flex-col gap-y-3">
-                <h1 className="font-bold font-comic text-3xl">
-                  Ongoing Contest ...
-                </h1>
                 <Join />
               </div>
               <div className="flex flex-col gap-y-3">
-                <h1 className="font-bold font-comic text-3xl">
-                  Ended Contest ...
-                </h1>
                 {currentContests.map((contest, index) => (
                   <Contestitle key={index} contest={contest} />
                 ))}
@@ -88,7 +87,7 @@ const Contest = () => {
                 <Image className="w-[7vw]" src={Cloud} alt="Cloud" />
               </div>
             </div>
-            <div className="w-full mt-10 text-lg md:text-xl font-comic">
+            {/* <div className="w-full mt-10 text-lg md:text-xl font-comic">
               <ReactPaginate
                 previousLabel={
                   <FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
@@ -111,7 +110,7 @@ const Contest = () => {
                 nextLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
                 activeClassName="bg-black text-white rounded-full"
               />
-            </div>
+            </div> */}
           </div>
 
           <div className="flex flex-col vsm-hide gap-8">

@@ -21,6 +21,7 @@ const ContestPrompt: React.FC<PromptProps> = ({
   isActive,
 }) => {
   const router = useRouter()
+
   const handleClick = () => {
     if(isActive){
     router.push(`/Contests/${contestId}/prompt/${promptId}/story/create`);
@@ -30,9 +31,17 @@ const ContestPrompt: React.FC<PromptProps> = ({
     // onSelectPrompt(contestId, promptId,"");
   };
 
+
+
+  // fetch api here and 
+  
+  
+
+
+
   return (
     <div className="flex justify-center px-4 md:px-0 w-full   bg-white border-2 border-gray-300 rounded-3xl ">
-      <div className="w-full  h-auto md:h-40 flex relativeoverflow-hidden mb-4">
+      <div className="w-full  h-auto md:h-40 flex relative overflow-hidden mb-4">
         <div className="px-4 py-4 md:px-6 md:py-4 w-full md:w-10/12">
           <div className="font-bold font-comic text-wrap text-base md:text-xl mb-2 overflow-hidden overflow-ellipsis whitespace-nowrap">
             {promptText}
@@ -54,8 +63,9 @@ const ContestPrompt: React.FC<PromptProps> = ({
             height={24}
             className="md:w-auto md:h-auto"
           />
+          {/* <h1>hello</h1> */}
         </div>
-        {/* )} */}
+
       </div>
     </div>
   );

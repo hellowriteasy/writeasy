@@ -7,6 +7,7 @@ const {
   deleteContest,
   getContest,
   getOngoingContests,
+  getEndedContests,
 } = require("../src/controllers/contestController");
 
 /**
@@ -62,6 +63,22 @@ router.get("/", getContests);
  *         description: Server error when fetching ongoing contests.
  */
 router.get("/ongoing", getOngoingContests);
+
+/**
+ * @openapi
+ * /api/contests/ended:
+ *   get:
+ *     tags:
+ *       - Contests
+ *     summary: Get ended contests
+ *     description: Retrieves all ongoing contests that have not reached their submission deadline.
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved ongoing contests.
+ *       500:
+ *         description: Server error when fetching ongoing contests.
+ */
+router.get("/ended", getEndedContests);
 
 /**
  * @openapi

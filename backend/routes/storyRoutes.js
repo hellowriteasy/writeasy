@@ -176,100 +176,54 @@ router.put("/:id", updateStory);
  */
 router.delete("/:id", deleteStory);
 
-/**
- * @openapi
- * /api/stories/score:
- *   post:
- *     tags:
- *       - Stories
- *     summary: Score a story and get corrections
- *     description: Submits a story for scoring and correction based on specified task type (grammar, rewrite, or improve).
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required: [userId, title, content, wordCount, taskType]
- *             properties:
- *               userId:
- *                 type: string
- *                 description: ID of the user who is submitting the story.
- *               title:
- *                 type: string
- *                 description: Title of the story.
- *               content:
- *                 type: string
- *                 description: Content of the story to be scored and optionally corrected.
- *               wordCount:
- *                 type: number
- *                 description: Word count of the story.
- *               taskType:
- *                 type: string
- *                 description: The type of task to perform on the story (ScoreOnly, Grammar, Rewrite, Improve).
- *                 enum: ["grammar", "rewrite", "improve"]
- *               storyType:
- *                 type: string
- *                 description: The type of the story
- *                 enum: ["practice", "contest", "game"]
- *               prompt:
- *                 type: string
- *                 description: ID of the prompt associated with the story.
- *     responses:
- *       201:
- *         description: Story scored and, if requested, corrected successfully.
- *       400:
- *         description: Invalid request parameters.
- *       500:
- *         description: Error occurred while processing the story.
- */
-router.post("/score", scoreStory);
 
 /**
  * @openapi
- * /api/stories/top-story/prompt/{prompt_id}:
+ * /api/stories/user/{prompt_id}/{user_id}:
  *   get:
- *     tags:
- *       - Stories
- *     summary: Get top stories by prompt ID
- *     description: Retrieves the top stories associated with a specified prompt ID.
+ *     summary: Get the story of a user by prompt ID and user ID
+ *     description: Retrieves the story content associated with a specific user and prompt.
+ *     tags: [Stories]
  *     parameters:
  *       - in: path
  *         name: prompt_id
  *         required: true
  *         schema:
  *           type: string
- *         description: ID of the prompt to retrieve top stories for.
- *       - in: query
- *         name: page
+ *         description: The ID of the prompt.
+ *       - in: path
+ *         name: user_id
+ *         required: true
  *         schema:
- *           type: integer
- *           minimum: 1
- *         description: The page number for pagination (default is 1).
- *       - in: query
- *         name: perPage
- *         schema:
- *           type: integer
- *           minimum: 1
- *         description: The number of stories per page for pagination (default is 10).
+ *           type: string
+ *         description: The ID of the user.
  *     responses:
  *       '200':
- *         description: Successful response with top stories.
+ *         description: Successful response. Story data returned.
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Story'
- *       '400':
- *         description: Invalid request parameters.
+ *               type: object
+ *               properties:
+ *                 prompt_id:
+ *                   type: string
+ *                   example: "prompt123"
+ *                   description: The ID of the prompt.
+ *                 user_id:
+ *                   type: string
+ *                   example: "user456"
+ *                   description: The ID of the user.
+ *                 story:
+ *                   type: string
+ *                   example: "Once upon a time..."
+ *                   description: The story content related to the user and prompt.
  *       '404':
- *         description: Prompt not found or no stories associated with the prompt.
+ *         description: Not Found. The requested user or prompt was not found.
  *       '500':
- *         description: Error occurred while processing the request.
+ *         description: Internal Server Error. An unexpected error occurred.
  */
-
 router.get("/user/:prompt_id/:user_id", getStoryOfAuserByPrompt);
+
 /**
  * @swagger
  * /api/stories/contest/prompt:

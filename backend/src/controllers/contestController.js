@@ -70,6 +70,14 @@ const getOngoingContests = async (req, res) => {
   }
 };
 
+const getEndedContests = async (req, res) => {
+  try {
+    const endedContest = await ContestService.getEndedContests();
+    res.json(endedContest);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 module.exports = {
   createContest,
   getContests,
@@ -77,4 +85,5 @@ module.exports = {
   deleteContest,
   getContest,
   getOngoingContests,
+  getEndedContests,
 };

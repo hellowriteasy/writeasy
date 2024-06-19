@@ -1,13 +1,12 @@
 "use client";
 import { useState } from "react";
-import axios from "axios";
-
 import Card from "../../../components/admin/contests/CardAdd";
 import Modal from "@/app/components/admin/contests/ContestModal";
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
 import { useCustomToast } from "@/app/utils/hooks/useToast";
 import { axiosInstance } from "@/app/utils/config/axios";
-
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 interface Prompt {
   _id: string;
   title: string;
@@ -20,8 +19,12 @@ const Page = () => {
   const [promptCards, setPromptCards] = useState<Prompt[]>([]);
   const [contestDetails, setContestDetails] = useState({
     promptPublishDate: new Date(),
-    submissionDeadline: new Date(),
-    topWritingPublishDate: new Date(),
+    submissionDeadline: new Date(
+      new Date().getTime() + 1000 * 60 * 60 * 24 * 1
+    ),
+    topWritingPublishDate: new Date(
+      new Date().getTime() + 1000 * 60 * 60 * 24 * 2
+    ),
     description: "",
     contestTheme: "",
   });
@@ -38,15 +41,12 @@ const Page = () => {
     //   setError("Deadline cannot be earlier than today.");
     //   return;
     // }
-  const AxiosIns=axiosInstance("")
+    const AxiosIns = axiosInstance("");
     try {
-      const { status } = await AxiosIns.post(
-      "/api/contests",
-        {
-          prompts: promptCards.map((prompt) => prompt._id),
-          ...contestDetails,
-        }
-      );
+      const { status } = await AxiosIns.post("/contests", {
+        prompts: promptCards.map((prompt) => prompt._id),
+        ...contestDetails,
+      });
       if (status === 201) {
         setContestDetails((_) => ({
           submissionDeadline: new Date(),
@@ -110,36 +110,16 @@ const Page = () => {
                   className="block text-gray-700 text-sm font-bold mb-2"
                   htmlFor="deadline"
                 >
-                  Submission Deadline
-                </label>
-                <input
-                  id="submissionDeadline"
-                  name="submissionDeadline"
-                  type="date"
-                  className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                  onChange={(e) =>
-                    handleInputChange(e.target.name, e.target.value)
-                  }
-                  value={contestDetails.submissionDeadline}
-                />
-                <i>Deadline for story submission / contest end time</i>
-              </div>
-              <div className="mb-4">
-                <label
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                  htmlFor="deadline"
-                >
                   Prompt Publish Date
                 </label>
-                <input
-                  id="deadline"
-                  type="date"
-                  name="promptPublishDate"
-                  className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                  onChange={(e) =>
-                    handleInputChange(e.target.name, e.target.value)
-                  }
-                  value={contestDetails.promptPublishDate}
+                <DatePicker
+                  dateFormat="MM/dd/yyyy h:mm aa"
+                  showTimeInput
+                  selected={contestDetails.promptPublishDate}
+                  onChange={(date) => {
+                    if (!date) return;
+                    handleInputChange("promptPublishDate", date);
+                  }}
                 />
                 <i>Time to publish the prompt in a contest</i>
               </div>
@@ -148,17 +128,35 @@ const Page = () => {
                   className="block text-gray-700 text-sm font-bold mb-2"
                   htmlFor="deadline"
                 >
+                  Submission Deadline
+                </label>
+                <DatePicker
+                  dateFormat="MM/dd/yyyy h:mm aa"
+                  showTimeInput
+                  selected={contestDetails.submissionDeadline}
+                  onChange={(date) => {
+                    if (!date) return;
+                    handleInputChange("submissionDeadline", date);
+                  }}
+                />
+                <i>Deadline for story submission / contest end time</i>
+              </div>
+
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="deadline"
+                >
                   Top writing publish date
                 </label>
-                <input
-                  id="promptPublishDate"
-                  type="date"
-                  name="topWritingPublishDate"
-                  className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                  onChange={(e) =>
-                    handleInputChange(e.target.name, e.target.value)
-                  }
-                  value={contestDetails.topWritingPublishDate}
+                <DatePicker
+                  dateFormat="MM/dd/yyyy h:mm aa"
+                  showTimeInput
+                  selected={contestDetails.topWritingPublishDate}
+                  onChange={(date) => {
+                    if (!date) return;
+                    handleInputChange("topWritingPublishDate", date);
+                  }}
                 />
                 <i>Date to publish the top writings of a contest</i>
               </div>

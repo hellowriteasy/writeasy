@@ -13,28 +13,25 @@ import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { TPrompt } from "../utils/types";
 import { axiosInstance } from "../utils/config/axios";
+import NotFound from "../components/Others/NotFound";
 
 const Games: React.FC = () => {
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(0);
   const [prompts, setPrompts] = useState<TPrompt[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const AxiosIns=axiosInstance("")
+  const AxiosIns = axiosInstance("");
   useEffect(() => {
     const fetchPrompts = async () => {
       try {
-
         const response = await AxiosIns.get("/prompts/game-prompts");
-        setPrompts(response.data.reverse())
-
-      
+        setPrompts(response.data.reverse());
       } catch (error: any) {
         setError(error.message);
-       
       }
     };
     fetchPrompts();
-  }, []); 
+  }, []);
 
   const handlePageClick = (event: { selected: number }) => {
     setCurrentPage(event.selected);
@@ -44,15 +41,11 @@ const Games: React.FC = () => {
   const currentPrompts = prompts.slice(offset, offset + itemsPerPage);
   const pageCount = Math.ceil(prompts.length / itemsPerPage);
 
-
   if (error) return <p>Error: {error}</p>;
-  function handlePromptClick(){
-    
+  function handlePromptClick() {}
 
-  }
-  
-  console.log("user",prompts)
-  
+  console.log("user", prompts);
+
   return (
     <div className="w-full h-[1300px] mt-6 z-0 relative flex justify-center">
       <div className="absolute -top-14 right-0">
@@ -76,9 +69,13 @@ const Games: React.FC = () => {
             <Image className="w-[12vw]" src={Bee} alt="bee" />
           </div>
           <div className="gap-8 w-full  relative flex flex-col">
-            {currentPrompts.map((prompt) => (
-              <Prompt  key={prompt._id} prompt={prompt} />
-            ))}
+            {currentPrompts.length > 0 ? (
+              currentPrompts.map((prompt) => (
+                <Prompt key={prompt._id} prompt={prompt} />
+              ))
+            ) : (
+              <NotFound text="No games right now !!" />
+            )}
             <div className="absolute bottom-1/3 -left-32">
               <Image src={Cloud} alt="Cloud" />
             </div>
@@ -88,10 +85,14 @@ const Games: React.FC = () => {
             <TopWriting />
           </div>
         </div>
-        <div className="w-full mt-10 text-lg md:text-xl font-comic">
+        {/* <div className="w-full mt-10 text-lg md:text-xl font-comic">
           <ReactPaginate
-            previousLabel={<FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />}
-            nextLabel={<FaAngleRight className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />}
+            previousLabel={
+              <FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+            }
+            nextLabel={
+              <FaAngleRight className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+            }
             breakLabel="..."
             breakClassName="break-me"
             pageCount={pageCount}
@@ -107,7 +108,7 @@ const Games: React.FC = () => {
             nextLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
             activeClassName="bg-black text-white rounded-full"
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );

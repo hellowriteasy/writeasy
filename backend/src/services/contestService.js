@@ -28,6 +28,11 @@ const getOngoingContests = async () => {
     submissionDeadline: { $gt: currentDateTime },
   }).populate("prompts");
 };
+const getEndedContests = async () => {
+  return await Contest.find({
+    isActive: false,
+  });
+};
 
 module.exports = {
   createContest,
@@ -36,4 +41,5 @@ module.exports = {
   deleteContest,
   getContestById,
   getOngoingContests,
+  getEndedContests,
 };

@@ -22,7 +22,7 @@ const ContestPage: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await AxiosIns.get('/api/stories/user', {
+        const response = await AxiosIns.get('/stories/user', {
           params: {
             userId:userId,
             storyType: 'contest',
@@ -48,6 +48,7 @@ const ContestPage: React.FC = () => {
 
   const pageCount = Math.ceil(userStories.length / itemsPerPage);
 
+  
   return (
     <div className='font-poppins'>
       <ProfileTabs />

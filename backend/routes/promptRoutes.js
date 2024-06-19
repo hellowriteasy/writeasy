@@ -190,7 +190,37 @@ router.get("/contest/:contestId", getPromptsByContestId);
 
 
 
-router.get("/list/:contestId",getAllPromptsOfContest)
+router.get("/list/:contestId", getAllPromptsOfContest)
+
+
+
+
+/**
+ * @openapi
+ * /api/prompts/user/{userId}/{promptId}:
+ *   get:
+ *     tags:
+ *       - Prompts
+ *     summary: Get all prompts for a contest
+ *     description: Retrieves all prompts for a specific contest by contest ID.
+ *     parameters:
+ *       - in: path
+ *         name: contestId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the contest.
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved the contest prompts.
+ *       404:
+ *         description: Contest not found.
+ *       500:
+ *         description: Server error when fetching contest prompts.
+ */
+// router.get("/user/:contestId", getPromptsByContestId);
+
+
 
 
 module.exports = router;
