@@ -23,89 +23,72 @@ import useAuthStore from "../store/useAuthStore";
 import { axiosInstance } from "../utils/config/axios";
 import { TTaskType } from "../utils/types";
 
-const Page = ({
-  inputText,
-  corrected,
-}: {
-  inputText: string;
-  corrected: string;
-}) => {
-  const [improved, setImproved] = useState<React.ReactNode[]>([]);
+// const Page = ({
+//   inputText,
+//   corrected,
+// }: {
+//   inputText: string;
+//   corrected: string;
+// }) => {
+//   const [improved, setImproved] = useState<React.ReactNode[]>([]);
 
-  const compareSentences = (
-    original: string,
-    corrected: string
-  ): React.ReactNode[] => {
-    original = original.replace(/<\/?p>/g, "");
-    corrected = corrected.replace(/<\/?p>/g, "");
+//   const compareSentences = (
+//     original: string,
+//     corrected: string
+//   ): React.ReactNode[] => {
+//     original = original.replace(/<\/?p>/g, "");
+//     corrected = corrected.replace(/<\/?p>/g, "");
 
-    const diff: Change[] = diffChars(original, corrected);
-    const result: React.ReactNode[] = [];
+//     const diff: Change[] = diffChars(original, corrected);
+//     const result: React.ReactNode[] = [];
 
-    diff.forEach((part: Change, index: number) => {
-      let style: React.CSSProperties = {};
-      if (part.added) {
-        style = {
-          color: "green",
-          backgroundColor: "lightgreen",
-          textDecoration: "none",
-        };
-      } else if (part.removed) {
-        style = {
-          color: "red",
-          backgroundColor: "lightcoral",
-          textDecoration: "line-through",
-        };
-      } else {
-        style = {
-          color: "black",
-          backgroundColor: "transparent",
-          textDecoration: "none",
-        };
-      }
+//     diff.forEach((part: Change, index: number) => {
+//       let style: React.CSSProperties = {};
+//       if (part.added) {
+//         style = {
+//           color: "green",
+//           backgroundColor: "lightgreen",
+//           textDecoration: "none",
+//         };
+//       } else if (part.removed) {
+//         style = {
+//           color: "red",
+//           backgroundColor: "lightcoral",
+//           textDecoration: "line-through",
+//         };
+//       } else {
+//         style = {
+//           color: "black",
+//           backgroundColor: "transparent",
+//           textDecoration: "none",
+//         };
+//       }
 
-      const span: React.ReactElement = (
-        <div key={index} style={style}>
-          {part.value}
-        </div>
-      );
-      result.push(span);
-    });
+//       const span: React.ReactElement = (
+//         <div key={index} style={style}>
+//           {part.value}
+//         </div>
+//       );
+//       result.push(span);
+//     });
 
-    return result;
-  };
+//     return result;
+//   };
 
-  useEffect(() => {
-    setImproved(compareSentences(inputText, corrected));
-  }, [inputText, corrected]);
+//   useEffect(() => {
+//     setImproved(compareSentences(inputText, corrected));
+//   }, [inputText, corrected]);
 
-  return <div className="mt-4">{improved}</div>;
-};
+//   return <div className="mt-4">{improved}</div>;
+// };
 
-type TWriteEasyFeature = "improve" | "grammer" | "rewrite";
+// type TWriteEasyFeature = "improve" | "grammer" | "rewrite";
 
-const AiFeatureTextMapping = {
-  improve: "Proofread this improving clarity and flow",
-  grammer: "Proofread this but only fix grammar",
-  rewrite: "Rewrite this improving clarity and flow",
-} as Record<TWriteEasyFeature, string>;
-
-const getAiPrompt = (type: TWriteEasyFeature, userInput: string) => {
-  let task = AiFeatureTextMapping[type];
-
-  const messages = [
-    {
-      role: "system",
-      content:
-        "You are a master proofreader. Only proofread the given text, don't add new text to the document. The instructions are often in English, but keep prompt in the same language as the language being asked to proofread.",
-    },
-    {
-      role: "user",
-      content: `${task} : ${userInput}`,
-    },
-  ];
-  return messages;
-};
+// const AiFeatureTextMapping = {
+//   improve: "Proofread this improving clarity and flow",
+//   grammer: "Proofread this but only fix grammar",
+//   rewrite: "Rewrite this improving clarity and flow",
+// } as Record<TWriteEasyFeature, string>;
 
 interface SimpleEditorProps {
   triggerGrammarCheck: any;
@@ -115,29 +98,30 @@ interface SimpleEditorProps {
   _id: string;
   type: string;
   wordcount?: number;
+  hasSaved: boolean;
+  setHasSaved: React.Dispatch<React.SetStateAction<boolean>>;
   setTriggerGrammarCheck: React.Dispatch<React.SetStateAction<boolean>>;
 }
+type THandleClickFeature = (
+  type: TTaskType,
+  event: React.MouseEvent<HTMLButtonElement> | MouseEvent
+) => void;
 
 export function SimpleEditor({
   triggerGrammarCheck,
   taskType,
   title,
-  Userid,
   _id,
-  type,
   setTriggerGrammarCheck,
+  hasSaved,
+  setHasSaved,
 }: SimpleEditorProps) {
   const [inputText, setInputText] = useState(""); // State to hold input text
   const [correctedText, setCorrectedText] = useState("");
   const [copied, setCopied] = useState(false); // State to track if text is copied
-  const [improved, setImproved] = useState<React.ReactNode[]>([]);
-  const [final, setFinal] = useState("");
   const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
   const setStoredFunction = usePdfStore((state) => state.setPdfExportFunction);
-  const [isCheckingGrammer, setIsCheckingGrammer] = useState(false);
   const pdfExportFunction = usePdfStore((state) => state.pdfExportFunction);
-
-  console.log("editor", triggerGrammarCheck);
 
   useEffect(() => {
     setStoredFunction(toPDF);
@@ -161,57 +145,52 @@ export function SimpleEditor({
     return stringWithoutPTags;
   };
 
-  const compareSentences = (
-    original: string,
-    corrected: string
-  ): React.ReactNode[] => {
-    console.log("debug  2 comparing",)
-    const diff: Change[] = diffChars(original, corrected);
-    const result: React.ReactNode[] = [];
+  // const compareSentences = (
+  //   original: string,
+  //   corrected: string
+  // ): React.ReactNode[] => {
+  //   console.log("debug  2 comparing");
+  //   const diff: Change[] = diffChars(original, corrected);
+  //   const result: React.ReactNode[] = [];
 
-    diff.forEach((part: Change, index: number) => {
-      let style: React.CSSProperties = {};
+  //   diff.forEach((part: Change, index: number) => {
+  //     let style: React.CSSProperties = {};
 
-      if (part.added) {
-        style = {
-          color: "green",
-          backgroundColor: "lightgreen",
-          textDecoration: "underline",
-          height: "40px",
-        };
-      } else if (part.removed) {
-        style = {
-          color: "red",
-          backgroundColor: "lightcoral",
-          height: "40px",
-        };
-      } else {
-        style = {
-          color: "black",
-          backgroundColor: "transparent",
-          textDecoration: "none",
-          height: "40px",
-        };
-      }
+  //     if (part.added) {
+  //       style = {
+  //         color: "green",
+  //         backgroundColor: "lightgreen",
+  //         textDecoration: "underline",
+  //         height: "40px",
+  //       };
+  //     } else if (part.removed) {
+  //       style = {
+  //         color: "red",
+  //         backgroundColor: "lightcoral",
+  //         height: "40px",
+  //       };
+  //     } else {
+  //       style = {
+  //         color: "black",
+  //         backgroundColor: "transparent",
+  //         textDecoration: "none",
+  //         height: "40px",
+  //       };
+  //     }
 
-      result.push(
-        <div key={index} style={style}>
-          {part.value}
-        </div>
-      );
-    });
+  //     result.push(
+  //       <div key={index} style={style}>
+  //         {part.value}
+  //       </div>
+  //     );
+  //   });
 
-    return result;
-  };
+  //   return result;
+  // };
 
   useEffect(() => {
     handleUpdate();
   }, [correctedText]);
-
-  useEffect(() => {
-    console.log("debug  1 correction text",correctedText)
-    setImproved(compareSentences(inputText, correctedText));
-  }, [inputText, correctedText]);
 
   const [wordCount, setWordCount] = useState(0);
   const [wordLimitExceeded, setWordLimitExceeded] = useState(false);
@@ -245,16 +224,11 @@ export function SimpleEditor({
   const handleExport = () => {
     toPDF();
   };
-
+  console.log("debug 1", triggerGrammarCheck, hasSaved);
   useEffect(() => {
-    if (!triggerGrammarCheck) return;
+    if (!triggerGrammarCheck && !hasSaved) return;
     handleClickFeature(taskType, new MouseEvent("click"));
-  }, [triggerGrammarCheck]);
-
-  type THandleClickFeature = (
-    type: TTaskType,
-    event: React.MouseEvent<HTMLButtonElement> | MouseEvent
-  ) => void;
+  }, [triggerGrammarCheck, hasSaved]);
 
   const userId = useAuthStore((state) => state.userId);
   const AxiosIns = axiosInstance(token || "");
@@ -279,18 +253,20 @@ export function SimpleEditor({
         taskType: type,
         storyType: "practice",
         prompt: _id,
+        hasSaved,
       };
 
       const { data, status } = await AxiosIns.post("stories/score", payload);
       toast.success("Story saved succesfully");
       setInputText(currentContent);
-      console.log("debug 01",data.corrections)
+      console.log("debug 01", data.corrections);
       setCorrectedText(data.corrections);
       setCopied(false);
-      setIsCheckingGrammer(true);
+      setHasSaved(false);
       setTriggerGrammarCheck(false);
     } catch (error) {
       setTriggerGrammarCheck(false);
+      setHasSaved(false);
       toast.error("An error occurred while checking grammar.");
     }
   };
@@ -299,18 +275,16 @@ export function SimpleEditor({
     if (editor) {
       editor.commands.setContent(`${correctedText}`);
     }
-    setIsCheckingGrammer(false);
   };
 
   const handleReject = () => {
     if (editor) {
       editor.commands.setContent(`${inputText}`);
     }
-    setIsCheckingGrammer(false);
   };
 
   const handleUpdate = () => {
-    console.log("debug 4 updating editor ",correctedText)
+    console.log("debug 4 updating editor ", correctedText);
     if (editor) {
       editor.commands.setContent(
         `${getCorrectedContent(inputText, correctedText)}`

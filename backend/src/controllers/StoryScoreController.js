@@ -4,25 +4,39 @@ const Story = require("../models/story");
 const gptService = new GptService(process.env.GPT_API_KEY);
 
 exports.scoreStory = async function (req, res) {
-  const { userId, title, content, taskType, storyType, prompt } = req.body;
+  const { userId, title, content, taskType, storyType, prompt, hasSaved } =
+    req.body;
   const wordCount = content.split(" ").length; // Calculate word count
-console.log("debug 1");
+  let score = 0;
+  let corrections = null;
+  let correctionSummary = null;
   try {
-    // Check if a practice story exists for the same user and prompt
     if (storyType === "practice") {
-      const existingPracticeStory = await Story.findOne({ user: userId, prompt: prompt, storyType: "practice" });
-  console.log("debug 2 ",existingPracticeStory)
+      const existingPracticeStory = await Story.findOne({
+        user: userId,
+        prompt: prompt,
+        storyType: "practice",
+      });
       if (existingPracticeStory) {
         // Update the existing practice story
         existingPracticeStory.title = title;
         existingPracticeStory.content = content;
         existingPracticeStory.wordCount = wordCount;
+        existingPracticeStory.hasSaved = true;
         existingPracticeStory.submissionDateTime = new Date();
+        existingPracticeStory.hasSaved = !!hasSaved;
 
         // Get corrections and correction summary
-        const corrections = await gptService.generateScore(existingPracticeStory.content, taskType,existingPracticeStory.wordCount);
-        const correctionSummary = await gptService.generateCorrectionSummary(existingPracticeStory.content, corrections, 0);
-   console.log("debug 3",corrections)
+        const corrections = await gptService.generateScore(
+          existingPracticeStory.content,
+          taskType,
+          existingPracticeStory.wordCount
+        );
+        const correctionSummary = await gptService.generateCorrectionSummary(
+          existingPracticeStory.content,
+          corrections,
+          0
+        );
         // Update the existing practice story with corrections and correction summary
         existingPracticeStory.corrections = corrections.corrections;
         existingPracticeStory.correctionSummary = correctionSummary;
@@ -34,14 +48,12 @@ console.log("debug 1");
           success: true,
           message: "Practice story updated successfully",
           storyId: updatedPracticeStory._id,
-          score:corrections.score,
-          corrections:corrections.corrections,
-          correctionSummary
+          score: corrections.score,
+          corrections: corrections.corrections,
+          correctionSummary,
         });
       }
     }
-  console.log("debug 4");
-    // Save the new story to the database without score and corrections
     const newStory = new Story({
       user: userId,
       title: title,
@@ -54,28 +66,30 @@ console.log("debug 1");
 
     const savedStory = await newStory.save();
 
-    let score = 0;
-    let corrections = null;
-    let correctionSummary = null;
-
-    // Generate corrections for all story types
     corrections = await gptService.generateScore(savedStory.content, taskType);
-    correctionSummary = await gptService.generateCorrectionSummary(savedStory.content, corrections.corrections, corrections.score);
-    console.log("debug 5",corrections)
+    correctionSummary = await gptService.generateCorrectionSummary(
+      savedStory.content,
+      corrections.corrections,
+      corrections.score
+    );
 
-    if (storyType !== "practice") {
-      // Call the GPT service to score the story
-      const result = await gptService.generateScore(savedStory.content, taskType, wordCount);
+    if (storyType === "practice") {
+      savedStory.score = 0;
+      savedStory.corrections = corrections.corrections;
+      savedStory.correctionSummary = correctionSummary;
+      savedStory.hasSaved = !!hasSaved;
+      savedStory.hasSaved = true;
+    } else {
+      const result = await gptService.generateScore(
+        savedStory.content,
+        taskType,
+        wordCount
+      );
       score = result.score;
       savedStory.score = score;
-    } else {
-      savedStory.score =0; // Score is set to 0 for practice stories
+      savedStory.hasSaved = true;
     }
-     console.log("debug 6 ",corrections);
-    // Update the story with the score, corrections, and correction summary
-    savedStory.corrections = corrections.corrections;
-    savedStory.correctionSummary = correctionSummary;
-   
+
     await savedStory.save();
 
     return res.status(201).json({

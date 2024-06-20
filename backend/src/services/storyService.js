@@ -25,8 +25,13 @@ const getAllStories = async () => {
 
 const getStoriesByUserAndType = async (userId, storyType) => {
   const objectId = new mongoose.Types.ObjectId(userId);
+  const isPractiseStory = storyType === "practice";
   if (storyType === "practice" || storyType === "contest") {
-    return await Story.find({ user: objectId, storyType: storyType })
+    return await Story.find({
+      user: objectId,
+      storyType: storyType,
+      ...(isPractiseStory ? { hasSaved: true } : null),
+    })
       .populate("user")
       .populate("contest")
       .populate("prompt")

@@ -23,6 +23,10 @@ const storySchema = new mongoose.Schema({
     enum: ["practice", "contest", "game"],
     required: true,
   },
+  hasSaved: {
+    type: Boolean,
+    default: false,
+  },
   contest: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Contest",
