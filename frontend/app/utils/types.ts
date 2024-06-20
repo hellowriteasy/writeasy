@@ -57,3 +57,4 @@ export type TFAQ ={
   answer: string;
   place:number
 }
+export type TTaskType = "improve" | "grammer" | "rewrite";

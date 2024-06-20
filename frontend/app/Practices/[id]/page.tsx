@@ -8,6 +8,7 @@ import { SimpleEditor } from "@/app/components/WriteStory";
 import useAuthStore from '@/app/store/useAuthStore';
 import Subscription from "@/app/components/Subscription"
 import { axiosInstance } from '@/app/utils/config/axios';
+import { TTaskType } from '@/app/utils/types';
 
 interface Prompt {
   _id: string;
@@ -27,7 +28,7 @@ interface PromptPageProps {
 const PromptPage: React.FC<PromptPageProps> = ({ params }) => {  
   const [prompt, setPrompt] = useState<Prompt | null>(null);
   const [triggerGrammarCheck, setTriggerGrammarCheck] = useState(false);
-  const [taskType, setTaskType] = useState("");
+  const [taskType, setTaskType] = useState<TTaskType>("grammer");
   const [input, setInput] = useState("");
   const { role, isSubcriptionActive } = useAuthStore();
   const AxiosIns = axiosInstance("");
@@ -51,7 +52,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
 
   const handleTaskTypeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { value } = e.currentTarget;
-    setTaskType(value);
+    setTaskType(value as TTaskType);
   };
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,6 +96,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
                         <button
                           className="w-40 h-14 bg-black text-white hover:opacity-80 font-bold text-2xl rounded-full"
                           value={type}
+                          type='button'
                           onClick={
                             type !== "pdf"
                               ? (e) => {
@@ -103,7 +105,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
                                 }
                               : undefined
                           }
-                          disabled={type !== "pdf" && triggerGrammarCheck}
+                          // disabled={type !== "pdf" && triggerGrammarCheck}
                         >
                           {type.charAt(0).toUpperCase() + type.slice(1)}
                         </button>
@@ -122,8 +124,9 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
             Userid={params.id}
             type={prompt.promptType}
             _id={prompt._id}
-            taskType={taskType}
+            taskType={taskType }
             key={prompt._id}
+            setTriggerGrammarCheck={setTriggerGrammarCheck}
           />
         </div>
         <div className='flex justify-center font-comic items-center my-4'>

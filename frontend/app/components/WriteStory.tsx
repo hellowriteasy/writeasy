@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useCallback, useState, useEffect } from "react";
 import classNames from "classnames";
 import axios from "axios";
@@ -17,18 +17,28 @@ import { diffChars, Change } from "diff";
 import usePdfStore from "@/app/store/usePDFStore";
 import { usePDF } from "react-to-pdf";
 import PDF from "./PDF";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import useAuthStore from "../store/useAuthStore";
 import { axiosInstance } from "../utils/config/axios";
+import { TTaskType } from "../utils/types";
 
-const Page = ({ inputText, corrected }: { inputText: string; corrected: string; }) => {
+const Page = ({
+  inputText,
+  corrected,
+}: {
+  inputText: string;
+  corrected: string;
+}) => {
   const [improved, setImproved] = useState<React.ReactNode[]>([]);
 
-  const compareSentences = (original: string, corrected: string): React.ReactNode[] => {
+  const compareSentences = (
+    original: string,
+    corrected: string
+  ): React.ReactNode[] => {
     original = original.replace(/<\/?p>/g, "");
     corrected = corrected.replace(/<\/?p>/g, "");
-   
+
     const diff: Change[] = diffChars(original, corrected);
     const result: React.ReactNode[] = [];
 
@@ -99,15 +109,24 @@ const getAiPrompt = (type: TWriteEasyFeature, userInput: string) => {
 
 interface SimpleEditorProps {
   triggerGrammarCheck: any;
-  taskType: string;
+  taskType: TTaskType;
   title: string;
   Userid: string;
   _id: string;
   type: string;
-  wordcount?:number;
+  wordcount?: number;
+  setTriggerGrammarCheck: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id, type }: SimpleEditorProps) {
+export function SimpleEditor({
+  triggerGrammarCheck,
+  taskType,
+  title,
+  Userid,
+  _id,
+  type,
+  setTriggerGrammarCheck,
+}: SimpleEditorProps) {
   const [inputText, setInputText] = useState(""); // State to hold input text
   const [correctedText, setCorrectedText] = useState("");
   const [copied, setCopied] = useState(false); // State to track if text is copied
@@ -117,6 +136,8 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
   const setStoredFunction = usePdfStore((state) => state.setPdfExportFunction);
   const [isCheckingGrammer, setIsCheckingGrammer] = useState(false);
   const pdfExportFunction = usePdfStore((state) => state.pdfExportFunction);
+
+  console.log("editor", triggerGrammarCheck);
 
   useEffect(() => {
     setStoredFunction(toPDF);
@@ -140,7 +161,10 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
     return stringWithoutPTags;
   };
 
-  const compareSentences = (original: string, corrected: string): React.ReactNode[] => {
+  const compareSentences = (
+    original: string,
+    corrected: string
+  ): React.ReactNode[] => {
     const diff: Change[] = diffChars(original, corrected);
     const result: React.ReactNode[] = [];
 
@@ -178,18 +202,19 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
 
     return result;
   };
-  
+
   useEffect(() => {
     handleUpdate();
   }, [correctedText]);
 
   useEffect(() => {
+
     setImproved(compareSentences(inputText, correctedText));
   }, [inputText, correctedText]);
 
   const [wordCount, setWordCount] = useState(0);
   const [wordLimitExceeded, setWordLimitExceeded] = useState(false);
-  
+  const { token } = useAuthStore();
   const editor = useEditor({
     extensions: [
       Document,
@@ -204,15 +229,16 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
     ],
     editorProps: {
       attributes: {
-        class: 'prose dark:prose-invert prose-sm sm:prose-base w-full inline-block lg:prose-lg xl:prose-2xl outline-none h-full',
+        class:
+          "prose dark:prose-invert prose-sm sm:prose-base w-full inline-block lg:prose-lg xl:prose-2xl outline-none h-full",
       },
-    }, 
+    },
     onUpdate: ({ editor }) => {
       const textContent = editor.getText();
       const words = textContent.split(/\s+/).filter(Boolean).length;
       setWordCount(words);
       setWordLimitExceeded(words > 1000);
-    }
+    },
   }) as Editor;
 
   const handleExport = () => {
@@ -220,14 +246,18 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
   };
 
   useEffect(() => {
-    if (triggerGrammarCheck) {
-      handleClickFeature("grammer", new MouseEvent("click"));
-    }
+    if (!triggerGrammarCheck) return;
+    handleClickFeature(taskType, new MouseEvent("click"));
   }, [triggerGrammarCheck]);
 
-  type THandleClickFeature = (type: "improve" | "grammer" | "rewrite", event: React.MouseEvent<HTMLButtonElement> | MouseEvent) => void;
+  type THandleClickFeature = (
+    type: TTaskType,
+    event: React.MouseEvent<HTMLButtonElement> | MouseEvent
+  ) => void;
+
   const userId = useAuthStore((state) => state.userId);
-   const AxiosIns=axiosInstance("")
+  const AxiosIns = axiosInstance(token || "");
+
   const handleClickFeature: THandleClickFeature = async (type, event) => {
     event.preventDefault();
     try {
@@ -245,23 +275,21 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
         userId: userId,
         title: title,
         content: currentContent,
-        taskType: taskType,
+        taskType: type,
         storyType: "practice",
-        prompt: _id
+        prompt: _id,
       };
-      
-      const { data, status } = await AxiosIns.post(
-        "stories/score",
-        payload
-      );
+
+      const { data, status } = await AxiosIns.post("stories/score", payload);
       toast.success("Story saved succesfully");
-      
+
       setInputText(currentContent);
       setCorrectedText(data.corrections);
       setCopied(false);
       setIsCheckingGrammer(true);
-    
+      setTriggerGrammarCheck(false);
     } catch (error) {
+      setTriggerGrammarCheck(false);
       toast.error("An error occurred while checking grammar.");
     }
   };
@@ -325,7 +353,10 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
             <button
               className="menu-button mr-2"
               type="button"
-              onClick={(e) => { e.preventDefault(); editor.chain().focus().undo().run(); }}
+              onClick={(e) => {
+                e.preventDefault();
+                editor.chain().focus().undo().run();
+              }}
               disabled={!editor.can().undo()}
             >
               <Icons.RotateLeft />
@@ -333,7 +364,10 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
             <button
               className="menu-button mr-2"
               type="button"
-              onClick={(e) => { e.preventDefault(); editor.chain().focus().redo().run(); }}
+              onClick={(e) => {
+                e.preventDefault();
+                editor.chain().focus().redo().run();
+              }}
               disabled={!editor.can().redo()}
             >
               <Icons.RotateRight />
@@ -343,7 +377,10 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
                 "is-active": editor.isActive("bold"),
               })}
               type="button"
-              onClick={(e) => { e.preventDefault(); toggleBold(); }}
+              onClick={(e) => {
+                e.preventDefault();
+                toggleBold();
+              }}
             >
               <Icons.Bold />
             </button>
@@ -352,7 +389,10 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
                 "is-active": editor.isActive("underline"),
               })}
               type="button"
-              onClick={(e) => { e.preventDefault(); toggleUnderline(); }}
+              onClick={(e) => {
+                e.preventDefault();
+                toggleUnderline();
+              }}
             >
               <Icons.Underline />
             </button>
@@ -361,7 +401,10 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
                 "is-active": editor.isActive("italic"),
               })}
               type="button"
-              onClick={(e) => { e.preventDefault(); toggleItalic(); }}
+              onClick={(e) => {
+                e.preventDefault();
+                toggleItalic();
+              }}
             >
               <Icons.Italic />
             </button>
@@ -370,7 +413,10 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
                 "is-active": editor.isActive("strike"),
               })}
               type="button"
-              onClick={(e) => { e.preventDefault(); toggleStrike(); }}
+              onClick={(e) => {
+                e.preventDefault();
+                toggleStrike();
+              }}
             >
               <Icons.Strikethrough />
             </button>
@@ -379,7 +425,10 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
                 "is-active": editor.isActive("code"),
               })}
               type="button"
-              onClick={(e) => { e.preventDefault(); toggleCode(); }}
+              onClick={(e) => {
+                e.preventDefault();
+                toggleCode();
+              }}
             >
               <Icons.Code />
             </button>
@@ -387,45 +436,60 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
               <button
                 className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
                 type="button"
-                onClick={(e) => { e.preventDefault(); handleAcceptAll(); }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleAcceptAll();
+                }}
               >
                 Accept All
               </button>
               <button
                 className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
                 type="button"
-                onClick={(e) => { e.preventDefault(); handleReject(); }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleReject();
+                }}
               >
                 Reject All
               </button>
               <button
                 className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
-                onClick={(e) => {e.preventDefault(); handleCopy()}}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleCopy();
+                }}
               >
                 {copied ? "Copied" : "Copy"}
               </button>
-              
+
               <button
-              
                 className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
-                onClick={(e) => {e.preventDefault();
+                onClick={(e) => {
+                  e.preventDefault();
                   pdfExportFunction && pdfExportFunction();
                 }}
               >
                 Export pdf
               </button>
               <div className="w-60 h-7 bg-white flex flex-col justify-center rounded-2xl shadow-sm ">
-
-                <p className="text-center font-comic">Word count: {wordCount} / 1000</p>
+                <p className="text-center font-comic">
+                  Word count: {wordCount} / 1000
+                </p>
                 {wordLimitExceeded && (
-               <p className="text-red-500">Word limit exceeded. Please reduce the number of words.</p>
-                  )}
-             </div>
+                  <p className="text-red-500">
+                    Word limit exceeded. Please reduce the number of words.
+                  </p>
+                )}
+              </div>
             </>
           </div>
         </div>
         <div className=" w-[70vw]  rounded-3xl">
-          <EditorContent className=" scroll-m-2 w-[100%] min-h-[40vw] mt-10 " editor={editor} />
+          <EditorContent
+            className=" scroll-m-2 w-[100%] min-h-[40vw] mt-10 "
+            editor={editor}
+          />
         </div>
       </div>
       <div className="absolute -left-2/3">

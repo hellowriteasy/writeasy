@@ -1,5 +1,5 @@
-'use client';
-import React, { useState, useEffect } from 'react';
+"use client";
+import React, { useState } from "react";
 import Logo from "@/public/Landingpage-img/logo.svg";
 import Image from "next/image";
 import Link from "next/link";
@@ -30,15 +30,23 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
           </div>
         </Link>
         <div className="hidden md:flex md:flex-grow justify-center">
-        <div className="hidden md:flex md:flex-grow justify-center">
           <ul className="flex justify-center w-full items-center font-comic text-xl space-x-4">
             {titles.map((link) => {
               const isActive =
                 path.startsWith(link.path) || path.includes(link.path);
               return (
-                <li key={`${link.label}-${link.path}`} className={isActive ? 'active sm:px-6 py-2 text-center ' : ' sm:px-6 py-2 text-center '}>
-                  <Link className="pt-5 text-[1.5vw] cursor-pointer" href={link.path}>
-                    {link.label}
+                <li
+                  key={`${link.label}-${link.path}`}
+                  className={
+                    isActive
+                      ? "active sm:px-6 py-2 text-center "
+                      : " sm:px-6 py-2 text-center "
+                  }
+                >
+                  <Link href={link.path}>
+                    <p className="pt-5 text-[1.5vw] cursor-pointer">
+                      {link.label}
+                    </p>
                   </Link>
                 </li>
               );
@@ -47,9 +55,7 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
         </div>
         <div className="hidden md:flex items-center space-x-4">
           {loggedIn ? (
-            
             <UserMenu />
-         
           ) : (
             <div className="flex gap-2 sm:gap-4">
               <button
@@ -83,8 +89,12 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
     </>
   );
 
-  if (path.includes("admin") || path.includes("signup") || path.includes("login")) {
-    return null; 
+  if (
+    path.includes("admin") ||
+    path.includes("signup") ||
+    path.includes("login")
+  ) {
+    return null;
   }
 
   return (
@@ -106,9 +116,18 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
             const isActive =
               path.startsWith(link.path) || path.includes(link.path);
             return (
-              <li key={`${link.label}-${link.path}`} className={isActive ? 'active sm:px-6 py-2 text-center ' : ' sm:px-6 py-2 text-center '}>
-                <Link className="pt-5 cursor-pointer " href={link.path} onClick={toggleMenu}>
-                  {link.label}
+              <li
+                key={`${link.label}-${link.path}`}
+                className={
+                  isActive
+                    ? "active sm:px-6 py-2 text-center "
+                    : " sm:px-6 py-2 text-center "
+                }
+              >
+                <Link href={link.path}>
+                  <p className="pt-5 cursor-pointer" onClick={toggleMenu}>
+                    {link.label}
+                  </p>
                 </Link>
               </li>
             );
@@ -143,7 +162,6 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
       </div>
     </nav>
   );
-};
 };
 
 export default Navbar;
