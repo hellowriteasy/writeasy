@@ -13,8 +13,8 @@ interface Prompt {
   _id: string;
   title: string;
   promptType: string;
-  Userid:string;
-  type:string
+  Userid: string;
+  type: string;
 }
 
 interface PromptPageProps {
@@ -29,12 +29,13 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
   const [triggerGrammarCheck, setTriggerGrammarCheck] = useState(false);
   const [taskType, setTaskType] = useState("");
   const [input, setInput] = useState("");
-  const {role, isSubcriptionActive}=useAuthStore();
-  const AxiosIns=axiosInstance("")
+  const { role, isSubcriptionActive } = useAuthStore();
+  const AxiosIns = axiosInstance("");
+
   useEffect(() => {
     if (params.id) {
-      // Fetch the specific prompt data based on promptId
-      AxiosIns.get(`http://localhost:8000/api/prompts/${params.id}`)
+     
+      AxiosIns.get(`prompts/${params.id}`)
         .then(response => {
           setPrompt(response.data);
         })
@@ -58,11 +59,16 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
     setInput(value);
   };
 
+  const handleSaveToProfile = () => {
+    setTaskType("improve");
+    handleGrammarClick();
+  };
+
   if (!prompt) return <div>Loading...</div>;
 
   return (
     <div className="w-full h-[1900px] mt-6 z-0 relative flex justify-center">
-      <div className="w-10/12 h-screen ms-12 ">
+      <div className="w-10/12 h-screen ms-12">
         <div className="w-full h-32 relative pt-4">
           <h1 className="text-5xl pt-4 ps-16 font-bold font-comic">
             {prompt.title}
@@ -119,6 +125,11 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
             taskType={taskType}
             key={prompt._id}
           />
+        </div>
+        <div className='flex justify-center font-comic items-center my-4'>
+          <button 
+           className='text-white bg-black w-96 h-12 rounded-3xl'
+           onClick={handleSaveToProfile}>Save to Profile</button>
         </div>
       </div>
 

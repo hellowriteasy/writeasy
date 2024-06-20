@@ -1,5 +1,5 @@
 // components/UserMenu.js
-
+'use client'
 import { useState, useEffect } from "react";
 import { FaAngleDown } from "react-icons/fa6";
 import { IoPersonSharp } from "react-icons/io5";
@@ -11,6 +11,7 @@ import { axiosInstance } from "../utils/config/axios";
 const UserMenu = () => {
   const [selectedOption, setSelectedOption] = useState('');
   const [showOptions, setShowOptions] = useState(false);
+    const [isClient, setIsClient] = useState(false)
   const logout = useAuthStore((state) => state.logout);
   const username = useAuthStore((state) => state.username);
   const role = useAuthStore((state) => state.role); // Get the user's role
@@ -24,7 +25,7 @@ const UserMenu = () => {
     }
   };
 
-  // Ensure options are not shown during the initial server render
+  
   useEffect(() => {
     setShowOptions(false);
   }, []);

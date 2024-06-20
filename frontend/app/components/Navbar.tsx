@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useState, useEffect } from 'react';
 import Logo from "@/public/Landingpage-img/logo.svg";
 import Image from 'next/image';
@@ -14,26 +14,14 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ titles }) => {
-  const [loading, setLoading] = useState(true); // State to track loading status
   const path = usePathname();
   const router = useRouter();
   const loggedIn = useAuthStore((state) => state.loggedIn);
   const [isOpen, setIsOpen] = useState(false);
 
-  useEffect(() => {
-    // Simulate loading delay
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-
-    // Clean up timeout
-    return () => clearTimeout(timer);
-  }, []);
-
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const navContent = (
-
     <>
       <div className="flex items-center justify-between w-11/12">
         <Link href="/">
@@ -41,13 +29,13 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
             <Image src={Logo} alt='logo' />
           </div>
         </Link>
-        <div className="hidden md:flex md:flex-grow  justify-center">
+        <div className="hidden md:flex md:flex-grow justify-center">
           <ul className="flex justify-center w-full items-center font-comic text-xl space-x-4">
             {titles.map(link => {
               const isActive = path.startsWith(link.path) || path.includes(link.path);
               return (
-                <li key={`${link.label}-${link.path}`} className={isActive ? 'active sm:px-6 py-2  text-center  ' : ' sm:px-6 py-2 text-center '}>
-                  <Link className="pt-5  text-[1.5vw] cursor-pointer" href={link.path}>
+                <li key={`${link.label}-${link.path}`} className={isActive ? 'active sm:px-6 py-2 text-center ' : ' sm:px-6 py-2 text-center '}>
+                  <Link className="pt-5 text-[1.5vw] cursor-pointer" href={link.path}>
                     {link.label}
                   </Link>
                 </li>
@@ -57,7 +45,9 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
         </div>
         <div className="hidden md:flex items-center space-x-4">
           {loggedIn ? (
+            
             <UserMenu />
+         
           ) : (
             <div className="flex gap-2 sm:gap-4">
               <button onClick={() => router.push('/login')} className="text-lg sm:text-2xl font-bold text-center bg-custom-yellow border-2 w-16 sm:w-20 h-10 sm:h-12 hover:bg-white rounded-3xl border-black text-black font-comic">Login</button>
@@ -74,17 +64,10 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
     </>
   );
 
-  if (loading) {
-    // Show loading effect
-    return (
-      <nav className="navbar flex w-screen sticky top-0 h-28 justify-between items-center bg-custom-yellow p-6 z-50">
-        <div></div>
-      </nav>
-    );
+  if (path.includes("admin") || path.includes("signup") || path.includes("login")) {
+    return null; 
   }
 
-  // Once loaded, render the actual navbar content
-  if(!path.includes("admin")|| path.includes("signup")|| path.includes("login")){
   return (
     <nav className="navbar flex w-screen sticky top-0 h-28 justify-between items-center bg-custom-yellow p-6 z-50">
       {navContent}
@@ -97,7 +80,7 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
             const isActive = path.startsWith(link.path) || path.includes(link.path);
             return (
               <li key={`${link.label}-${link.path}`} className={isActive ? 'active sm:px-6 py-2 text-center ' : ' sm:px-6 py-2 text-center '}>
-                <Link className="pt-5  cursor-pointer " href={link.path} onClick={toggleMenu}>
+                <Link className="pt-5 cursor-pointer " href={link.path} onClick={toggleMenu}>
                   {link.label}
                 </Link>
               </li>
@@ -117,6 +100,6 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
       </div>
     </nav>
   );
-};}
+};
 
 export default Navbar;
