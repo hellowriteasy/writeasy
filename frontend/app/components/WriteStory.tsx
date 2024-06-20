@@ -425,7 +425,7 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
           </div>
         </div>
         <div className=" w-[70vw]  rounded-3xl">
-          <EditorContent className=" scroll-m-2 w-[100%] h-[40vw] mt-10 " editor={editor} />
+          <EditorContent className=" scroll-m-2 w-[100%] min-h-[40vw] mt-10 " editor={editor} />
         </div>
       </div>
       <div className="absolute -left-2/3">
