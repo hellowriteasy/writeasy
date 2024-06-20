@@ -165,6 +165,7 @@ export function SimpleEditor({
     original: string,
     corrected: string
   ): React.ReactNode[] => {
+    console.log("debug  2 comparing",)
     const diff: Change[] = diffChars(original, corrected);
     const result: React.ReactNode[] = [];
 
@@ -208,7 +209,7 @@ export function SimpleEditor({
   }, [correctedText]);
 
   useEffect(() => {
-
+    console.log("debug  1 correction text",correctedText)
     setImproved(compareSentences(inputText, correctedText));
   }, [inputText, correctedText]);
 
@@ -282,8 +283,8 @@ export function SimpleEditor({
 
       const { data, status } = await AxiosIns.post("stories/score", payload);
       toast.success("Story saved succesfully");
-
       setInputText(currentContent);
+      console.log("debug 01",data.corrections)
       setCorrectedText(data.corrections);
       setCopied(false);
       setIsCheckingGrammer(true);
@@ -309,6 +310,7 @@ export function SimpleEditor({
   };
 
   const handleUpdate = () => {
+    console.log("debug 4 updating editor ",correctedText)
     if (editor) {
       editor.commands.setContent(
         `${getCorrectedContent(inputText, correctedText)}`

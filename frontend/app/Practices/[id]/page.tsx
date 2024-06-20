@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import Image from "next/image";
 import Bee from "@/public/Game/cloud3.svg";
 import { SimpleEditor } from "@/app/components/WriteStory";
