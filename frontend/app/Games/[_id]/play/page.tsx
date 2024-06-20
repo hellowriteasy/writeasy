@@ -26,9 +26,12 @@ import Logo from "@/public/Landingpage-img/logo.svg";
 
 interface StoryEditorProps {
   _id: string;
+  title:string,
+  content:string,
+ 
 }
 
-const StoryEditor: React.FC<StoryEditorProps> = ({}) => {
+const StoryEditor: React.FC<StoryEditorProps> = () => {
   const [storyDetails, setStoryDetails] = useState({
     title: "",
     email: "",

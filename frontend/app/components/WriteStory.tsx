@@ -131,6 +131,7 @@ export function SimpleEditor({
   const [correctedText, setCorrectedText] = useState("");
   const [copied, setCopied] = useState(false); // State to track if text is copied
   const [improved, setImproved] = useState<React.ReactNode[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [final, setFinal] = useState("");
   const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
   const setStoredFunction = usePdfStore((state) => state.setPdfExportFunction);
@@ -280,9 +281,11 @@ export function SimpleEditor({
         storyType: "practice",
         prompt: _id,
       };
-
+      setIsLoading(true);
       const { data, status } = await AxiosIns.post("stories/score", payload);
+      setIsLoading(false);
       toast.success("Story saved succesfully");
+      
       setInputText(currentContent);
       console.log("debug 01",data.corrections)
       setCorrectedText(data.corrections);
@@ -290,6 +293,7 @@ export function SimpleEditor({
       setIsCheckingGrammer(true);
       setTriggerGrammarCheck(false);
     } catch (error) {
+      setIsLoading(false); 
       setTriggerGrammarCheck(false);
       toast.error("An error occurred while checking grammar.");
     }
@@ -349,9 +353,14 @@ export function SimpleEditor({
 
   return (
     <>
+   
       <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
         <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
-          <div className="flex gap-3 p-3 ps-6">
+          <div className="flex h-16  gap-3 p-3 ps-6">
+          {isLoading && (
+        <div className="loader mr-10 "></div>
+
+      )}
             <button
               className="menu-button mr-2"
               type="button"
@@ -488,8 +497,9 @@ export function SimpleEditor({
           </div>
         </div>
         <div className=" w-[70vw]  rounded-3xl">
+
           <EditorContent
-            className=" scroll-m-2 w-[100%] min-h-[40vw] mt-10 "
+            className={` scroll-m-2 w-[100%] min-h-[40vw] mt-10 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''} `}
             editor={editor}
           />
         </div>
