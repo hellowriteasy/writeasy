@@ -1,12 +1,10 @@
 // layout.tsx
-import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import LoadingAnimation from "./loading";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -34,11 +32,8 @@ export default function RootLayout({
     <html lang="en">
       <body className="two-line-bg">
         <Navbar titles={navTitles}></Navbar> 
-        
         <ToastContainer />
-
         {children}
-     
         <Footer></Footer>
       </body>
     </html>

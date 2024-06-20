@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import Image from "next/image";
 import Prompt from "../components/Practice/PracticePrompt";
 import TopWriting from "../components/Others/TopWriting";

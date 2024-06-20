@@ -82,9 +82,9 @@ console.log("debug 1");
       success: true,
       message: "Story scored and corrected successfully",
       storyId: savedStory._id,
-      score:corrections.score,
-      corrections,
-      correctionSummary
+      score: corrections.score,
+      corrections: corrections.corrections,
+      correctionSummary,
     });
   } catch (error) {
     console.error("Failed to score story:", error);

@@ -244,7 +244,7 @@ const CreateContest = () => {
                     </div>
                     <div className="w-[80vw]  rounded-3xl mx-auto ">
                       <EditorContent
-                        className="scroll-m-2 w-[70%] h-[300px]  mt-10 "
+                        className="scroll-m-2 w-[70%] min-h-[300px]  mt-10 "
                         editor={editor}
                       />
                     </div>

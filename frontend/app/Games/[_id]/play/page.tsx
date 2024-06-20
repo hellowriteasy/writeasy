@@ -406,7 +406,7 @@ const StoryEditor: React.FC<StoryEditorProps> = ({}) => {
                       }   `}
                     >
                       <EditorContent
-                        className="scroll-m-2 w-[100%] h-96 mt-10"
+                        className="scroll-m-2 w-[100%] min-h-300 mt-10"
                         editor={editor}
                       />
                     </div>

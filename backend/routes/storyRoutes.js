@@ -175,6 +175,77 @@ router.put("/:id", updateStory);
  *         description: Error occurred while deleting the story.
  */
 router.delete("/:id", deleteStory);
+/**
+ * @openapi
+ * /api/stories/score:
+ *   post:
+ *     tags:
+ *       - Stories
+ *     summary: Score a story and get corrections
+ *     description: Submits a story for scoring and correction based on specified task type (grammar, rewrite, or improve).
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [userId, title, content, wordCount, taskType]
+ *             properties:
+ *               userId:
+ *                 type: string
+ *                 description: ID of the user who is submitting the story.
+ *               title:
+ *                 type: string
+ *                 description: Title of the story.
+ *               content:
+ *                 type: string
+ *                 description: Content of the story to be scored and optionally corrected.
+ *               wordCount:
+ *                 type: number
+ *                 description: Word count of the story.
+ *               taskType:
+ *                 type: string
+ *                 description: The type of task to perform on the story (ScoreOnly, Grammar, Rewrite, Improve).
+ *                 enum: ["grammar", "rewrite", "improve"]
+ *               storyType:
+ *                 type: string
+ *                 description: The type of the story
+ *                 enum: ["practice", "contest", "game"]
+ *               prompt:
+ *                 type: string
+ *                 description: ID of the prompt associated with the story.
+ *     responses:
+ *       201:
+ *         description: Story scored and, if requested, corrected successfully.
+ *       400:
+ *         description: Invalid request parameters.
+ *       500:
+ *         description: Error occurred while processing the story.
+ */
+router.post("/score", scoreStory);
+
+/**
+ * @openapi
+ * /api/stories/{id}:
+ *   delete:
+ *     tags:
+ *       - Stories
+ *     summary: Delete a story
+ *     description: Deletes a specific story by ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the story to delete.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: Story deleted successfully.
+ *       500:
+ *         description: Error occurred while deleting the story.
+ */
+router.delete("/:id", deleteStory);
 
 
 /**
