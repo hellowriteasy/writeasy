@@ -18,6 +18,7 @@ import logo from "../../public/Landingpage-img/logo.svg";
 import InputField from "../components/InputFIelds";
 import Link from "next/link";
 import { axiosInstance } from "../utils/config/axios";
+import Button from "../components/Button";
 
 const schema = z.object({
   email: z.string().email(),
@@ -26,7 +27,6 @@ const schema = z.object({
   username: z.string().regex(/^[a-zA-Z0-9_ @]+$/, {
     message: "Username can only contain letters, numbers, underscores, spaces, and the '@' symbol."
   })
-  
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
@@ -43,7 +43,9 @@ const Signup = () => {
   } = useForm<FormFields>({
     resolver: zodResolver(schema),
   });
-  const AxiosIns=axiosInstance("")
+
+  const AxiosIns = axiosInstance("");
+  
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       await AxiosIns.post("/auth/register", {
@@ -65,12 +67,12 @@ const Signup = () => {
           <Image src={logo} alt="logo" />
         </div>
       </Link>
-      <div className="flex flex-col   items-center overflow-hidden">
-        <h1 className="text-center text-4xl pt-6 font-comic">
+      <div className="flex flex-col w-screen items-center overflow-hidden">
+        <h1 className="text-center text-2xl sm:text-4xl pt-6 font-comic">
           <span className="font-bold">Hello!</span> Welcome to Writeasy
         </h1>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="relative flex flex-col gap-2 font-comic mt-10 z-10">
+        <form onSubmit={handleSubmit(onSubmit)} className="relative flex flex-col  items-center gap-2 font-comic mt-10 z-10 ">
           <InputField
             types="text"
             placeholder="Email"
@@ -99,9 +101,10 @@ const Signup = () => {
           />
           {errors.confirmPassword && <div className="text-red-500">{errors.confirmPassword.message}</div>}
 
-          <button className="text-center border rounded-3xl text-white hover:opacity-80 w-96 mt-5 bg-black h-14 text-2xl">
+          <button className="text-center border rounded-3xl text-white hover:opacity-80 w-full sm:w-72 md:w-80 lg:w-96 mt-5 bg-black h-12 sm:h-14 text-xl sm:text-2xl">
             Sign Up
           </button>
+          <Button type="google" />
           <h1 className="text-center font-comic pt-6">
             Already have an account? <Link href="/login" className="font-bold underline">Login</Link>
           </h1>
@@ -131,7 +134,7 @@ const Signup = () => {
         <div className="absolute vsm-hide right-6 bottom-20">
           <Image src={Vector1} height={300} alt="vector1" />
         </div>
-        <Image className="w-screen mt-10"  alt="earth" src={Earth} />
+        <Image className="w-full mt-10" alt="earth" src={Earth} />
       </div>
     </div>
   );

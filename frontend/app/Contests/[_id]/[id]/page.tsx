@@ -61,15 +61,15 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
         </div>
         <div className="flex justify-center mt-8"></div>
         <div className="flex w-full h-auto relative mt-0 justify-around">
-          <div className="absolute top-0 -left-40">
+          <div className="absolute md-hide top-0 -left-48 ">
             <Image src={Cloud2} alt="cloud" />
           </div>
-          <div className="gap-8 relative flex flex-col">
-            <div className="w-[53vw]">
+          <div className="gap-8 relative w-full flex flex-col">
+            {/* <div className="w-[53vw]">
               {/* <h1 className="text-6xl font-comic font-bold p-10">
                 {prompt_title}
               </h1> */}
-            </div>
+        
             {stories.map((story, index) => {
               let starType: "main" | "second" | "none" = "none";
               if (index === 0) {
@@ -89,7 +89,10 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
                 />
               );
             })}
-            <div className="absolute bottom-80 -left-32">
+            <div className="absolute bottom-80 sm-hide  -right-40">
+              <Image src={Cloud} alt="Cloud" />
+            </div>
+            <div className="absolute bottom-80 sm-hide -left-36">
               <Image src={Cloud} alt="Cloud" />
             </div>
           </div>

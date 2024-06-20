@@ -41,7 +41,10 @@ const FrequentlyAsked = () => {
         <Image className='w-[5vw]' src={Path} alt="path" />
       </div>
       <div className="text-3xl flex flex-col items-center font-bold font-comic gap-3">
-        <h1 className="text-center font-crayon text-5xl md:text-7xl font-bold pt-10">Frequently Asked Questions</h1>
+      <h1 className="text-center font-crayon text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold pt-5 md:pt-10">
+  Frequently Asked Questions
+</h1>
+
         <div className="w-full pt-16 px-4">
           <div className="mx-auto w-full max-w-lg">
             <div className="divide-y divide-gray-300 rounded-xl flex flex-col items-center">

@@ -18,8 +18,8 @@ export type TStory = {
   submissionDateTime: string;
   score: number;
   corrections: string;
-  contest: TContest;
-  prompt: TPrompt;
+  contest: string;
+  prompt: string;
   storyType: string;
   contributors: TUser[];
   hasEnded: boolean;
@@ -32,8 +32,7 @@ export type TPrompt = {
   promptType: string;
   __v: number;
   description: string;
-  type: string;
-  contestId:TContest
+  type:string
 };
 
 export type TContest = {
@@ -56,4 +55,5 @@ export type TFAQ ={
   _id: string;
   question: string;
   answer: string;
+  place:number
 }
