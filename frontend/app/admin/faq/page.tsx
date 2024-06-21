@@ -1,14 +1,15 @@
-'use client';
+'use client'
 import { useState, useEffect } from "react";
 import Card from "../../components/admin/faq/CardAdd";
 import Modal from "../../components/admin/faq/Modal"
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
-import { TFAQ } from "@/app/utils/types"; // Assuming you have defined TFAQ type
+import { TFAQ } from "@/app/utils/types";
 import { axiosInstance } from "@/app/utils/config/axios";
+import { toast } from 'react-toastify';
 
 const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [faqs, setFAQs] = useState<TFAQ[]>([]); // State variable renamed to faqs
+  const [faqs, setFAQs] = useState<TFAQ[]>([]);
   const AxiosIns = axiosInstance("");
 
   const handleAddClick = () => {
@@ -18,7 +19,7 @@ const Page = () => {
   useEffect(() => {
     const fetchFAQs = async () => {
       try {
-        const response = await AxiosIns.get('/faq'); // Endpoint adjusted to fetch FAQs
+        const response = await AxiosIns.get('/faq');
         setFAQs(response.data); // Assuming response data is an array of FAQs
       } catch (error) {
         console.error('Error fetching FAQs:', error);
@@ -27,6 +28,16 @@ const Page = () => {
 
     fetchFAQs();
   }, []);
+
+  const onSuccess = async () => {
+    try {
+      const response = await AxiosIns.get('/faq');
+      setFAQs(response.data);
+    } catch (error) {
+      console.error('Error fetching FAQs after deletion:', error);
+      toast.error('Failed to refresh FAQs after deletion.');
+    }
+  };
 
   return (
     <ProtectedRoute>
@@ -53,12 +64,19 @@ const Page = () => {
               </div>
               <div className="mt-4 space-y-4">
                 {faqs.map((faq, index) => (
-                  <Card key={index} id={faq._id} question={faq.question} answer={faq.answer} position={faq.place} />
+                  <Card
+                    key={index}
+                    id={faq._id}
+                    question={faq.question}
+                    answer={faq.answer}
+                    position={faq.place}
+                    onSuccess={onSuccess}
+                  />
                 ))}
               </div>
             </div>
           </div>
-          {isModalOpen && <Modal setIsModalOpen={setIsModalOpen} />}
+          {isModalOpen && <Modal setIsModalOpen={setIsModalOpen} onSuccess={onSuccess} />}
         </div>
       </div>
     </ProtectedRoute>

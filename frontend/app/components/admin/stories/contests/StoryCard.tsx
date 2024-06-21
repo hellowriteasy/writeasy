@@ -5,6 +5,7 @@ import axios from 'axios';
 import { diffChars } from 'diff';
 import { toast } from 'react-toastify';
 import { axiosInstance } from '@/app/utils/config/axios';
+import DeleteModal from '@/app/components/DeleteModal';
 interface CardProps {
   _id: string;
   username: string;
@@ -82,9 +83,9 @@ const Card: React.FC<CardProps> = ({ contest }) => {
             <button className="text-black" onClick={() => setOpen(true)}>
               <FaEdit size={30} />
             </button>
-            <button className="text-black text-3xl">
+            {/* <button className="text-black text-3xl">
               <FaTrash size={30} />
-            </button>
+            </button> */}
           </div>
         </div>
         <div className="text-gray-600">User: {contest.username}</div>

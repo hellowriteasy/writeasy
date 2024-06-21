@@ -1,7 +1,5 @@
 'use client';
 import { useState, useEffect } from "react";
-import axios from "axios";
-import Navbar from "../../components/admin/Navbar";
 import Card from "../../components/admin/practice/CardAdd";
 import Modal from "../../components/admin/practice/Modal";
 import ProtectedRoute from "@/app/utils/ProtectedRoute";

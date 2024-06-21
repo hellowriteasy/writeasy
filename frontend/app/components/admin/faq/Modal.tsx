@@ -7,9 +7,10 @@ import { axiosInstance } from '@/app/utils/config/axios';
 
 interface ModalProps {
   setIsModalOpen: (isOpen: boolean) => void;
+  onSuccess:()=>void;
 }
 
-const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
+const Modal: React.FC<ModalProps> = ({ setIsModalOpen,onSuccess }) => {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [Position, setPosition] = useState<number | ''>('');
@@ -26,6 +27,7 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
     AxiosIns.post('/faq', faqData)
       .then((response) => {
         setIsModalOpen(false);
+       onSuccess();
         toast.success('FAQ added successfully!');
         // Optionally, reset the input fields after successful creation
         setQuestion('');

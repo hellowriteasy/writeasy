@@ -13,7 +13,6 @@ import { axiosInstance } from '../utils/config/axios';
 
 const Page: React.FC = () => {
   const [userStories, setUserStories] = useState<TStory[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string|null>(null);
   const [currentPage, setCurrentPage] = useState(0);
   const { userId } = useAuthStore();
@@ -26,22 +25,45 @@ const Page: React.FC = () => {
           params: {
             userId:userId,
             storyType: 'practice',
-            skip: currentPage * itemsPerPage, // Calculate the number of items to skip
-            limit: itemsPerPage // Limit the number of items per page
+            skip: currentPage * itemsPerPage, 
+            limit: itemsPerPage 
           }
         });
        
         setUserStories(response.data.reverse());
-        setLoading(false);
+        
       } catch (error:any) {
         setError('Error fetching user stories: ' + error.message);
-        setLoading(false);
+       
       }
     };
 
     fetchUserStories();
   }, [currentPage]); // Fetch user stories whenever currentPage changes
-
+   async function  onSuccess(){
+ 
+      const fetchUserStories = async () => {
+        try {
+          const response = await AxiosIns.get<TStory[]>('/stories/user', {
+            params: {
+              userId:userId,
+              storyType: 'practice',
+              skip: currentPage * itemsPerPage, 
+              limit: itemsPerPage 
+            }
+          });
+         
+          setUserStories(response.data.reverse());
+          
+        } catch (error:any) {
+          setError('Error fetching user stories: ' + error.message);
+         
+        }
+      };
+  
+      fetchUserStories();
+   
+  }
   const handlePageClick = (data:{selected:number}) => {
     const selectedPage = data.selected;
     setCurrentPage(selectedPage);
@@ -49,7 +71,7 @@ const Page: React.FC = () => {
 
   const pageCount = Math.ceil(userStories.length / itemsPerPage);
 
-  if (loading) return <p>Loading...</p>;
+
   if (error) return <p>{error}</p>;
 
   return (
@@ -65,6 +87,7 @@ const Page: React.FC = () => {
             corrections={story.corrections}
             type={story.storyType}
             contributors={story.contributors}
+            onsuccess={onSuccess}
           />
         )) :<NotFound text='No Practices To Show !!'/>}
       </div>

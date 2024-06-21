@@ -1,8 +1,10 @@
-import { useState, Fragment, useRef } from 'react';
+'use client'
+import { useState, useRef,Fragment } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Dialog, Transition } from '@headlessui/react';
-import axios from 'axios';
 import { axiosInstance } from '@/app/utils/config/axios';
+import DeleteModal from '../../DeleteModal';
+import { toast } from 'react-toastify';
 
 interface CardProps {
   _id: string;
@@ -16,6 +18,7 @@ interface CardProps {
   correctionSummary: string;
   corrections: string;
   score: number;
+  onDeleteSuccess: () => void; // Callback function to update parent component
 }
 
 const Card: React.FC<CardProps> = ({
@@ -29,23 +32,40 @@ const Card: React.FC<CardProps> = ({
   storyType,
   correctionSummary,
   corrections,
-  score
+  score,
+  onDeleteSuccess, // Receive onDeleteSuccess as a prop
 }) => {
   const [open, setOpen] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [feedback, setFeedback] = useState(correctionSummary);
   const [storyDetail, setStoryDetail] = useState(content);
   const cancelButtonRef = useRef(null);
-  const AxiosIns=axiosInstance("")
+  const AxiosIns = axiosInstance('');
+
+  const handleDelete = async () => {
+    try {
+      setOpenDeleteModal(true);
+      await AxiosIns.delete(`/stories/${_id}`);
+      toast.success('Deleted successfully');
+      setOpenDeleteModal(false);
+      onDeleteSuccess();
+    } catch (error) {
+      setOpenDeleteModal(false);
+      console.error('Error deleting the story:', error);
+      toast.error('Failed to delete the story.');
+    }
+  };
+
   const handleUpdate = async () => {
     try {
-      const response = await AxiosIns.put(`http://localhost:8000/api/stories/${_id}`, {
+      await AxiosIns.put(`/stories/${_id}`, {
         correctionSummary: feedback,
         content: storyDetail,
       });
-   
       setOpen(false);
     } catch (error) {
-      console.error('There was an error updating the story!', error);
+      console.error('Error updating the story:', error);
+      toast.error('Failed to update the story.');
     }
   };
 
@@ -58,13 +78,15 @@ const Card: React.FC<CardProps> = ({
             <button className="text-black" onClick={() => setOpen(true)}>
               <FaEdit size={30} />
             </button>
-            <button className="text-black text-3xl">
+            <button className="text-black text-3xl" onClick={() => setOpenDeleteModal(true)}>
               <FaTrash size={30} />
             </button>
           </div>
         </div>
         <div className="text-gray-600">User: {user}</div>
-        <div className="text-gray-600">Submission Date: {new Date(submissionDateTime).toLocaleString()}</div>
+        <div className="text-gray-600">
+          Submission Date: {new Date(submissionDateTime).toLocaleString()}
+        </div>
         <div className="text-gray-600">Score: {score}</div>
       </div>
 
@@ -124,10 +146,8 @@ const Card: React.FC<CardProps> = ({
                               placeholder="Story details"
                               value={storyDetail}
                               disabled
-                             
                             />
                           </div>
-                          
                         </div>
                       </div>
                     </div>
@@ -155,6 +175,12 @@ const Card: React.FC<CardProps> = ({
           </div>
         </Dialog>
       </Transition.Root>
+
+      <DeleteModal
+        isOpen={openDeleteModal}
+        setIsOpen={setOpenDeleteModal}
+        onConfirm={handleDelete}
+      />
     </>
   );
 };

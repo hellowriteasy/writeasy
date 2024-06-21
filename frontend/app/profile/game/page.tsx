@@ -5,7 +5,7 @@ import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import useAuthStore from '@/app/store/useAuthStore';
-import { TUser } from '@/app/utils/types';
+import { TUser,TStory } from '@/app/utils/types';
 import NotFound from '@/app/components/Others/NotFound';
 import ProfileTabs from '@/app/components/profile/ProfileTabs';
 import { axiosInstance } from '@/app/utils/config/axios';
@@ -21,7 +21,7 @@ interface UserStory {
 
 const Page: React.FC = () => {
   const [userStories, setUserStories] = useState<UserStory[]>([]);
-  const [loading, setLoading] = useState(true);
+
   const [error, setError] = useState<string|null>(null);
   const [currentPage, setCurrentPage] = useState(0);
   const userId = useAuthStore((state) => state.userId);
@@ -40,25 +40,50 @@ const Page: React.FC = () => {
         });
         
         setUserStories(response.data.reverse());
-        setLoading(false);
+
       } catch (error:any) {
     
-        setLoading(false);
+
       }
     };
 
     fetchUserStories();
   }, [currentPage]);
+  async function  onSuccess(){
+    const fetchUserStories = async () => {
+      try {
+        const response = await AxiosIns.get<UserStory[]>('/stories/user', {
+          params: {
+            userId:userId,
+            storyType: 'game',
+            skip: currentPage * itemsPerPage,
+            limit: itemsPerPage
+          }
+        });
+        
+        setUserStories(response.data.reverse());
+
+      } catch (error:any) {
+    
+
+      }
+    };
+
+    fetchUserStories();
+      
+  
+  };
+    
 
   const handlePageClick = (data:{selected:number}) => {
     const selectedPage = data.selected;
     setCurrentPage(selectedPage);
     };
-
+ 
    
   const pageCount = Math.ceil(userStories.length / itemsPerPage);
 
-  if (loading) return <p>Loading...</p>;
+  
   if (error) return <p>{error}</p>;
  
   return (
@@ -74,6 +99,7 @@ const Page: React.FC = () => {
             corrections={story.corrections}
             type={story.storyType}
             contributors={story.contributors}
+            onsuccess={onSuccess}
           />
         )) :<NotFound text='No Games To Show !!'/>}
       </div>

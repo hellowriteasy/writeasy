@@ -117,9 +117,9 @@ export function SimpleEditor({
   hasSaved,
   setHasSaved,
 }: SimpleEditorProps) {
-  const [inputText, setInputText] = useState(""); // State to hold input text
+  const [inputText, setInputText] = useState(""); 
   const [correctedText, setCorrectedText] = useState("");
-  const [copied, setCopied] = useState(false); // State to track if text is copied
+  const [copied, setCopied] = useState(false); 
   const [isLoading, setIsLoading] = useState(false);
   const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
   const setStoredFunction = usePdfStore((state) => state.setPdfExportFunction);
@@ -327,6 +327,7 @@ export function SimpleEditor({
   if (!editor) {
     return null;
   }
+  
 
   return (
     <>

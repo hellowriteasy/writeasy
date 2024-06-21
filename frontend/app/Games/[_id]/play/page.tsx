@@ -109,7 +109,19 @@ const StoryEditor: React.FC<StoryEditorProps> = () => {
       fetchPromptById();
     }
   }, [promptId]);
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = "Refreshing the page may erase your changes. Are you sure you want to continue?";
+      return "Refreshing the page may erase your changes. Are you sure you want to continue?";
+    };
 
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
   useEffect(() => {
     console.log("inside", currentStory);
     if (currentStory && editor) {

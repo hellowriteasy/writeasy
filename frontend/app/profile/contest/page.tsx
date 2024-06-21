@@ -37,9 +37,27 @@ const ContestPage: React.FC = () => {
         setLoading(false);
       }
     };
-
     fetchData();
   }, [currentPage]);
+ async function onsuccess(){
+    try {
+      const response = await AxiosIns.get('/stories/user', {
+        params: {
+          userId:userId,
+          storyType: 'contest',
+          skip: currentPage * itemsPerPage,
+          limit: itemsPerPage
+        }
+      });
+      setUserStories(response.data.reverse());
+      setLoading(false);
+    } catch (error) {
+ 
+      setLoading(false);
+    }
+  };
+
+  
 
   const handlePageClick = (data:{selected:number}) => {
     const selectedPage = data.selected;
@@ -71,6 +89,7 @@ const ContestPage: React.FC = () => {
                   contributors={story.contributors}
                   promptTitle={story.prompt.title}
                   contestTitle={story.contest.contestTheme}
+                  onsuccess={onsuccess}
                 />
               ))
             ) : (

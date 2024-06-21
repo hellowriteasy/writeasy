@@ -1,5 +1,5 @@
 'use client';
-import { Fragment, useState } from 'react';
+import { Fragment, useState,useEffect } from 'react';
 import { Dialog, Transition, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -15,6 +15,19 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
   const [promptTitle, setPromptTitle] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const AxiosIns=axiosInstance("")
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = "Refreshing the page may erase your changes. Are you sure you want to continue?";
+      return "Refreshing the page may erase your changes. Are you sure you want to continue?";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
   const handleAddPrompt = async () => {
     try {
       const response = await AxiosIns.post('/prompts', {

@@ -4,6 +4,7 @@ import { Dialog, Transition, Menu, MenuButton, MenuItem, MenuItems } from '@head
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { axiosInstance } from '@/app/utils/config/axios';
+import DeleteModal from '@/app/components/DeleteModal'; // Adjust the import path as necessary
 
 interface CardProps {
   title: string;
@@ -12,7 +13,8 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ title, type, id }) => {
-  const [open, setOpen] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [promptTitle, setPromptTitle] = useState(title);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
 
@@ -36,7 +38,7 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
         promptType: 'practice',
       });
 
-      setOpen(false);
+      setOpenEditModal(false);
       toast.success('Prompt updated successfully!');
     } catch (error) {
       console.error('Error updating prompt:', error);
@@ -46,11 +48,10 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
 
   const handleDelete = async () => {
     try {
+      setOpenDeleteModal(true);
       const response = await AxiosIns.delete(`/prompts/${id}`);
-      if (window.confirm('Are you sure you want to delete this prompt?')) {
-        toast.success('Prompt deleted successfully!');
-        // Optionally, you can also update the UI to remove the card from the list of prompts
-      }
+      setOpenDeleteModal(false);
+      toast.success('Prompt deleted successfully!');
     } catch (error) {
       console.error('Error deleting prompt:', error);
       toast.error('Failed to delete prompt.');
@@ -63,18 +64,20 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
         <div className="flex justify-between items-center mb-2">
           <div className="text-xl font-semibold">{title}</div>
           <div className="flex space-x-2 gap-4">
-            <button className="text-black " onClick={() => setOpen(true)}>
+            <button className="text-black" onClick={() => setOpenEditModal(true)}>
               <FaEdit size={30} />
             </button>
-            <button className="text-black text-3xl" onClick={handleDelete}>
+            <button className="text-black text-3xl" onClick={() => setOpenDeleteModal(true)}>
               <FaTrash size={30} />
             </button>
           </div>
         </div>
         <div className="text-gray-600">{type}</div>
       </div>
-      <Transition.Root show={open} as={Fragment}>
-        <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
+
+      {/* Edit Modal */}
+      <Transition.Root show={openEditModal} as={Fragment}>
+        <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpenEditModal}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -127,7 +130,7 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
                               leaveTo="transform opacity-0 scale-95"
                             >
                               <MenuItems className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                {['Adventure', 'Comic', 'Fantasy','Romance'].map((type) => (
+                                {['Adventure', 'Comic', 'Fantasy', 'Romance'].map((type) => (
                                   <MenuItem key={type}>
                                     {({ active }) => (
                                       <button
@@ -167,7 +170,7 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
                     <button
                       type="button"
                       className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                      onClick={() => setOpen(false)}
+                      onClick={() => setOpenEditModal(false)}
                       ref={cancelButtonRef}
                     >
                       Cancel
@@ -179,6 +182,12 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
           </div>
         </Dialog>
       </Transition.Root>
+
+      <DeleteModal
+        isOpen={openDeleteModal}
+        setIsOpen={setOpenDeleteModal}
+        onConfirm={handleDelete}
+      />
     </>
   );
 };

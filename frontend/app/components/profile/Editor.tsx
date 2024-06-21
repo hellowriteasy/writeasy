@@ -41,6 +41,19 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,contributo
   const isSubcriptionActive = useAuthStore(
     (state) => state.isSubcriptionActive
   );
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = "Refreshing the page may erase your changes. Are you sure you want to continue?";
+      return "Refreshing the page may erase your changes. Are you sure you want to continue?";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
   const AxiosIns=axiosInstance("")
   const role = useAuthStore((state) => state.role);
   const { userId } = useAuthStore();

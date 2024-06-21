@@ -1,18 +1,21 @@
+'use client'
 import { useState, Fragment, useRef, useEffect } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Dialog, Transition, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { axiosInstance } from '@/app/utils/config/axios';
-
+import DeleteModal from '../../DeleteModal';
 interface CardProps {
   question: string;
   answer: string;
   position: number;
   id: string;
+  onSuccess: () => void; 
 }
 
-const Card: React.FC<CardProps> = ({ question, answer, position, id }) => {
+const Card: React.FC<CardProps> = ({ question, answer, position, id, onSuccess }) => {
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [open, setOpen] = useState(false);
   const [promptQuestion, setPromptQuestion] = useState(question);
   const [promptAnswer, setPromptAnswer] = useState(answer);
@@ -39,12 +42,13 @@ const Card: React.FC<CardProps> = ({ question, answer, position, id }) => {
 
   const handleDelete = async () => {
     try {
+      setOpenDeleteModal(true);
       const response = await AxiosIns.delete(`/faq/${id}`);
-      if (window.confirm('Are you sure you want to delete this FAQ?')) {
-        toast.success('FAQ deleted successfully!');
-        // Optionally, you can also update the UI to remove the card from the list of FAQs
-      }
+      setOpenDeleteModal(false);
+      onSuccess(); // Trigger parent component to refetch FAQs
+      toast.success('FAQ deleted successfully!');
     } catch (error) {
+      setOpenDeleteModal(false);
       console.error('Error deleting FAQ:', error);
       toast.error('Failed to delete FAQ.');
     }
@@ -59,7 +63,7 @@ const Card: React.FC<CardProps> = ({ question, answer, position, id }) => {
             <button className="text-black " onClick={() => setOpen(true)}>
               <FaEdit size={30} />
             </button>
-            <button className="text-black text-3xl" onClick={handleDelete}>
+            <button className="text-black text-3xl" onClick={() => setOpenDeleteModal(true)}>
               <FaTrash size={30} />
             </button>
           </div>
@@ -148,6 +152,11 @@ const Card: React.FC<CardProps> = ({ question, answer, position, id }) => {
           </div>
         </Dialog>
       </Transition.Root>
+      <DeleteModal
+        isOpen={openDeleteModal}
+        setIsOpen={setOpenDeleteModal}
+        onConfirm={handleDelete}
+      />
     </>
   );
 };

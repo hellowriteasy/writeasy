@@ -34,6 +34,19 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
   const [hasSaved, setHasSaved] = useState(false);
 
   useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = "Refreshing the page may erase your changes. Are you sure you want to continue?";
+      return "Refreshing the page may erase your changes. Are you sure you want to continue?";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+  useEffect(() => {
     if (params.id) {
       AxiosIns.get(`prompts/${params.id}`)
         .then((response) => {

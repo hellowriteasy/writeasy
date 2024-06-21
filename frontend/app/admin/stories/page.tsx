@@ -1,4 +1,4 @@
-'use client';
+'use client'
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Card from "../../components/admin/stories/StoryTitleCard";
@@ -19,14 +19,14 @@ interface Story {
   correctionSummary: string;
   corrections: string;
   score: number;
-  username:string;  
 }
 
 const Page: React.FC = () => {
   const [stories, setStories] = useState<Story[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const AxiosIns=axiosInstance("")
+  const AxiosIns = axiosInstance("");
+
   useEffect(() => {
     const fetchStories = async () => {
       try {
@@ -42,6 +42,16 @@ const Page: React.FC = () => {
     fetchStories();
   }, []);
 
+  const onDeleteSuccess = async () => {
+    try {
+      const response = await AxiosIns.get<Story[]>("/stories");
+      setStories(response.data.reverse());
+    } catch (error) {
+      console.error('Error fetching stories after deletion:', error);
+      toast.error('Failed to refresh stories after deletion.');
+    }
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -53,9 +63,7 @@ const Page: React.FC = () => {
   return (
     <ProtectedRoute>
       <div className="bg-gray-50 min-h-screen">
-      
         <div className="flex h-screen">
-        
           <div className="flex-1 flex flex-col p-6 space-y-6">
             <StoryNav />
             <div className="flex justify-between items-center w-5/6 bg-white shadow-sm p-4 rounded-lg border border-gray-200">
@@ -76,6 +84,7 @@ const Page: React.FC = () => {
                   correctionSummary={story.correctionSummary}
                   corrections={story.corrections}
                   score={story.score}
+                  onDeleteSuccess={onDeleteSuccess} // Pass onDeleteSuccess as prop
                 />
               ))}
             </div>

@@ -5,7 +5,7 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { axiosInstance } from '@/app/utils/config/axios';
-
+import DeleteModal from '../../DeleteModal';
 interface CardProps {
   title: string;
   description: string;
@@ -15,6 +15,7 @@ interface CardProps {
 
 const CardAdd: React.FC<CardProps> = ({ title, description, id, categories }) => {
   const [open, setOpen] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [promptTitle, setPromptTitle] = useState(title);
   const [promptDescription, setPromptDescription] = useState(description);
   const [selectedCategories, setSelectedCategories] = useState<string[]>(categories);
@@ -40,9 +41,12 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id, categories }) =>
   const handleDelete = async () => {
     try {
       await AxiosIns.delete(`/prompts/${id}`);
+      setOpenDeleteModal(true)
       toast.success('Prompt deleted successfully!');
+      setOpenDeleteModal(false)
       // Optionally, remove the prompt from the UI here or refresh the list.
     } catch (error) {
+      setOpenDeleteModal(false)
       toast.error('Error deleting prompt.');
       console.error('Error:', error);
     }
@@ -67,7 +71,7 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id, categories }) =>
             <button className="text-black" onClick={() => setOpen(true)}>
               <FaEdit size={30} />
             </button>
-            <button className="text-black text-3xl" onClick={handleDelete}>
+            <button className="text-black text-3xl" onClick={() => setOpenDeleteModal(true)}>
               <FaTrash size={30} />
             </button>
           </div>
@@ -176,6 +180,11 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id, categories }) =>
         </Dialog>
       </Transition.Root>
       <ToastContainer />
+      <DeleteModal
+        isOpen={openDeleteModal}
+        setIsOpen={setOpenDeleteModal}
+        onConfirm={handleDelete}
+      />
     </>
   );
 };

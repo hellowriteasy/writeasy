@@ -60,7 +60,19 @@ const CreateContest = () => {
   const [wordCount, setWordCount] = useState(0);
   const router = useRouter();
   const { role, isSubcriptionActive, userId } = useAuthStore();
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = "Refreshing the page may erase your changes. Are you sure you want to continue?";
+      return "Refreshing the page may erase your changes. Are you sure you want to continue?";
+    };
 
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
   async function handleSubmit(e: SyntheticEvent) {
     e.preventDefault(); // Prevent default form submission behavior
 
