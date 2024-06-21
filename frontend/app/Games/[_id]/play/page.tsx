@@ -41,6 +41,7 @@ const StoryEditor: React.FC<StoryEditorProps> = () => {
     refresh: false,
   });
   const [prompt, setPrompt] = useState<TPrompt | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [currentStory, setCurrentStory] = useState<TStory | null>(null);
   const isSubcriptionActive = useAuthStore(
     (state) => state.isSubcriptionActive
@@ -149,16 +150,18 @@ const StoryEditor: React.FC<StoryEditorProps> = () => {
           storyType: "game",
           prompt: promptId,
         };
+        setIsLoading(true);
         await AxiosIns.post(`/stories`, payload);
         setStoryDetails((prev) => ({
           ...prev,
           refresh: !prev.refresh,
         }));
       }
-
+      setIsLoading(false);
       toast.success("Story saved successfully");
       return toast;
     } catch (error) {
+      setIsLoading(false)
       toast.error(
         "An error occurred while submitting the story. Please try again later."
       );
@@ -308,6 +311,11 @@ const StoryEditor: React.FC<StoryEditorProps> = () => {
                   <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
                     <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
                       <div className="flex gap-3 p-3 ps-6">
+                      {isLoading && (
+        <div className="loader mr-10 "></div>
+
+      )}
+           
                         <button
                           className="menu-button mr-2"
                           type="button"

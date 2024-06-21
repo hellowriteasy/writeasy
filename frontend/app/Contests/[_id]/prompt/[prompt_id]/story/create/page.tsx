@@ -56,6 +56,7 @@ const CreateContest = () => {
   };
 
   const [title, setTitle] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [wordCount, setWordCount] = useState(0);
   const router = useRouter();
   const { role, isSubcriptionActive, userId } = useAuthStore();
@@ -83,13 +84,15 @@ const CreateContest = () => {
         prompt: promptId,
         contest: contestId,
       };
-
+      setIsLoading(true);
       const { status } = await axiosIns.post("/stories", payload);
+      setIsLoading(false);
       if (status === 201) {
         toast.success("Story saved successfully");
         router.push(`/profile/contest?search=${promptId}`);
       }
     } catch (error) {
+      setIsLoading(false);
       toast.error("Story failed to save.");
     }
   }
@@ -174,6 +177,11 @@ const CreateContest = () => {
                   <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
                     <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
                       <div className="flex gap-3 p-3 ps-6">
+                      {isLoading && (
+        <div className="loader mr-10 "></div>
+
+      )}
+         
                         <button
                           className="menu-button mr-2"
                           type="button"

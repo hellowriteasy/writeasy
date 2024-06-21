@@ -25,6 +25,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
 
   const [contest, setContest] = useState<TContest | null>(null);
   const [promptList, setPromptList] = useState<TPrompt[]>([]);
+ 
   const [error, setError] = useState<string | null>(null);
   const [hasPromptPublished, setHasPromptPublished] = useState(false);
   const [selectedPrompt, setSelectedPrompt] = useState<{
@@ -65,11 +66,13 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
     const fetchContestById = async () => {
       try {
         const response = await axios.get(
+
           `http://localhost:8000/api/contests/${contestId}`
         );
         if (response.status !== 200) {
           throw new Error(`Error: ${response.status}`);
         }
+      
         const data: TContest = response.data;
         setContest(data);
       } catch (err: any) {
