@@ -38,14 +38,14 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
                   key={`${link.label}-${link.path}`}
                   className={
                     isActive
-                      ? "active sm:px-6 py-2 text-center "
-                      : " sm:px-6 py-2 text-center "
+                      ? "active sm:px-6 py-2 rounded-full text-center "
+                      : " sm:px-6 py-2  rounded-full text-center "
                   }
                 >
-                  <Link href={link.path}>
-                    <p className="pt-5 text-[1.5vw] cursor-pointer">
+                  <Link href={link.path}
+                    className="pt-5 text-[1.5vw]    cursor-pointer">
                       {link.label}
-                    </p>
+                    
                   </Link>
                 </li>
               );
@@ -84,7 +84,7 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
         <button onClick={toggleMenu} className="self-end text-black focus:outline-none mb-4">
           <XMarkIcon className="h-8 w-8" />
         </button>
-        <ul className="flex flex-col items-center gap-10 font-comic text-xl">
+        {/* <ul className="flex flex-col items-center gap-20 font-comic text-md">
           {titles.map(link => {
             const isActive = path.startsWith(link.path) || path.includes(link.path);
             return (
@@ -92,19 +92,19 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
                 key={`${link.label}-${link.path}`}
                 className={
                   isActive
-                    ? "active sm:px-6 py-2 text-center "
-                    : " sm:px-6 py-2 text-center "
+                    ? "active  py-2 text-center "
+                    : " py-2 text-center "
                 }
               >
-                <Link href={link.path}>
-                  <p className="pt-5 cursor-pointer" onClick={toggleMenu}>
+                <Link className="pt-5 text-sm cursor-pointer" href={link.path}
+                   onClick={toggleMenu}>
                     {link.label}
-                  </p>
+                 
                 </Link>
               </li>
             );
-          })}
         </ul>
+          })} */}
         <div className="flex flex-col gap-4">
           {loggedIn ? (
             <UserMenu />

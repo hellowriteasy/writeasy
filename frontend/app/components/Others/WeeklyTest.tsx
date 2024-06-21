@@ -58,7 +58,7 @@ const WeeklyTest = () => {
             {new Date(contest.submissionDeadline).toLocaleString()}
           </p>
           <Link href={`/Contests/${contest._id}`}>
-            <button className="w-40 h-12 mt-4 bg-black font-bold font-comic text-white rounded-2xl ">
+            <button className="text-sm w-40 h-12 mt-4 bg-black font-bold font-comic text-white rounded-2xl ">
               view details
             </button>
           </Link>

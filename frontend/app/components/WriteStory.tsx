@@ -16,7 +16,7 @@ import { diffChars, Change } from "diff";
 import usePdfStore from "@/app/store/usePDFStore";
 import { usePDF } from "react-to-pdf";
 import PDF from "./PDF";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useAuthStore from "../store/useAuthStore";
 import { axiosInstance } from "../utils/config/axios";
@@ -212,7 +212,7 @@ export function SimpleEditor({
     editorProps: {
       attributes: {
         class:
-          "prose dark:prose-invert prose-sm sm:prose-base w-full inline-block lg:prose-lg xl:prose-2xl outline-none h-full",
+          "prose dark:prose-invert prose-sm sm:prose-base w-full inline-block  lg:prose-lg xl:prose-2xl outline-none  min-h-[30vw]",
       },
     },
     onUpdate: ({ editor }) => {
@@ -220,6 +220,8 @@ export function SimpleEditor({
       const words = textContent.split(/\s+/).filter(Boolean).length;
       setWordCount(words);
       setWordLimitExceeded(words > 1000);
+      
+
     },
   }) as Editor;
 
@@ -329,9 +331,9 @@ export function SimpleEditor({
   return (
     <>
    
-      <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
-        <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
-          <div className="flex h-16  gap-3 p-3 ps-6">
+      <div className="editor bg-white p-4 h-auto rounded-3xl relative shadow-md w-full">
+        <div className="menu flex gap-5 w-[100%]  left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
+          <div className="flex gap-3 w-full h-12  overflow-hidden p-3 ps-6">
           {isLoading && (
         <div className="loader mr-10 "></div>
 
@@ -420,7 +422,7 @@ export function SimpleEditor({
             </button>
             <>
               <button
-                className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
+                className="bg-slate-100 border  overflow-y-hidden border-slate-500 p-1 text-sm rounded-md"
                 type="button"
                 onClick={(e) => {
                   e.preventDefault();
@@ -431,7 +433,7 @@ export function SimpleEditor({
                 Accept All
               </button>
               <button
-                className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
+                className="bg-slate-100 border  overflow-y-hidden border-slate-500 p-1 text-sm rounded-md"
                 type="button"
                 onClick={(e) => {
                   e.preventDefault();
@@ -442,7 +444,7 @@ export function SimpleEditor({
                 Reject All
               </button>
               <button
-                className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
+                className="bg-slate-100 border  border-slate-500 p-1 text-sm rounded-md"
                 onClick={(e) => {
                   e.preventDefault();
                   handleCopy();
@@ -452,7 +454,7 @@ export function SimpleEditor({
               </button>
 
               <button
-                className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
+                className="bg-slate-100 border overflow-y-hidden border-slate-500 p-1 text-sm rounded-md"
                 onClick={(e) => {
                   e.preventDefault();
                   pdfExportFunction && pdfExportFunction();
@@ -460,23 +462,19 @@ export function SimpleEditor({
               >
                 Export pdf
               </button>
-              <div className="w-60 h-7 bg-white flex flex-col justify-center rounded-2xl shadow-sm ">
+              <div className="w-60 h-7 sm-hide bg-white flex flex-col justify-center rounded-2xl shadow-sm ">
                 <p className="text-center font-comic">
                   Word count: {wordCount} / 1000
                 </p>
-                {wordLimitExceeded && (
-                  <p className="text-red-500">
-                    Word limit exceeded. Please reduce the number of words.
-                  </p>
-                )}
+               
               </div>
             </>
           </div>
         </div>
-        <div className=" w-[70vw]  rounded-3xl">
+        <div className=" w-[70vw] mt-10 rounded-3xl">
 
           <EditorContent
-            className={` scroll-m-2 w-[100%] min-h-[40vw] mt-10 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''} `}
+            className={` scroll-m-2 w-[100%] min-h-[30vw] mt-[4vw] ${isLoading ? 'opacity-50 cursor-not-allowed' : ''} `}
             editor={editor}
           />
         </div>
@@ -484,7 +482,7 @@ export function SimpleEditor({
       <div className="absolute -left-2/3">
         <PDF corrected={correctedText} originals={inputText} />
       </div>
-      <ToastContainer />
+    \
     </>
   );
 }

@@ -32,8 +32,8 @@ const CreateContest = () => {
   const axiosIns = axiosInstance(token as string);
   useEffect(() => {
     const pathSegments = pathname.split("/");
-    const contestIdFromUrl = pathSegments[2]; // Assuming 'Contests' is at index 1
-    const promptIdFromUrl = pathSegments[4]; // Assuming 'prompt' is at index 3
+    const contestIdFromUrl = pathSegments[2]; 
+    const promptIdFromUrl = pathSegments[4]; 
 
     setContestId(contestIdFromUrl);
     setPromptId(promptIdFromUrl);
@@ -43,7 +43,7 @@ const CreateContest = () => {
     if (promptId) {
       getPromptById();
     }
-    // eslintreact - hooks / exhaustive - deps;
+   
   }, [promptId]);
 
   const getPromptById = async () => {
@@ -54,9 +54,12 @@ const CreateContest = () => {
       //
     }
   };
+
   const [title, setTitle] = useState("");
+  const [wordCount, setWordCount] = useState(0);
   const router = useRouter();
   const { role, isSubcriptionActive, userId } = useAuthStore();
+
   async function handleSubmit(e: SyntheticEvent) {
     e.preventDefault(); // Prevent default form submission behavior
 
@@ -64,6 +67,11 @@ const CreateContest = () => {
       const currentContent = editor.getText();
       if (!title || !currentContent) {
         toast.warn("Please enter both title and content before submitting.");
+        return;
+      }
+
+      if (wordCount > 1000) {
+        toast.warn("Word limit exceeded. Please reduce the content to 1000 words or less.");
         return;
       }
 
@@ -78,7 +86,7 @@ const CreateContest = () => {
 
       const { status } = await axiosIns.post("/stories", payload);
       if (status === 201) {
-        toast.success("Story saved succesfully");
+        toast.success("Story saved successfully");
         router.push(`/profile/contest?search=${promptId}`);
       }
     } catch (error) {
@@ -101,9 +109,17 @@ const CreateContest = () => {
     editorProps: {
       attributes: {
         class:
-          "prose dark:prose-invert prose-sm sm:prose-base w-full   inline-block lg:prose-lg xl:prose-2xl outline-none  h-full ",
+          "prose dark:prose-invert prose-sm sm:prose-base w-full inline-block lg:prose-lg xl:prose-2xl outline-none min-h-[300px]",
       },
     },
+    onUpdate: ({ editor }) => {
+      const text = editor.getText();
+      const wordCount = text.split(/\s+/).filter(word => word.length > 0).length;
+      setWordCount(wordCount);
+      if (wordCount > 1000) {
+        toast.warn("Word limit exceeded. Please reduce the content to 1000 words or less.");
+      }
+    }
   }) as Editor;
 
   const toggleBold = useCallback(() => {
@@ -131,8 +147,8 @@ const CreateContest = () => {
   }
 
   return (
-    <div className="w-full  mt-6 z-0 relative flex justify-center">
-      <div className="w-10/12 h-screen ms-12">
+    <div className="w-full h-[100vw] mt-6 z-0 relative flex justify-center">
+      <div className="w-10/12 h-auto ms-12">
         <div className="w-full h-32 relative pt-4">
           <h1 className="text-6xl font-comic font-bold py-4"></h1>
         </div>
@@ -140,10 +156,10 @@ const CreateContest = () => {
           <div className="absolute -top-40 mt-3 -left-60">
             <Image src={Bee} alt="bee" />
           </div>
-          <div className="gap-8 relative w-4/5 flex flex-col">
+          <div className="gap-8 relative w-full flex flex-col">
             <form action="" className="height-[100px]">
-              <div className="flex flex-col w-full items-center gap-4 h-96">
-                <h2 className="text-3xl uppercase" > {promptDetails?.contestId.contestTheme} &gt; {promptDetails?.title} </h2>
+              <div className="flex flex-col w-full justify-center gap-4 h-96">
+                <h2 className="text-3xl uppercase">{promptDetails?.contestId.contestTheme} &gt; {promptDetails?.title}</h2>
                 <div>
                   <input
                     className="border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[70vw] h-12 focus:outline-none focus:border-yellow-600"
@@ -154,7 +170,7 @@ const CreateContest = () => {
                   />
                 </div>
 
-                <div className="h-[800px] rounded-full">
+                <div className="h-full w-full rounded-full">
                   <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
                     <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
                       <div className="flex gap-3 p-3 ps-6">
@@ -240,17 +256,22 @@ const CreateContest = () => {
                         >
                           <Icons.Code />
                         </button>
+                        <div className="w-60 h-7 bg-white flex flex-col justify-center rounded-2xl shadow-sm ">
+                          <p className="text-center font-comic">
+                            Word count: {wordCount} / 1000
+                          </p>
+                        </div>
                       </div>
                     </div>
-                    <div className="w-[80vw]  rounded-3xl mx-auto ">
+                    <div className="w-[80vw] rounded-3xl mx-auto">
                       <EditorContent
-                        className="scroll-m-2 w-[70%] min-h-[300px]  mt-10 "
+                        className="scroll-m-2 w-[70%] min-h-[300px] mt-10"
                         editor={editor}
                       />
                     </div>
                   </div>
                 </div>
-                <div>
+                <div className="flex justify-center">
                   <button
                     onClick={handleSubmit}
                     className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-[50vw] h-14"

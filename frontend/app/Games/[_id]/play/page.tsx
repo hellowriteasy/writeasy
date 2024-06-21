@@ -66,7 +66,7 @@ const StoryEditor: React.FC<StoryEditorProps> = () => {
     editorProps: {
       attributes: {
         class:
-          "prose dark:prose-invert prose-sm sm:prose-base w-full inline-block lg:prose-lg xl:prose-2xl outline-none h-full",
+          "prose dark:prose-invert prose-sm sm:prose-base w-full inline-block lg:prose-lg xl:prose-2xl outline-none min-h-96",
       },
     },
     content: storyDetails.content,
@@ -394,12 +394,7 @@ const StoryEditor: React.FC<StoryEditorProps> = () => {
                           <p className="text-center font-comic">
                             Word count: {storyDetails.wordCount} / 1000
                           </p>
-                          {storyDetails.wordLimitExceeded && (
-                            <p className="text-red-500">
-                              Word limit exceeded. Please reduce the number of
-                              words.
-                            </p>
-                          )}
+                        
                         </div>
                       </div>
                     </div>
@@ -409,7 +404,7 @@ const StoryEditor: React.FC<StoryEditorProps> = () => {
                       }   `}
                     >
                       <EditorContent
-                        className="scroll-m-2 w-[100%] min-h-300 mt-10"
+                        className="scroll-m-2 w-[100%] min-h-96 mt-10"
                         editor={editor}
                       />
                     </div>

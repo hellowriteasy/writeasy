@@ -80,7 +80,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
           </h1>
         </div>
         <div className="flex w-[100%] relative mt-0 ">
-          <div className="absolute -top-40 mt-3 -left-48">
+          <div className="absolute vsm-hide -top-40 mt-3 -left-48">
             <Image src={Bee} alt="bee" />
           </div>
           <div className="gap-8 relative w-full flex flex-col items-center ">
@@ -88,7 +88,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
               action=""
               className="flex flex-col items-center w-full mx-auto"
             >
-              <div className="flex flex-col w-full items-center gap-8 h-40  mx-auto">
+              <div className="flex flex-col w-full items-center gap-8 h-auto  mx-auto">
                 <div>
                   <input
                     className="border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[50vw] h-12 focus:outline-none focus:border-yellow-600"
@@ -96,16 +96,16 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
                     onChange={handleTitleChange}
                   />
                 </div>
-                <div className="flex flex-col gap-8">
-                  <div className="flex flex-wrap gap-4 font-comic">
+                <div className="flex w-full  flex-col gap-8">
+                  <div className="flex flex-wrap justify-center gap-4 font-comic">
                     {["grammar", "rewrite", "improve", "pdf"].map((type) => (
                       <div key={type}>
                         <button
-                          className={`w-40 h-14 bg-black text-white ${
+                          className={`w-[10vw] h-[4vw] bg-black text-white ${
                             taskType === type
                               ? "bg-custom-yellow text-black"
                               : ""
-                          } hover:opacity-80 font-bold text-2xl rounded-full`}
+                          } hover:opacity-80 font-bold text-[1.6vw] rounded-full`}
                           value={type}
                           type="button"
                           onClick={
@@ -144,7 +144,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
         </div>
         <div className="flex justify-center font-comic items-center my-4">
           <button
-            className="text-white bg-black w-96 h-12 rounded-3xl"
+            className="text-white bg-black text-2xl font-bold w-96 h-12 rounded-3xl"
             onClick={handleSaveToProfile}
           >
             Save to Profile

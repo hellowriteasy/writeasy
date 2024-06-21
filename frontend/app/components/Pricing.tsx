@@ -89,7 +89,7 @@ const Pricing = () => {
             </div>
             <div className="text-center flex flex-col gap-y-2 absolute sm:top-28 top-28  md:top-40 w-10/12 mx-auto">
               <div>
-                <h2 className="p-4 text-2xl font-black underline">Subscription benefits</h2>
+                {/* <h2 className="p-4 text-2xl font-black underline">Subscription benefits</h2> */}
                 <ul className="flex sm:text-sm lg:text-xl  flex-col px-4  items-start ">
                   <li className=" text-start">•⁠ ⁠Unlimited writing practices with immediate GPT markings</li>
                   <li>•⁠ ⁠Weekly writing contests</li>

@@ -122,7 +122,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
             </div>
           </div>
           <div className="flex w-full h-auto relative mt-0 justify-around gap-x-7">
-            <div className="absolute top-0 -left-40">
+            <div className="absolute sm-hide top-0 -left-40">
               <Image src={Cloud2} alt="cloud" />
             </div>
             <div className="gap-8 relative flex flex-col ">
@@ -153,11 +153,11 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
               <div className="w-full ms-28">
                 <Pagination />
               </div>
-              <div className="absolute bottom-80 -left-32">
+              <div className="absolute md-hide bottom-80 -left-32">
                 <Image src={Cloud} alt="Cloud" />
               </div>
             </div>
-            <div className="flex flex-col gap-8">
+            <div className="flex md-hide flex-col gap-8">
               <WeeklyTest />
               <TopWriting />
             </div>
