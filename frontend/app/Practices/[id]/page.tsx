@@ -33,7 +33,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
   const AxiosIns = axiosInstance("");
 
   useEffect(() => {
-    const handleBeforeUnload = (event) => {
+    const handleBeforeUnload = (event:any) => {
       event.preventDefault();
       event.returnValue = "Refreshing the page may erase your changes. Are you sure you want to continue?";
       return "Refreshing the page may erase your changes. Are you sure you want to continue?";
