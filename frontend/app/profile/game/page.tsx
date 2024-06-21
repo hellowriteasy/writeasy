@@ -39,28 +39,7 @@ const Page: React.FC = () => {
 
     fetchUserStories();
   }, [currentPage]);
-  async function  onSuccess(){
-    const fetchUserStories = async () => {
-      try {
-        const response = await AxiosIns.get<UserStory[]>('/stories/user', {
-          params: {
-            userId:userId,
-            storyType: 'game',
-            skip: currentPage * itemsPerPage,
-            limit: itemsPerPage
-          }
-        });
-        
-        setUserStories(response.data.reverse());
-
-      } catch (error:any) {
-    
-
-      }
-    };
-
-    fetchUserStories();
-  }, [currentPage]);
+  
   async function  onSuccess(){
     const fetchUserStories = async () => {
       try {
