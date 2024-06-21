@@ -8,6 +8,7 @@ import { axiosInstance } from '@/app/utils/config/axios';
 
 interface ModalProps {
   setIsModalOpen: (isOpen: boolean) => void;
+  onSuccess: () => void; 
 }
 
 interface CardProps {
@@ -15,7 +16,7 @@ interface CardProps {
   type: string;
 }
 
-const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
+const Modal: React.FC<ModalProps> = ({ setIsModalOpen,onSuccess }) => {
   const [promptTitle, setPromptTitle] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]); // State for selected categories
   const [promptCards, setPromptCards] = useState<CardProps[]>([]); // State to store added prompt cards
@@ -36,6 +37,7 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen }) => {
         };
         setPromptCards([...promptCards, newPrompt]); // Add the new prompt card to the state
         setIsModalOpen(false);
+        onSuccess();
         toast.success('Prompt added successfully!');
       })
       .catch(error => {

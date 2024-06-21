@@ -6,9 +6,10 @@ import { axiosInstance } from '@/app/utils/config/axios';
 
 interface ModalProps {
   setIsModalOpen: (isOpen: boolean) => void;
+  onSuccess : ()=>void;
 }
 
-const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen }) => {
+const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen ,onSuccess}) => {
   const [promptTitle, setPromptTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -24,8 +25,9 @@ const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen }) => {
         promptCategory: selectedCategories,
       });
       console.log('Response:', response.data);
-      toast.success('Prompt added successfully!');
       setIsModalOpen(false);
+      onSuccess();
+      toast.success('Prompt added successfully!');
     } catch (err: any) {
       setError('Error submitting the prompt');
       console.error('Error:', err);

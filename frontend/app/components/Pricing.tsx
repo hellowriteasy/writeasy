@@ -87,7 +87,7 @@ const Pricing = () => {
                 </div>
               )}
             </div>
-            <div className="text-center flex flex-col gap-y-2 absolute sm:top-28 top-28  md:top-40 w-10/12 mx-auto">
+            <div className="text-center flex flex-col gap-y-2 absolute sm:top-48 top-48  md:top-60 w-10/12 mx-auto">
               <div>
                 {/* <h2 className="p-4 text-2xl font-black underline">Subscription benefits</h2> */}
                 <ul className="flex sm:text-sm lg:text-xl  flex-col px-4  items-start ">
@@ -96,6 +96,7 @@ const Pricing = () => {
                   <li>•⁠ ⁠Unlimited collaborative writing games</li>
                 </ul>
               </div>
+              
               {!isSubcriptionActive && (
                   <button
                   onClick={handleSignUp}

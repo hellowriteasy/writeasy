@@ -11,9 +11,10 @@ interface CardProps {
   title: string;
   deadline: string;
   id: string;
+  onSuccess: () => void; 
 }
 
-const Card: React.FC<CardProps> = ({ title, deadline, id }) => {
+const Card: React.FC<CardProps> = ({ title, deadline, id,onSuccess}) => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const AxiosIns=axiosInstance("")
   const cancelButtonRef = useRef(null);
@@ -22,6 +23,7 @@ const Card: React.FC<CardProps> = ({ title, deadline, id }) => {
       setOpenDeleteModal(true);
       await AxiosIns.delete(`/contests/${id}`);
       setOpenDeleteModal(false);
+      onSuccess();
       toast.success("Contest deleted successfully!");
     } catch (error) {
       setOpenDeleteModal(false);

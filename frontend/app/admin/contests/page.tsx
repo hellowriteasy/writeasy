@@ -39,6 +39,19 @@ const AxiosIns=axiosInstance("");
     fetchContests();
   }, []);
 
+  async function onsuccess(){
+    const fetchPrompts = async () => {
+      try {
+        const response = await AxiosIns.get('/contests');
+        setContests(response.data.reverse());
+      } catch (error) {
+        console.error('Error fetching contest:', error);
+      }
+    };
+
+    fetchPrompts();
+   }
+
   const handleAddClick = () => {
     router.push("/admin/contests/edit");
   };
@@ -80,6 +93,7 @@ const AxiosIns=axiosInstance("");
                     title={contest.contestTheme}
                     id={contest._id}
                     deadline={contest.submissionDeadline}
+                    onSuccess={onsuccess}
                   />
                 ))
               )}

@@ -8,11 +8,12 @@ import DeleteModal from '@/app/components/DeleteModal'; // Adjust the import pat
 
 interface CardProps {
   title: string;
-  type: string;
+  type :string[];
   id: string;
+  onSuccess: () => void; 
 }
 
-const Card: React.FC<CardProps> = ({ title, type, id }) => {
+const Card: React.FC<CardProps> = ({ title, type, id,onSuccess }) => {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [promptTitle, setPromptTitle] = useState(title);
@@ -37,8 +38,8 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
         promptCategory: selectedTypes.join(','), // Join selected types into a comma-separated string for backend
         promptType: 'practice',
       });
-
       setOpenEditModal(false);
+      onSuccess();
       toast.success('Prompt updated successfully!');
     } catch (error) {
       console.error('Error updating prompt:', error);
@@ -51,6 +52,7 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
       setOpenDeleteModal(true);
       const response = await AxiosIns.delete(`/prompts/${id}`);
       setOpenDeleteModal(false);
+      onSuccess();
       toast.success('Prompt deleted successfully!');
     } catch (error) {
       console.error('Error deleting prompt:', error);
