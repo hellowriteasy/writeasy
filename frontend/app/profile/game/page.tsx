@@ -4,7 +4,7 @@ import UserStory from "@/app/components/profile/UserStory";
 import ReactPaginate from 'react-paginate';
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import useAuthStore from '@/app/store/useAuthStore';
-import { TUser,TStory } from '@/app/utils/types';
+import { TStory } from '@/app/utils/types';
 import NotFound from '@/app/components/Others/NotFound';
 import ProfileTabs from '@/app/components/profile/ProfileTabs';
 import { axiosInstance } from '@/app/utils/config/axios';
