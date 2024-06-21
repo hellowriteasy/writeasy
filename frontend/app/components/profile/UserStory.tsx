@@ -1,9 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { usePDF } from 'react-to-pdf';
-import { toast } from 'react-toastify';
 import { diffChars } from 'diff';
-import 'react-toastify/dist/ReactToastify.css';
 import StoryEditor from './Editor'; // Adjust the import path as necessary
 import { TUser } from '@/app/utils/types';
 import { axiosInstance } from '@/app/utils/config/axios';
@@ -35,7 +33,8 @@ const Card: React.FC<CardProps> = ({
   const [showDiff, setShowDiff] = useState(false);
   const [showEditor, setShowEditor] = useState(false);
   const toggleDescription = () => setShowFullDescription(!showFullDescription);
- const AxiosIns=axiosInstance("")
+  const AxiosIns = axiosInstance("");
+
   const previewWords = 50;
   const descriptionText = description || "";
   const descriptionWords = descriptionText.split(" ");
@@ -45,29 +44,16 @@ const Card: React.FC<CardProps> = ({
       : descriptionText;
 
   const deleteClick = () => {
-    toast.warn("Are you sure you want to delete this item?", {
-      position: "top-center",
-      autoClose: false,
-      closeOnClick: false,
-      draggable: true,
-      closeButton: false,
-      hideProgressBar: true,
-      pauseOnHover: true,
-      progress: undefined,
-      onClose: () => {
-        AxiosIns
-          .delete(`/stories/${id}`)
-          .then(() =>
-            toast.success("Item deleted successfully!", {
-              position: "top-center",
-            })
-          )
-          .catch((error) => {
-            toast.error("Failed to delete item.", { position: "top-center" });
-            console.error("Error deleting item:", error);
-          });
-      },
-    });
+    AxiosIns
+      .delete(`/stories/${id}`)
+      .then(() => {
+        console.log("Item deleted successfully!");
+        // Optionally perform any other UI updates upon successful deletion
+      })
+      .catch((error) => {
+        console.error("Failed to delete item.", error);
+        // Optionally handle and log errors
+      });
   };
 
   const compareSentences = (description = "", corrections = "") => {
@@ -88,7 +74,7 @@ const Card: React.FC<CardProps> = ({
       };
       return <span key={index} style={style}>{part.value}</span>;
     });
-  }; 
+  };
 
   if (showEditor) {
     return (

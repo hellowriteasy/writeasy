@@ -1,7 +1,6 @@
 "use client";
 import React, { useCallback, useState, useEffect } from "react";
 import classNames from "classnames";
-import axios from "axios";
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
@@ -92,8 +91,9 @@ import { TTaskType } from "../utils/types";
 
 interface SimpleEditorProps {
   triggerGrammarCheck: any;
-  taskType: TTaskType;
+  taskType: TTaskType | string;
   title: string;
+  handleRemoveActiveTaskType: () => void;
   Userid: string;
   _id: string;
   type: string;
@@ -103,7 +103,7 @@ interface SimpleEditorProps {
   setTriggerGrammarCheck: React.Dispatch<React.SetStateAction<boolean>>;
 }
 type THandleClickFeature = (
-  type: TTaskType,
+  type: TTaskType|string,
   event: React.MouseEvent<HTMLButtonElement> | MouseEvent
 ) => void;
 
@@ -112,6 +112,7 @@ export function SimpleEditor({
   taskType,
   title,
   _id,
+  handleRemoveActiveTaskType,
   setTriggerGrammarCheck,
   hasSaved,
   setHasSaved,
@@ -119,6 +120,7 @@ export function SimpleEditor({
   const [inputText, setInputText] = useState(""); // State to hold input text
   const [correctedText, setCorrectedText] = useState("");
   const [copied, setCopied] = useState(false); // State to track if text is copied
+  const [isLoading, setIsLoading] = useState(false);
   const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
   const setStoredFunction = usePdfStore((state) => state.setPdfExportFunction);
   const pdfExportFunction = usePdfStore((state) => state.pdfExportFunction);
@@ -255,9 +257,11 @@ export function SimpleEditor({
         prompt: _id,
         hasSaved,
       };
-
+      setIsLoading(true);
       const { data, status } = await AxiosIns.post("stories/score", payload);
+      setIsLoading(false);
       toast.success("Story saved succesfully");
+      
       setInputText(currentContent);
       console.log("debug 01", data.corrections);
       setCorrectedText(data.corrections);
@@ -265,6 +269,7 @@ export function SimpleEditor({
       setHasSaved(false);
       setTriggerGrammarCheck(false);
     } catch (error) {
+      setIsLoading(false); 
       setTriggerGrammarCheck(false);
       setHasSaved(false);
       toast.error("An error occurred while checking grammar.");
@@ -323,9 +328,14 @@ export function SimpleEditor({
 
   return (
     <>
+   
       <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
         <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
-          <div className="flex gap-3 p-3 ps-6">
+          <div className="flex h-16  gap-3 p-3 ps-6">
+          {isLoading && (
+        <div className="loader mr-10 "></div>
+
+      )}
             <button
               className="menu-button mr-2"
               type="button"
@@ -415,6 +425,7 @@ export function SimpleEditor({
                 onClick={(e) => {
                   e.preventDefault();
                   handleAcceptAll();
+                  handleRemoveActiveTaskType()
                 }}
               >
                 Accept All
@@ -425,6 +436,7 @@ export function SimpleEditor({
                 onClick={(e) => {
                   e.preventDefault();
                   handleReject();
+                  handleRemoveActiveTaskType()
                 }}
               >
                 Reject All
@@ -462,8 +474,9 @@ export function SimpleEditor({
           </div>
         </div>
         <div className=" w-[70vw]  rounded-3xl">
+
           <EditorContent
-            className=" scroll-m-2 w-[100%] min-h-[40vw] mt-10 "
+            className={` scroll-m-2 w-[100%] min-h-[40vw] mt-10 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''} `}
             editor={editor}
           />
         </div>

@@ -27,7 +27,7 @@ interface PromptPageProps {
 const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
   const [prompt, setPrompt] = useState<Prompt | null>(null);
   const [triggerGrammarCheck, setTriggerGrammarCheck] = useState(false);
-  const [taskType, setTaskType] = useState<TTaskType>("grammer");
+  const [taskType, setTaskType] = useState<TTaskType|string>("");
   const [input, setInput] = useState("");
   const { role, isSubcriptionActive } = useAuthStore();
   const AxiosIns = axiosInstance("");
@@ -65,6 +65,8 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
     setHasSaved(true);
   };
 
+
+  const handleRemoveActiveTaskType = () =>  setTaskType("")
   // hasSaved-true-handleCheck-setHasSaved-false
 
   if (!prompt) return <div>Loading...</div>;
@@ -82,7 +84,10 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
             <Image src={Bee} alt="bee" />
           </div>
           <div className="gap-8 relative w-full flex flex-col items-center ">
-            <form action="" className="flex flex-col items-center w-full mx-auto">
+            <form
+              action=""
+              className="flex flex-col items-center w-full mx-auto"
+            >
               <div className="flex flex-col w-full items-center gap-8 h-40  mx-auto">
                 <div>
                   <input
@@ -96,7 +101,11 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
                     {["grammar", "rewrite", "improve", "pdf"].map((type) => (
                       <div key={type}>
                         <button
-                          className="w-40 h-14 bg-black text-white hover:opacity-80 font-bold text-2xl rounded-full"
+                          className={`w-40 h-14 bg-black text-white ${
+                            taskType === type
+                              ? "bg-custom-yellow text-black"
+                              : ""
+                          } hover:opacity-80 font-bold text-2xl rounded-full`}
                           value={type}
                           type="button"
                           onClick={
@@ -130,6 +139,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
             hasSaved={hasSaved}
             setTriggerGrammarCheck={setTriggerGrammarCheck}
             setHasSaved={setHasSaved}
+            handleRemoveActiveTaskType={handleRemoveActiveTaskType}
           />
         </div>
         <div className="flex justify-center font-comic items-center my-4">
