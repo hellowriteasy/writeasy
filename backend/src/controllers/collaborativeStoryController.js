@@ -48,7 +48,7 @@ const createCollaborativeStory = [
 ];
 
 const inviteCollaborators = [
-  authMiddleware,
+  // authMiddleware,
   async (req, res) => {
     let { storyID, email, promptID, userID } = req.body;
     let story;
@@ -117,10 +117,10 @@ const inviteCollaborators = [
 ];
 
 const submitCollaborativePart = [
-  authMiddleware,
-  checkInviteStatus,
+  // authMiddleware,
+  // checkInviteStatus,
   async (req, res) => {
-    const { storyID, text } = req.body;
+    const { storyID, text ,title} = req.body;
     const wordCount = text.split(" ").length; // Calculate word count
     // const userID = req.user.id; // Using user id from auth token
     try {
@@ -143,6 +143,7 @@ const submitCollaborativePart = [
 
       story.correctionSummary = correctionSummary;
       story.corrections = correctionRes.corrections;
+      story.title = title;
 
       await story.save();
       res.status(200).json({ message: "Story part submitted successfully." });

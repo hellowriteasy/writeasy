@@ -1,7 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import UserStory from "@/app/components/profile/UserStory";
-import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import useAuthStore from '../store/useAuthStore';

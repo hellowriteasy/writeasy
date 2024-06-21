@@ -122,7 +122,7 @@ class GptService {
       * Accurate basic spelling
       * Simple use of vocabulary
 
-      If the content includes any inappropriate themes such as violence or explicit content, immediately assign a score of -10.
+      If the content includes any inappropriate themes such as violence or explicit content, immediately assign a score of 0.
 
       Please provide the numerical score strictly in the first line based solely on this rubric. Additionally, You are a master proofreader. Only proofread the given text, don't add new text to the document. \n(${systemMessage[taskType]}). \n Start this from the second line of your response. Once again, Please provide the numerical score strictly in the first line!!!
     `;

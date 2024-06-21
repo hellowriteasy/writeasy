@@ -31,7 +31,6 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
   const [input, setInput] = useState("");
   const { role, isSubcriptionActive } = useAuthStore();
   const AxiosIns = axiosInstance("");
-  const [hasSaved, setHasSaved] = useState(false);
 
   useEffect(() => {
     const handleBeforeUnload = (event) => {
@@ -73,14 +72,9 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
     setInput(value);
   };
 
-  const handleSaveToProfile = () => {
-    setTaskType("improve");
-    setHasSaved(true);
-  };
 
 
   const handleRemoveActiveTaskType = () =>  setTaskType("")
-  // hasSaved-true-handleCheck-setHasSaved-false
 
   if (!prompt) return <div>Loading...</div>;
 
@@ -149,20 +143,18 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
             _id={prompt._id}
             taskType={taskType}
             key={prompt._id}
-            hasSaved={hasSaved}
             setTriggerGrammarCheck={setTriggerGrammarCheck}
-            setHasSaved={setHasSaved}
             handleRemoveActiveTaskType={handleRemoveActiveTaskType}
           />
         </div>
-        <div className="flex justify-center font-comic items-center my-4">
+        {/* <div className="flex justify-center font-comic items-center my-4">
           <button
             className="text-white bg-black text-2xl font-bold w-96 h-12 rounded-3xl"
             onClick={handleSaveToProfile}
           >
             Save to Profile
           </button>
-        </div>
+        </div> */}
       </div>
 
       {!isSubcriptionActive && role != "admin" ? <Subscription /> : null}

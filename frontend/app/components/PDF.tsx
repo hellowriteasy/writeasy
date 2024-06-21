@@ -12,7 +12,6 @@ const PDF: React.FC<Props> = ({ originals, corrected }) => {
   const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
   const [improved, setImproved] = useState<React.ReactElement[]>([]);
   const setStoredFunction = usePdfStore((state) => state.setPdfExportFunction);
-
   useEffect(() => {
     setStoredFunction(toPDF);
   }, []);
@@ -63,7 +62,7 @@ const PDF: React.FC<Props> = ({ originals, corrected }) => {
   }, [corrected]);
 
   return (
-    <div className="w-full  relative  z-[-5] bg-black">
+    <div className="w-full  relative  z-[-5] ">
       <button
         className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
         onClick={() => toPDF()}

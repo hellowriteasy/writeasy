@@ -16,19 +16,18 @@ import Bee from "@/public/Game/cloud3.svg";
 import Image from "next/image";
 import Subscription from "@/app/components/Subscription";
 import useAuthStore from "@/app/store/useAuthStore";
-import { toast} from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
 import { useParams } from "next/navigation";
 import { axiosInstance } from "@/app/utils/config/axios";
 import { TPrompt, TStory } from "@/app/utils/types";
 import Logo from "@/public/Landingpage-img/logo.svg";
+import { useRouter } from "next/navigation";
 
 interface StoryEditorProps {
   _id: string;
-  title:string,
-  content:string,
- 
+  title: string;
+  content: string;
 }
 
 const StoryEditor: React.FC<StoryEditorProps> = () => {
@@ -40,16 +39,18 @@ const StoryEditor: React.FC<StoryEditorProps> = () => {
     wordLimitExceeded: false,
     refresh: false,
   });
+  const [inviting, setInviting] = useState(false);
   const [prompt, setPrompt] = useState<TPrompt | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [currentStory, setCurrentStory] = useState<TStory | null>(null);
+  const [submittingStory, setSubmittingStory] = useState(false);
   const isSubcriptionActive = useAuthStore(
     (state) => state.isSubcriptionActive
   );
   const { userId, token, role } = useAuthStore();
   const params = useParams();
   const promptId = params._id;
-
+  const router = useRouter();
   const AxiosIns = axiosInstance(token || "");
 
   const editor = useEditor({
@@ -148,10 +149,12 @@ const StoryEditor: React.FC<StoryEditorProps> = () => {
         return;
       }
 
+      setSubmittingStory(true);
       if (currentStory?._id) {
         const payload = {
           storyID: storyId,
           text: currentContent,
+          title: storyDetails.title,
         };
         await AxiosIns.post(`/collaborative-stories/submit`, payload);
       } else {
@@ -169,11 +172,11 @@ const StoryEditor: React.FC<StoryEditorProps> = () => {
           refresh: !prev.refresh,
         }));
       }
-      setIsLoading(false);
+      setSubmittingStory(false);
       toast.success("Story saved successfully");
       return toast;
     } catch (error) {
-      setIsLoading(false)
+      setSubmittingStory(false);
       toast.error(
         "An error occurred while submitting the story. Please try again later."
       );
@@ -182,33 +185,32 @@ const StoryEditor: React.FC<StoryEditorProps> = () => {
 
   const handleInvite = async (e: SyntheticEvent) => {
     e.preventDefault();
+
     const storyId = currentStory?._id;
     const { email } = storyDetails;
     if (!email) {
       toast.error("Please enter an email address.");
       return;
     }
+    setInviting(true);
     try {
       const invitePayload = {
         storyID: storyId,
-        email: email.replaceAll(/\s/g, '').split(","),
-        promptID:promptId,
+        email: email.replaceAll(/\s/g, "").split(","),
+        promptID: promptId,
         userID: userId,
       };
 
-      const { data } = await axios.post(
-        `http://localhost:8000/api/collaborative-stories/invite`,
-        invitePayload,
-        {
-          headers: {
-            "x-auth-token": token,
-          },
-        }
+      const { data } = await AxiosIns.post(
+        `/collaborative-stories/invite`,
+        invitePayload
       );
-      console.log(data);
-      handleStoryDetailsInputChange("refresh",!storyDetails.refresh)
+      setInviting(false);
+      router.push("/profile/game");
+      handleStoryDetailsInputChange("refresh", !storyDetails.refresh);
     } catch (error: any) {
       console.log(error);
+      setInviting(false);
       toast.error(
         error.response?.data?.message ||
           "An error occurred while sending the invitation. Please try again later."
@@ -249,39 +251,80 @@ const StoryEditor: React.FC<StoryEditorProps> = () => {
       [name]: value,
     }));
   };
+  const contributors = currentStory
+    ? Array.from(new Array(...currentStory?.contributors, currentStory?.user))
+    : [];
+  const InvitationButton = (
+    <div>
+      <input
+        className="border border-gray-500 z-10 text-xl placeholder:font-comic placeholder:text-xl rounded-3xl indent-7 w-[40vw] h-12 focus:outline-none focus:border-yellow-600"
+        placeholder="Email to invite"
+        value={storyDetails.email}
+        onChange={(e) => {
+          handleStoryDetailsInputChange("email", e.target.value);
+        }}
+      />
+      <button
+        type="button"
+        onClick={handleInvite}
+        className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-40 h-14 ml-4"
+      >
+        {inviting ? "Inviting..." : "Invite"}
+      </button>
+    </div>
+  );
+  console.log(contributors);
+
   return (
     <div className="w-full h-[1300px] mt-6 z-0 relative flex justify-center ">
-      <div className="w-10/12 h-screen ms-12">
-        <div className="w-full h-60 relative pt-4">
-          <h1 className="text-6xl pt-4 font-bold font-comic">
-            {prompt?.title || ""}
-          </h1>
+      <div className="w-10/12 h-screen ms-12 flex flex-col gap-y-4">
+        <div className="w-full  relative pt-4 flex flex-col gap-y-4">
+          <div className="flex flex-col gap-y-4">
+            <div className="flex flex-col gap-y-2">
+              <h1 className="text-6xl pt-4 font-bold font-comic">
+                {prompt?.title || ""}
+              </h1>
+              <p className="font-comic text-xl">{prompt?.description}</p>
+            </div>
+            {!currentStory && (
+              <div className="flex flex-col gap-y-6">
+                <h1 className="font-comic text-2xl font-bold">
+                  Join the Collaborative Story Game!
+                </h1>
 
-          <div className="w-full relative pt-6 flex h-20">
-            {currentStory
-              ? Array.from(
-                  new Array(...currentStory?.contributors, currentStory?.user)
-                ).map((contributor, index) => (
+                <p className="text-xl font-comic">
+                  Calling all friends! , Let team up and create stories
+                  together. To join, enter your email addresses separated by
+                  commas:{" "}
+                  <strong>
+                    user1@gmail.com, user2@gmail.com, user3@gmail.com
+                  </strong>
+                </p>
+
+                <p className="text-xl font-comic">
+                  Let the storytelling begin!
+                </p>
+              </div>
+            )}
+          </div>
+          {currentStory ? (
+            <div className="w-full pt-2 flex flex-col gap-y-2">
+              <h2 className="font-comic">Contributors</h2>
+              <div className="flex gap-x-2">
+                {contributors.map((contributor, index) => (
                   <div key={contributor._id}>
                     <div
-                      className={`w-10 absolute h-10 left-${
+                      className={`w-10 h-10 left-${
                         index * 3 + 3
-                      } bg-white flex items-center content-center rounded-full border`}
+                      } bg-white flex items-center justify-center rounded-full border`}
                     >
                       <Image src={Logo} alt="" />
                     </div>
-                    <p>{contributor.username}</p>
                   </div>
-                ))
-              : ""}
-
-            {/* <div className="w-10 h-10 absolute left-14 bg-slate-500 rounded-full border">
-              <Image src="" alt="" />
+                ))}
+              </div>
             </div>
-            <div className="w-10 h-10 absolute left-18 bg-slate-500 rounded-full border">
-              <Image src="" alt="" />
-            </div> */}
-          </div>
+          ) : null}
         </div>
         <div className="flex w-[100%] relative mt-0 ">
           <div className="absolute -top-40 mt-3 -left-48">
@@ -289,162 +332,152 @@ const StoryEditor: React.FC<StoryEditorProps> = () => {
           </div>
           <div className="gap-8 relative  flex flex-col items-center  w-full">
             <form className="height-[800px] w-full">
-              <div className="flex flex-col w-full  gap-4 h-96 ">
-                <div>
-                  <input
-                    className="border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[40vw] h-12 focus:outline-none focus:border-yellow-600"
-                    placeholder="Email to invite"
-                    value={storyDetails.email}
-                    onChange={(e) => {
-                      handleStoryDetailsInputChange("email", e.target.value);
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={handleInvite}
-                    className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-40 h-14 ml-4"
-                  >
-                    Invite
-                  </button>
-                </div>
-                <div>
-                  <input
-                    className="border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[50vw] h-12 focus:outline-none focus:border-yellow-600"
-                    placeholder="Untitled Story"
-                    onChange={(e) => {
-                      handleStoryDetailsInputChange("title", e.target.value);
-                    }}
-                    disabled={!currentStory}
-                    value={storyDetails.title}
-                  />
-                </div>
-                {/* should make it shared component in future  */}
-                <div className="h-[800px] rounded-full w-full ">
-                  <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
-                    <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
-                      <div className="flex gap-3 p-3 ps-6">
-                      {isLoading && (
-        <div className="loader mr-10 "></div>
+              <div className="flex flex-col w-full  gap-4  ">
+                {!currentStory && InvitationButton}
+                {currentStory && (
+                  <>
+                    <div>
+                      <input
+                        className={`border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[50vw] h-12 focus:outline-none focus:border-yellow-600 ${
+                          !currentStory || submittingStory
+                            ? "opacity-50 cursor-not-allowed"
+                            : ""
+                        }`}
+                        placeholder="Untitled Story"
+                        onChange={(e) => {
+                          handleStoryDetailsInputChange(
+                            "title",
+                            e.target.value
+                          );
+                        }}
+                        disabled={!currentStory}
+                        value={storyDetails.title}
+                      />
+                    </div>
+                    {/* should make it shared component in future  */}
+                    <div className=" bg-black rounded-full w-full ">
+                      <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
+                        <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
+                          <div className="flex gap-3 p-3 ps-6">
+                            {submittingStory && (
+                              <div className="loader mr-10 "></div>
+                            )}
 
-      )}
-           
-                        <button
-                          className="menu-button mr-2"
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            editor.chain().focus().undo().run();
-                          }}
-                          disabled={!editor.can().undo()}
-                        >
-                          <Icons.RotateLeft />
-                        </button>
-                        <button
-                          className="menu-button mr-2"
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            editor.chain().focus().redo().run();
-                          }}
-                          disabled={!editor.can().redo()}
-                        >
-                          <Icons.RotateRight />
-                        </button>
-                        <button
-                          className={classNames("menu-button mr-2", {
-                            "is-active": editor.isActive("bold"),
-                          })}
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            toggleBold();
-                          }}
-                        >
-                          <Icons.Bold />
-                        </button>
-                        <button
-                          className={classNames("menu-button mr-2", {
-                            "is-active": editor.isActive("underline"),
-                          })}
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            toggleUnderline();
-                          }}
-                        >
-                          <Icons.Underline />
-                        </button>
-                        <button
-                          className={classNames("menu-button mr-2", {
-                            "is-active": editor.isActive("italic"),
-                          })}
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            toggleItalic();
-                          }}
-                        >
-                          <Icons.Italic />
-                        </button>
-                        <button
-                          className={classNames("menu-button mr-2", {
-                            "is-active": editor.isActive("strike"),
-                          })}
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            toggleStrike();
-                          }}
-                        >
-                          <Icons.Strikethrough />
-                        </button>
-                        <button
-                          className={classNames("menu-button mr-2", {
-                            "is-active": editor.isActive("code"),
-                          })}
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            toggleCode();
-                          }}
-                        >
-                          <Icons.Code />
-                        </button>
-                        <div className="w-60 h-7 bg-white flex flex-col justify-center rounded-2xl shadow-sm ">
-                          <p className="text-center font-comic">
-                            Word count: {storyDetails.wordCount} / 1000
-                          </p>
-                        
+                            <button
+                              className="menu-button mr-2"
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                editor.chain().focus().undo().run();
+                              }}
+                              disabled={!editor.can().undo()}
+                            >
+                              <Icons.RotateLeft />
+                            </button>
+                            <button
+                              className="menu-button mr-2"
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                editor.chain().focus().redo().run();
+                              }}
+                              disabled={!editor.can().redo()}
+                            >
+                              <Icons.RotateRight />
+                            </button>
+                            <button
+                              className={classNames("menu-button mr-2", {
+                                "is-active": editor.isActive("bold"),
+                              })}
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                toggleBold();
+                              }}
+                            >
+                              <Icons.Bold />
+                            </button>
+                            <button
+                              className={classNames("menu-button mr-2", {
+                                "is-active": editor.isActive("underline"),
+                              })}
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                toggleUnderline();
+                              }}
+                            >
+                              <Icons.Underline />
+                            </button>
+                            <button
+                              className={classNames("menu-button mr-2", {
+                                "is-active": editor.isActive("italic"),
+                              })}
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                toggleItalic();
+                              }}
+                            >
+                              <Icons.Italic />
+                            </button>
+                            <button
+                              className={classNames("menu-button mr-2", {
+                                "is-active": editor.isActive("strike"),
+                              })}
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                toggleStrike();
+                              }}
+                            >
+                              <Icons.Strikethrough />
+                            </button>
+                            <button
+                              className={classNames("menu-button mr-2", {
+                                "is-active": editor.isActive("code"),
+                              })}
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                toggleCode();
+                              }}
+                            >
+                              <Icons.Code />
+                            </button>
+                            <div className="w-60 h-7 bg-white flex flex-col justify-center rounded-2xl shadow-sm ">
+                              <p className="text-center font-comic">
+                                Word count: {storyDetails.wordCount} / 1000
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className={`w-[50vw] rounded-3xl  `}>
+                          <EditorContent
+                            className={`scroll-m-2 w-[100%] min-h-96 mt-10  ${
+                              !currentStory || submittingStory
+                                ? "opacity-50 cursor-not-allowed"
+                                : ""
+                            }`}
+                            editor={editor}
+                          />
                         </div>
                       </div>
                     </div>
-                    <div
-                      className={`w-[50vw] rounded-3xl ${
-                        !currentStory && "pointer-events-none opacity-20"
-                      }   `}
+                    <button
+                      onClick={handleSubmit}
+                      className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-[50vw] h-[60px]"
                     >
-                      <EditorContent
-                        className="scroll-m-2 w-[100%] min-h-96 mt-10"
-                        editor={editor}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="">
-                  <button
-                    onClick={handleSubmit}
-                    className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-[50vw] h-14"
-                  >
-                    Submit Story
-                  </button>
-                </div>
+                      {submittingStory ? "Submitting..." : "Submit"}
+                    </button>
+                  </>
+                )}
               </div>
             </form>
           </div>
         </div>
       </div>
       {!isSubcriptionActive && role != "admin" ? <Subscription /> : null}
-
     </div>
   );
 };

@@ -1,7 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import UserStory from "@/app/components/profile/UserStory";
-import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import useAuthStore from '@/app/store/useAuthStore';
@@ -9,15 +8,6 @@ import { TUser,TStory } from '@/app/utils/types';
 import NotFound from '@/app/components/Others/NotFound';
 import ProfileTabs from '@/app/components/profile/ProfileTabs';
 import { axiosInstance } from '@/app/utils/config/axios';
-interface UserStory {
-  _id: string;
-  title: string;
-  content: string;
-  corrections: string;
-  storyType: string;
-  username: string;
-  contributors: TUser[];
-}
 
 const Page: React.FC = () => {
   const [userStories, setUserStories] = useState<UserStory[]>([]);
@@ -28,6 +18,28 @@ const Page: React.FC = () => {
   const itemsPerPage = 5;
   const AxiosIns=axiosInstance("")
   useEffect(() => {
+    const fetchUserStories = async () => {
+      try {
+        const response = await AxiosIns.get<TStory[]>('/stories/user', {
+          params: {
+            userId:userId,
+            storyType: 'game',
+            skip: currentPage * itemsPerPage,
+            limit: itemsPerPage
+          }
+        });
+        
+        setUserStories(response.data.reverse());
+
+      } catch (error:any) {
+    
+
+      }
+    };
+
+    fetchUserStories();
+  }, [currentPage]);
+  async function  onSuccess(){
     const fetchUserStories = async () => {
       try {
         const response = await AxiosIns.get<UserStory[]>('/stories/user', {

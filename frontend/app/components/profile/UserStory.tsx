@@ -27,6 +27,7 @@ const Card: React.FC<CardProps> = ({
   type,
   contestTitle,
   promptTitle,
+  prompt_id,
   contributors,
   onsuccess
 }) => {
@@ -46,10 +47,9 @@ const Card: React.FC<CardProps> = ({
     descriptionWords.length > previewWords
       ? descriptionWords.slice(0, previewWords).join(" ") + "..."
       : descriptionText;
-
+  const router = useRouter();
   const deleteClick = () => {
-    AxiosIns
-      .delete(`/stories/${id}`)
+    AxiosIns.delete(`/stories/${id}`)
       .then(() => {
         console.log("Item deleted successfully!");
         onsuccess();
@@ -61,21 +61,37 @@ const Card: React.FC<CardProps> = ({
 
   const compareSentences = (description = "", corrections = "") => {
     if (!description) {
-      return <span style={{ color: 'red', backgroundColor: 'lightcoral' }}>No original description provided.</span>;
+      return (
+        <span style={{ color: "red", backgroundColor: "lightcoral" }}>
+          No original description provided.
+        </span>
+      );
     }
 
     if (!corrections) {
-      return <span style={{ color: 'green', backgroundColor: 'lightgreen' }}>No corrections provided.</span>;
+      return (
+        <span style={{ color: "green", backgroundColor: "lightgreen" }}>
+          No corrections provided.
+        </span>
+      );
     }
 
     const diff = diffChars(description, corrections);
     return diff.map((part, index) => {
       const style = {
-        backgroundColor: part.added ? 'lightgreen' : part.removed ? 'lightcoral' : 'transparent',
-        textDecoration: part.removed ? 'line-through' : 'none',
-        color: part.added ? 'green' : part.removed ? 'red' : 'black'
+        backgroundColor: part.added
+          ? "lightgreen"
+          : part.removed
+          ? "lightcoral"
+          : "transparent",
+        textDecoration: part.removed ? "line-through" : "none",
+        color: part.added ? "green" : part.removed ? "red" : "black",
       };
-      return <span key={index} style={style}>{part.value}</span>;
+      return (
+        <span key={index} style={style}>
+          {part.value}
+        </span>
+      );
     });
   };
 
@@ -93,25 +109,27 @@ const Card: React.FC<CardProps> = ({
   return (
     <div className="bg-white w-full sm:w-3/4 border-2 border-slate-300 shadow-sm rounded-3xl p-6 transition-all duration-300">
       <div ref={targetRef} className="flex flex-col mb-4">
-        <h2 className="text-xlpy-2 font-bold mb-2">{title}</h2>
-        <p>
-          {contestTitle} &gt; {promptTitle}
-        </p>
-        <p
-          className={`text-gray-700 py-4 transition-all duration-300 ${
-            showFullDescription ? "max-h-full" : "max-h-20 overflow-hidden"
-          }`}
-        >
-          {showFullDescription ? descriptionText : truncatedDescription}
-        </p>
-        {showDiff && (
-          <div className="mt-4">
-            <h3 className="px-5 text-lg font-semibold">Corrections:</h3>
-            <p className="py-4 px-5">
-              {compareSentences(description, corrections)}
-            </p>
-          </div>
-        )}
+        <h1 className="text-2xl font-bold mb-4">
+          {contestTitle ? `${contestTitle} > ` : ""} {promptTitle}
+        </h1>
+        <div>
+          <h2 className=" py-2 font-bold ">{title}</h2>
+          <p
+            className={`text-gray-700   transition-all duration-300 ${
+              showFullDescription ? "max-h-full" : "max-h-20 overflow-hidden"
+            }`}
+          >
+            {showFullDescription ? descriptionText : truncatedDescription}
+          </p>
+          {showDiff && (
+            <div className="mt-4">
+              <h3 className="px-5 text-lg font-semibold">Corrections:</h3>
+              <p className="py-4 px-5">
+                {compareSentences(description, corrections)}
+              </p>
+            </div>
+          )}
+        </div>
       </div>
       <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4 mt-4">
         <button
@@ -125,7 +143,7 @@ const Card: React.FC<CardProps> = ({
         </button>
         {type === "game" && (
           <button
-            onClick={() => setShowEditor(true)}
+            onClick={() => router.push(`/Games/${prompt_id}/play`)}
             className="bg-white border-2 rounded-2xl border-slate-700 text-black px-4 py-2"
           >
             Contribute

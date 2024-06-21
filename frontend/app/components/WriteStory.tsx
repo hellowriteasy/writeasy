@@ -21,6 +21,7 @@ import "react-toastify/dist/ReactToastify.css";
 import useAuthStore from "../store/useAuthStore";
 import { axiosInstance } from "../utils/config/axios";
 import { TTaskType } from "../utils/types";
+import { useRouter } from "next/navigation";
 
 // const Page = ({
 //   inputText,
@@ -89,6 +90,49 @@ import { TTaskType } from "../utils/types";
 //   rewrite: "Rewrite this improving clarity and flow",
 // } as Record<TWriteEasyFeature, string>;
 
+// const compareSentences = (
+//   original: string,
+//   corrected: string
+// ): React.ReactNode[] => {
+//   console.log("debug  2 comparing");
+//   const diff: Change[] = diffChars(original, corrected);
+//   const result: React.ReactNode[] = [];
+
+//   diff.forEach((part: Change, index: number) => {
+//     let style: React.CSSProperties = {};
+
+//     if (part.added) {
+//       style = {
+//         color: "green",
+//         backgroundColor: "lightgreen",
+//         textDecoration: "underline",
+//         height: "40px",
+//       };
+//     } else if (part.removed) {
+//       style = {
+//         color: "red",
+//         backgroundColor: "lightcoral",
+//         height: "40px",
+//       };
+//     } else {
+//       style = {
+//         color: "black",
+//         backgroundColor: "transparent",
+//         textDecoration: "none",
+//         height: "40px",
+//       };
+//     }
+
+//     result.push(
+//       <div key={index} style={style}>
+//         {part.value}
+//       </div>
+//     );
+//   });
+
+//   return result;
+// };
+
 interface SimpleEditorProps {
   triggerGrammarCheck: any;
   taskType: TTaskType | string;
@@ -98,13 +142,12 @@ interface SimpleEditorProps {
   _id: string;
   type: string;
   wordcount?: number;
-  hasSaved: boolean;
-  setHasSaved: React.Dispatch<React.SetStateAction<boolean>>;
   setTriggerGrammarCheck: React.Dispatch<React.SetStateAction<boolean>>;
 }
 type THandleClickFeature = (
-  type: TTaskType|string,
-  event: React.MouseEvent<HTMLButtonElement> | MouseEvent
+  type: TTaskType | string,
+  event: React.MouseEvent<HTMLButtonElement> | MouseEvent,
+  hasSaved: boolean
 ) => void;
 
 export function SimpleEditor({
@@ -114,8 +157,6 @@ export function SimpleEditor({
   _id,
   handleRemoveActiveTaskType,
   setTriggerGrammarCheck,
-  hasSaved,
-  setHasSaved,
 }: SimpleEditorProps) {
   const [inputText, setInputText] = useState(""); 
   const [correctedText, setCorrectedText] = useState("");
@@ -124,7 +165,7 @@ export function SimpleEditor({
   const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
   const setStoredFunction = usePdfStore((state) => state.setPdfExportFunction);
   const pdfExportFunction = usePdfStore((state) => state.pdfExportFunction);
-
+  const router = useRouter();
   useEffect(() => {
     setStoredFunction(toPDF);
   }, [toPDF, setStoredFunction]);
@@ -147,49 +188,6 @@ export function SimpleEditor({
     return stringWithoutPTags;
   };
 
-  // const compareSentences = (
-  //   original: string,
-  //   corrected: string
-  // ): React.ReactNode[] => {
-  //   console.log("debug  2 comparing");
-  //   const diff: Change[] = diffChars(original, corrected);
-  //   const result: React.ReactNode[] = [];
-
-  //   diff.forEach((part: Change, index: number) => {
-  //     let style: React.CSSProperties = {};
-
-  //     if (part.added) {
-  //       style = {
-  //         color: "green",
-  //         backgroundColor: "lightgreen",
-  //         textDecoration: "underline",
-  //         height: "40px",
-  //       };
-  //     } else if (part.removed) {
-  //       style = {
-  //         color: "red",
-  //         backgroundColor: "lightcoral",
-  //         height: "40px",
-  //       };
-  //     } else {
-  //       style = {
-  //         color: "black",
-  //         backgroundColor: "transparent",
-  //         textDecoration: "none",
-  //         height: "40px",
-  //       };
-  //     }
-
-  //     result.push(
-  //       <div key={index} style={style}>
-  //         {part.value}
-  //       </div>
-  //     );
-  //   });
-
-  //   return result;
-  // };
-
   useEffect(() => {
     handleUpdate();
   }, [correctedText]);
@@ -197,6 +195,7 @@ export function SimpleEditor({
   const [wordCount, setWordCount] = useState(0);
   const [wordLimitExceeded, setWordLimitExceeded] = useState(false);
   const { token } = useAuthStore();
+  const [isSaving, setIsSaving] = useState(false);
   const editor = useEditor({
     extensions: [
       Document,
@@ -228,20 +227,22 @@ export function SimpleEditor({
   const handleExport = () => {
     toPDF();
   };
-  console.log("debug 1", triggerGrammarCheck, hasSaved);
   useEffect(() => {
-    if (!triggerGrammarCheck && !hasSaved) return;
-    handleClickFeature(taskType, new MouseEvent("click"));
-  }, [triggerGrammarCheck, hasSaved]);
+    if (!triggerGrammarCheck) return;
+    handleClickFeature(taskType, new MouseEvent("click"), false);
+  }, [triggerGrammarCheck]);
 
   const userId = useAuthStore((state) => state.userId);
   const AxiosIns = axiosInstance(token || "");
 
-  const handleClickFeature: THandleClickFeature = async (type, event) => {
+  const handleClickFeature: THandleClickFeature = async (
+    type,
+    event,
+    hasSaved = false
+  ) => {
     event.preventDefault();
     try {
       const currentContent = editor.getText();
-
       if (!title || !currentContent) {
         toast.warn("Please enter both title and content before submitting.");
         return;
@@ -260,38 +261,38 @@ export function SimpleEditor({
         hasSaved,
       };
       setIsLoading(true);
-      const { data, status } = await AxiosIns.post("stories/score", payload);
-      setIsLoading(false);
+      const { data } = await AxiosIns.post("stories/score", payload);
       toast.success("Story saved succesfully");
-      
+      if (hasSaved) {
+        router.push(`/profile`);
+      }
       setInputText(currentContent);
-      console.log("debug 01", data.corrections);
       setCorrectedText(data.corrections);
       setCopied(false);
-      setHasSaved(false);
+      setIsLoading(false);
+      setIsSaving(false);
       setTriggerGrammarCheck(false);
     } catch (error) {
-      setIsLoading(false); 
+      setIsLoading(false);
       setTriggerGrammarCheck(false);
-      setHasSaved(false);
+      setIsSaving(false);
       toast.error("An error occurred while checking grammar.");
     }
   };
 
-  const handleAcceptAll = () => {
-    if (editor) {
-      editor.commands.setContent(`${correctedText}`);
-    }
-  };
+  // const handleAcceptAll = () => {
+  //   if (editor) {
+  //     editor.commands.setContent(`${correctedText}`);
+  //   }
+  // };
 
-  const handleReject = () => {
-    if (editor) {
-      editor.commands.setContent(`${inputText}`);
-    }
-  };
+  // const handleReject = () => {
+  //   if (editor) {
+  //     editor.commands.setContent(`${inputText}`);
+  //   }
+  // };
 
   const handleUpdate = () => {
-    console.log("debug 4 updating editor ", correctedText);
     if (editor) {
       editor.commands.setContent(
         `${getCorrectedContent(inputText, correctedText)}`
@@ -331,14 +332,10 @@ export function SimpleEditor({
 
   return (
     <>
-   
-      <div className="editor bg-white p-4 h-auto rounded-3xl relative shadow-md w-full">
-        <div className="menu flex gap-5 w-[100%]  left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
-          <div className="flex gap-3 w-full h-12  overflow-hidden p-3 ps-6">
-          {isLoading && (
-        <div className="loader mr-10 "></div>
-
-      )}
+      <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
+        <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
+          <div className="flex h-16  gap-3 p-3 ps-6">
+            {isLoading && <div className="loader mr-10 "></div>}
             <button
               className="menu-button mr-2"
               type="button"
@@ -422,8 +419,8 @@ export function SimpleEditor({
               <Icons.Code />
             </button>
             <>
-              <button
-                className="bg-slate-100 border  overflow-y-hidden border-slate-500 p-1 text-sm rounded-md"
+              {/* <button
+                className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
                 type="button"
                 onClick={(e) => {
                   e.preventDefault();
@@ -432,9 +429,9 @@ export function SimpleEditor({
                 }}
               >
                 Accept All
-              </button>
-              <button
-                className="bg-slate-100 border  overflow-y-hidden border-slate-500 p-1 text-sm rounded-md"
+              </button> */}
+              {/* <button
+                className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
                 type="button"
                 onClick={(e) => {
                   e.preventDefault();
@@ -443,7 +440,7 @@ export function SimpleEditor({
                 }}
               >
                 Reject All
-              </button>
+              </button> */}
               <button
                 className="bg-slate-100 border  border-slate-500 p-1 text-sm rounded-md"
                 onClick={(e) => {
@@ -472,16 +469,28 @@ export function SimpleEditor({
             </>
           </div>
         </div>
-        <div className=" w-[70vw] mt-10 rounded-3xl">
-
+        <div className=" w-[70vw]  rounded-3xl">
           <EditorContent
-            className={` scroll-m-2 w-[100%] min-h-[30vw] mt-[4vw] ${isLoading ? 'opacity-50 cursor-not-allowed' : ''} `}
+            className={` scroll-m-2 w-[100%] min-h-[200px] mt-10 ${
+              isLoading ? "opacity-50 cursor-not-allowed" : ""
+            } `}
             editor={editor}
           />
         </div>
       </div>
-      <div className="absolute -left-2/3">
-        <PDF corrected={correctedText} originals={inputText} />
+      <div className="flex justify-center font-comic items-center my-4">
+        <button
+          className={`text-white bg-black  ${isSaving ? "text-black bg-custom-yellow":""} w-96 h-12 rounded-3xl`}
+          onClick={(e) => {
+            setIsSaving(true);
+            handleClickFeature("improve", e, true);
+          }}
+        >
+          {isSaving ? "Saving to profile..." : "Save to Profile"}
+        </button>
+      </div>
+      <div className="absolute -left-2/3 ">
+        {/* <PDF corrected={correctedText} originals={inputText} /> */}
       </div>
     \
     </>

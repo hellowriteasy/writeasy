@@ -110,7 +110,7 @@ const getStoryofUserByPromptId = async (user_id, prompt_id) => {
         },
       },
     ],
-  });
+  }).populate("contributors").populate("user")
 };
 
 module.exports = {

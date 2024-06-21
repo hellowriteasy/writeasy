@@ -18,8 +18,8 @@ export type TStory = {
   submissionDateTime: string;
   score: number;
   corrections: string;
-  contest: string;
-  prompt: string;
+  contest?: TContest;
+  prompt: TPrompt;
   storyType: string;
   contributors: TUser[];
   hasEnded: boolean;

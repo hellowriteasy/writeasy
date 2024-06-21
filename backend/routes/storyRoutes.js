@@ -8,7 +8,6 @@ const {
   getStory,
   getTopContestStories,
   getStoriesByUserAndType,
-  getTopStoriesByPrompt,
   getStoryOfAuserByPrompt,
   getStoriesByContentAndPrompt,
 } = require("../src/controllers/storyController");
