@@ -13,6 +13,7 @@ interface CardProps {
   description?: string;
   corrections: string;
   type: string;
+  prompt_id: string;
   promptTitle: string;
   contestTitle: string;
   contributors: TUser[];

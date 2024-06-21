@@ -10,7 +10,7 @@ import ProfileTabs from '@/app/components/profile/ProfileTabs';
 import { axiosInstance } from '@/app/utils/config/axios';
 
 const Page: React.FC = () => {
-  const [userStories, setUserStories] = useState<UserStory[]>([]);
+  const [userStories, setUserStories] = useState<TStory[]>([]);
 
   const [error, setError] = useState<string|null>(null);
   const [currentPage, setCurrentPage] = useState(0);
@@ -43,7 +43,7 @@ const Page: React.FC = () => {
   async function  onSuccess(){
     const fetchUserStories = async () => {
       try {
-        const response = await AxiosIns.get<UserStory[]>('/stories/user', {
+        const response = await AxiosIns.get<TStory[]>('/stories/user', {
           params: {
             userId:userId,
             storyType: 'game',
@@ -91,6 +91,9 @@ const Page: React.FC = () => {
             type={story.storyType}
             contributors={story.contributors}
             onsuccess={onSuccess}
+            prompt_id={story.prompt._id}
+            promptTitle={story.prompt.title}
+            contestTitle={story.contest?.contestTheme||""}
           />
         )) :<NotFound text='No Games To Show !!'/>}
       </div>
