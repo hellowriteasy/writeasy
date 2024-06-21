@@ -18,7 +18,6 @@ import Subscription from "@/app/components/Subscription";
 import useAuthStore from "@/app/store/useAuthStore";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
 import { useParams } from "next/navigation";
 import { axiosInstance } from "@/app/utils/config/axios";
 import { TPrompt, TStory } from "@/app/utils/types";
@@ -42,6 +41,7 @@ const StoryEditor: React.FC<StoryEditorProps> = () => {
   });
   const [inviting, setInviting] = useState(false);
   const [prompt, setPrompt] = useState<TPrompt | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [currentStory, setCurrentStory] = useState<TStory | null>(null);
   const [submittingStory, setSubmittingStory] = useState(false);
   const isSubcriptionActive = useAuthStore(
@@ -153,6 +153,7 @@ const StoryEditor: React.FC<StoryEditorProps> = () => {
           storyType: "game",
           prompt: promptId,
         };
+        setIsLoading(true);
         await AxiosIns.post(`/stories`, payload);
         setStoryDetails((prev) => ({
           ...prev,

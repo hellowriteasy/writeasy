@@ -11,11 +11,12 @@ import { axiosInstance } from "../utils/config/axios";
 const UserMenu = () => {
   const [selectedOption, setSelectedOption] = useState('');
   const [showOptions, setShowOptions] = useState(false);
-    const [isClient, setIsClient] = useState(false)
+  const [isClient, setIsClient] = useState(false);
   const logout = useAuthStore((state) => state.logout);
   const username = useAuthStore((state) => state.username);
   const role = useAuthStore((state) => state.role); // Get the user's role
-  const AxiosIns=axiosInstance("")
+  const AxiosIns = axiosInstance("");
+  
   const handleLogout = async () => {
     try {
       await AxiosIns.post("http://localhost:8000/api/auth/logout");
@@ -25,18 +26,18 @@ const UserMenu = () => {
     }
   };
 
-  
   useEffect(() => {
     setShowOptions(false);
   }, []);
-   
+
   return (
     <div 
       className="relative font-comic w-60 cursor-pointer" 
       onMouseEnter={() => setShowOptions(true)} 
+      onMouseLeave={() => setShowOptions(false)} // Add onMouseLeave here
     >
       <div className="relative font-comic">
-        <div className="w-full text-white h-14 text-center font-bold text-md  font-comic bg-black border border-black rounded-3xl px-4 py-3  focus:outline-none focus:border-black">
+        <div className="w-full text-white h-14 text-center font-bold text-md font-comic bg-black border border-black rounded-3xl px-4 py-3 focus:outline-none focus:border-black">
           {selectedOption || `${username}`}
         </div>
         <div className="pointer-events-none absolute inset-y-0 -left-2 bg-white rounded-full flex items-center px-2 text-white">
@@ -48,7 +49,7 @@ const UserMenu = () => {
       </div>
       {/* Custom dropdown options */}
       {showOptions && (
-        <div onMouseLeave={() => setShowOptions(false)} className="absolute w-full mt-2 text-slate-900 bg-white border border-black rounded-lg shadow-lg">
+        <div className="absolute w-full  text-slate-900 bg-white border border-black rounded-lg shadow-lg">
           <Link href="/profile">
             <div
               className="px-4 py-2 h-9 cursor-pointer hover:bg-gray-200"
