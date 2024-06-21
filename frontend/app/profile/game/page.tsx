@@ -1,26 +1,16 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import UserStory from "@/app/components/profile/UserStory";
-import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import useAuthStore from '@/app/store/useAuthStore';
-import { TUser } from '@/app/utils/types';
+import { TStory, TUser } from '@/app/utils/types';
 import NotFound from '@/app/components/Others/NotFound';
 import ProfileTabs from '@/app/components/profile/ProfileTabs';
 import { axiosInstance } from '@/app/utils/config/axios';
-interface UserStory {
-  _id: string;
-  title: string;
-  content: string;
-  corrections: string;
-  storyType: string;
-  username: string;
-  contributors: TUser[];
-}
 
 const Page: React.FC = () => {
-  const [userStories, setUserStories] = useState<UserStory[]>([]);
+  const [userStories, setUserStories] = useState<TStory[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string|null>(null);
   const [currentPage, setCurrentPage] = useState(0);
@@ -30,7 +20,7 @@ const Page: React.FC = () => {
   useEffect(() => {
     const fetchUserStories = async () => {
       try {
-        const response = await AxiosIns.get<UserStory[]>('/stories/user', {
+        const response = await AxiosIns.get<TStory[]>('/stories/user', {
           params: {
             userId:userId,
             storyType: 'game',
@@ -74,6 +64,9 @@ const Page: React.FC = () => {
             corrections={story.corrections}
             type={story.storyType}
             contributors={story.contributors}
+            contestTitle={story.contest?.contestTheme||""}
+            prompt_id={story.prompt._id}
+            promptTitle={story.prompt?.title||""}
           />
         )) :<NotFound text='No Games To Show !!'/>}
       </div>

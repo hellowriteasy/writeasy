@@ -2,7 +2,6 @@ const StoryService = require("../services/storyService");
 const GptService = require("../services/gptService");
 const Contest = require("../models/contest");
 const Prompt = require("../models/prompt");
-const { createCollaborativeStory } = require("./collaborativeStoryController");
 const Story = require("../models/story");
 const gptService = new GptService(process.env.GPT_API_KEY); // Initialize GPT service
 
@@ -219,6 +218,7 @@ const getStoryOfAuserByPrompt = async (req, res) => {
     );
     return res.status(200).json(story);
   } catch (error) {
+    console.log(error); 
     res.status(500).json({ message: error?.message || "Something went wrong" });
   }
 };

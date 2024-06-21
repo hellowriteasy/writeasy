@@ -331,21 +331,10 @@ export function SimpleEditor({
 
   return (
     <>
-<<<<<<< Updated upstream
-   
-      <div className="editor bg-white p-4 h-auto rounded-3xl relative shadow-md w-full">
-        <div className="menu flex gap-5 w-[100%]  left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
-          <div className="flex gap-3 w-full h-12  overflow-hidden p-3 ps-6">
-          {isLoading && (
-        <div className="loader mr-10 "></div>
-
-      )}
-=======
       <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
         <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
           <div className="flex h-16  gap-3 p-3 ps-6">
             {isLoading && <div className="loader mr-10 "></div>}
->>>>>>> Stashed changes
             <button
               className="menu-button mr-2"
               type="button"
@@ -429,13 +418,8 @@ export function SimpleEditor({
               <Icons.Code />
             </button>
             <>
-<<<<<<< Updated upstream
-              <button
-                className="bg-slate-100 border  overflow-y-hidden border-slate-500 p-1 text-sm rounded-md"
-=======
               {/* <button
                 className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
->>>>>>> Stashed changes
                 type="button"
                 onClick={(e) => {
                   e.preventDefault();
@@ -444,15 +428,9 @@ export function SimpleEditor({
                 }}
               >
                 Accept All
-<<<<<<< Updated upstream
-              </button>
-              <button
-                className="bg-slate-100 border  overflow-y-hidden border-slate-500 p-1 text-sm rounded-md"
-=======
               </button> */}
               {/* <button
                 className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
->>>>>>> Stashed changes
                 type="button"
                 onClick={(e) => {
                   e.preventDefault();
@@ -490,25 +468,18 @@ export function SimpleEditor({
             </>
           </div>
         </div>
-<<<<<<< Updated upstream
-        <div className=" w-[70vw] mt-10 rounded-3xl">
-
-          <EditorContent
-            className={` scroll-m-2 w-[100%] min-h-[30vw] mt-[4vw] ${isLoading ? 'opacity-50 cursor-not-allowed' : ''} `}
-=======
         <div className=" w-[70vw]  rounded-3xl">
           <EditorContent
-            className={` scroll-m-2 w-[100%] min-h-[40vw] mt-10 ${
+            className={` scroll-m-2 w-[100%] min-h-[200px] mt-10 ${
               isLoading ? "opacity-50 cursor-not-allowed" : ""
             } `}
->>>>>>> Stashed changes
             editor={editor}
           />
         </div>
       </div>
       <div className="flex justify-center font-comic items-center my-4">
         <button
-          className="text-white bg-black w-96 h-12 rounded-3xl"
+          className={`text-white bg-black  ${isSaving ? "text-black bg-custom-yellow":""} w-96 h-12 rounded-3xl`}
           onClick={(e) => {
             setIsSaving(true);
             handleClickFeature("improve", e, true);

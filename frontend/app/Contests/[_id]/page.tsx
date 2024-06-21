@@ -106,12 +106,24 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
         <>
           <div className="flex mt-8 ">
             <div className="p-6 mb-6 flex flex-col gap-y-4 ">
-              <div className="flex gap-x-7  items-center">
+              <div className="flex gap-y-3 flex-col  ">
                 <h2 className="text-4xl font-comic font-bold  ">
                   {contest.contestTheme}
                 </h2>
-                <div className="text-center text-2xl font-comic relative">
-                  until {moment(contest.submissionDeadline).format("llll")}
+                <div className="flex flex-col gap-y-1">
+                  <p className=" text-xl font-comic ">
+                    <b className="font-bold"> Prompt publish date</b> -
+                    {moment(contest.promptPublishDate).format("llll")}
+                  </p>
+                  <p className=" text-xl font-comic ">
+                    <b className="font-bold"> Story submission deadline</b> -
+                    {moment(contest.submissionDeadline).format("llll")}
+                  </p>
+                  <p className=" text-xl font-comic ">
+                    {" "}
+                    <b className="font-bold"> Top writings publish date </b> -
+                    {moment(contest.topWritingPublishDate).format("llll")}
+                  </p>
                 </div>
               </div>
 

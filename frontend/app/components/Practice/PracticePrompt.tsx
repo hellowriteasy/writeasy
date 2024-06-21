@@ -19,7 +19,7 @@ const Prompt: React.FC<PromptProps> = ({ prompt }) => {
             {prompt.title}
           </div>
           <p className="text-gray-900 font-bold text-wrap font-comic pt-4 md:pt-8 text-sm md:text-base">
-            Category: {prompt.promptCategory}
+            Category: {prompt.promptCategory.join(",")}
           </p>
         </div>
         <Link href={`/Practices/${prompt._id}`}>

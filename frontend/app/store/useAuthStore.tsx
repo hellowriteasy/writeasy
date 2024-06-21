@@ -41,7 +41,6 @@ const useAuthStore = create<AuthState>((set) => {
             isSubcriptionActive,
             subscriptionRemainingDays,
             profile_picture
-
           });
         } else {
           throw new Error(`Error: ${response.status}`);
@@ -62,7 +61,6 @@ const useAuthStore = create<AuthState>((set) => {
       token: null,
       username: null,
       role: null,
-      
       subscriptionType: null,
       login: async (userId: string, token: string) => {
         localStorage.setItem("userId", userId);
