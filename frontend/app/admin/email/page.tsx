@@ -1,6 +1,5 @@
 'use client';
 import { useState } from "react";
-import axios from 'axios';
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
 import { toast } from 'react-toastify';
 import { axiosInstance } from "@/app/utils/config/axios";
@@ -11,11 +10,11 @@ const Email = () => {
   const AxiosIns=axiosInstance("")
   const handleSendClick = async () => {
     try {
-      const response = await AxiosIns.post('/emails/all', {
+       await AxiosIns.post('/emails/all', {
         subject,
         content
       });
-    toast.success("Email sent succesfully to all user")
+    toast.success("Email sent succesfully to all user");
     } catch (error) {
       console.error('Error sending email:', error);
       toast.error("failed to send email");

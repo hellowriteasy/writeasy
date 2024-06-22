@@ -2,7 +2,6 @@
 import { useState, Fragment, useRef, useEffect } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Dialog, Transition, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { axiosInstance } from '@/app/utils/config/axios';
 import DeleteModal from '../../DeleteModal';
@@ -33,6 +32,7 @@ const Card: React.FC<CardProps> = ({ question, answer, position, id, onSuccess }
       });
 
       setOpen(false);
+      onSuccess();
       toast.success('FAQ updated successfully!');
     } catch (error) {
       console.error('Error updating FAQ:', error);
@@ -43,9 +43,9 @@ const Card: React.FC<CardProps> = ({ question, answer, position, id, onSuccess }
   const handleDelete = async () => {
     try {
       setOpenDeleteModal(true);
-      const response = await AxiosIns.delete(`/faq/${id}`);
+      await AxiosIns.delete(`/faq/${id}`);
       setOpenDeleteModal(false);
-      onSuccess(); // Trigger parent component to refetch FAQs
+      onSuccess(); 
       toast.success('FAQ deleted successfully!');
     } catch (error) {
       setOpenDeleteModal(false);

@@ -262,8 +262,8 @@ export function SimpleEditor({
       };
       setIsLoading(true);
       const { data } = await AxiosIns.post("stories/score", payload);
-      toast.success("Story saved succesfully");
       if (hasSaved) {
+          toast.success("Story saved succesfully");
         router.push(`/profile`);
       }
       setInputText(currentContent);
