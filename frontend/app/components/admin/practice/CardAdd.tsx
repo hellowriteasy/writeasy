@@ -1,18 +1,26 @@
-import { useState, Fragment, useRef, useEffect } from 'react';
-import { FaEdit, FaTrash } from 'react-icons/fa';
-import { Dialog, Transition, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { axiosInstance } from '@/app/utils/config/axios';
-import DeleteModal from '@/app/components/DeleteModal'; // Adjust the import path as necessary
+import { useState, Fragment, useRef, useEffect } from "react";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import {
+  Dialog,
+  Transition,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+} from "@headlessui/react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { axiosInstance } from "@/app/utils/config/axios";
+import DeleteModal from "@/app/components/DeleteModal"; // Adjust the import path as necessary
 
 interface CardProps {
   title: string;
-  type: string;
+  type: string[];
   id: string;
+  onSuccess: () => void;
 }
 
-const Card: React.FC<CardProps> = ({ title, type, id }) => {
+const Card: React.FC<CardProps> = ({ title, type, id, onSuccess }) => {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [promptTitle, setPromptTitle] = useState(title);
@@ -20,29 +28,30 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
 
   // Split initial type into array if it's a comma-separated string
   useEffect(() => {
-    if (typeof type === 'string') {
-      setSelectedTypes(type.split(','));
+    if (typeof type === "string") {
+      const prompt_type = type as string;
+      setSelectedTypes(prompt_type.split(","));
     } else {
       setSelectedTypes([]);
     }
   }, [type]);
 
-  const AxiosIns = axiosInstance('');
+  const AxiosIns = axiosInstance("");
   const cancelButtonRef = useRef(null);
 
   const handleUpdate = async () => {
     try {
       const response = await AxiosIns.put(`/prompts/${id}`, {
         title: promptTitle,
-        promptCategory: selectedTypes.join(','), // Join selected types into a comma-separated string for backend
-        promptType: 'practice',
+        promptCategory: selectedTypes.join(","), // Join selected types into a comma-separated string for backend
+        promptType: "practice",
       });
-
       setOpenEditModal(false);
-      toast.success('Prompt updated successfully!');
+      onSuccess();
+      toast.success("Prompt updated successfully!");
     } catch (error) {
-      console.error('Error updating prompt:', error);
-      toast.error('Failed to update prompt.');
+      console.error("Error updating prompt:", error);
+      toast.error("Failed to update prompt.");
     }
   };
 
@@ -51,10 +60,11 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
       setOpenDeleteModal(true);
       const response = await AxiosIns.delete(`/prompts/${id}`);
       setOpenDeleteModal(false);
-      toast.success('Prompt deleted successfully!');
+      onSuccess();
+      toast.success("Prompt deleted successfully!");
     } catch (error) {
-      console.error('Error deleting prompt:', error);
-      toast.error('Failed to delete prompt.');
+      console.error("Error deleting prompt:", error);
+      toast.error("Failed to delete prompt.");
     }
   };
 
@@ -64,10 +74,16 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
         <div className="flex justify-between items-center mb-2">
           <div className="text-xl font-semibold">{title}</div>
           <div className="flex space-x-2 gap-4">
-            <button className="text-black" onClick={() => setOpenEditModal(true)}>
+            <button
+              className="text-black"
+              onClick={() => setOpenEditModal(true)}
+            >
               <FaEdit size={30} />
             </button>
-            <button className="text-black text-3xl" onClick={() => setOpenDeleteModal(true)}>
+            <button
+              className="text-black text-3xl"
+              onClick={() => setOpenDeleteModal(true)}
+            >
               <FaTrash size={30} />
             </button>
           </div>
@@ -77,7 +93,12 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
 
       {/* Edit Modal */}
       <Transition.Root show={openEditModal} as={Fragment}>
-        <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpenEditModal}>
+        <Dialog
+          as="div"
+          className="relative z-10"
+          initialFocus={cancelButtonRef}
+          onClose={setOpenEditModal}
+        >
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -105,7 +126,10 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
                   <div className="bg-white h-96 px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                     <div className="sm:flex sm:items-start">
                       <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                        <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
+                        <Dialog.Title
+                          as="h3"
+                          className="text-base font-semibold leading-6 text-gray-900"
+                        >
                           Edit Prompt
                         </Dialog.Title>
                         <div className="mt-2">
@@ -118,7 +142,9 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
                           />
                           <Menu as="div" className="relative mt-3">
                             <MenuButton className="w-96 text-left rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                              {selectedTypes.length > 0 ? selectedTypes.join(', ') : 'Select Type'}
+                              {selectedTypes.length > 0
+                                ? selectedTypes.join(", ")
+                                : "Select Type"}
                             </MenuButton>
                             <Transition
                               as={Fragment}
@@ -130,19 +156,26 @@ const Card: React.FC<CardProps> = ({ title, type, id }) => {
                               leaveTo="transform opacity-0 scale-95"
                             >
                               <MenuItems className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                {['Adventure', 'Comic', 'Fantasy', 'Romance'].map((type) => (
+                                {[
+                                  "Adventure",
+                                  "Comic",
+                                  "Fantasy",
+                                  "Romance",
+                                ].map((type) => (
                                   <MenuItem key={type}>
                                     {({ active }) => (
                                       <button
                                         className={`${
                                           selectedTypes.includes(type)
-                                            ? 'bg-black text-white'
-                                            : 'text-gray-900'
+                                            ? "bg-black text-white"
+                                            : "text-gray-900"
                                         } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                                         onClick={() =>
                                           setSelectedTypes((prevTypes) =>
                                             prevTypes.includes(type)
-                                              ? prevTypes.filter((t) => t !== type)
+                                              ? prevTypes.filter(
+                                                  (t) => t !== type
+                                                )
                                               : [...prevTypes, type]
                                           )
                                         }

@@ -11,9 +11,10 @@ interface CardProps {
   description: string;
   id: string;
   categories: string[];
+  onSuccess: () => void; 
 }
 
-const CardAdd: React.FC<CardProps> = ({ title, description, id, categories }) => {
+const CardAdd: React.FC<CardProps> = ({ title, description, id, categories,onSuccess }) => {
   const [open, setOpen] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [promptTitle, setPromptTitle] = useState(title);
@@ -30,8 +31,9 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id, categories }) =>
         promptType: 'game',
         promptCategory: selectedCategories,
       });
-      toast.success('Prompt updated successfully!');
       setOpen(false);
+      onSuccess();
+      toast.success('Prompt updated successfully!');
     } catch (error) {
       toast.error('Error updating prompt.');
       console.error('Error:', error);
@@ -40,10 +42,11 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id, categories }) =>
 
   const handleDelete = async () => {
     try {
-      await AxiosIns.delete(`/prompts/${id}`);
       setOpenDeleteModal(true)
-      toast.success('Prompt deleted successfully!');
+      await AxiosIns.delete(`/prompts/${id}`);
       setOpenDeleteModal(false)
+      onSuccess();
+      toast.success('Prompt deleted successfully!');
       // Optionally, remove the prompt from the UI here or refresh the list.
     } catch (error) {
       setOpenDeleteModal(false)

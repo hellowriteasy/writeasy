@@ -13,13 +13,11 @@ import Code from "@tiptap/extension-code";
 import History from "@tiptap/extension-history";
 import * as Icons from "../../components/Icons";
 import Bee from "@/public/Game/cloud3.svg";
-import Cloud from "@/public/Game/cloud.svg";
 import Image from "next/image";
 import Subscription from "@/app/components/Subscription";
 import useAuthStore from "@/app/store/useAuthStore";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from "axios";
 import { TUser } from "@/app/utils/types";
 import { axiosInstance } from "@/app/utils/config/axios";
 
@@ -42,21 +40,19 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,contributo
     (state) => state.isSubcriptionActive
   );
   useEffect(() => {
-    const handleBeforeUnload = (event) => {
+    const handleBeforeUnload = (event:any) => {
       event.preventDefault();
       event.returnValue = "Refreshing the page may erase your changes. Are you sure you want to continue?";
       return "Refreshing the page may erase your changes. Are you sure you want to continue?";
     };
-
     window.addEventListener("beforeunload", handleBeforeUnload);
-
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
-  const AxiosIns=axiosInstance("")
-  const role = useAuthStore((state) => state.role);
-  const { userId } = useAuthStore();
+
+
+  const AxiosIns =axiosInstance("")
   const { token } = useAuthStore();
   const editor = useEditor({
     extensions: [
@@ -84,7 +80,6 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,contributo
     }
   }) as Editor;
 
-  console.log("story id",id)
 
   const handleSubmit = async (e:SyntheticEvent) => {
     e.preventDefault();

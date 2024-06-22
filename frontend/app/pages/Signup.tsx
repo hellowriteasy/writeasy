@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import Earth from "../../public/Landingpage-img/earth.svg";
 import Group from "../../public/Loginsignup-img/Group (2).svg";
 import Group2 from "../../public/Loginsignup-img/Group.svg";
@@ -39,6 +38,7 @@ const Signup = () => {
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<FormFields>({
     resolver: zodResolver(schema),
@@ -72,41 +72,59 @@ const Signup = () => {
           <span className="font-bold">Hello!</span> Welcome to Writeasy
         </h1>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="relative flex flex-col  items-center gap-2 font-comic mt-10 z-10 ">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="relative flex flex-col  items-center gap-2 font-comic mt-10 z-10 "
+        >
           <InputField
             types="text"
             placeholder="Email"
+            value={getValues("email")}
             {...register("email")}
           />
-          {errors.email && <div className="text-red-500">{errors.email.message}</div>}
+          {errors.email && (
+            <div className="text-red-500">{errors.email.message}</div>
+          )}
 
           <InputField
+            value={getValues("username")}
             types="text"
             placeholder="Username"
             {...register("username")}
           />
-          {errors.username && <div className="text-red-500">{errors.username.message}</div>}
+          {errors.username && (
+            <div className="text-red-500">{errors.username.message}</div>
+          )}
 
           <InputField
             types="password"
+            value={getValues("password")}
             placeholder="Password"
             {...register("password")}
           />
-          {errors.password && <div className="text-red-500">{errors.password.message}</div>}
+          {errors.password && (
+            <div className="text-red-500">{errors.password.message}</div>
+          )}
 
           <InputField
             types="password"
+            value={getValues("confirmPassword")}
             placeholder="Confirm Password"
             {...register("confirmPassword")}
           />
-          {errors.confirmPassword && <div className="text-red-500">{errors.confirmPassword.message}</div>}
+          {errors.confirmPassword && (
+            <div className="text-red-500">{errors.confirmPassword.message}</div>
+          )}
 
           <button className="text-center border rounded-3xl text-white hover:opacity-80 w-full sm:w-72 md:w-80 lg:w-96 mt-5 bg-black h-12 sm:h-14 text-xl sm:text-2xl">
             Sign Up
           </button>
           <Button type="google" />
           <h1 className="text-center font-comic pt-6">
-            Already have an account? <Link href="/login" className="font-bold underline">Login</Link>
+            Already have an account?{" "}
+            <Link href="/login" className="font-bold underline">
+              Login
+            </Link>
           </h1>
           <div className="absolute w-32 h-16 vvsm-hide -top-4 -right-28">
             <Image src={Rocket} alt="rocket" />

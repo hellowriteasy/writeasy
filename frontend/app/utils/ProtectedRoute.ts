@@ -1,10 +1,10 @@
 // components/ProtectedRoute.tsx
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import useAuthStore from '../store/useAuthStore';
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children }:{children:React.ReactNode}) => {
   const router = useRouter();
   const { loggedIn, role } = useAuthStore();
   const [isLoading, setIsLoading] = useState(true);

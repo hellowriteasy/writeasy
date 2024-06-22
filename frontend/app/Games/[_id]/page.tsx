@@ -10,13 +10,13 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { axiosInstance } from "@/app/utils/config/axios";
 import NotFound from "@/app/components/Others/NotFound";
+
 interface PageProps {
   params: {
     _id: string;
   };
 }
 
-const itemsPerPage = 5; // Adjust this value to the number of items per page you want
 
 const Page: React.FC<PageProps> = ({ params }) => {
   const [stories, setStories] = useState<TStory[]>([]);

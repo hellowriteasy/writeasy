@@ -43,7 +43,7 @@ const Login = () => {
         role,
         subscriptionType,
       } = response.data;
-      login(userId);
+      login(userId,token);
 
       router.push("/", { scroll: false });
     } catch (error: any) {

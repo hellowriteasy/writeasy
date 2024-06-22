@@ -1,36 +1,24 @@
-import { useState, Fragment, useRef, useEffect } from 'react';
-import { FaEdit, FaTrash } from 'react-icons/fa';
-import { Dialog, Transition } from '@headlessui/react';
-import axios from 'axios';
-import { diffChars } from 'diff';
-import { toast } from 'react-toastify';
-import { axiosInstance } from '@/app/utils/config/axios';
-import DeleteModal from '@/app/components/DeleteModal';
+import { useState, Fragment, useRef, useEffect } from "react";
+import { FaEdit } from "react-icons/fa";
+import { Dialog, Transition } from "@headlessui/react";
+import { diffChars } from "diff";
+import { toast } from "react-toastify";
+import { axiosInstance } from "@/app/utils/config/axios";
+import { TStory } from "@/app/utils/types";
 interface CardProps {
-  _id: string;
-  username: string;
-  title: string;
-  content: string;
-  wordCount: number;
-  submissionDateTime: string;
-  prompt: string;
-  storyType: string;
-  correctionSummary: string;
-  corrections: string;
-  score: number;
-  
+  contest: TStory;
 }
 
 const Card: React.FC<CardProps> = ({ contest }) => {
   const [open, setOpen] = useState(false);
-  const [Edit,setEdit]=useState(true)
+  const [Edit, setEdit] = useState(true);
   const [showDiff, setShowDiff] = useState(false);
   const [feedback, setFeedback] = useState(contest.correctionSummary);
   const [storyDetail, setStoryDetail] = useState(contest.content);
   const [corrections, setCorrections] = useState(contest.corrections);
   const [grade, setGrade] = useState(contest.score); // Renamed to grade for clarity
   const cancelButtonRef = useRef(null);
- const AxiosIns=axiosInstance("")
+  const AxiosIns = axiosInstance("");
   useEffect(() => {
     setFeedback(contest.correctionSummary);
     setStoryDetail(contest.content);
@@ -40,39 +28,57 @@ const Card: React.FC<CardProps> = ({ contest }) => {
 
   const handleUpdate = async () => {
     try {
-      const response = await AxiosIns.put(`http://localhost:8000/api/stories/${contest._id}`, {
-        correctionSummary: feedback,
-        content: storyDetail,
-        score: grade,
-      });
-      toast.success("contest updated successfully")
+      const response = await AxiosIns.put(
+        `http://localhost:8000/api/stories/${contest._id}`,
+        {
+          correctionSummary: feedback,
+          content: storyDetail,
+          score: grade,
+        }
+      );
+      toast.success("contest updated successfully");
       setOpen(false);
     } catch (error) {
-      console.error('There was an error updating the story!', error);
-      toast.error("failed to update contest")
+      console.error("There was an error updating the story!", error);
+      toast.error("failed to update contest");
     }
   };
 
   const compareSentences = (description = "", corrections = "") => {
     if (!description) {
-      return <span style={{ color: 'red', backgroundColor: 'lightcoral' }}>No original description provided.</span>;
+      return (
+        <span style={{ color: "red", backgroundColor: "lightcoral" }}>
+          No original description provided.
+        </span>
+      );
     }
 
     if (!corrections) {
-      return <span style={{ color: 'green', backgroundColor: 'lightgreen' }}>No corrections provided.</span>;
+      return (
+        <span style={{ color: "green", backgroundColor: "lightgreen" }}>
+          No corrections provided.
+        </span>
+      );
     }
 
     const diff = diffChars(description, corrections);
     return diff.map((part, index) => {
       const style = {
-        backgroundColor: part.added ? 'lightgreen' : part.removed ? 'lightcoral' : 'transparent',
-        textDecoration: part.removed ? 'line-through' : 'none',
-        color: part.added ? 'green' : part.removed ? 'red' : 'black'
+        backgroundColor: part.added
+          ? "lightgreen"
+          : part.removed
+          ? "lightcoral"
+          : "transparent",
+        textDecoration: part.removed ? "line-through" : "none",
+        color: part.added ? "green" : part.removed ? "red" : "black",
       };
-      return <span key={index} style={style}>{part.value}</span>;
+      return (
+        <span key={index} style={style}>
+          {part.value}
+        </span>
+      );
     });
   };
- 
 
   return (
     <>
@@ -88,13 +94,21 @@ const Card: React.FC<CardProps> = ({ contest }) => {
             </button> */}
           </div>
         </div>
-        <div className="text-gray-600">User: {contest.username}</div>
-        <div className="text-gray-600">Submission Date: {new Date(contest.submissionDateTime).toLocaleString()}</div>
+        <div className="text-gray-600">User: {contest.user.username}</div>
+        <div className="text-gray-600">
+          Submission Date:{" "}
+          {new Date(contest.submissionDateTime).toLocaleString()}
+        </div>
         <div className="text-gray-600">Score: {contest.score}</div>
       </div>
 
       <Transition.Root show={open} as={Fragment}>
-        <Dialog as="div" className="relative font-poppins z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
+        <Dialog
+          as="div"
+          className="relative font-poppins z-10"
+          initialFocus={cancelButtonRef}
+          onClose={setOpen}
+        >
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -122,11 +136,17 @@ const Card: React.FC<CardProps> = ({ contest }) => {
                   <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                     <div className="sm:flex sm:items-start">
                       <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
-                        <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
+                        <Dialog.Title
+                          as="h3"
+                          className="text-base font-semibold leading-6 text-gray-900"
+                        >
                           {contest.title}
                         </Dialog.Title>
-                        <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                          {contest.username}
+                        <Dialog.Title
+                          as="h3"
+                          className="text-base font-semibold leading-6 text-gray-900"
+                        >
+                          {contest.user.username}
                         </Dialog.Title>
                         <div className="mt-2">
                           <div className="mb-4">
@@ -163,20 +183,24 @@ const Card: React.FC<CardProps> = ({ contest }) => {
                             />
                           </div>
                           <button
-                      type="button"
-                      className="inline-flex w-full mx-4 justify-center rounded-md bg-black font-poppins px-4 py-2 font-semibold text-white shadow-sm  sm:ml-3 sm:w-auto"
-                      onClick={() => setEdit(false)}
-                      disabled={!Edit}
-                    >
-                      Edit
-                    </button>
+                            type="button"
+                            className="inline-flex w-full mx-4 justify-center rounded-md bg-black font-poppins px-4 py-2 font-semibold text-white shadow-sm  sm:ml-3 sm:w-auto"
+                            onClick={() => setEdit(false)}
+                            disabled={!Edit}
+                          >
+                            Edit
+                          </button>
                           <button
                             onClick={() => setShowDiff(!showDiff)}
                             className="bg-white border-2 rounded-2xl border-slate-700 text-black px-4 py-2"
                           >
                             {showDiff ? "Original" : "Marked"}
                           </button>
-                          {showDiff && <div className="mt-4 p-8 bg-white rounded-xl border border-slate-300">{compareSentences(storyDetail, corrections)}</div>}
+                          {showDiff && (
+                            <div className="mt-4 p-8 bg-white rounded-xl border border-slate-300">
+                              {compareSentences(storyDetail, corrections)}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>

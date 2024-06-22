@@ -5,10 +5,11 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { axiosInstance } from '@/app/utils/config/axios';
+import { TPromptAdd } from '@/app/admin/contests/edit/page';
 
 interface ModalProps {
   setIsModalOpen: (isOpen: boolean) => void;
-  onAddPrompt: (prompt: { _id: string; promptText: string; promptCategories: string[] }) => void;
+  onAddPrompt: (prompt: TPromptAdd) => void;
 }
 
 const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
@@ -16,7 +17,7 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const AxiosIns=axiosInstance("")
   useEffect(() => {
-    const handleBeforeUnload = (event) => {
+    const handleBeforeUnload = (event:any) => {
       event.preventDefault();
       event.returnValue = "Refreshing the page may erase your changes. Are you sure you want to continue?";
       return "Refreshing the page may erase your changes. Are you sure you want to continue?";
@@ -40,6 +41,7 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
         _id,
         promptText: promptTitle,
         promptCategories: selectedCategories,
+        title:promptTitle
       });
       toast.success("Prompt added successfully!");
       setIsModalOpen(false);

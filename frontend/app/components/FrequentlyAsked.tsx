@@ -1,12 +1,14 @@
-'use client'
-import { useState, useEffect } from 'react';
+"use client";
+import { useState, useEffect } from "react";
 import Group from "@/public/Landingpage-img/groupqn.svg";
 import Path from "@/public/Landingpage-img/path34.svg";
 import Image from "next/image";
 import cloud from "@/public/Game/sm-cloud.svg";
-import { Disclosure } from '@headlessui/react';
-import { Transition } from '@headlessui/react';
-import axios from 'axios';
+import { Disclosure } from "@headlessui/react";
+import { Transition } from "@headlessui/react";
+import axios from "axios";
+import { axiosInstance } from "../utils/config/axios";
+import useAuthStore from "../store/useAuthStore";
 
 interface FAQ {
   _id: string;
@@ -18,15 +20,16 @@ const FrequentlyAsked = () => {
   const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [openId, setOpenId] = useState<string | null>(null);
   const [showAll, setShowAll] = useState(false);
-
+  const { token } = useAuthStore();
+  const axiosIns = axiosInstance(token || "");
   useEffect(() => {
     const fetchFaqs = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/faq');
+        const response = await axiosIns.get("/faq");
         setFaqs(response.data);
         setOpenId(response.data[0]?._id || null); // Initialize with the first question open if available
       } catch (error) {
-        console.error('Error fetching FAQs:', error);
+        console.error("Error fetching FAQs:", error);
       }
     };
 
@@ -42,10 +45,10 @@ const FrequentlyAsked = () => {
   return (
     <div className="relative w-full h-auto text-black flex flex-col items-center px-4 md:px-10">
       <div className="absolute left-4 md:left-10 vsm-hide top-20 md:top-32">
-        <Image className='w-[13vw]' src={Group} alt="group" />
+        <Image className="w-[13vw]" src={Group} alt="group" />
       </div>
       <div className="absolute right-4 md:right-10 top-40 md:top-60">
-        <Image className='w-[5vw]' src={Path} alt="path" />
+        <Image className="w-[5vw]" src={Path} alt="path" />
       </div>
       <div className="text-3xl flex flex-col items-center font-bold font-comic gap-3">
         <h1 className="text-center font-crayon text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold pt-5 md:pt-10">
@@ -56,12 +59,20 @@ const FrequentlyAsked = () => {
           <div className="mx-auto w-full max-w-lg">
             <div className="divide-y divide-gray-300 rounded-xl flex flex-col items-center">
               {displayedFaqs.map((question) => (
-                <Disclosure as="div" className="p-4 md:p-6 w-full" key={question._id}>
+                <Disclosure
+                  as="div"
+                  className="p-4 md:p-6 w-full"
+                  key={question._id}
+                >
                   {({ open }) => (
                     <>
                       <Disclosure.Button
                         className="group flex w-full items-center justify-center focus:outline-none"
-                        onClick={() => setOpenId(openId === question._id ? null : question._id)}
+                        onClick={() =>
+                          setOpenId(
+                            openId === question._id ? null : question._id
+                          )
+                        }
                       >
                         <span className="text-lg md:text-xl font-medium text-black">
                           {question.question}

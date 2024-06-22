@@ -24,13 +24,7 @@ import { TPrompt, TStory } from "@/app/utils/types";
 import Logo from "@/public/Landingpage-img/logo.svg";
 import { useRouter } from "next/navigation";
 
-interface StoryEditorProps {
-  _id: string;
-  title: string;
-  content: string;
-}
-
-const StoryEditor: React.FC<StoryEditorProps> = () => {
+const Page = () => {
   const [storyDetails, setStoryDetails] = useState({
     title: "",
     email: "",
@@ -111,9 +105,10 @@ const StoryEditor: React.FC<StoryEditorProps> = () => {
     }
   }, [promptId]);
   useEffect(() => {
-    const handleBeforeUnload = (event) => {
+    const handleBeforeUnload = (event: any) => {
       event.preventDefault();
-      event.returnValue = "Refreshing the page may erase your changes. Are you sure you want to continue?";
+      event.returnValue =
+        "Refreshing the P may erase your changes. Are you sure you want to continue?";
       return "Refreshing the page may erase your changes. Are you sure you want to continue?";
     };
 
@@ -482,4 +477,4 @@ const StoryEditor: React.FC<StoryEditorProps> = () => {
   );
 };
 
-export default StoryEditor;
+export default Page;

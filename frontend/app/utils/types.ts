@@ -18,6 +18,7 @@ export type TStory = {
   submissionDateTime: string;
   score: number;
   corrections: string;
+  correctionSummary: string;
   contest?: TContest;
   prompt: TPrompt;
   storyType: string;
@@ -32,7 +33,7 @@ export type TPrompt = {
   promptType: string;
   __v: number;
   description: string;
-  type:string
+  type: string;
 };
 
 export type TContest = {
@@ -47,14 +48,14 @@ export type TContest = {
   __v: number;
 };
 
- export type Params= {
+export type Params = {
   _id: string;
 };
 
-export type TFAQ ={
+export type TFAQ = {
   _id: string;
   question: string;
   answer: string;
-  place:number
-}
+  place: number;
+};
 export type TTaskType = "improve" | "grammer" | "rewrite";

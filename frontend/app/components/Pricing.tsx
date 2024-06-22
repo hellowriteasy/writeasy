@@ -6,21 +6,24 @@ import Group16 from "../../public/Landingpage-img/Group (17).svg";
 import { TbCurrencyPound } from "react-icons/tb";
 import Link from "next/link";
 import useAuthStore from "../store/useAuthStore";
-import axios from "axios";
 import { axiosInstance } from "../utils/config/axios";
+import { useRouter } from "next/navigation";
 
 const Pricing = () => {
-  const { userId, isSubcriptionActive, subscriptionRemainingDays } = useAuthStore();
+  const { userId, isSubcriptionActive, subscriptionRemainingDays } =
+    useAuthStore();
   const AxiosIns = axiosInstance("");
+  const router = useRouter()
+
   const handleSignUp = async () => {
     try {
-      const response = await AxiosIns.post(
-        "http://localhost:8000/api/payments/checkout",
-        {
-          user_id: userId,
-        }
-      );
-      
+      if (!userId) {
+        return router.push("/signup");
+      }
+      const response = await AxiosIns.post("/payments/checkout", {
+        user_id: userId,
+      });
+
       const { url } = response.data;
       window.location.href = url; // Redirect to Stripe Checkout
     } catch (error) {
@@ -70,7 +73,9 @@ const Pricing = () => {
                 <>
                   <div className="flex justify-center items-center">
                     <TbCurrencyPound className="text-5xl" />
-                    <h2 className="text-4xl font-comic text-center font-bold">20</h2>
+                    <h2 className="text-4xl font-comic text-center font-bold">
+                      20
+                    </h2>
                     <span className="pt-4">/month</span>
                   </div>
                 </>
@@ -78,7 +83,9 @@ const Pricing = () => {
                 <div>
                   <div className="flex items-center gap-y-4">
                     <TbCurrencyPound className="text-5xl" />
-                    <h2 className="text-4xl font-comic text-center font-bold">20</h2>
+                    <h2 className="text-4xl font-comic text-center font-bold">
+                      20
+                    </h2>
                     <span className="pt-4">/month</span>
                   </div>
                   <div className="text-center py-4 font-comic font-bold text-2xl">
@@ -87,22 +94,32 @@ const Pricing = () => {
                 </div>
               )}
             </div>
-            <div className="text-center flex flex-col gap-y-2 absolute sm:top-28 top-28  md:top-56 w-10/12 mx-auto">
+            <div className="text-center flex flex-col gap-y-2 absolute sm:top-48 top-48  md:top-60 w-10/12 mx-auto">
               <div>
                 {/* <h2 className="p-4 text-2xl font-black underline">Subscription benefits</h2> */}
                 <ul className="flex sm:text-sm lg:text-xl  flex-col px-4  items-start ">
-                  <li className=" text-start">•⁠ ⁠Unlimited writing practices with immediate GPT markings</li>
+                  <li className=" text-start">
+                    •⁠ ⁠Unlimited writing practices with immediate GPT markings
+                  </li>
                   <li>•⁠ ⁠Weekly writing contests</li>
                   <li>•⁠ ⁠Unlimited collaborative writing games</li>
                 </ul>
               </div>
-              {!isSubcriptionActive && (
-                  <button
+
+              {!userId ? (
+                <button
+                  onClick={handleSignUp}
+                  className="border text-2xl sm:text-3xl mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl text-white w-40 sm:w-48 md:w-56 lg:w-60 h-12 sm:h-14"
+                >Sign up</button>
+              ) : !isSubcriptionActive ? (
+                <button
                   onClick={handleSignUp}
                   className="border text-2xl sm:text-3xl mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl text-white w-40 sm:w-48 md:w-56 lg:w-60 h-12 sm:h-14"
                 >
-                  Sign up
+                  Buy Now
                 </button>
+              ) : (
+                ""
               )}
             </div>
           </div>
@@ -112,4 +129,6 @@ const Pricing = () => {
   );
 };
 
+
 export default Pricing;
+

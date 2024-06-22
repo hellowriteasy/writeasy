@@ -1,25 +1,20 @@
-"use client"
-import Link from 'next/link';
-import { FaCheckCircle } from 'react-icons/fa';
-import { useEffect } from 'react';
-import axios from 'axios'
-import { axiosInstance } from '../utils/config/axios';
+"use client";
+import Link from "next/link";
+import { FaCheckCircle } from "react-icons/fa";
+import { useEffect } from "react";
+import { axiosInstance } from "../utils/config/axios";
+import { usePathname, useSearchParams } from "next/navigation";
 const Success = () => {
   // Get the current URL
-  const currentUrl = window.location.href;
-
-  // Extract query parameters using URLSearchParams
-  const queryParams = new URLSearchParams(currentUrl.split("?")[1]);
-  const AxiosIns=axiosInstance("")
-  // Get the session_id parameter
-  const sessionId = queryParams.get("session_id");
+  const searchParams = useSearchParams();
+  const sessionId = new URLSearchParams(searchParams).get("session_id");
+  const AxiosIns = axiosInstance("");
 
   useEffect(() => {
     if (sessionId) {
-      AxiosIns
-        .post("/payments/confirm-checkout-session", {
-          stripe_session_id: sessionId,
-        })
+      AxiosIns.post("/payments/confirm-checkout-session", {
+        stripe_session_id: sessionId,
+      })
         .then((response) => {
           console.log(response.data);
           // Handle success response

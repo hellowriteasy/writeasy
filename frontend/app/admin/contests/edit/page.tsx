@@ -7,7 +7,7 @@ import { useCustomToast } from "@/app/utils/hooks/useToast";
 import { axiosInstance } from "@/app/utils/config/axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-interface Prompt {
+export interface TPromptAdd {
   _id: string;
   title: string;
   promptCategories: string[];
@@ -16,7 +16,7 @@ interface Prompt {
 
 const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [promptCards, setPromptCards] = useState<Prompt[]>([]);
+  const [promptCards, setPromptCards] = useState<TPromptAdd[]>([]);
   const [contestDetails, setContestDetails] = useState({
     promptPublishDate: new Date(),
     submissionDeadline: new Date(
@@ -93,7 +93,7 @@ const Page = () => {
     }));
   };
 
-  const handlePromptAdd = (prompt: Prompt) => {
+  const handlePromptAdd = (prompt: TPromptAdd) => {
     setPromptCards([...promptCards, prompt]);
   };
 
@@ -207,9 +207,12 @@ const Page = () => {
               </button>
               {promptCards.map((prompt, index) => (
                 <Card
+                  onSuccess={() => {}}
                   key={index}
                   title={prompt.title}
-                  type={prompt.promptCategories.join(", ")}
+                  // type={prompt.promptCategories.join(",")}
+                  id={prompt._id}
+                  deadline="234"
                 />
               ))}
               <button

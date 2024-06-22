@@ -25,6 +25,19 @@ const Page = () => {
     fetchPrompts();
   }, []);
 
+   async function onsuccess(){
+    const fetchPrompts = async () => {
+      try {
+        const response = await AxiosIns.get('/prompts/practice-prompts');
+        setPrompts(response.data.reverse());
+      } catch (error) {
+        console.error('Error fetching prompts:', error);
+      }
+    };
+
+    fetchPrompts();
+   }
+
   return (
     <ProtectedRoute>
     <div className="bg-gray-50 font-poppins min-h-screen">
@@ -52,12 +65,12 @@ const Page = () => {
             </div>
             <div className="mt-4 space-y-4">
               {prompts.map((prompt, index) => (
-                <Card key={index} id={prompt._id} title={prompt.title} type={prompt.promptCategory} />
+                <Card key={index} id={prompt._id} title={prompt.title} onSuccess={onsuccess} type={prompt.promptCategory} />
               ))}
             </div>
           </div>
         </div>
-        {isModalOpen && <Modal setIsModalOpen={setIsModalOpen} />}
+        {isModalOpen && <Modal setIsModalOpen={setIsModalOpen} onSuccess={onsuccess} />}
       </div>
     </div>
     </ProtectedRoute>

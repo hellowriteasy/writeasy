@@ -5,6 +5,7 @@ import Card from "../../components/admin/stories/StoryTitleCard";
 import StoryNav from "@/app/components/admin/stories/StoryNav";
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
 import { axiosInstance } from "@/app/utils/config/axios";
+import { toast } from "react-toastify";
 
 // Define the Story interface
 interface Story {
@@ -74,7 +75,7 @@ const Page: React.FC = () => {
                 <Card
                   key={story._id}
                   _id={story._id}
-                  user={story.user?.username}
+                  user={story.user}
                   title={story.title}
                   content={story.content}
                   wordCount={story.wordCount}

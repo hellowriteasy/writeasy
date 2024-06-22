@@ -28,12 +28,11 @@ const CreateContest = () => {
   const pathname = usePathname();
   const { token } = useAuthStore();
   const [promptDetails, setPromptDetails] = useState<TPrompt | null>(null);
-  console.log("contest", contestId, promptId);
   const axiosIns = axiosInstance(token as string);
   useEffect(() => {
     const pathSegments = pathname.split("/");
-    const contestIdFromUrl = pathSegments[2]; 
-    const promptIdFromUrl = pathSegments[4]; 
+    const contestIdFromUrl = pathSegments[2];
+    const promptIdFromUrl = pathSegments[4];
 
     setContestId(contestIdFromUrl);
     setPromptId(promptIdFromUrl);
@@ -43,7 +42,6 @@ const CreateContest = () => {
     if (promptId) {
       getPromptById();
     }
-   
   }, [promptId]);
 
   const getPromptById = async () => {
@@ -61,9 +59,10 @@ const CreateContest = () => {
   const router = useRouter();
   const { role, isSubcriptionActive, userId } = useAuthStore();
   useEffect(() => {
-    const handleBeforeUnload = (event) => {
+    const handleBeforeUnload = (event: any) => {
       event.preventDefault();
-      event.returnValue = "Refreshing the page may erase your changes. Are you sure you want to continue?";
+      event.returnValue =
+        "Refreshing the page may erase your changes. Are you sure you want to continue?";
       return "Refreshing the page may erase your changes. Are you sure you want to continue?";
     };
 
@@ -84,7 +83,9 @@ const CreateContest = () => {
       }
 
       if (wordCount > 1000) {
-        toast.warn("Word limit exceeded. Please reduce the content to 1000 words or less.");
+        toast.warn(
+          "Word limit exceeded. Please reduce the content to 1000 words or less."
+        );
         return;
       }
 
@@ -129,12 +130,16 @@ const CreateContest = () => {
     },
     onUpdate: ({ editor }) => {
       const text = editor.getText();
-      const wordCount = text.split(/\s+/).filter(word => word.length > 0).length;
+      const wordCount = text
+        .split(/\s+/)
+        .filter((word) => word.length > 0).length;
       setWordCount(wordCount);
       if (wordCount > 1000) {
-        toast.warn("Word limit exceeded. Please reduce the content to 1000 words or less.");
+        toast.warn(
+          "Word limit exceeded. Please reduce the content to 1000 words or less."
+        );
       }
-    }
+    },
   }) as Editor;
 
   const toggleBold = useCallback(() => {
@@ -174,7 +179,7 @@ const CreateContest = () => {
           <div className="gap-8 relative w-full flex flex-col">
             <form action="" className="height-[100px]">
               <div className="flex flex-col w-full justify-center gap-4 h-96">
-                <h2 className="text-3xl uppercase">{promptDetails?.contestId.contestTheme} &gt; {promptDetails?.title}</h2>
+                <h2 className="text-3xl uppercase"> {promptDetails?.title}</h2>
                 <div>
                   <input
                     className="border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[70vw] h-12 focus:outline-none focus:border-yellow-600"
@@ -189,11 +194,8 @@ const CreateContest = () => {
                   <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
                     <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
                       <div className="flex gap-3 p-3 ps-6">
-                      {isLoading && (
-        <div className="loader mr-10 "></div>
+                        {isLoading && <div className="loader mr-10 "></div>}
 
-      )}
-         
                         <button
                           className="menu-button mr-2"
                           type="button"

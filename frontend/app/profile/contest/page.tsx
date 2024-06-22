@@ -88,7 +88,8 @@ const ContestPage: React.FC = () => {
                   type={story.storyType}
                   contributors={story.contributors}
                   promptTitle={story.prompt.title}
-                  contestTitle={story.contest.contestTheme}
+                  prompt_id={story.prompt._id}
+                  contestTitle={story.contest?.contestTheme||""}
                   onsuccess={onsuccess}
                 />
               ))
