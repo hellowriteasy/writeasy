@@ -63,6 +63,7 @@ const Card: React.FC<CardProps> = ({
         correctionSummary: feedback,
         content: storyDetail,
       });
+      toast.success(' updated successfully');
       setOpen(false);
     } catch (error) {
       console.error('Error updating the story:', error);
