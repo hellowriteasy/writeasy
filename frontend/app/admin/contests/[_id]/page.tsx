@@ -28,7 +28,7 @@ const Page = ({ params }: PageProps) => {
           contest.prompts.map((prompt) => {
             return {
               _id: prompt._id,
-              promptCategories: prompt.promptCategory,
+              promptCategory: prompt.promptCategory,
               promptText: prompt.title,
               title: prompt.title,
             };
@@ -114,7 +114,7 @@ const Page = ({ params }: PageProps) => {
                   key={index}
                   title={prompt.title}
                   id={prompt._id}
-                  type={prompt.promptCategories}
+                  type={prompt.promptCategory}
                 />
               ))}
               <button

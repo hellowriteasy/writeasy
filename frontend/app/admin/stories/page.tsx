@@ -1,16 +1,16 @@
 'use client'
 import { useState, useEffect } from "react";
-import axios from "axios";
 import Card from "../../components/admin/stories/StoryTitleCard";
 import StoryNav from "@/app/components/admin/stories/StoryNav";
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
 import { axiosInstance } from "@/app/utils/config/axios";
 import { toast } from "react-toastify";
+import { TUser } from "@/app/utils/types";
 
 // Define the Story interface
 interface Story {
   _id: string;
-  user: string;
+  user: TUser;
   title: string;
   content: string;
   wordCount: number;

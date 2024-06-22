@@ -25,8 +25,8 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen,onSuccess }) => {
   const handleAdd = () => {
     const promptData = {
       title: promptTitle,
-      promptCategories: selectedCategories, // Use selectedCategories array
-      promptType: 'practice'
+      promptCategory: selectedCategories, // Use selectedCategories array
+      promptType: "practice",
     };
 
     AxiosIns.post('/prompts', promptData)

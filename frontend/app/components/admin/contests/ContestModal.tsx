@@ -1,11 +1,17 @@
-'use client';
-import { Fragment, useState,useEffect } from 'react';
-import { Dialog, Transition, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { axiosInstance } from '@/app/utils/config/axios';
-import { TPromptAdd } from '@/app/admin/contests/edit/page';
+"use client";
+import { Fragment, useState, useEffect } from "react";
+import {
+  Dialog,
+  Transition,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+} from "@headlessui/react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { axiosInstance } from "@/app/utils/config/axios";
+import { TPromptAdd } from "@/app/admin/contests/edit/page";
 
 interface ModalProps {
   setIsModalOpen: (isOpen: boolean) => void;
@@ -13,13 +19,14 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
-  const [promptTitle, setPromptTitle] = useState('');
+  const [promptTitle, setPromptTitle] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const AxiosIns=axiosInstance("")
+  const AxiosIns = axiosInstance("");
   useEffect(() => {
-    const handleBeforeUnload = (event:any) => {
+    const handleBeforeUnload = (event: any) => {
       event.preventDefault();
-      event.returnValue = "Refreshing the page may erase your changes. Are you sure you want to continue?";
+      event.returnValue =
+        "Refreshing the page may erase your changes. Are you sure you want to continue?";
       return "Refreshing the page may erase your changes. Are you sure you want to continue?";
     };
 
@@ -31,22 +38,22 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
   }, []);
   const handleAddPrompt = async () => {
     try {
-      const response = await AxiosIns.post('/prompts', {
+      const response = await AxiosIns.post("/prompts", {
         title: promptTitle,
         promptCategory: selectedCategories,
-        promptType: 'contest',
+        promptType: "contest",
       });
       const { _id } = response.data;
       onAddPrompt({
         _id,
         promptText: promptTitle,
-        promptCategories: selectedCategories,
-        title:promptTitle
+        promptCategory: selectedCategories,
+        title: promptTitle,
       });
       toast.success("Prompt added successfully!");
       setIsModalOpen(false);
     } catch (error) {
-      console.error('Error adding prompt:', error);
+      console.error("Error adding prompt:", error);
       toast.error("Failed to add prompt.");
     }
   };
@@ -63,7 +70,11 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
 
   return (
     <Transition.Root show={true} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={() => setIsModalOpen(false)}>
+      <Dialog
+        as="div"
+        className="relative z-10"
+        onClose={() => setIsModalOpen(false)}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -91,7 +102,10 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
                 <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                   <div className="sm:flex sm:items-start">
                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                      <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
+                      <Dialog.Title
+                        as="h3"
+                        className="text-base font-semibold leading-6 text-gray-900"
+                      >
                         Add Prompt
                       </Dialog.Title>
                       <div className="mt-2">
@@ -104,7 +118,9 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
                         />
                         <Menu as="div" className="relative mt-3">
                           <MenuButton className="w-96 text-left rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                            {selectedCategories.length ? selectedCategories.join(', ') : 'Select Categories'}
+                            {selectedCategories.length
+                              ? selectedCategories.join(", ")
+                              : "Select Categories"}
                           </MenuButton>
                           <Transition
                             as={Fragment}
@@ -116,26 +132,34 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
                             leaveTo="transform opacity-0 scale-95"
                           >
                             <MenuItems className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                              {['adventure', 'romance', 'mystery'].map((category) => (
-                                <MenuItem key={category}>
-                                  {({ active }) => (
-                                    <button
-                                      className={`${
-                                        active ? 'bg-indigo-600 text-white' : 'text-gray-900'
-                                      } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                      onClick={() => toggleCategory(category)}
-                                    >
-                                      <input
-                                        type="checkbox"
-                                        checked={selectedCategories.includes(category)}
-                                        onChange={() => toggleCategory(category)}
-                                        className="mr-2"
-                                      />
-                                      {category}
-                                    </button>
-                                  )}
-                                </MenuItem>
-                              ))}
+                              {["adventure", "romance", "mystery"].map(
+                                (category) => (
+                                  <MenuItem key={category}>
+                                    {({ active }) => (
+                                      <button
+                                        className={`${
+                                          active
+                                            ? "bg-indigo-600 text-white"
+                                            : "text-gray-900"
+                                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                        onClick={() => toggleCategory(category)}
+                                      >
+                                        <input
+                                          type="checkbox"
+                                          checked={selectedCategories.includes(
+                                            category
+                                          )}
+                                          onChange={() =>
+                                            toggleCategory(category)
+                                          }
+                                          className="mr-2"
+                                        />
+                                        {category}
+                                      </button>
+                                    )}
+                                  </MenuItem>
+                                )
+                              )}
                             </MenuItems>
                           </Transition>
                         </Menu>

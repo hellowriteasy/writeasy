@@ -8,13 +8,13 @@ const config: Config = {
   ],
   theme: {
     fontFamily: {
-      'poppins': ['Poppins', 'sans-serif'],
-      'crayon': ['"DK Crayon Crumble"', 'cursive'],
-       'comic':['"sans-comic-sans"', 'cursive']
+      poppins: ["Poppins", "sans-serif"],
+      crayon: ['"DK Crayon Crumble"', "cursive"],
+      comic: ['"sans-comic-sans"'],
     },
     extend: {
       screens: {
-        'custom': '1000px',
+        custom: "1000px",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
@@ -22,7 +22,7 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       colors: {
-        'custom-yellow': '#FCD800',
+        "custom-yellow": "#FCD800",
       },
     },
   },

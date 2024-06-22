@@ -5,10 +5,11 @@ import { Dialog, Transition } from '@headlessui/react';
 import { axiosInstance } from '@/app/utils/config/axios';
 import DeleteModal from '../../DeleteModal';
 import { toast } from 'react-toastify';
+import { TUser } from '@/app/utils/types';
 
 interface CardProps {
   _id: string;
-  user: string;
+  user: TUser;
   title: string;
   content: string;
   wordCount: number;
@@ -83,7 +84,7 @@ const Card: React.FC<CardProps> = ({
             </button>
           </div>
         </div>
-        <div className="text-gray-600">User: {user}</div>
+        <div className="text-gray-600">User: {user.username}</div>
         <div className="text-gray-600">
           Submission Date: {new Date(submissionDateTime).toLocaleString()}
         </div>
@@ -123,7 +124,7 @@ const Card: React.FC<CardProps> = ({
                           {title}
                         </Dialog.Title>
                         <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                          {user}
+                          {user.username}
                         </Dialog.Title>
                         <div className="mt-2">
                           <div className="mb-4">

@@ -10,7 +10,7 @@ import "react-datepicker/dist/react-datepicker.css";
 export interface TPromptAdd {
   _id: string;
   title: string;
-  promptCategories: string[];
+  promptCategory: string[];
   promptText: string;
 }
 
