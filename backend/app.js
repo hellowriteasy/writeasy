@@ -13,7 +13,7 @@ const promptRoutes = require("./routes/promptRoutes");
 const contestRoutes = require("./routes/contestRoutes");
 const emailRoutes = require("./routes/emailRoute");
 const collaborativeStoryRoutes = require("./routes/collaborativeStoryRoutes");
-const faqRoutes=require('./routes/faq')
+const faqRoutes = require("./routes/faq");
 const paymentRoutes = require("./routes/paymentRoute");
 const scheduleJob = require("./config/cron");
 const Subscription = require("./src/models/subscription");
@@ -26,8 +26,8 @@ initializeDatabase();
 const app = express();
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
-    credentials:true
+    origin: ["http://localhost:3000", "https://writeasyy.vercel.app"],
+    credentials: true,
   })
 );
 app.use(express.json());
