@@ -82,8 +82,8 @@ const Page: React.FC = () => {
             key={story._id}
             title={story.title}
             contestTitle={story.contest?.contestTheme || ""}
-            promptTitle={story.prompt.title}
-            prompt_id={story.prompt._id}
+            promptTitle={story.prompt?.title}
+            prompt_id={story.prompt?._id}
             description={story.content}
             id={story._id}
             corrections={story.corrections}
