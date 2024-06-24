@@ -7,13 +7,12 @@ exports.scoreStory = async function (req, res) {
   const { userId, title, content, taskType, storyType, prompt, hasSaved } =
     req.body;
   const wordCount = content.split(" ").length; // Calculate word count
-  let score = 0;
   let corrections = null;
   let correctionSummary = null;
   try {
     const newStory = new Story({
       user: userId,
-      title: title,
+      title: title||"",
       content: content,
       wordCount: wordCount,
       submissionDateTime: new Date(),

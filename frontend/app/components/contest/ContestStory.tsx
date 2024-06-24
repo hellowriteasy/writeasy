@@ -359,20 +359,20 @@ export function SimpleEditor({ triggerGrammarCheck, taskType, title, Userid, _id
               <Icons.Code />
             </button>
             <>
-              <button
+              {/* <button
                 className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
                 type="button"
                 onClick={(e) => { e.preventDefault(); handleAcceptAll(); }}
               >
                 Accept All
-              </button>
-              <button
+              </button> */}
+              {/* <button
                 className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
                 type="button"
                 onClick={(e) => { e.preventDefault(); handleReject(); }}
               >
                 Reject All
-              </button>
+              </button> */}
               <button
                 className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
                 onClick={(e) => {e.preventDefault(); handleCopy()}}

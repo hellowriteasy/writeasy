@@ -23,8 +23,9 @@
 }
 body{
   background-color: #f5f5f5;
-  font-family: "Poppins";
+  /* font-family: "Poppins"; */
   overflow-x: hidden;
+  font-family: "sans-comic-sans" !important;
 }
 .white{
   background-color: #f5f5f5;

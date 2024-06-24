@@ -4,22 +4,20 @@ import { useRouter } from "next/navigation";
 import moment from "moment";
 import { TContest } from "@/app/utils/types";
 import NotFound from "../Others/NotFound";
+import { axiosInstance } from "@/app/utils/config/axios";
+import useAuthStore from "@/app/store/useAuthStore";
 
 const Join = () => {
   const router = useRouter();
   const [contests, setContests] = useState<TContest[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const { token } = useAuthStore();
+  const axiosIns = axiosInstance(token || "");
 
   useEffect(() => {
     const fetchContests = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8000/api/contests/ongoing`
-        );
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
-        }
-        const data: TContest[] = await response.json();
+        const { data } = await axiosIns.get(`/contests/ongoing`);
         setContests(data);
       } catch (err: any) {
         setError(err.message);
