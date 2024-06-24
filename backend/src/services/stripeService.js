@@ -20,7 +20,7 @@ const createStripeCheckout = async () => {
               name: "Writeasy monthly subscription",
               description: `TYPE: Monthly Subscription  \nStart Date: 8th June 2024 \nEnd Date: 8th July 2024`,
             },
-            unit_amount: Math.round(50 * 100),
+            unit_amount: Math.round(25.29 * 100),
           },
           quantity: 1,
         },
@@ -37,7 +37,7 @@ const createStripeCheckout = async () => {
   }
 };
 
- async function confirmStripeCheckout(session_id) {
+async function confirmStripeCheckout(session_id) {
   try {
     const session = await stripe.checkout.sessions.retrieve(session_id);
 
@@ -51,8 +51,8 @@ const createStripeCheckout = async () => {
   }
 }
 
- const StripeService = {
-    createStripeCheckout,
-    confirmStripeCheckout
- };
-module.exports= StripeService
+const StripeService = {
+  createStripeCheckout,
+  confirmStripeCheckout,
+};
+module.exports = StripeService;

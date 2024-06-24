@@ -16,7 +16,7 @@ import { diffChars, Change } from "diff";
 import usePdfStore from "@/app/store/usePDFStore";
 import { usePDF } from "react-to-pdf";
 import PDF from "./PDF";
-import {  toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useAuthStore from "../store/useAuthStore";
 import { axiosInstance } from "../utils/config/axios";
@@ -158,9 +158,9 @@ export function SimpleEditor({
   handleRemoveActiveTaskType,
   setTriggerGrammarCheck,
 }: SimpleEditorProps) {
-  const [inputText, setInputText] = useState(""); 
+  const [inputText, setInputText] = useState("");
   const [correctedText, setCorrectedText] = useState("");
-  const [copied, setCopied] = useState(false); 
+  const [copied, setCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
   const setStoredFunction = usePdfStore((state) => state.setPdfExportFunction);
@@ -219,8 +219,6 @@ export function SimpleEditor({
       const words = textContent.split(/\s+/).filter(Boolean).length;
       setWordCount(words);
       setWordLimitExceeded(words > 1000);
-      
-
     },
   }) as Editor;
 
@@ -243,8 +241,8 @@ export function SimpleEditor({
     event.preventDefault();
     try {
       const currentContent = editor.getText();
-      if (!title || !currentContent) {
-        toast.warn("Please enter both title and content before submitting.");
+      if (!currentContent) {
+        toast.warn("Please enter content before submitting.");
         return;
       }
       if (wordLimitExceeded) {
@@ -261,9 +259,9 @@ export function SimpleEditor({
         hasSaved,
       };
       setIsLoading(true);
-      const { data } = await AxiosIns.post("stories/score", payload);
+      const { data } = await AxiosIns.post("/stories/score", payload);
       if (hasSaved) {
-          toast.success("Story saved succesfully");
+        toast.success("Story saved succesfully");
         router.push(`/profile`);
       }
       setInputText(currentContent);
@@ -328,7 +326,6 @@ export function SimpleEditor({
   if (!editor) {
     return null;
   }
-  
 
   return (
     <>
@@ -441,7 +438,7 @@ export function SimpleEditor({
               >
                 Reject All
               </button> */}
-              <button
+              {/* <button
                 className="bg-slate-100 border  border-slate-500 p-1 text-sm rounded-md"
                 onClick={(e) => {
                   e.preventDefault();
@@ -449,7 +446,7 @@ export function SimpleEditor({
                 }}
               >
                 {copied ? "Copied" : "Copy"}
-              </button>
+              </button> */}
 
               <button
                 className="bg-slate-100 border overflow-y-hidden border-slate-500 p-1 text-sm rounded-md"
@@ -464,7 +461,6 @@ export function SimpleEditor({
                 <p className="text-center font-comic">
                   Word count: {wordCount} / 1000
                 </p>
-               
               </div>
             </>
           </div>
@@ -480,7 +476,9 @@ export function SimpleEditor({
       </div>
       <div className="flex justify-center font-comic items-center my-4">
         <button
-          className={`text-white bg-black  ${isSaving ? "text-black bg-custom-yellow":""} w-96 h-12 rounded-3xl`}
+          className={`text-white bg-black  ${
+            isSaving ? "text-black bg-custom-yellow" : ""
+          } w-96 h-12 rounded-3xl`}
           onClick={(e) => {
             setIsSaving(true);
             handleClickFeature("improve", e, true);
@@ -492,7 +490,7 @@ export function SimpleEditor({
       <div className="absolute -left-2/3 ">
         {/* <PDF corrected={correctedText} originals={inputText} /> */}
       </div>
-    \
+      \
     </>
   );
 }

@@ -105,7 +105,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
                 </div>
                 <div className="flex w-full  flex-col gap-8">
                   <div className="flex flex-wrap justify-center gap-4 font-comic">
-                    {["grammar", "rewrite", "improve", "pdf"].map((type) => (
+                    {["grammar", "rewrite", "improve"].map((type) => (
                       <div key={type}>
                         <button
                           className={`w-[10vw] h-[4vw] bg-black text-white ${
