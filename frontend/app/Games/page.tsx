@@ -47,11 +47,11 @@ const Games: React.FC = () => {
   console.log("user", prompts);
 
   return (
-    <div className="w-full h-[1300px] mt-6 z-0 relative flex justify-center">
+    <div className="w-full min-h-screen mt-6 z-0 relative flex justify-center">
       <div className="absolute -top-14 right-0">
         <Image className="w-[5vw]" src={halfmoon} alt="halfmoon" />
       </div>
-      <div className="w-10/12 h-screen ms-12">
+      <div className="w-10/12 min-h-screen ms-12">
         <div className="w-full h-60 relative pt-4">
           <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold font-comic">
             Embark on a Collaborative Adventure
@@ -68,7 +68,7 @@ const Games: React.FC = () => {
           <div className="absolute -top-40 mt-3 -left-32">
             <Image className="w-[12vw]" src={Bee} alt="bee" />
           </div>
-          <div className="gap-8 w-full  relative flex flex-col">
+          <div className="gap-8 w-full relative flex flex-col">
             {currentPrompts.length > 0 ? (
               currentPrompts.map((prompt) => (
                 <Prompt key={prompt._id} prompt={prompt} />

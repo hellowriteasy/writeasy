@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, SyntheticEvent, useState } from "react";
+import React, { ChangeEvent, SyntheticEvent, useState ,useEffect} from "react";
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
@@ -17,8 +17,9 @@ import useAuthStore from "../store/useAuthStore";
 import { useRouter } from "next/navigation";
 import Earth from "../../public/Landingpage-img/earth.svg";
 import { axiosInstance } from "../utils/config/axios";
+import type { NextPage } from 'next';
 
-const Login = () => {
+const Login: NextPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -50,6 +51,14 @@ const Login = () => {
       setError(error.response?.data?.message || "Login failed");
     }
   };
+   
+  useEffect(() => {
+   
+    if (typeof window !== 'undefined' && "Notification" in window) {
+   const permission=   Notification.requestPermission();
+    
+    }
+  }, []);
 
   return (
     <div className="overflow-hidden  two-line-bg">

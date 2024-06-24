@@ -2,7 +2,7 @@ import React from 'react'
 import FrequentlyAsked from '../components/FrequentlyAsked'
 const page = () => {
   return (
-    <div >
+    <div className='faq' >
         <FrequentlyAsked/>
     </div>
   )

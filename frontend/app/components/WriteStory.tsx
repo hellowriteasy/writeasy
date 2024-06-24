@@ -15,123 +15,12 @@ import * as Icons from "./Icons";
 import { diffChars, Change } from "diff";
 import usePdfStore from "@/app/store/usePDFStore";
 import { usePDF } from "react-to-pdf";
-import PDF from "./PDF";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useAuthStore from "../store/useAuthStore";
 import { axiosInstance } from "../utils/config/axios";
 import { TTaskType } from "../utils/types";
 import { useRouter } from "next/navigation";
-
-// const Page = ({
-//   inputText,
-//   corrected,
-// }: {
-//   inputText: string;
-//   corrected: string;
-// }) => {
-//   const [improved, setImproved] = useState<React.ReactNode[]>([]);
-
-//   const compareSentences = (
-//     original: string,
-//     corrected: string
-//   ): React.ReactNode[] => {
-//     original = original.replace(/<\/?p>/g, "");
-//     corrected = corrected.replace(/<\/?p>/g, "");
-
-//     const diff: Change[] = diffChars(original, corrected);
-//     const result: React.ReactNode[] = [];
-
-//     diff.forEach((part: Change, index: number) => {
-//       let style: React.CSSProperties = {};
-//       if (part.added) {
-//         style = {
-//           color: "green",
-//           backgroundColor: "lightgreen",
-//           textDecoration: "none",
-//         };
-//       } else if (part.removed) {
-//         style = {
-//           color: "red",
-//           backgroundColor: "lightcoral",
-//           textDecoration: "line-through",
-//         };
-//       } else {
-//         style = {
-//           color: "black",
-//           backgroundColor: "transparent",
-//           textDecoration: "none",
-//         };
-//       }
-
-//       const span: React.ReactElement = (
-//         <div key={index} style={style}>
-//           {part.value}
-//         </div>
-//       );
-//       result.push(span);
-//     });
-
-//     return result;
-//   };
-
-//   useEffect(() => {
-//     setImproved(compareSentences(inputText, corrected));
-//   }, [inputText, corrected]);
-
-//   return <div className="mt-4">{improved}</div>;
-// };
-
-// type TWriteEasyFeature = "improve" | "grammer" | "rewrite";
-
-// const AiFeatureTextMapping = {
-//   improve: "Proofread this improving clarity and flow",
-//   grammer: "Proofread this but only fix grammar",
-//   rewrite: "Rewrite this improving clarity and flow",
-// } as Record<TWriteEasyFeature, string>;
-
-// const compareSentences = (
-//   original: string,
-//   corrected: string
-// ): React.ReactNode[] => {
-//   console.log("debug  2 comparing");
-//   const diff: Change[] = diffChars(original, corrected);
-//   const result: React.ReactNode[] = [];
-
-//   diff.forEach((part: Change, index: number) => {
-//     let style: React.CSSProperties = {};
-
-//     if (part.added) {
-//       style = {
-//         color: "green",
-//         backgroundColor: "lightgreen",
-//         textDecoration: "underline",
-//         height: "40px",
-//       };
-//     } else if (part.removed) {
-//       style = {
-//         color: "red",
-//         backgroundColor: "lightcoral",
-//         height: "40px",
-//       };
-//     } else {
-//       style = {
-//         color: "black",
-//         backgroundColor: "transparent",
-//         textDecoration: "none",
-//         height: "40px",
-//       };
-//     }
-
-//     result.push(
-//       <div key={index} style={style}>
-//         {part.value}
-//       </div>
-//     );
-//   });
-
-//   return result;
-// };
 
 interface SimpleEditorProps {
   triggerGrammarCheck: any;
@@ -211,7 +100,7 @@ export function SimpleEditor({
     editorProps: {
       attributes: {
         class:
-          "prose dark:prose-invert prose-sm sm:prose-base w-full inline-block  lg:prose-lg xl:prose-2xl outline-none  min-h-[30vw]",
+          "prose dark:prose-invert prose-sm sm:prose-base px-4 w-full h-full inline-block lg:prose-lg xl:prose-2xl outline-none scroll",
       },
     },
     onUpdate: ({ editor }) => {
@@ -277,18 +166,6 @@ export function SimpleEditor({
       toast.error("An error occurred while checking grammar.");
     }
   };
-
-  // const handleAcceptAll = () => {
-  //   if (editor) {
-  //     editor.commands.setContent(`${correctedText}`);
-  //   }
-  // };
-
-  // const handleReject = () => {
-  //   if (editor) {
-  //     editor.commands.setContent(`${inputText}`);
-  //   }
-  // };
 
   const handleUpdate = () => {
     if (editor) {
@@ -415,82 +292,25 @@ export function SimpleEditor({
             >
               <Icons.Code />
             </button>
-            <>
-              {/* <button
-                className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleAcceptAll();
-                  handleRemoveActiveTaskType()
-                }}
-              >
-                Accept All
-              </button> */}
-              {/* <button
-                className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleReject();
-                  handleRemoveActiveTaskType()
-                }}
-              >
-                Reject All
-              </button> */}
-              {/* <button
-                className="bg-slate-100 border  border-slate-500 p-1 text-sm rounded-md"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleCopy();
-                }}
-              >
-                {copied ? "Copied" : "Copy"}
-              </button> */}
-
-              <button
-                className="bg-slate-100 border overflow-y-hidden border-slate-500 p-1 text-sm rounded-md"
-                onClick={(e) => {
-                  e.preventDefault();
-                  pdfExportFunction && pdfExportFunction();
-                }}
-              >
-                Export pdf
-              </button>
-              <div className="w-60 h-7 sm-hide bg-white flex flex-col justify-center rounded-2xl shadow-sm ">
-                <p className="text-center font-comic">
-                  Word count: {wordCount} / 1000
-                </p>
-              </div>
-            </>
+            
           </div>
         </div>
-        <div className=" w-[70vw]  rounded-3xl">
+        <div className="mt-10">
           <EditorContent
-            className={` scroll-m-2 w-[100%] min-h-[200px] mt-10 ${
-              isLoading ? "opacity-50 cursor-not-allowed" : ""
-            } `}
+            className="h-[600px] overflow-y-auto scrollbar-hide"
             editor={editor}
+            style={{
+              overflowY: "auto",
+              scrollbarWidth: "none",
+            }}
           />
+          <style jsx>{`
+            .scrollbar-hide::-webkit-scrollbar {
+              display: none;
+            }
+          `}</style>
         </div>
       </div>
-      <div className="flex justify-center font-comic items-center my-4">
-        <button
-          className={`text-white bg-black  ${
-            isSaving ? "text-black bg-custom-yellow" : ""
-          } w-96 h-12 rounded-3xl`}
-          onClick={(e) => {
-            setIsSaving(true);
-            handleClickFeature("improve", e, true);
-          }}
-        >
-          {isSaving ? "Saving to profile..." : "Save to Profile"}
-        </button>
-      </div>
-      <div className="absolute -left-2/3 ">
-        {/* <PDF corrected={correctedText} originals={inputText} /> */}
-      </div>
-      \
     </>
   );
 }

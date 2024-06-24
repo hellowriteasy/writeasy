@@ -34,6 +34,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
     title: string;
   } | null>(null);
   const AxiosIns = axiosInstance("");
+
   useEffect(() => {
     if (!contestId) {
       setError("Contest ID is missing.");
@@ -49,8 +50,6 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
         setPromptList(response.data);
       } catch (err: any) {
         setError(err.message);
-      } finally {
-        //
       }
     };
     fetchPromptsOfContest();
@@ -59,7 +58,6 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
   useEffect(() => {
     if (!contestId) {
       setError("Contest ID is missing.");
-
       return;
     }
 
@@ -74,7 +72,6 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
         setContest(data);
       } catch (err: any) {
         setError(err.message);
-      } finally {
       }
     };
 
@@ -101,80 +98,63 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
   if (!contest) return <p>No contest available at the moment.</p>;
 
   return (
-    <div className="w-full h-auto mt-6 z-0 relative flex justify-center">
+    <div className="w-full min-h-screen mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 h-auto ms-12">
-        <>
-          <div className="flex mt-8 ">
-            <div className="p-6 mb-6 flex flex-col gap-y-4 ">
-              <div className="flex gap-y-3 flex-col  ">
-                <h2 className="text-4xl font-comic font-bold  ">
-                  {contest.contestTheme}
-                </h2>
-                <div className="flex flex-col gap-y-1">
-                  <p className=" text-xl font-comic ">
-                    <b className="font-bold"> Prompt publish date</b> -
-                    {moment(contest.promptPublishDate).format("llll")}
-                  </p>
-                  <p className=" text-xl font-comic ">
-                    <b className="font-bold"> Story submission deadline</b> -
-                    {moment(contest.submissionDeadline).format("llll")}
-                  </p>
-                  <p className=" text-xl font-comic ">
-                    {" "}
-                    <b className="font-bold"> Top writings publish date </b> -
-                    {moment(contest.topWritingPublishDate).format("llll")}
-                  </p>
-                </div>
-              </div>
-
-              <p className="text-xl w-10/12 ">
+        <div className="flex w-full justify-center">
+          <p className="text-xl text-center font-comic">
+            <b className="font-bold"> Until </b> -
+            {moment(contest.submissionDeadline).format("llll")}
+          </p>
+        </div>
+        <div className="flex mt-8">
+          <div className="p-6 mb-6 flex flex-col gap-y-4">
+            <div className="flex gap-y-3 flex-col">
+              <h2 className="text-4xl font-comic font-bold">
+                {contest.contestTheme}
+              </h2>
+              <p className="text-xl w-10/12">
                 {contest.description ||
                   "Paragraphs are the building blocks of papers. Many students define paragraphs in terms of length: a paragraph is a group of at least five sentences, a paragraph is half a page long, etc. In reality, though, the unity and coherence of ideas among sentences is what constitutes a paragraph."}
               </p>
             </div>
           </div>
-          <div className="flex w-full h-auto relative mt-0 justify-around gap-x-7">
-            <div className="absolute sm-hide top-0 -left-40">
-              <Image src={Cloud2} alt="cloud" />
+        </div>
+        <div className="flex w-full h-auto relative mt-0 justify-around gap-x-7">
+          <div className="absolute sm-hide top-0 -left-40">
+            <Image src={Cloud2} alt="cloud" />
+          </div>
+          <div className="gap-8 relative flex flex-col">
+            {hasPromptPublished ? (
+              promptList.length > 0 ? (
+                promptList.map((prompt) => (
+                  <PromptComponent
+                    key={prompt._id}
+                    promptText={prompt.title}
+                    promptCategory={prompt.promptCategory}
+                    contestId={contest._id}
+                    promptId={prompt._id}
+                    onSelectPrompt={handleSelectPrompt}
+                    isActive={contest.isActive}
+                  />
+                ))
+              ) : null
+            ) : (
+              <PromptNotPublished
+                publishDate={moment(contest.promptPublishDate).format("llll")}
+              />
+            )}
+            <div className="w-full ms-28">
+              <Pagination />
             </div>
-            <div className="gap-8 relative flex flex-col ">
-              {/* <h1 className="text-6xl font-comic font-bold p-10">
-                    {contest.contestTheme}
-                  </h1> */}
-              {hasPromptPublished ? (
-                promptList.length > 0 ? (
-                  promptList.map((prompt) => (
-                    <>
-                      <PromptComponent
-                        key={prompt._id}
-                        promptText={prompt.title}
-                        promptCategory={prompt.promptCategory}
-                        contestId={contest._id}
-                        promptId={prompt._id}
-                        onSelectPrompt={handleSelectPrompt}
-                        isActive={contest.isActive}
-                      />
-                    </>
-                  ))
-                ) : null
-              ) : (
-                <PromptNotPublished
-                  publishDate={moment(contest.promptPublishDate).format("llll")}
-                />
-              )}
-              <div className="w-full ms-28">
-                <Pagination />
-              </div>
-              <div className="absolute md-hide bottom-80 -left-32">
-                <Image src={Cloud} alt="Cloud" />
-              </div>
-            </div>
-            <div className="flex md-hide flex-col gap-8">
-              <WeeklyTest />
-              <TopWriting />
+            <div className="absolute md-hide bottom-80 -left-32">
+              <Image src={Cloud} alt="Cloud" />
             </div>
           </div>
-        </>
+          <div className="flex md-hide flex-col gap-8">
+            <WeeklyTest />
+            <TopWriting />
+          </div>
+        </div>
       </div>
     </div>
   );

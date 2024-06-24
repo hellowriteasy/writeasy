@@ -125,7 +125,7 @@ const CreateContest = () => {
     editorProps: {
       attributes: {
         class:
-          "prose dark:prose-invert prose-sm sm:prose-base w-full inline-block lg:prose-lg xl:prose-2xl outline-none min-h-[300px]",
+          "prose dark:prose-invert prose-sm sm:prose-base px-4 w-full inline-block h-full lg:prose-lg xl:prose-2xl outline-none scroll",
       },
     },
     onUpdate: ({ editor }) => {
@@ -167,20 +167,20 @@ const CreateContest = () => {
   }
 
   return (
-    <div className="w-full h-[100vw] mt-6 z-0 relative flex justify-center">
-      <div className="w-10/12 h-auto ms-12">
-        <div className="w-full h-32 relative pt-4">
+    <div className="w-full h-auto z-0 relative flex justify-center">
+      <div className="w-10/12 ms-12">
+        <div className="w-full h-14 relative pt-4">
           <h1 className="text-6xl font-comic font-bold py-4"></h1>
         </div>
         <div className="flex w-[100%] relative mt-0">
-          <div className="absolute -top-40 mt-3 -left-60">
+          <div className="absolute -top-20 mt-3 -left-60">
             <Image src={Bee} alt="bee" />
           </div>
           <div className="gap-8 relative w-full flex flex-col">
-            <form action="" className="height-[100px]">
-              <div className="flex flex-col w-full justify-center gap-4 h-96">
+            <form action="">
+              <div className="flex flex-col w-full h-32 items-center gap-4">
                 <h2 className="text-3xl uppercase"> {promptDetails?.title}</h2>
-                <div>
+                <div className="">
                   <input
                     className="border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[70vw] h-12 focus:outline-none focus:border-yellow-600"
                     placeholder="Untitled Story"
@@ -189,8 +189,9 @@ const CreateContest = () => {
                     }}
                   />
                 </div>
+                </div>
 
-                <div className="h-full w-full rounded-full">
+                <div className="h-auto w-full rounded-full">
                   <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
                     <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
                       <div className="flex gap-3 p-3 ps-6">
@@ -285,12 +286,13 @@ const CreateContest = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="w-[80vw] rounded-3xl mx-auto">
-                      <EditorContent
-                        className="scroll-m-2 w-[70%] min-h-[300px] mt-10"
-                        editor={editor}
-                      />
-                    </div>
+
+                    <EditorContent
+                      className={`scroll h-[600px] mt-10 overflow-y-auto hide-scrollbar ${
+                        isLoading ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
+                      editor={editor}
+                    />
                   </div>
                 </div>
                 <div className="flex justify-center">
@@ -301,14 +303,23 @@ const CreateContest = () => {
                     Submit Story
                   </button>
                 </div>
-              </div>
+            
             </form>
+            <style jsx>{`
+           .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+`}</style>
           </div>
         </div>
       </div>
       {!isSubcriptionActive && role != "admin" ? <Subscription /> : null}
+   
     </div>
+    
   );
+
 };
+
 
 export default CreateContest;
