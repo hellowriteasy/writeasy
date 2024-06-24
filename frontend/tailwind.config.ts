@@ -10,7 +10,7 @@ const config: Config = {
     fontFamily: {
       poppins: ["Poppins", "sans-serif"],
       crayon: ['"DK Crayon Crumble"', "cursive"],
-    // comic: ['"sans-comic-sans"',"cursive"],
+    comic: ['"sans-comic-sans"',"cursive"],
     },
     extend: {
       screens: {

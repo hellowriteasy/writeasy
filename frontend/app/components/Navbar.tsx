@@ -84,7 +84,7 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
         <button onClick={toggleMenu} className="self-end text-black focus:outline-none mb-4">
           <XMarkIcon className="h-8 w-8" />
         </button>
-        {/* <ul className="flex flex-col items-center gap-20 font-comic text-md">
+        <ul className="flex flex-col items-center gap-20 font-comic text-md">
           {titles.map(link => {
             const isActive = path.startsWith(link.path) || path.includes(link.path);
             return (
@@ -93,18 +93,18 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
                 className={
                   isActive
                     ? "active  py-2 text-center "
-                    : " py-2 text-center "
+                    : "  text-center "
                 }
               >
-                <Link className="pt-5 text-sm cursor-pointer" href={link.path}
+                <Link className="pt-5 text-lg cursor-pointer" href={link.path}
                    onClick={toggleMenu}>
                     {link.label}
                  
                 </Link>
               </li>
             );
+          })}
         </ul>
-          })} */}
         <div className="flex flex-col gap-4">
           {loggedIn ? (
             <UserMenu />

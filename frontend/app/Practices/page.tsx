@@ -21,11 +21,11 @@ const Page: React.FC = () => {
   const [promptData, setPromptData] = useState<TPrompt[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedOption, setSelectedOption] = useState<string>("");
-  const AxiosIns=axiosInstance("")
+  const AxiosIns = axiosInstance("");
+
   useEffect(() => {
     setIsLoading(true);
-    AxiosIns
-      .get("/prompts/practice-prompts")
+    AxiosIns.get("/prompts/practice-prompts")
       .then((response) => {
         setPromptData(response.data.reverse());
         setIsLoading(false);
@@ -57,11 +57,11 @@ const Page: React.FC = () => {
   const pageCount = Math.ceil(filteredPrompts.length / itemsPerPage);
 
   return (
-    <div className="w-full h-[1400px] mt-6 z-0 relative flex justify-center">
+    <div className="w-full min-h-screen mt-6 z-0 relative flex justify-center">
       <div className="absolute -top-10 right-0">
         <Image className="w-[10vw]" src={moon} alt="moon" />
       </div>
-      <div className="w-10/12 h-screen ms-12">
+      <div className="w-10/12 min-h-screen ms-12">
         <div className="w-full h-80 relative pt-4">
           <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold font-comic">
             Practice Your Craft
@@ -103,10 +103,10 @@ const Page: React.FC = () => {
             <div className="w-full mt-10 text-lg md:text-xl font-comic ">
               <ReactPaginate
                 previousLabel={
-                  <FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+                  <FaAngleLeft className="w-6 h-6 md:w-8 md:w-10 lg:w-10" />
                 }
                 nextLabel={
-                  <FaAngleRight className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+                  <FaAngleRight className="w-6 h-6 md:w-8 md:w-10 lg:w-10" />
                 }
                 breakLabel="..."
                 breakClassName="break-me"

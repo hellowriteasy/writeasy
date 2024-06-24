@@ -4,7 +4,7 @@ import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"; // Changed from 'next/navigation' to 'next/router'
 import Earth from "../../public/Landingpage-img/earth.svg";
 import Group from "../../public/Loginsignup-img/Group (2).svg";
 import Group2 from "../../public/Loginsignup-img/Group.svg";
@@ -45,7 +45,7 @@ const Signup = () => {
   });
 
   const AxiosIns = axiosInstance("");
-  
+
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
       await AxiosIns.post("/auth/register", {
@@ -53,10 +53,41 @@ const Signup = () => {
         password: data.password,
         username: data.username
       });
-     
-      router.push('/login', { scroll: false });
+
+      router.push('/login');
     } catch (error) {
       console.error("Error:", error);
+    }
+  };
+
+  const handleGoogleSignup = async (e) => {
+    try {
+      e.preventDefault();
+      const response = await AxiosIns.get("/auth/google");
+      window.location.href = response.data.authUrl;
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  // Handle callback after Google OAuth completes
+  React.useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+
+    if (code) {
+      // Send the received code to your backend for token exchange
+      exchangeCodeForToken(code);
+    }
+  }, []);
+
+  const exchangeCodeForToken = async (code) => {
+    try {
+      const response = await AxiosIns.post("/auth/google/callback", { code });
+      // Assuming the backend redirects to '/' after successful authentication
+      router.push('/');
+    } catch (error) {
+      console.error("Error exchanging code for token:", error);
     }
   };
 
@@ -74,7 +105,7 @@ const Signup = () => {
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="relative flex flex-col  items-center gap-2 font-comic mt-10 z-10 "
+          className="relative flex flex-col items-center gap-2 font-comic mt-10 z-10"
         >
           <InputField
             types="text"
@@ -119,7 +150,7 @@ const Signup = () => {
           <button className="text-center border rounded-3xl text-white hover:opacity-80 w-full sm:w-72 md:w-80 lg:w-96 mt-5 bg-black h-12 sm:h-14 text-xl sm:text-2xl">
             Sign Up
           </button>
-          <Button type="google" />
+          <Button type="google" onClick={handleGoogleSignup} />
           <h1 className="text-center font-comic pt-6">
             Already have an account?{" "}
             <Link href="/login" className="font-bold underline">

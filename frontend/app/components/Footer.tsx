@@ -12,7 +12,7 @@ const Footer = () => {
   )
 }else{
   return(
-    <div className=" flex justify-center items-center  " >
+    <div className=" flex justify-center h-full items-center  " >
     <Image src={footer} alt="footer" className="w-screen" ></Image>
    </div>
   );

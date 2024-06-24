@@ -14,7 +14,7 @@ const Storytitle: React.FC<StoryProps> = ({ story }) => {
     setIsExpanded(!isExpanded);
   };
 
-  const getPreviewContent = (content: string, wordLimit: number) => {
+  const getPreviewContent = (content: string , wordLimit: number) => {
     const words = content.split(' ');
     if (words.length <= wordLimit) return content;
     return words.slice(0, wordLimit).join(' ') + '...';

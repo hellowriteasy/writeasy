@@ -212,3 +212,18 @@ u{
   100% {transform: rotate(1turn)}
 }
 
+.hide-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+.faq{
+  background-image: url("../public/bg.png");
+  background-repeat: repeat;
+  background-attachment: fixed;
+   background-size: cover;
+   background-position: center;
+}
