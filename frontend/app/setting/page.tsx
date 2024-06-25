@@ -2,6 +2,7 @@
 import React, { useState, useRef, ChangeEvent, SyntheticEvent } from "react";
 import useAuthStore from "../store/useAuthStore";
 import { axiosInstance } from "../utils/config/axios";
+import useUploadFile from "../hooks/useFileUpload";
 
 const Page = () => {
   const { userId, profile_picture, token } = useAuthStore();
@@ -11,8 +12,10 @@ const Page = () => {
   const [newPassword, setNewPassword] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [file, setFile] = useState<File | null>(null);
   const axiosIns = axiosInstance(token || "");
 
+  const { uploadFile } = useUploadFile();
   const upload = () => {
     if (!fileInputRef.current) return;
     fileInputRef.current.click();
@@ -22,6 +25,7 @@ const Page = () => {
     if (!e.target.files) return;
     const file = e.target.files[0];
     if (file) {
+      setFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setProfilePicture(reader.result as string);
@@ -32,10 +36,16 @@ const Page = () => {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
+    let profile_image_url = "";
     try {
-      const response = await axiosIns.post(`/auth/users/profile/${userId}`, {
-        password: newPassword,
-        profile_picture: profilePicture,
+      if (file) {
+        profile_image_url = await uploadFile(file);
+      }
+      const response = await axiosIns.put(`/auth/users/profile/${userId}`, {
+        ...(profile_image_url ? { profile_picture: profile_image_url } : {}),
+        ...(username ? { username: username } : {}),
+        ...(email ? { email: email } : {}),
+        ...(newPassword ? { password: newPassword } : {}),
       });
 
       console.log("Update successful", response.data);
@@ -54,10 +64,10 @@ const Page = () => {
         className="w-40 h-40 bg-slate-700 rounded-full cursor-pointer"
         onClick={upload}
       >
-        {profile_picture ? (
+        {profile_picture || file ? (
           <img
-            className="w-full h-full rounded-full"
-            src={profile_picture}
+            className="w-full h-full rounded-full object-cover"
+            src={file ? URL.createObjectURL(file) : profile_picture || ""}
             alt="profile"
           />
         ) : (
@@ -65,13 +75,6 @@ const Page = () => {
             <span className="text-white">Upload</span>
           </div>
         )}
-        <input
-          type="file"
-          ref={fileInputRef}
-          style={{ display: "none" }}
-          onChange={handleFileChange}
-          accept="image/*"
-        />
       </div>
 
       <div className="flex justify-center">
