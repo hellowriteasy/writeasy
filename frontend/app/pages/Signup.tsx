@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React from "react";
 import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,17 +19,20 @@ import Link from "next/link";
 import { axiosInstance } from "../utils/config/axios";
 import Button from "../components/Button";
 
-const schema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-  confirmPassword: z.string(),
-  username: z.string().regex(/^[a-zA-Z0-9_ @]+$/, {
-    message: "Username can only contain letters, numbers, underscores, spaces, and the '@' symbol."
+const schema = z
+  .object({
+    email: z.string().email(),
+    password: z.string().min(8),
+    confirmPassword: z.string(),
+    username: z.string().regex(/^[a-zA-Z0-9_ @]+$/, {
+      message:
+        "Username can only contain letters, numbers, underscores, spaces, and the '@' symbol.",
+    }),
   })
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
 
 type FormFields = z.infer<typeof schema>;
 
@@ -51,16 +54,16 @@ const Signup = () => {
       await AxiosIns.post("/auth/register", {
         email: data.email,
         password: data.password,
-        username: data.username
+        username: data.username,
       });
 
-      router.push('/login');
+      router.push("/login");
     } catch (error) {
       console.error("Error:", error);
     }
   };
 
-  const handleGoogleSignup = async (e) => {
+  const handleGoogleSignup = async (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
       e.preventDefault();
       const response = await AxiosIns.get("/auth/google");
@@ -73,7 +76,7 @@ const Signup = () => {
   // Handle callback after Google OAuth completes
   React.useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
+    const code = urlParams.get("code");
 
     if (code) {
       // Send the received code to your backend for token exchange
@@ -81,11 +84,11 @@ const Signup = () => {
     }
   }, []);
 
-  const exchangeCodeForToken = async (code) => {
+  const exchangeCodeForToken = async (code: string) => {
     try {
       const response = await AxiosIns.post("/auth/google/callback", { code });
       // Assuming the backend redirects to '/' after successful authentication
-      router.push('/');
+      router.push("/");
     } catch (error) {
       console.error("Error exchanging code for token:", error);
     }

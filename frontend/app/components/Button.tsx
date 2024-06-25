@@ -7,7 +7,7 @@ import Image from "next/image";
 interface ButtonProps {
   children?: React.ReactNode;
   type?: "google" | "login" | "signup";
-  onClick?: () => void;
+  onClick?: (e:React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const Button: React.FC<ButtonProps> = ({ children, type, onClick }) => {
