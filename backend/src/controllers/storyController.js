@@ -243,6 +243,7 @@ const getStoriesByContentAndPrompt = async (req, res) => {
         },
         path: "user",
       })
+      .populate("contributors")
       .sort(getSortInputForStoriesByContestAndPrompt(sortKey, "desc"))
       .skip(skip)
       .limit(perPage);

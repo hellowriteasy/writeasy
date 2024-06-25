@@ -141,8 +141,8 @@ export function SimpleEditor({
       const payload = {
         userId: userId,
         title: title,
-        content: currentContent,
-        taskType: type,
+        content: hasSaved ? inputText : currentContent,
+        taskType: type || "improve",
         storyType: "practice",
         prompt: _id,
         hasSaved,
@@ -206,110 +206,124 @@ export function SimpleEditor({
 
   return (
     <>
-      <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
-        <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
-          <div className="flex h-16  gap-3 p-3 ps-6">
-            {isLoading && <div className="loader mr-10 "></div>}
-            <button
-              className="menu-button mr-2"
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                editor.chain().focus().undo().run();
+      <div className="w-full flex flex-col justify-center items-center">
+        <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
+          <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
+            <div className="flex h-16  gap-3 p-3 ps-6">
+              {isLoading && <div className="loader mr-10 "></div>}
+              <button
+                className="menu-button mr-2"
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  editor.chain().focus().undo().run();
+                }}
+                disabled={!editor.can().undo()}
+              >
+                <Icons.RotateLeft />
+              </button>
+              <button
+                className="menu-button mr-2"
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  editor.chain().focus().redo().run();
+                }}
+                disabled={!editor.can().redo()}
+              >
+                <Icons.RotateRight />
+              </button>
+              <button
+                className={classNames("menu-button mr-2", {
+                  "is-active": editor.isActive("bold"),
+                })}
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleBold();
+                }}
+              >
+                <Icons.Bold />
+              </button>
+              <button
+                className={classNames("menu-button mr-2", {
+                  "is-active": editor.isActive("underline"),
+                })}
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleUnderline();
+                }}
+              >
+                <Icons.Underline />
+              </button>
+              <button
+                className={classNames("menu-button mr-2", {
+                  "is-active": editor.isActive("italic"),
+                })}
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleItalic();
+                }}
+              >
+                <Icons.Italic />
+              </button>
+              <button
+                className={classNames("menu-button mr-2", {
+                  "is-active": editor.isActive("strike"),
+                })}
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleStrike();
+                }}
+              >
+                <Icons.Strikethrough />
+              </button>
+              <button
+                className={classNames("menu-button mr-2", {
+                  "is-active": editor.isActive("code"),
+                })}
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleCode();
+                }}
+              >
+                <Icons.Code />
+              </button>
+            </div>
+          </div>
+          <div className="mt-10">
+            <EditorContent
+              className={`scroll-m-2 w-[100%]  mt-10 ${
+                isLoading ? "opacity-50 cursor-not-allowed" : ""
+              }  h-[600px] overflow-y-auto scrollbar-hide`}
+              editor={editor}
+              style={{
+                overflowY: "auto",
+                scrollbarWidth: "none",
               }}
-              disabled={!editor.can().undo()}
-            >
-              <Icons.RotateLeft />
-            </button>
-            <button
-              className="menu-button mr-2"
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                editor.chain().focus().redo().run();
-              }}
-              disabled={!editor.can().redo()}
-            >
-              <Icons.RotateRight />
-            </button>
-            <button
-              className={classNames("menu-button mr-2", {
-                "is-active": editor.isActive("bold"),
-              })}
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                toggleBold();
-              }}
-            >
-              <Icons.Bold />
-            </button>
-            <button
-              className={classNames("menu-button mr-2", {
-                "is-active": editor.isActive("underline"),
-              })}
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                toggleUnderline();
-              }}
-            >
-              <Icons.Underline />
-            </button>
-            <button
-              className={classNames("menu-button mr-2", {
-                "is-active": editor.isActive("italic"),
-              })}
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                toggleItalic();
-              }}
-            >
-              <Icons.Italic />
-            </button>
-            <button
-              className={classNames("menu-button mr-2", {
-                "is-active": editor.isActive("strike"),
-              })}
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                toggleStrike();
-              }}
-            >
-              <Icons.Strikethrough />
-            </button>
-            <button
-              className={classNames("menu-button mr-2", {
-                "is-active": editor.isActive("code"),
-              })}
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                toggleCode();
-              }}
-            >
-              <Icons.Code />
-            </button>
-            
+            />
+            <style jsx>{`
+              .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+              }
+            `}</style>
           </div>
         </div>
-        <div className="mt-10">
-          <EditorContent
-            className="h-[600px] overflow-y-auto scrollbar-hide"
-            editor={editor}
-            style={{
-              overflowY: "auto",
-              scrollbarWidth: "none",
-            }}
-          />
-          <style jsx>{`
-            .scrollbar-hide::-webkit-scrollbar {
-              display: none;
-            }
-          `}</style>
-        </div>
+        <button
+          className={`text-white bg-black text-2xl  ${
+            isSaving ? "text-black bg-custom-yellow" : ""
+          } w-96 h-16 rounded-full mx-auto mt-10 `}
+          onClick={(e) => {
+            setIsSaving(true);
+            handleClickFeature(taskType, e, true);
+          }}
+        >
+          {isSaving ? "Saving to profile..." : "Save to Profile"}
+        </button>
       </div>
     </>
   );

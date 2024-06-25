@@ -12,7 +12,7 @@ const createStripeCheckout = async () => {
       line_items: [
         {
           price_data: {
-            currency: "aud",
+            currency: "gbp",
             product_data: {
               images: [
                 "https://images.pexels.com/photos/19992420/pexels-photo-19992420/free-photo-of-hindu-goddess-decorated-with-flowers.jpeg?auto=compress&cs=tinysrgb&w=800",

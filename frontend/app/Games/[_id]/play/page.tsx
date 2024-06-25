@@ -160,6 +160,7 @@ const Page = () => {
           storyType: "game",
           prompt: promptId,
         };
+
         setIsLoading(true);
         await AxiosIns.post(`/stories`, payload);
         setStoryDetails((prev) => ({
@@ -167,6 +168,8 @@ const Page = () => {
           refresh: !prev.refresh,
         }));
       }
+      router.push(`/profile/game?prompt_id=${promptId}`);
+
       setSubmittingStory(false);
       toast.success("Story saved successfully");
       return toast;
@@ -311,9 +314,18 @@ const Page = () => {
                     <div
                       className={`w-10 h-10 left-${
                         index * 3 + 3
-                      } bg-white flex items-center justify-center rounded-full border`}
+                      } bg-white flex items-center justify-center rounded-full border overflow-hidden`}
                     >
-                      <Image src={Logo} alt="" />
+                      {contributor.profile_picture &&
+                      contributor.profile_picture.startsWith("https") ? (
+                        <img
+                          className="w-full h-full"
+                          src={contributor.profile_picture}
+                          alt=""
+                        />
+                      ) : (
+                        <Image src={Logo} alt="contributor's profile picture" />
+                      )}
                     </div>
                   </div>
                 ))}
@@ -461,7 +473,7 @@ const Page = () => {
                     </div>
                     <button
                       onClick={handleSubmit}
-                      className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-[50vw] h-[60px]"
+                      className="text-white bg-black border text-2xl font-bold font-comic rounded-full  px-3 h-[60px]"
                     >
                       {submittingStory ? "Submitting..." : "Submit"}
                     </button>

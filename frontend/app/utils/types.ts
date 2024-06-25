@@ -4,6 +4,7 @@ export type TUser = {
   email: string;
   role: string;
   lastLogin: string;
+  profile_picture?: string;
   isSubcriptionActive: boolean;
   subscriptionRemainingDays: number | null;
   __v: number;

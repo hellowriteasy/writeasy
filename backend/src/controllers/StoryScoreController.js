@@ -9,10 +9,11 @@ exports.scoreStory = async function (req, res) {
   const wordCount = content.split(" ").length; // Calculate word count
   let corrections = null;
   let correctionSummary = null;
+  console.log("task type",taskType)
   try {
     const newStory = new Story({
       user: userId,
-      title: title||"",
+      title: title || "",
       content: content,
       wordCount: wordCount,
       submissionDateTime: new Date(),
