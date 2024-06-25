@@ -26,7 +26,7 @@ initializeDatabase();
 const app = express();
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://writeasyy.vercel.app"],
+    origin: process.env.WHITELISTED_ORIGINS.split(","),
     credentials: true,
   })
 );
