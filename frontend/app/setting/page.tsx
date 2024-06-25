@@ -1,19 +1,33 @@
 "use client";
-import React, { useState, useRef, ChangeEvent, SyntheticEvent } from "react";
+import React, { useState, useRef, ChangeEvent, SyntheticEvent, useEffect } from "react";
 import useAuthStore from "../store/useAuthStore";
 import { axiosInstance } from "../utils/config/axios";
 import useUploadFile from "../hooks/useFileUpload";
 
 const Page = () => {
   const { userId, profile_picture, token } = useAuthStore();
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+  const [userDetails, setUserDetails] = useState({
+    username: "",
+    email: "",
+    password: "",
+    old_password: "",
+  });
   const [profilePicture, setProfilePicture] = useState("");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const userProfile = useAuthStore()
   const [file, setFile] = useState<File | null>(null);
   const axiosIns = axiosInstance(token || "");
+
+
+  useEffect(() => {
+    setUserDetails({
+      username: userProfile.username||"",
+      email: userProfile.email||"",
+      old_password: "",
+      password:""
+     
+    })
+  },[userProfile])
 
   const { uploadFile } = useUploadFile();
   const upload = () => {
@@ -37,6 +51,12 @@ const Page = () => {
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     let profile_image_url = "";
+    const {
+      username,
+      email,
+      password: newPassword,
+      old_password,
+    } = userDetails;
     try {
       if (file) {
         profile_image_url = await uploadFile(file);
@@ -52,6 +72,13 @@ const Page = () => {
     } catch (error) {
       console.error("Error updating profile", error);
     }
+  };
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUserDetails((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   return (
@@ -77,40 +104,44 @@ const Page = () => {
         )}
       </div>
 
-      <div className="flex justify-center">
+      <div className="flex justify-center gap-4">
         <form
           onSubmit={handleSubmit}
-          className="w-[70%] h-60 ms-72 flex mt-10 flex-wrap"
+          className="w-[70%] h-60 ms-72 flex mt-10 flex-wrap gap-2"
         >
           <input
             className="border border-gray-500 w-96 z-10 text-xl rounded-3xl indent-7 h-14 focus:outline-none focus:border-yellow-600"
             type="email"
+            name="email"
             placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={userDetails.email}
+            onChange={handleInputChange}
           />
           <input
             className="border border-gray-500 w-96 z-10 text-xl rounded-3xl indent-7 h-14 focus:outline-none focus:border-yellow-600"
             type="text"
             placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            name="username"
+            value={userDetails.username}
+            onChange={handleInputChange}
           />
           <input
             className="border border-gray-500 w-96 z-10 text-xl rounded-3xl indent-7 h-14 focus:outline-none focus:border-yellow-600"
             type="password"
+            name="old_password"
             placeholder="Old Password"
-            value={oldPassword}
-            onChange={(e) => setOldPassword(e.target.value)}
+            value={userDetails.old_password}
+            onChange={handleInputChange}
           />
           <input
             className="border border-gray-500 w-96 z-10 text-xl rounded-3xl indent-7 h-14 focus:outline-none focus:border-yellow-600"
             type="password"
             placeholder="New Password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
+            name="password"
+            value={userDetails.password}
+            onChange={handleInputChange}
           />
-          <div className="w-full flex justify-center mt-4">
+          <div className="w-full flex justify-start mt-4">
             <button
               type="submit"
               className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-96 h-14"

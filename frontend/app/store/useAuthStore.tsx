@@ -7,6 +7,7 @@ interface AuthState {
   userId: string | null;
   token: string | null;
   username: string | null;
+  email: string | null;
   role: string | null;
   subscriptionType: string | null;
   subscriptionRemainingDays?: number | null;
@@ -32,7 +33,8 @@ const useAuthStore = create<AuthState>((set) => {
             subscriptionType,
             isSubcriptionActive,
             subscriptionRemainingDays,
-            profile_picture
+            profile_picture,
+            email
           } = response.data.message;
           set({
             username,
@@ -40,7 +42,8 @@ const useAuthStore = create<AuthState>((set) => {
             subscriptionType,
             isSubcriptionActive,
             subscriptionRemainingDays,
-            profile_picture
+            profile_picture,
+            email,
           });
         } else {
           throw new Error(`Error: ${response.status}`);
@@ -61,6 +64,7 @@ const useAuthStore = create<AuthState>((set) => {
       token: null,
       username: null,
       role: null,
+      email:null,
       subscriptionType: null,
       login: async (userId: string, token: string) => {
         localStorage.setItem("userId", userId);
@@ -82,6 +86,7 @@ const useAuthStore = create<AuthState>((set) => {
       token: null,
       username: null,
       role: null,
+      email:null,
       subscriptionType: null,
       login: () => {},
       logout: () => {},
