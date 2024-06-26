@@ -1,12 +1,11 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
-import axios from "axios";
-import Link from "next/link";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { axiosInstance } from "@/app/utils/config/axios";
 import DeleteModal from "../../DeleteModal";
+import Link from "next/link";
 interface CardProps {
   title: string;
   deadline: string;
@@ -17,7 +16,6 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({ title, deadline, id, onSuccess }) => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const AxiosIns = axiosInstance("");
-  const cancelButtonRef = useRef(null);
   const handleDeleteContest = async () => {
     try {
       setOpenDeleteModal(true);
@@ -37,9 +35,11 @@ const Card: React.FC<CardProps> = ({ title, deadline, id, onSuccess }) => {
       <div className="flex justify-between items-center mb-2">
         <div className="text-xl font-semibold">{title}</div>
         <div className="flex space-x-2 gap-4">
-          <button className="text-black">
-            <FaEdit size={20} />
-          </button>
+          <Link href={`/admin/contests/${id}`}>
+            <button className="text-black">
+              <FaEdit size={20} />
+            </button>
+          </Link>
           <button
             className="text-black text-3xl"
             onClick={() => setOpenDeleteModal(true)}

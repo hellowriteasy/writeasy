@@ -67,7 +67,6 @@ const inviteCollaborators = [
         });
       }
 
-      console.log("story", story);
 
       const newContributorUsers = await User.find({
         email: {
@@ -75,7 +74,6 @@ const inviteCollaborators = [
         },
       });
 
-      console.log("new contributors", newContributorUsers);
 
       if (newContributorUsers.length !== email.length) {
         return res.status(400).json({
@@ -84,7 +82,6 @@ const inviteCollaborators = [
         });
       }
 
-      console.log("new contributors", newContributorUsers);
 
       const isAlreadyContributor = story.contributors.some((contributorId) => {
         return newContributorUsers.some(
@@ -92,7 +89,6 @@ const inviteCollaborators = [
         );
       });
 
-      console.log(" prev contributors ", story.contributors);
 
       if (isAlreadyContributor) {
         return res.status(400).json({
@@ -102,8 +98,6 @@ const inviteCollaborators = [
       story.contributors.push(
         newContributorUsers.map((user) => user._id.toString())
       );
-
-      console.log(" new  story ", story);
 
       await story.save();
       res
@@ -148,6 +142,7 @@ const submitCollaborativePart = [
       await story.save();
       res.status(200).json({ message: "Story part submitted successfully." });
     } catch (error) {
+      console.log("Error submitting story part:", error);
       res.status(500).json({ message: error.message });
     }
   },

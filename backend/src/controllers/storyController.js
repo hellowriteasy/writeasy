@@ -30,7 +30,6 @@ const createStory = async (req, res) => {
       story: story._id,
     }); // Respond without score
 
-    console.log(story);
     // Process the story for scoring in the background
     processStoryForScoring(story._id, story.content, wordCount); // Ensuring 'content' exists in your story model
   } catch (error) {
