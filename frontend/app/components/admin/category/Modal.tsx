@@ -1,42 +1,34 @@
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { axiosInstance } from '@/app/utils/config/axios';
 
 interface ModalProps {
   setIsModalOpen: (isOpen: boolean) => void;
-  onSuccess:()=>void;
+  onSuccess: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ setIsModalOpen,onSuccess }) => {
-  const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState('');
-  const [Position, setPosition] = useState<number | ''>('');
+const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onSuccess }) => {
+  const [categoryName, setCategoryName] = useState('');
 
   const AxiosIns = axiosInstance('');
 
   const handleAdd = () => {
-    const faqData = {
-      question,
-      answer,
-      place: Number(Position),
+    const categoryData = {
+      name: categoryName,
     };
 
-    AxiosIns.post('/faq', faqData)
+    AxiosIns.post('/category', categoryData)
       .then((response) => {
         setIsModalOpen(false);
-       onSuccess();
-        toast.success('FAQ added successfully!');
-        // Optionally, reset the input fields after successful creation
-        setQuestion('');
-        setAnswer('');
-        setPosition('');
+        onSuccess();
+        toast.success('Category added successfully!');
+        setCategoryName('');
       })
       .catch((error) => {
         console.error('There was an error posting the data!', error);
-        toast.error('Failed to add FAQ.');
+        toast.error('Failed to add category.');
       });
   };
 
@@ -71,29 +63,15 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen,onSuccess }) => {
                   <div className="sm:flex sm:items-start">
                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                       <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                        Create FAQ
+                        Create Category
                       </Dialog.Title>
                       <div className="mt-2">
                         <input
                           type="text"
                           className="mt-1 block w-96 h-12 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
-                          placeholder="Question"
-                          value={question}
-                          onChange={(e) => setQuestion(e.target.value)}
-                        />
-                        <input
-                          type="text"
-                          className="mt-1 block w-96 h-12 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
-                          placeholder="Answer"
-                          value={answer}
-                          onChange={(e) => setAnswer(e.target.value)}
-                        />
-                        <input
-                          type="number"
-                          className="mt-1 block w-96 h-12 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
-                          placeholder="Position Number"
-                          value={Position}
-                          onChange={(e) => setPosition(Number(e.target.value))}
+                          placeholder="Category Name"
+                          value={categoryName}
+                          onChange={(e) => setCategoryName(e.target.value)}
                         />
                       </div>
                     </div>
@@ -105,7 +83,7 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen,onSuccess }) => {
                     className="inline-flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm sm:ml-3 sm:w-auto"
                     onClick={handleAdd}
                   >
-                    Add
+                    Create
                   </button>
                   <button
                     type="button"

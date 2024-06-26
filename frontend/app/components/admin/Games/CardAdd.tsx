@@ -1,4 +1,4 @@
-import { useState, Fragment, useRef } from 'react';
+import { useState, Fragment, useRef,useEffect } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Dialog, Transition, Menu, MenuItem } from '@headlessui/react';
 import axios from 'axios';
@@ -13,6 +13,10 @@ interface CardProps {
   categories: string[];
   onSuccess: () => void; 
 }
+interface Category{
+  _id:string,
+  name:string
+}
 
 const CardAdd: React.FC<CardProps> = ({ title, description, id, categories,onSuccess }) => {
   const [open, setOpen] = useState(false);
@@ -20,6 +24,7 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id, categories,onSuc
   const [promptTitle, setPromptTitle] = useState(title);
   const [promptDescription, setPromptDescription] = useState(description);
   const [selectedCategories, setSelectedCategories] = useState<string[]>(categories);
+  const [Categories, setCategories] = useState<Category[]>([]);
   const cancelButtonRef = useRef(null);
   const AxiosIns = axiosInstance("");
 
@@ -54,7 +59,7 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id, categories,onSuc
       console.error('Error:', error);
     }
   };
-
+  
   const toggleCategory = (category: string) => {
     setSelectedCategories((prevCategories) =>
       prevCategories.includes(category)
@@ -62,8 +67,20 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id, categories,onSuc
         : [...prevCategories, category]
     );
   };
+  useEffect(() => {
+    const getCategory = async () => {
+      try {
+        const { data } = await AxiosIns.get<{ categories: Category[] }>('/category');
+        setCategories(data.categories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
 
-  const categoryOptions = ['adventure', 'romance', 'mystery'];
+    getCategory();
+  }, []);
+
+
 
   return (
     <>
@@ -128,17 +145,17 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id, categories,onSuc
                             Categories
                           </label>
                           <div className="flex flex-wrap gap-2">
-                            {categoryOptions.map((category) => (
+                            {Categories.map((category) => (
                               <button
-                                key={category}
+                                key={category._id}
                                 className={`px-3 py-1 rounded-full border ${
-                                  selectedCategories.includes(category)
+                                  selectedCategories.includes(category.name)
                                     ? 'bg-black text-white'
                                     : 'bg-gray-200 text-gray-700'
                                 }`}
-                                onClick={() => toggleCategory(category)}
+                                onClick={() => toggleCategory(category.name)}
                               >
-                                {category}
+                                {category.name}
                               </button>
                             ))}
                           </div>

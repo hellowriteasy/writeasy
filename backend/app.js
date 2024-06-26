@@ -15,6 +15,7 @@ const emailRoutes = require("./routes/emailRoute");
 const collaborativeStoryRoutes = require("./routes/collaborativeStoryRoutes");
 const faqRoutes = require("./routes/faq");
 const paymentRoutes = require("./routes/paymentRoute");
+const categoriesRoute=require("./routes/category")
 const scheduleJob = require("./config/cron");
 const Subscription = require("./src/models/subscription");
 
@@ -42,6 +43,7 @@ app.use("/api/prompts", promptRoutes);
 app.use("/api/contests", contestRoutes);
 app.use("/api/emails", emailRoutes);
 app.use("/api/payments", paymentRoutes);
+app.use("/api/category", categoriesRoute);
 app.use("/api/collaborative-stories", collaborativeStoryRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 

@@ -19,13 +19,16 @@ interface CardProps {
   id: string;
   onSuccess: () => void;
 }
-
+interface Category{
+  name:string,
+  _id:string
+}
 const Card: React.FC<CardProps> = ({ title, type, id, onSuccess }) => {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [promptTitle, setPromptTitle] = useState(title);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-
+  const [category,setCategory]=useState<Category[]>([])
   // Split initial type into array if it's a comma-separated string
   useEffect(() => {
     if (typeof type === "string") {
@@ -38,7 +41,19 @@ const Card: React.FC<CardProps> = ({ title, type, id, onSuccess }) => {
 
   const AxiosIns = axiosInstance("");
   const cancelButtonRef = useRef(null);
+  
+  useEffect(() => {
+    const getCategory = async () => {
+      try {
+        const { data } = await AxiosIns.get<{ categories: Category[] }>('/category');
+        setCategory(data.categories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
 
+    getCategory();
+  }, []);
   const handleUpdate = async () => {
     try {
       const response = await AxiosIns.put(`/prompts/${id}`, {
@@ -156,31 +171,26 @@ const Card: React.FC<CardProps> = ({ title, type, id, onSuccess }) => {
                               leaveTo="transform opacity-0 scale-95"
                             >
                               <MenuItems className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                {[
-                                  "Adventure",
-                                  "Comic",
-                                  "Fantasy",
-                                  "Romance",
-                                ].map((type) => (
-                                  <MenuItem key={type}>
+                                { category.map((type) => (
+                                  <MenuItem key={type._id}>
                                     {({ active }) => (
                                       <button
                                         className={`${
-                                          selectedTypes.includes(type)
+                                          selectedTypes.includes(type.name)
                                             ? "bg-black text-white"
                                             : "text-gray-900"
                                         } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                                         onClick={() =>
                                           setSelectedTypes((prevTypes) =>
-                                            prevTypes.includes(type)
+                                            prevTypes.includes(type.name)
                                               ? prevTypes.filter(
-                                                  (t) => t !== type
+                                                  (t) => t !== type.name
                                                 )
-                                              : [...prevTypes, type]
+                                              : [...prevTypes, type.name]
                                           )
                                         }
                                       >
-                                        {type}
+                                        {type.name}
                                       </button>
                                     )}
                                   </MenuItem>

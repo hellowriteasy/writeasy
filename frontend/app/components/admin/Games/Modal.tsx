@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState,useEffect } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,12 +7,18 @@ import { axiosInstance } from '@/app/utils/config/axios';
 interface ModalProps {
   setIsModalOpen: (isOpen: boolean) => void;
   onSuccess : ()=>void;
+  category:string[]
+}
+interface Category{
+  name:string;
+  _id:string
 }
 
-const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen ,onSuccess}) => {
+const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen ,onSuccess,category}) => {
   const [promptTitle, setPromptTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [Categories, setCategories] = useState<Category[]>([]);
   const [error, setError] = useState<string | null>(null);
   const AxiosIns = axiosInstance("");
 
@@ -33,7 +39,18 @@ const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen ,onSuccess}) => {
       console.error('Error:', err);
     }
   };
+  useEffect(() => {
+    const getCategory = async () => {
+      try {
+        const { data } = await AxiosIns.get<{ categories: Category[] }>('/category');
+        setCategories(data.categories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
 
+    getCategory();
+  }, []);
   const toggleCategory = (category: string) => {
     setSelectedCategories((prevCategories) =>
       prevCategories.includes(category)
@@ -41,8 +58,8 @@ const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen ,onSuccess}) => {
         : [...prevCategories, category]
     );
   };
+  
 
-  const categoryOptions = ['adventure', 'romance', 'mystery'];
 
   return (
     <Transition.Root show={true} as={Fragment}>
@@ -91,17 +108,17 @@ const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen ,onSuccess}) => {
                           Categories
                         </label>
                         <div className="flex flex-wrap gap-2">
-                          {categoryOptions.map((category) => (
+                          {Categories.map((data) => (
                             <button
-                              key={category}
+                              key={data._id}
                               className={`px-3 py-1 rounded-full border ${
-                                selectedCategories.includes(category)
+                                selectedCategories.includes(data.name)
                                   ? 'bg-black text-white'
                                   : 'bg-gray-200 text-gray-700'
                               }`}
-                              onClick={() => toggleCategory(category)}
+                              onClick={() => toggleCategory(data.name)}
                             >
-                              {category}
+                              {data.name}
                             </button>
                           ))}
                         </div>

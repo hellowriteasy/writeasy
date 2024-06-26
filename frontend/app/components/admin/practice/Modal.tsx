@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState,useEffect } from 'react';
 import { Dialog, Transition, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -15,11 +15,16 @@ interface CardProps {
   title: string;
   type: string;
 }
+interface Category{
+  _id:string,
+  name:string
+}
 
 const Modal: React.FC<ModalProps> = ({ setIsModalOpen,onSuccess }) => {
   const [promptTitle, setPromptTitle] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]); // State for selected categories
-  const [promptCards, setPromptCards] = useState<CardProps[]>([]); // State to store added prompt cards
+  const [promptCards, setPromptCards] = useState<CardProps[]>([]);
+  const [category,setCategory]=useState<Category[]> ([]) // State to store added prompt cards
   const AxiosIns = axiosInstance('');
 
   const handleAdd = () => {
@@ -53,7 +58,18 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen,onSuccess }) => {
       setSelectedCategories([...selectedCategories, category]);
     }
   };
+  useEffect(() => {
+    const getCategory = async () => {
+      try {
+        const { data } = await AxiosIns.get<{ categories: Category[] }>('/category');
+        setCategory(data.categories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
 
+    getCategory();
+  }, []);
   return (
     <Transition.Root show={true} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={() => setIsModalOpen(false)}>
@@ -109,18 +125,18 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen,onSuccess }) => {
                             leaveTo="transform opacity-0 scale-95"
                           >
                             <MenuItems className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                              {["Adventure", "Fiction", "Romance","comic"].map((category) => (
-                                <MenuItem key={category}>
+                              {category.map((data) => (
+                                <MenuItem key={data._id}>
                                   {({ active }) => (
                                     <button
                                       className={`${
-                                        selectedCategories.includes(category)
+                                        selectedCategories.includes(data.name)
                                           ? "bg-indigo-600 text-white"
                                           : "text-gray-900"
                                       } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                      onClick={() => toggleCategory(category)}
+                                      onClick={() => toggleCategory(data.name)}
                                     >
-                                      {category}
+                                      {data.name}
                                     </button>
                                   )}
                                 </MenuItem>
