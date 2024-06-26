@@ -17,7 +17,6 @@ const client = new OAuth2Client(
   `${process.env.SERVER_URL}/api/auth/google/callback`
 );
 
-
 /**
  * @openapi
  * /api/auth/user/{id}:
@@ -35,15 +34,14 @@ const client = new OAuth2Client(
  *         description: The user ID
  *     responses:
  *       200:
- *         description: Sends user data 
- *       404: 
- *         description: User not found 
+ *         description: Sends user data
+ *       404:
+ *         description: User not found
  *       500:
  *         description: Internal server error
  */
 
-router.get("/user/:id",UserController.getUserById);
-
+router.get("/user/:id", UserController.getUserById);
 
 /**
  * @openapi
@@ -247,7 +245,38 @@ router.get("/google/callback", async (req, res) => {
  */
 router.put("/users/profile/:user_id", UserController.updateProfile);
 
+/**
+ * @swagger
+ * /api/auth/users/search:
+ *   get:
+ *     summary: Search for users by username or email
+ *     tags: [Authentication]
+ *     parameters:
+ *       - in: query
+ *         name: search_query
+ *         schema:
+ *           type: string
+ *         description: Search term for username or email
+ *     responses:
+ *       200:
+ *         description: A list of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   username:
+ *                     type: string
+ *                     example: johndoe
+ *                   email:
+ *                     type: string
+ *                     example: johndoe@example.com
+ *       500:
+ *         description: Internal server error
+ */
 
-
+router.get("/users/search", UserController.searchUser);
 
 module.exports = router;
