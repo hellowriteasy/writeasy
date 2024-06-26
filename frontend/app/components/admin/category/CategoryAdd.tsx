@@ -1,56 +1,49 @@
-'use client'
-import { useState, Fragment, useRef, useEffect } from 'react';
+
+import { useState, Fragment, useRef } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import { Dialog, Transition, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { Dialog, Transition } from '@headlessui/react';
 import { toast } from 'react-toastify';
 import { axiosInstance } from '@/app/utils/config/axios';
 import DeleteModal from '../../DeleteModal';
+
 interface CardProps {
-  question: string;
-  answer: string;
-  position: number;
+  name: string;
   id: string;
-  onSuccess: () => void; 
+  onSuccess: () => void;
 }
 
-const Card: React.FC<CardProps> = ({ question, answer, position, id, onSuccess }) => {
+const Card: React.FC<CardProps> = ({ name, id, onSuccess }) => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [open, setOpen] = useState(false);
-  const [promptQuestion, setPromptQuestion] = useState(question);
-  const [promptAnswer, setPromptAnswer] = useState(answer);
-  const [promptPosition, setPromptPosition] = useState(position);
+  const [categoryName, setCategoryName] = useState(name);
 
   const AxiosIns = axiosInstance('');
   const cancelButtonRef = useRef(null);
 
   const handleUpdate = async () => {
     try {
-      const response = await AxiosIns.put(`/faq/${id}`, {
-        question: promptQuestion,
-        answer: promptAnswer,
-        place: promptPosition,
+      await AxiosIns.put(`/category/${id}`, {
+        name: categoryName,
       });
-
       setOpen(false);
       onSuccess();
-      toast.success('FAQ updated successfully!');
+      toast.success('Category updated successfully!');
     } catch (error) {
-      console.error('Error updating FAQ:', error);
-      toast.error('Failed to update FAQ.');
+      console.error('Error updating category:', error);
+      toast.error('Failed to update category.');
     }
   };
 
   const handleDelete = async () => {
     try {
-      setOpenDeleteModal(true);
-      await AxiosIns.delete(`/faq/${id}`);
+      await AxiosIns.delete(`/category/${id}`);
       setOpenDeleteModal(false);
-      onSuccess(); 
-      toast.success('FAQ deleted successfully!');
+      onSuccess();
+      toast.success('Category deleted successfully!');
     } catch (error) {
       setOpenDeleteModal(false);
-      console.error('Error deleting FAQ:', error);
-      toast.error('Failed to delete FAQ.');
+      console.error('Error deleting category:', error);
+      toast.error('Failed to delete category.');
     }
   };
 
@@ -58,7 +51,7 @@ const Card: React.FC<CardProps> = ({ question, answer, position, id, onSuccess }
     <>
       <div className="bg-white border font-poppins border-gray-300 w-5/6 shadow-md rounded-lg p-4 mb-4">
         <div className="flex justify-between items-center mb-2">
-          <div className="text-xl font-semibold">{question}</div>
+          <div className="text-xl font-semibold">{categoryName}</div>
           <div className="flex space-x-2 gap-4">
             <button className="text-black " onClick={() => setOpen(true)}>
               <FaEdit size={30} />
@@ -68,8 +61,6 @@ const Card: React.FC<CardProps> = ({ question, answer, position, id, onSuccess }
             </button>
           </div>
         </div>
-        <div className="text-gray-600">{answer}</div>
-        <div className="text-gray-600">Position: {position}</div>
       </div>
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={() => setOpen(false)}>
@@ -101,29 +92,15 @@ const Card: React.FC<CardProps> = ({ question, answer, position, id, onSuccess }
                     <div className="sm:flex sm:items-start">
                       <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                         <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                          Edit FAQ
+                          Edit Category
                         </Dialog.Title>
                         <div className="mt-2">
                           <input
                             type="text"
                             className="mt-1 block w-96 h-12 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
-                            placeholder="Question"
-                            value={promptQuestion}
-                            onChange={(e) => setPromptQuestion(e.target.value)}
-                          />
-                          <input
-                            type="text"
-                            className="mt-1 block w-96 h-12 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
-                            placeholder="Answer"
-                            value={promptAnswer}
-                            onChange={(e) => setPromptAnswer(e.target.value)}
-                          />
-                          <input
-                            type="number"
-                            className="mt-1 block w-96 h-12 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
-                            placeholder="Position"
-                            value={promptPosition}
-                            onChange={(e) => setPromptPosition(Number(e.target.value))}
+                            placeholder="Category Name"
+                            value={categoryName}
+                            onChange={(e) => setCategoryName(e.target.value)}
                           />
                         </div>
                       </div>
@@ -162,3 +139,4 @@ const Card: React.FC<CardProps> = ({ question, answer, position, id, onSuccess }
 };
 
 export default Card;
+
