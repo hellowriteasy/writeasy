@@ -120,6 +120,28 @@ const UserController = {
       });
     }
   },
+  async searchUser(req, res) {
+    const { search_query } = req.query;
+    try {
+      let keyword = {};
+      keyword = search_query
+        ? {
+            $or: [
+              {
+                username: { $regex: search_query, $options: "i" },
+              },
+              { email: { $regex: search_query, $options: "i" } },
+            ],
+          }
+        : {};
+      const users = await User.find(keyword).select("-password");
+      res.status(200).json(users);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: error?.message || "Internal server error" });
+    }
+  },
 };
 
 module.exports = UserController;
