@@ -35,12 +35,6 @@ const Page = () => {
   };
 
   const handleSubmitContest = async () => {
-    // Validation for deadline
-    // const currentDate = new Date().toISOString().split("T")[0];
-    // if (deadline < currentDate) {
-    //   setError("Deadline cannot be earlier than today.");
-    //   return;
-    // }
     const AxiosIns = axiosInstance("");
     try {
       const { status } = await AxiosIns.post("/contests", {
