@@ -1,7 +1,7 @@
 "use client";
 import React, { useCallback, useState, SyntheticEvent, useEffect } from "react";
 import classNames from "classnames";
-import { useEditor, EditorContent, Editor } from "@tiptap/react";
+import { useEditor, EditorContent,Editor } from "@tiptap/react";
 import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
@@ -23,7 +23,19 @@ import { axiosInstance } from "@/app/utils/config/axios";
 import { TPrompt, TStory } from "@/app/utils/types";
 import Logo from "@/public/Landingpage-img/logo.svg";
 import { useRouter } from "next/navigation";
+interface SearchResult {
+  username: string;
+  email: string; 
+}
+interface Props {
+  searchResults: SearchResult[];
+  handleSelectedUser: (selectedEmail: string, event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+}
 
+interface Props {
+  searchResults: SearchResult[];
+  handleSelectedUser: (selectedEmail: string, event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+}
 const Page = () => {
   const [storyDetails, setStoryDetails] = useState({
     title: "",
@@ -33,7 +45,12 @@ const Page = () => {
     wordLimitExceeded: false,
     refresh: false,
   });
+  const [Value,setValue]=useState<string>("")
+  const [selectedUsers, setSelectedUsers]= useState <string[]> ([]);
   const [inviting, setInviting] = useState(false);
+  const [showCard, setShowCard] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]); // State to hold search results
   const [prompt, setPrompt] = useState<TPrompt | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [currentStory, setCurrentStory] = useState<TStory | null>(null);
@@ -73,6 +90,43 @@ const Page = () => {
       handleStoryDetailsInputChange("wordLimitExceeded", words > 1000);
     },
   }) as Editor;
+  const fetchUsers = async () => {
+    try {
+      // if (!searchQuery.trim()) {
+      //   setSearchResults([]); 
+      //   return;
+      // }
+      setShowCard(true)
+      const { data } = await AxiosIns.get(
+        `/auth/users/search?search_query=${searchQuery}`
+      );
+      setSearchResults(data); 
+      console.log(data)
+    
+    } catch (error) {
+      setShowCard(false)
+      console.error("Error fetching users:", error);
+      toast.error("Failed to fetch users. Please try again later.");
+    }
+  };
+  
+  const handleSearchChange = async (e:any): Promise<void> => {
+    setSearchQuery(e.target.value); 
+    await fetchUsers(); 
+  };
+  
+  const handleSelectedUser = (selectedEmail: string): void => {
+    setValue(selectedEmail); 
+    if (selectedUsers.length < 5 && !selectedUsers.includes(selectedEmail)) {
+      setSelectedUsers([...selectedUsers, selectedEmail]);
+    }
+  };
+  
+  const handleRemoveUser = (email: string, e:SyntheticEvent): void => {
+    e.preventDefault(); // Prevents page refresh
+    setSelectedUsers(selectedUsers.filter((user) => user !== email));
+  };
+
 
   const fetchPromptById = async () => {
     try {
@@ -95,6 +149,7 @@ const Page = () => {
       //
     }
   };
+  
   useEffect(() => {
     fetchStoryOfUserByPromptId();
   }, [userId, promptId, storyDetails.refresh]);
@@ -104,6 +159,7 @@ const Page = () => {
       fetchPromptById();
     }
   }, [promptId]);
+  
   useEffect(() => {
     const handleBeforeUnload = (event: any) => {
       event.preventDefault();
@@ -118,6 +174,7 @@ const Page = () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
+  
   useEffect(() => {
     console.log("inside", currentStory);
     if (currentStory && editor) {
@@ -168,6 +225,7 @@ const Page = () => {
           refresh: !prev.refresh,
         }));
       }
+      
       router.push(`/profile/game?prompt_id=${promptId}`);
 
       setSubmittingStory(false);
@@ -185,18 +243,18 @@ const Page = () => {
     e.preventDefault();
 
     const storyId = currentStory?._id;
-    const { email } = storyDetails;
-    if (!email) {
-      toast.error("Please enter an email address.");
-      return;
-    }
+    // const emailList = selectedUsers.join('","');
+    // // if (!email) {
+    //   toast.error("Please enter an email address.");
+    //   return;
+    // }
     setInviting(true);
     try {
       const invitePayload = {
         storyID: storyId,
-        email: email.replaceAll(/\s/g, "").split(","),
+        email:selectedUsers, 
         promptID: promptId,
-        userID: userId,
+        userID: userId
       };
 
       const { data } = await AxiosIns.post(
@@ -249,27 +307,83 @@ const Page = () => {
       [name]: value,
     }));
   };
+  const RenderUserCard: React.FC<Props> = ({ searchResults, handleSelectedUser }) => (
+    <div className="p-4 h-96 overflow-y-auto bg-white shadow-lg rounded-lg">
+      {searchResults.map((result, index) => (
+        <div
+          key={index}
+          className="p-4 border-b border-gray-200 cursor-pointer flex items-center hover:bg-gray-100 transition-colors duration-200 ease-in-out"
+          onClick={(e) => handleSelectedUser(result.email, e)} // Add user selection handler
+        >
+          <div className="flex-shrink-0 h-10 w-10 rounded-full bg-custom-yellow text-white flex items-center justify-center">
+            {result.username.charAt(0).toUpperCase()}
+          </div>
+          <div className="ml-4">
+            <div className="text-sm font-medium text-gray-900">{result.username}</div>
+            <div className="text-sm text-gray-500">{result.email}</div>
+          </div>
+        </div>
+      ))}
+      {searchResults.length === 0 && (
+        <div className="p-4 text-center text-gray-500">No users found.</div>
+      )}
+    </div>
+  );
+  const renderSelectedUsers = () => (
+    <div className="selected-users flex flex-wrap gap-2 mt-2">
+      {selectedUsers.map((user, index) => (
+        <span
+          key={index}
+          className="selected-user flex items-center space-x-2 bg-custom-yellow text-black px-3 py-1 rounded-full shadow-sm"
+        >
+          <span>{user}</span>
+          <button
+            className="remove-user bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center focus:outline-none"
+            onClick={(e) => handleRemoveUser(user, e)}
+          >
+            ✕
+          </button>
+        </span>
+      ))}
+    </div>
+  );
+  
+  
   const contributors = currentStory
     ? Array.from(new Array(...currentStory?.contributors, currentStory?.user))
     : [];
   const InvitationButton = (
-    <div>
-      <input
-        className="border border-gray-500 z-10 text-xl placeholder:font-comic placeholder:text-xl rounded-3xl indent-7 w-[40vw] h-12 focus:outline-none focus:border-yellow-600"
-        placeholder="Email to invite"
-        value={storyDetails.email}
-        onChange={(e) => {
-          handleStoryDetailsInputChange("email", e.target.value);
-        }}
-      />
-      <button
-        type="button"
-        onClick={handleInvite}
-        className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-40 h-14 ml-4"
-      >
-        {inviting ? "Inviting..." : "Invite"}
-      </button>
-    </div>
+    
+<div className="mb-4">
+              <label className="block mb-2 font-medium">
+                Invite Collaborators
+              </label>
+              {selectedUsers.length > 0 &&showCard&& (
+                <div className="mt-2">{renderSelectedUsers()}</div>
+              )}
+              <div className="flex">
+              <input
+                type="email"
+                className="w-full p-2 border outline-yellow-100 border-gray-300 rounded"
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+               <button
+                className="px-4  bg-black text-white rounded"
+                onClick={handleInvite}
+                disabled={inviting}
+              >
+                {inviting ? "Inviting..." : "Invite"}
+              </button>
+              </div>
+              {showCard && searchQuery && (
+                 <RenderUserCard searchResults={searchResults} handleSelectedUser={handleSelectedUser} />
+                 
+              )}
+             
+             
+            </div>
+   
   );
   console.log(contributors);
 

@@ -7,14 +7,13 @@ import { axiosInstance } from '@/app/utils/config/axios';
 interface ModalProps {
   setIsModalOpen: (isOpen: boolean) => void;
   onSuccess : ()=>void;
-  category:string[]
 }
 interface Category{
   name:string;
   _id:string
 }
 
-const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen ,onSuccess,category}) => {
+const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen ,onSuccess}) => {
   const [promptTitle, setPromptTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
