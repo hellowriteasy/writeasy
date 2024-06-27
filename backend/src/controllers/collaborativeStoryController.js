@@ -67,13 +67,11 @@ const inviteCollaborators = [
         });
       }
 
-
       const newContributorUsers = await User.find({
         email: {
           $in: email,
         },
       });
-
 
       if (newContributorUsers.length !== email.length) {
         return res.status(400).json({
@@ -82,13 +80,11 @@ const inviteCollaborators = [
         });
       }
 
-
       const isAlreadyContributor = story.contributors.some((contributorId) => {
         return newContributorUsers.some(
           (user) => user._id.toString() === contributorId.toString()
         );
       });
-
 
       if (isAlreadyContributor) {
         return res.status(400).json({
@@ -96,10 +92,10 @@ const inviteCollaborators = [
         });
       }
       story.contributors.push(
-        newContributorUsers.map((user) => user._id.toString())
+        ...newContributorUsers.map((user) => user._id.toString())
       );
-
       await story.save();
+
       res
         .status(200)
         .json({ message: "User invited successfully as contributor." });
@@ -114,7 +110,7 @@ const submitCollaborativePart = [
   // authMiddleware,
   // checkInviteStatus,
   async (req, res) => {
-    const { storyID, text ,title} = req.body;
+    const { storyID, text, title } = req.body;
     const wordCount = text.split(" ").length; // Calculate word count
     // const userID = req.user.id; // Using user id from auth token
     try {

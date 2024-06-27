@@ -3,13 +3,37 @@ const Story = require("../models/story");
 
 const gptService = new GptService(process.env.GPT_API_KEY);
 
-exports.scoreStory = async function (req, res) {
+async function processGeneratingCorrectionSummary({
+  story_id,
+  corrections,
+  score,
+  content,
+}) {
+  try {
+    console.log("started generating correction summary for story ", story_id);
+    const correctionSummary = await gptService.generateCorrectionSummary(
+      content,
+      corrections,
+      score
+    );
+    console.log("completed generating correction summary for story ", story_id);
+    await Story.findByIdAndUpdate(story_id, {
+      $set: {
+        correctionSummary,
+      },
+    });
+  } catch (error) {
+    console.log("error generating correction summary", error);
+  }
+  //
+}
+
+async function scoreStory(req, res) {
   const { userId, title, content, taskType, storyType, prompt, hasSaved } =
     req.body;
   const wordCount = content.split(" ").length; // Calculate word count
   let corrections = null;
-  let correctionSummary = null;
-  console.log("task type",taskType)
+  let correctionSummary = "";
   try {
     const newStory = new Story({
       user: userId,
@@ -26,27 +50,26 @@ exports.scoreStory = async function (req, res) {
       taskType,
       wordCount
     );
-    correctionSummary = await gptService.generateCorrectionSummary(
-      savedStory.content,
-      corrections.corrections,
-      corrections.score
-    );
     if (storyType === "practice") {
       savedStory.score = 0;
-      savedStory.corrections = corrections.corrections;
-      savedStory.correctionSummary = correctionSummary;
       savedStory.hasSaved = !!hasSaved;
     }
     if (storyType !== "practice") {
       savedStory.hasSaved = false;
     }
     await savedStory.save();
-    return res.status(201).json({
+    res.status(201).json({
       success: true,
       message: "Story scored and corrected successfully",
       storyId: savedStory._id,
       corrections: corrections.corrections,
       correctionSummary,
+    });
+    processGeneratingCorrectionSummary({
+      story_id: savedStory._id,
+      corrections: corrections.corrections,
+      score: corrections.score,
+      content,
     });
   } catch (error) {
     console.error("Failed to score story:", error);
@@ -55,4 +78,8 @@ exports.scoreStory = async function (req, res) {
       message: "Failed to score the story",
     });
   }
+}
+
+module.exports = {
+  scoreStory,
 };
