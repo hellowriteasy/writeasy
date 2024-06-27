@@ -1,8 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import axios from "axios";
-
-
 import CardAdd from "@/app/components/admin/Games/CardAdd";
 import ModalGame from "@/app/components/admin/Games/Modal";
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
@@ -30,6 +27,8 @@ const Games = () => {
 
     fetchGamePrompts();
   }, []);
+
+
   async function onsuccess(){
     const fetchGamePrompts = async () => {
       try {
@@ -75,10 +74,10 @@ const Games = () => {
               </div>
             </div>
             {gamePrompts.map((prompt) => (
-              <CardAdd key={prompt._id} id={prompt._id}  onSuccess={onsuccess} title={prompt.title} categories={prompt.promptCategory} description={prompt.description} />
+              <CardAdd key={prompt._id} id={prompt._id}  onSuccess={onsuccess} title={prompt.title}  categories={prompt.promptCategory} description={prompt.description} />
             ))}
           </div>
-          {isModalOpen && <ModalGame setIsModalOpen={setIsModalOpen} onSuccess={onsuccess} />}
+          {isModalOpen && <ModalGame setIsModalOpen={setIsModalOpen}  onSuccess={onsuccess} />}
         </div>
       </div>
     </ProtectedRoute>
