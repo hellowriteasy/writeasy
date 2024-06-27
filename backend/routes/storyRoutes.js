@@ -12,7 +12,6 @@ const {
   getStoriesByContentAndPrompt,
 } = require("../src/controllers/storyController");
 const { scoreStory } = require("../src/controllers/StoryScoreController");
-
 /**
  * @openapi
  * /api/stories:
@@ -221,7 +220,10 @@ router.delete("/:id", deleteStory);
  *       500:
  *         description: Error occurred while processing the story.
  */
+
+
 router.post("/score", scoreStory);
+
 
 /**
  * @openapi
@@ -245,7 +247,6 @@ router.post("/score", scoreStory);
  *         description: Error occurred while deleting the story.
  */
 router.delete("/:id", deleteStory);
-
 
 /**
  * @openapi
