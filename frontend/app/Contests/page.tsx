@@ -73,7 +73,7 @@ const Contest = () => {
               <div className="flex flex-col gap-y-3">
                 <Join />
               </div>
-              <div className="flex flex-col gap-y-3 w-full ">
+              <div className="flex flex-col  gap-y-3 w-full ">
                 {endedContests.map((contest, index) => (
                   <Contestitle key={index} contest={contest} />
                 ))}

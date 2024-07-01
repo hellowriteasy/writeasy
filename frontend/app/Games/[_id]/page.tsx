@@ -121,7 +121,8 @@ const Page: React.FC<PageProps> = ({ params }) => {
       <div className="w-screen flex flex-col items-center">
         {stories.length > 0 ? (
           <div className="w-4/5 mt-10">
-            <h1 className="font-bold text-7xl pt-5 font-comic">Stories</h1>
+           <h1 className="font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl pt-5 font-comic">Stories</h1>
+
             <div className="mt-4 flex flex-col gap-8">
               {stories.map((story: TStory, index) => (
                 <Storytitle
