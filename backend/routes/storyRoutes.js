@@ -248,6 +248,7 @@ router.post("/score", scoreStory);
  */
 router.delete("/:id", deleteStory);
 
+
 /**
  * @openapi
  * /api/stories/user/{prompt_id}/{user_id}:

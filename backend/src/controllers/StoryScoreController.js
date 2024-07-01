@@ -29,48 +29,53 @@ async function processGeneratingCorrectionSummary({
 }
 
 async function scoreStory(req, res) {
+  console.log("score story", req.body);
   const { userId, title, content, taskType, storyType, prompt, hasSaved } =
     req.body;
+  console.log(content);
+
   const wordCount = content.split(" ").length; // Calculate word count
   let corrections = null;
-  let correctionSummary = "";
   try {
-    const newStory = new Story({
-      user: userId,
-      title: title || "",
-      content: content,
-      wordCount: wordCount,
-      submissionDateTime: new Date(),
-      storyType: storyType,
-      prompt: prompt,
-    });
-    const savedStory = await newStory.save();
-    corrections = await gptService.generateScore(
-      savedStory.content,
-      taskType,
-      wordCount
-    );
-    if (storyType === "practice") {
-      savedStory.score = 0;
-      savedStory.hasSaved = !!hasSaved;
-    }
-    if (storyType !== "practice") {
-      savedStory.hasSaved = false;
-    }
-    await savedStory.save();
-    res.status(201).json({
-      success: true,
-      message: "Story scored and corrected successfully",
-      storyId: savedStory._id,
-      corrections: corrections.corrections,
-      correctionSummary,
-    });
-    processGeneratingCorrectionSummary({
-      story_id: savedStory._id,
-      corrections: corrections.corrections,
-      score: corrections.score,
+    await gptService.generateScoreInChunk(
       content,
-    });
+      taskType,
+      wordCount,
+      async (data, hasCompleted) => {
+        if (!hasCompleted) {
+          res.write(data);
+        } else {
+          console.log("ended", data);
+          res.end();
+
+          corrections = await gptService.generateScore(
+            content,
+            taskType,
+            wordCount
+          );
+
+          if (hasSaved) {
+            const newStory = new Story({
+              user: userId,
+              title: title || "",
+              content: content,
+              wordCount: wordCount,
+              submissionDateTime: new Date(),
+              storyType: storyType,
+              prompt: prompt,
+              hasSaved: true,
+            });
+            await newStory.save();
+            processGeneratingCorrectionSummary({
+              story_id: newStory._id,
+              corrections: corrections.corrections,
+              score: corrections.score,
+              content,
+            });
+          }
+        }
+      }
+    );
   } catch (error) {
     console.error("Failed to score story:", error);
     return res.status(500).json({

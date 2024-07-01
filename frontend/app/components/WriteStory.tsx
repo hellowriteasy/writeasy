@@ -12,7 +12,8 @@ import Strike from "@tiptap/extension-strike";
 import Code from "@tiptap/extension-code";
 import History from "@tiptap/extension-history";
 import * as Icons from "./Icons";
-import { diffChars, Change } from "diff";
+import { diff_match_patch } from "diff-match-patch";
+import { diffWords, Change } from "diff";
 import usePdfStore from "@/app/store/usePDFStore";
 import { usePDF } from "react-to-pdf";
 import { toast } from "react-toastify";
@@ -61,18 +62,41 @@ export function SimpleEditor({
 
   const getCorrectedContent = (original: string, corrected: string) => {
     original = original.replace(/<\/?p>/g, "");
-    const diff: Change[] = diffChars(original, corrected);
+    const diff: Change[] = diffWords(original, corrected);
     let text = "";
     diff.forEach((node) => {
+      console.log(node);
+
       if (node.added) {
         text += `<u>${node.value}</u>`;
       } else if (node.removed) {
+        console.log(node.value);
         text += `<del>${node.value}</del>`;
       } else {
         text += node.value;
       }
     });
 
+    let stringWithoutPTags = text.replace(/<p><\/p>/g, "");
+    return stringWithoutPTags;
+  };
+
+  const getDiff = (original: string, corrected: string) => {
+    const dmp = new diff_match_patch();
+    const diff = dmp.diff_main(original, corrected);
+    dmp.diff_cleanupSemantic(diff);
+
+    let text = "";
+
+    diff.forEach((part) => {
+      if (part[0] === -1) {
+        text += `<del>${part[1]}</del>`;
+      } else if (part[0] === 1) {
+        text += `<u>${part[1]}</u>`;
+      } else {
+        text += part[1];
+      }
+    });
     let stringWithoutPTags = text.replace(/<p><\/p>/g, "");
     return stringWithoutPTags;
   };
@@ -138,6 +162,7 @@ export function SimpleEditor({
         toast.error("Word limit exceeded. Please reduce the number of words.");
         return;
       }
+      setInputText(currentContent);
       const payload = {
         userId: userId,
         title: title,
@@ -147,18 +172,42 @@ export function SimpleEditor({
         prompt: _id,
         hasSaved,
       };
-      setIsLoading(true);
-      const { data } = await AxiosIns.post("/stories/score", payload);
-      if (hasSaved) {
-        toast.success("Story saved succesfully");
-        router.push(`/profile`);
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BACKEND_ROOT_URL}/api/stories/score`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ...payload }),
+        }
+      );
+
+      if (response.ok) {
+        if (response.body === null) {
+          return;
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+        setCorrectedText(""); // Reset the response text
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          const chunk = decoder.decode(value, { stream: true });
+          setCorrectedText((prev) => prev + chunk);
+        }
+        if (hasSaved) {
+          toast.success("Story saved succesfully");
+          router.push(`/profile`);
+        }
+        setCopied(false);
+        setIsLoading(false);
+        setIsSaving(false);
+        setTriggerGrammarCheck(false);
       }
-      setInputText(currentContent);
-      setCorrectedText(data.corrections);
-      setCopied(false);
-      setIsLoading(false);
-      setIsSaving(false);
-      setTriggerGrammarCheck(false);
     } catch (error) {
       setIsLoading(false);
       setTriggerGrammarCheck(false);
@@ -169,12 +218,9 @@ export function SimpleEditor({
 
   const handleUpdate = () => {
     if (editor) {
-      editor.commands.setContent(
-        `${getCorrectedContent(inputText, correctedText)}`
-      );
+      editor.commands.setContent(`${getDiff(inputText, correctedText)}`);
     }
   };
-
   const toggleBold = useCallback(() => {
     editor.chain().focus().toggleBold().run();
   }, [editor]);
