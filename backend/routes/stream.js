@@ -1,7 +1,10 @@
+const { default: axios } = require("axios");
+
 const router = require("express").Router();
 
 router.post("/", async (req, res) => {
-  const { storyText, taskType, wordCount } = req.body;
+  const { storyText, taskType } = req.body;
+  const wordCount = storyText.split(" ").length;
 
   const systemMessage = {
     grammar: "Proofread this text but only fix grammar",
@@ -21,7 +24,7 @@ router.post("/", async (req, res) => {
       url: "https://api.openai.com/v1/chat/completions",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `${process.env.GPT_API_KEY}`,
+        Authorization: `Bearer sk-proj-Dt2El0drg7WRw5kZGLhCT3BlbkFJE3B9RfWIhwzTPS6r7eHJ`,
       },
       data: {
         model: "gpt-4-turbo",
@@ -43,9 +46,48 @@ router.post("/", async (req, res) => {
       responseType: "stream",
     });
 
+    let buffer = "";
+
     response.data.on("data", (chunk) => {
       const chunkString = chunk.toString();
-      res.write(`data: ${chunkString}\n\n`);
+
+      // Accumulate the incoming chunks
+      buffer += chunkString;
+
+      // Split the buffer into potential complete JSON strings
+      const parts = buffer.split("\n\n");
+
+      // Process each part
+      parts.forEach((part, index) => {
+        if (index === parts.length - 1) {
+          // The last part might be incomplete, so keep it in the buffer
+          buffer = part;
+        } else {
+          // Remove the 'data: ' prefix if it exists
+          const jsonString = part.startsWith("data: ") ? part.slice(6) : part;
+
+          // Check if the string is a valid JSON string
+          if (jsonString.trim() === "[DONE]") {
+            console.log("[DONE] received");
+            return;
+          }
+
+          try {
+            // Parse the JSON string into an object
+            const jsonObject = JSON.parse(jsonString);
+            // Access the 'choices' property
+            const choices = jsonObject.choices;
+            // Log the choices to the console
+            console.log(choices);
+            if (choices[0] && choices[0].delta?.content) {
+              let data = choices[0].delta?.content;
+              res.write(`${data}`);
+            }
+          } catch (error) {
+            console.error("Error parsing JSON:", error);
+          }
+        }
+      });
     });
 
     response.data.on("end", () => {
