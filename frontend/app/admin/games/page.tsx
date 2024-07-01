@@ -27,6 +27,8 @@ const Games = () => {
 
     fetchGamePrompts();
   }, []);
+
+
   async function onsuccess(){
     const fetchGamePrompts = async () => {
       try {
@@ -72,10 +74,10 @@ const Games = () => {
               </div>
             </div>
             {gamePrompts.map((prompt) => (
-              <CardAdd key={prompt._id} id={prompt._id}  onSuccess={onsuccess} title={prompt.title} categories={prompt.promptCategory} description={prompt.description} />
+              <CardAdd key={prompt._id} id={prompt._id}  onSuccess={onsuccess} title={prompt.title}  categories={prompt.promptCategory} description={prompt.description} />
             ))}
           </div>
-          {isModalOpen && <ModalGame setIsModalOpen={setIsModalOpen} onSuccess={onsuccess} category={[]} />}
+          {isModalOpen && <ModalGame setIsModalOpen={setIsModalOpen}  onSuccess={onsuccess} />}
         </div>
       </div>
     </ProtectedRoute>
