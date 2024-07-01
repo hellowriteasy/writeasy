@@ -13,8 +13,9 @@ const Prompt: React.FC<PromptProps> = ({ prompt }) => {
     
     <div className="w-11/12 h-40 flex relative bg-white border-2 border-gray-300 rounded-3xl overflow-hidden">
       <div className="px-6 py-4 w-5/6">
-        <div className="font-bold font-comic text-xl mb-2">{prompt.title}</div>
-        <div className="font-bold font-comic text-xl mb-2">{prompt.promptCategory.join(",")}</div>
+      <div className="font-bold font-comic text-lg sm:text-xl md:text-2xl lg:text-3xl mb-2">{prompt.title}</div>
+<div className="font-bold font-comic text-lg sm:text-xl md:text-2xl lg:text-3xl mb-2">{prompt.promptCategory.join(",")}</div>
+
         
       </div>
       <Link href={`/Games/${prompt._id}`}>
@@ -22,7 +23,7 @@ const Prompt: React.FC<PromptProps> = ({ prompt }) => {
       <Image
         src={Pencil}
         alt='Pencil'
-        className="w-10 h-10 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12"
+        className="w-10  h-10 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12"
       />
     </div>
       </Link>

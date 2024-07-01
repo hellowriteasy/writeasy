@@ -46,7 +46,6 @@ app.use("/api/payments", paymentRoutes);
 app.use("/api/category", categoriesRoute);
 app.use("/api/collaborative-stories", collaborativeStoryRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
 app.get("/success", (req, res) => {
   const token = req.query.token;
   if (token) {

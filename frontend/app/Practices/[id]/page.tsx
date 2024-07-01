@@ -108,11 +108,11 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
                     {["grammar", "rewrite", "improve"].map((type) => (
                       <div key={type}>
                         <button
-                          className={`w-[10vw] h-[4vw] bg-black text-white ${
+                          className={`w-[12vw] h-[8vh] bg-black text-white ${
                             taskType === type
                               ? "bg-custom-yellow text-black"
                               : ""
-                          } hover:opacity-80 font-bold text-[1.6vw] rounded-full`}
+                          } hover:opacity-80 font-bold text-[1.6vw] rounded-3xl`}
                           value={type}
                           type="button"
                           onClick={

@@ -385,7 +385,6 @@ const Page = () => {
             </div>
    
   );
-  console.log(contributors);
 
   return (
     <div className="w-full h-[1300px] mt-6 z-0 relative flex justify-center ">

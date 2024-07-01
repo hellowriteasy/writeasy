@@ -77,7 +77,7 @@ const Games = () => {
               <CardAdd key={prompt._id} id={prompt._id}  onSuccess={onsuccess} title={prompt.title}  categories={prompt.promptCategory} description={prompt.description} />
             ))}
           </div>
-          {isModalOpen && <ModalGame setIsModalOpen={setIsModalOpen}  onSuccess={onsuccess} />}
+          {isModalOpen && <ModalGame  setIsModalOpen={setIsModalOpen}  onSuccess={onsuccess} />}
         </div>
       </div>
     </ProtectedRoute>

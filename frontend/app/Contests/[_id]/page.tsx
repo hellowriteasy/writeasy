@@ -100,7 +100,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
   return (
     <div className="w-full min-h-screen mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 h-auto ms-12">
-        <div className="flex w-full justify-center">
+        <div className="flex w-full ">
           <p className="text-xl text-center font-comic">
             <b className="font-bold"> Until </b> -
             {moment(contest.submissionDeadline).format("llll")}
@@ -119,11 +119,11 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
             </div>
           </div>
         </div>
-        <div className="flex w-full h-auto relative mt-0 justify-around gap-x-7">
+        <div className="flex w-full h-auto relative mt-0 justify-between ">
           <div className="absolute sm-hide top-0 -left-40">
             <Image src={Cloud2} alt="cloud" />
           </div>
-          <div className="gap-8 relative flex flex-col">
+          <div className="gap-8  flex flex-col">
             {hasPromptPublished ? (
               promptList.length > 0 ? (
                 promptList.map((prompt) => (
@@ -139,9 +139,11 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
                 ))
               ) : null
             ) : (
+             
               <PromptNotPublished
                 publishDate={moment(contest.promptPublishDate).format("llll")}
               />
+           
             )}
             <div className="w-full ms-28">
               <Pagination />
