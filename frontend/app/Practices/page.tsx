@@ -62,7 +62,7 @@ const Page: React.FC = () => {
         <Image className="w-[10vw]" src={moon} alt="moon" />
       </div>
       <div className="w-10/12 min-h-screen ms-12">
-        <div className="w-full h-80 relative pt-4">
+        <div className="w-full h-[30vh] relative pt-4">
           <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold font-comic">
             Practice Your Craft
           </h1>
