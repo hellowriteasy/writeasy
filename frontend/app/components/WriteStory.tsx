@@ -13,7 +13,6 @@ import Code from "@tiptap/extension-code";
 import History from "@tiptap/extension-history";
 import * as Icons from "./Icons";
 import { diff_match_patch } from "diff-match-patch";
-import { diffWords, Change } from "diff";
 import usePdfStore from "@/app/store/usePDFStore";
 import { usePDF } from "react-to-pdf";
 import { toast } from "react-toastify";
@@ -56,28 +55,15 @@ export function SimpleEditor({
   const setStoredFunction = usePdfStore((state) => state.setPdfExportFunction);
   const pdfExportFunction = usePdfStore((state) => state.pdfExportFunction);
   const router = useRouter();
+  const [wordCount, setWordCount] = useState(0);
+  const [wordLimitExceeded, setWordLimitExceeded] = useState(false);
+  const { token } = useAuthStore();
+  const [isSaving, setIsSaving] = useState(false);
   useEffect(() => {
     setStoredFunction(toPDF);
   }, [toPDF, setStoredFunction]);
 
-  const getCorrectedContent = (original: string, corrected: string) => {
-    original = original.replace(/<\/?p>/g, "");
-    const diff: Change[] = diffWords(original, corrected);
-    let text = "";
-    diff.forEach((node) => {
-
-      if (node.added) {
-        text += `<u>${node.value}</u>`;
-      } else if (node.removed) {
-        text += `<del>${node.value}</del>`;
-      } else {
-        text += node.value;
-      }
-    });
-
-    let stringWithoutPTags = text.replace(/<p><\/p>/g, "");
-    return stringWithoutPTags;
-  };
+  const axiosIns = axiosInstance(token || "");
 
   const getDiff = (original: string, corrected: string) => {
     const dmp = new diff_match_patch();
@@ -88,14 +74,9 @@ export function SimpleEditor({
 
     diff.forEach((part) => {
       if (part[0] === -1) {
-
-        text += `<del>${part[1]}</del>`
-        
+        text += `<del>${part[1]}</del>`;
       } else if (part[0] === 1) {
-
         text += `<u>${part[1]}</u>`;
-
-
       } else {
         text += part[1];
       }
@@ -108,10 +89,6 @@ export function SimpleEditor({
     handleUpdate();
   }, [correctedText]);
 
-  const [wordCount, setWordCount] = useState(0);
-  const [wordLimitExceeded, setWordLimitExceeded] = useState(false);
-  const { token } = useAuthStore();
-  const [isSaving, setIsSaving] = useState(false);
   const editor = useEditor({
     extensions: [
       Document,
@@ -147,7 +124,6 @@ export function SimpleEditor({
   }, [triggerGrammarCheck]);
 
   const userId = useAuthStore((state) => state.userId);
-  const AxiosIns = axiosInstance(token || "");
 
   const handleClickFeature: THandleClickFeature = async (
     type,
@@ -176,40 +152,43 @@ export function SimpleEditor({
         hasSaved,
       };
 
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_ROOT_URL}/api/stories/score`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ ...payload }),
-        }
-      );
-
-      if (response.ok) {
-        if (response.body === null) {
-          return;
-        }
-
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder("utf-8");
-        setCorrectedText(""); // Reset the response text
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          const chunk = decoder.decode(value, { stream: true });
-          setCorrectedText((prev) => prev + chunk);
-        }
-        if (hasSaved) {
-          toast.success("Story saved succesfully");
-          router.push(`/profile`);
-        }
-        setCopied(false);
-        setIsLoading(false);
+      if (hasSaved) {
+        await axiosIns.post("/stories/practise/save", payload);
         setIsSaving(false);
-        setTriggerGrammarCheck(false);
+        toast.success("Story saved succesfully");
+        router.push(`/profile`);
+      }
+      if (!hasSaved) {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_ROOT_URL}/api/stories/score`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ ...payload }),
+          }
+        );
+
+        if (response.ok) {
+          if (response.body === null) {
+            return;
+          }
+
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder("utf-8");
+          setCorrectedText(""); // Reset the response text
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            const chunk = decoder.decode(value, { stream: true });
+            setCorrectedText((prev) => prev + chunk);
+          }
+          setCopied(false);
+          setIsLoading(false);
+          setTriggerGrammarCheck(false);
+        }
       }
     } catch (error) {
       setIsLoading(false);
@@ -352,7 +331,6 @@ export function SimpleEditor({
                 isLoading ? "opacity-50 cursor-not-allowed" : ""
               }  h-[600px] overflow-y-auto scrollbar-hide`}
               editor={editor}
-              
               style={{
                 overflowY: "auto",
                 scrollbarWidth: "none",

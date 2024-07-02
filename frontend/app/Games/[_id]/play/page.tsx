@@ -1,7 +1,7 @@
 "use client";
 import React, { useCallback, useState, SyntheticEvent, useEffect } from "react";
 import classNames from "classnames";
-import { useEditor, EditorContent,Editor } from "@tiptap/react";
+import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
@@ -20,21 +20,27 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useParams } from "next/navigation";
 import { axiosInstance } from "@/app/utils/config/axios";
-import { TPrompt, TStory } from "@/app/utils/types";
+import { TPrompt, TStory, TUser } from "@/app/utils/types";
 import Logo from "@/public/Landingpage-img/logo.svg";
 import { useRouter } from "next/navigation";
 interface SearchResult {
   username: string;
-  email: string; 
+  email: string;
 }
 interface Props {
   searchResults: SearchResult[];
-  handleSelectedUser: (selectedEmail: string, event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  handleSelectedUser: (
+    selectedEmail: string,
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => void;
 }
 
 interface Props {
   searchResults: SearchResult[];
-  handleSelectedUser: (selectedEmail: string, event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  handleSelectedUser: (
+    selectedEmail: string,
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => void;
 }
 const Page = () => {
   const [storyDetails, setStoryDetails] = useState({
@@ -45,12 +51,12 @@ const Page = () => {
     wordLimitExceeded: false,
     refresh: false,
   });
-  const [Value,setValue]=useState<string>("")
-  const [selectedUsers, setSelectedUsers]= useState <string[]> ([]);
+  const [Value, setValue] = useState<string>("");
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [inviting, setInviting] = useState(false);
   const [showCard, setShowCard] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]); // State to hold search results
+  const [searchResults, setSearchResults] = useState<TUser[]>([]); // State to hold search results
   const [prompt, setPrompt] = useState<TPrompt | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [currentStory, setCurrentStory] = useState<TStory | null>(null);
@@ -93,40 +99,39 @@ const Page = () => {
   const fetchUsers = async () => {
     try {
       // if (!searchQuery.trim()) {
-      //   setSearchResults([]); 
+      //   setSearchResults([]);
       //   return;
       // }
-      setShowCard(true)
+      setShowCard(true);
       const { data } = await AxiosIns.get(
         `/auth/users/search?search_query=${searchQuery}`
       );
-      setSearchResults(data); 
-      console.log(data)
-    
+      const filtered = data.filter((user: any) => user._id !== userId);
+      setSearchResults(filtered);
+      console.log(data);
     } catch (error) {
-      setShowCard(false)
+      setShowCard(false);
       console.error("Error fetching users:", error);
       toast.error("Failed to fetch users. Please try again later.");
     }
   };
-  
-  const handleSearchChange = async (e:any): Promise<void> => {
-    setSearchQuery(e.target.value); 
-    await fetchUsers(); 
+
+  const handleSearchChange = async (e: any): Promise<void> => {
+    setSearchQuery(e.target.value);
+    await fetchUsers();
   };
-  
+
   const handleSelectedUser = (selectedEmail: string): void => {
-    setValue(selectedEmail); 
+    setValue(selectedEmail);
     if (selectedUsers.length < 5 && !selectedUsers.includes(selectedEmail)) {
       setSelectedUsers([...selectedUsers, selectedEmail]);
     }
   };
-  
-  const handleRemoveUser = (email: string, e:SyntheticEvent): void => {
+
+  const handleRemoveUser = (email: string, e: SyntheticEvent): void => {
     e.preventDefault(); // Prevents page refresh
     setSelectedUsers(selectedUsers.filter((user) => user !== email));
   };
-
 
   const fetchPromptById = async () => {
     try {
@@ -149,7 +154,7 @@ const Page = () => {
       //
     }
   };
-  
+
   useEffect(() => {
     fetchStoryOfUserByPromptId();
   }, [userId, promptId, storyDetails.refresh]);
@@ -159,7 +164,7 @@ const Page = () => {
       fetchPromptById();
     }
   }, [promptId]);
-  
+
   useEffect(() => {
     const handleBeforeUnload = (event: any) => {
       event.preventDefault();
@@ -174,7 +179,7 @@ const Page = () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
-  
+
   useEffect(() => {
     console.log("inside", currentStory);
     if (currentStory && editor) {
@@ -225,7 +230,7 @@ const Page = () => {
           refresh: !prev.refresh,
         }));
       }
-      
+
       router.push(`/profile/game?prompt_id=${promptId}`);
 
       setSubmittingStory(false);
@@ -252,9 +257,9 @@ const Page = () => {
     try {
       const invitePayload = {
         storyID: storyId,
-        email:selectedUsers, 
+        email: selectedUsers,
         promptID: promptId,
-        userID: userId
+        userID: userId,
       };
 
       const { data } = await AxiosIns.post(
@@ -307,7 +312,10 @@ const Page = () => {
       [name]: value,
     }));
   };
-  const RenderUserCard: React.FC<Props> = ({ searchResults, handleSelectedUser }) => (
+  const RenderUserCard: React.FC<Props> = ({
+    searchResults,
+    handleSelectedUser,
+  }) => (
     <div className="p-4 h-96 overflow-y-auto bg-white shadow-lg rounded-lg">
       {searchResults.map((result, index) => (
         <div
@@ -319,7 +327,9 @@ const Page = () => {
             {result.username.charAt(0).toUpperCase()}
           </div>
           <div className="ml-4">
-            <div className="text-sm font-medium text-gray-900">{result.username}</div>
+            <div className="text-sm font-medium text-gray-900">
+              {result.username}
+            </div>
             <div className="text-sm text-gray-500">{result.email}</div>
           </div>
         </div>
@@ -347,43 +357,38 @@ const Page = () => {
       ))}
     </div>
   );
-  
-  
+
   const contributors = currentStory
     ? Array.from(new Array(...currentStory?.contributors, currentStory?.user))
     : [];
   const InvitationButton = (
-    
-<div className="mb-4">
-              <label className="block mb-2 font-medium">
-                Invite Collaborators
-              </label>
-              {selectedUsers.length > 0 &&showCard&& (
-                <div className="mt-2">{renderSelectedUsers()}</div>
-              )}
-              <div className="flex">
-              <input
-                type="email"
-                className="w-full p-2 border outline-yellow-100 border-gray-300 rounded"
-                value={searchQuery}
-                onChange={handleSearchChange}
-              />
-               <button
-                className="px-4  bg-black text-white rounded"
-                onClick={handleInvite}
-                disabled={inviting}
-              >
-                {inviting ? "Inviting..." : "Invite"}
-              </button>
-              </div>
-              {showCard && searchQuery && (
-                 <RenderUserCard searchResults={searchResults} handleSelectedUser={handleSelectedUser} />
-                 
-              )}
-             
-             
-            </div>
-   
+    <div className="mb-4">
+      <label className="block mb-2 font-medium">Invite Collaborators</label>
+      {selectedUsers.length > 0 && showCard && (
+        <div className="mt-2">{renderSelectedUsers()}</div>
+      )}
+      <div className="flex">
+        <input
+          type="email"
+          className="w-full p-2 border outline-yellow-100 border-gray-300 rounded"
+          value={searchQuery}
+          onChange={handleSearchChange}
+        />
+        <button
+          className="px-4  bg-black text-white rounded"
+          onClick={handleInvite}
+          disabled={inviting}
+        >
+          {inviting ? "Inviting..." : "Invite"}
+        </button>
+      </div>
+      {showCard && searchQuery && (
+        <RenderUserCard
+          searchResults={searchResults}
+          handleSelectedUser={handleSelectedUser}
+        />
+      )}
+    </div>
   );
 
   return (
@@ -405,11 +410,7 @@ const Page = () => {
 
                 <p className="text-xl font-comic">
                   Calling all friends! , Let team up and create stories
-                  together. To join, enter your email addresses separated by
-                  commas:{" "}
-                  <strong>
-                    user1@gmail.com, user2@gmail.com, user3@gmail.com
-                  </strong>
+                  together.
                 </p>
 
                 <p className="text-xl font-comic">

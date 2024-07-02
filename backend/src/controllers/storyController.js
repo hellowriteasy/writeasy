@@ -8,27 +8,12 @@ const gptService = new GptService(process.env.GPT_API_KEY); // Initialize GPT se
 const createStory = async (req, res) => {
   try {
     const { content } = req.body;
-    // Calculate word count
     const wordCount = content.split(" ").length;
-
     const story = await StoryService.createStory({ ...req.body, wordCount });
-
-    // if (storyType === "game") {
-    //   const newCollaborativeStory = new CollaborativeStory({
-    //     title: story.title,
-    //     description: story.description,
-    //     creatorUser: user,
-    //     story_id:story._id,
-    //     content: [],
-    //     contributors: [],
-    //   });
-    //   await newCollaborativeStory.save();
-    // }
-
     res.status(201).json({
       message: "Story has been successfully saved.",
       story: story._id,
-    }); // Respond without score
+    });
 
     // Process the story for scoring in the background
     processStoryForScoring(story._id, story.content, wordCount); // Ensuring 'content' exists in your story model
@@ -217,7 +202,7 @@ const getStoryOfAuserByPrompt = async (req, res) => {
     );
     return res.status(200).json(story);
   } catch (error) {
-    console.log(error); 
+    console.log(error);
     res.status(500).json({ message: error?.message || "Something went wrong" });
   }
 };
@@ -268,6 +253,65 @@ const getSortInputForStoriesByContestAndPrompt = (sortKey, direction) => {
     };
   }
 };
+const savePractiseStoryToProfile = async (req, res) => {
+  const { userId, title, content, taskType, storyType, prompt } = req.body;
+
+  const wordCount = content.split(" ").length; // Calculate word count
+
+  try {
+    const newStory = await new Story({
+      title,
+      storyType,
+      content,
+      user: userId,
+      prompt,
+      wordCount,
+      hasSaved: true,
+    });
+    await newStory.save();
+    res.status(201).json({ message: "successfully saved to profile" });
+    processCorrectionAndSummary({
+      story_id: newStory._id,
+      content,
+      taskType,
+    });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ message: error.message || "Error saving to profile" });
+  }
+};
+
+const processCorrectionAndSummary = async ({
+  story_id,
+  content,
+  taskType,
+  wordCount,
+}) => {
+  try {
+    console.log("processing correction and summary 1",story_id);
+    const correction = await gptService.generateCorrection(
+      content,
+      taskType,
+      wordCount
+    );
+    console.log("processing correction 2", correction);
+
+    const summary = await gptService.generateCorrectionSummary(
+      content,
+      correction
+    );
+    console.log("processing correction summary 3 ", summary);
+
+    await Story.findByIdAndUpdate(story_id, {
+      corrections: correction,
+      correctionSummary: summary,
+    });
+  } catch (error) {
+    console.log("error generating correction summary", error);
+  }
+};
 
 module.exports = {
   createStory,
@@ -281,4 +325,5 @@ module.exports = {
   getTopStoriesByPrompt,
   getStoryOfAuserByPrompt,
   getStoriesByContentAndPrompt,
+  savePractiseStoryToProfile,
 };

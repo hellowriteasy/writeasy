@@ -10,8 +10,9 @@ const {
   getStoriesByUserAndType,
   getStoryOfAuserByPrompt,
   getStoriesByContentAndPrompt,
+  savePractiseStoryToProfile,
 } = require("../src/controllers/storyController");
-const { scoreStory } = require("../src/controllers/StoryScoreController");
+const { practiseStory } = require("../src/controllers/StoryScoreController");
 /**
  * @openapi
  * /api/stories:
@@ -222,8 +223,9 @@ router.delete("/:id", deleteStory);
  */
 
 
-router.post("/score", scoreStory);
+router.post("/practise/save", savePractiseStoryToProfile);
 
+router.post("/score", practiseStory);
 
 /**
  * @openapi
