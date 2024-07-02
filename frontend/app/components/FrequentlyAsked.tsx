@@ -43,7 +43,7 @@ const FrequentlyAsked = () => {
   };
 
   return (
-    <div className="relative w-full h-auto text-black flex flex-col items-center px-4 md:px-10">
+    <div className="relative w-full min-h-screen text-black flex flex-col items-center px-4 md:px-10">
       <div className="absolute left-4 md:left-10 vsm-hide top-20 md:top-32">
         <Image className="w-[13vw]" src={Group} alt="group" />
       </div>

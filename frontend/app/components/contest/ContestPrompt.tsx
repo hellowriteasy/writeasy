@@ -61,12 +61,12 @@ const ContestPrompt: React.FC<PromptProps> = ({
 
   return (
     <div
-      className="flex justify-center px-4 md:px-0 w-full   bg-white border-2 border-gray-300 rounded-3xl "
+      className="flex justify-center px-4 md:px-0 w-5/6   bg-white border-2 border-gray-300 rounded-3xl "
       onClick={handleRedirectToPromptWritings}
     >
       <div className="w-full  h-auto md:h-40 flex relative overflow-hidden mb-4">
-        <div className="px-4 py-4 md:px-6 md:py-4 w-full md:w-10/12">
-          <div className="font-bold font-comic text-wrap text-base md:text-xl mb-2 overflow-hidden overflow-ellipsis whitespace-nowrap">
+        <div className="px-4 py-4 md:px-6 md:py-4 w-full md:w-5/6">
+          <div className="font-bold  font-comic text-wrap text-base md:text-xl mb-2 overflow-hidden overflow-ellipsis whitespace-nowrap">
             {promptText}
           </div>
           <p className="text-gray-700 font-bold text-wrap font-comic pt-4 md:pt-8 text-sm md:text-base">

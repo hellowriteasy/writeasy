@@ -18,10 +18,30 @@ interface ModalProps {
   onAddPrompt: (prompt: TPromptAdd) => void;
 }
 
+interface Category {
+  name: string;
+  _id: string;
+}
+
 const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
   const [promptTitle, setPromptTitle] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const AxiosIns = axiosInstance("");
+
+  useEffect(() => {
+    const getCategory = async () => {
+      try {
+        const { data } = await AxiosIns.get<{ categories: Category[] }>('/category');
+        setCategories(data.categories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    getCategory();
+  }, []);
+
   useEffect(() => {
     const handleBeforeUnload = (event: any) => {
       event.preventDefault();
@@ -36,6 +56,7 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
+
   const handleAddPrompt = async () => {
     try {
       const response = await AxiosIns.post("/prompts", {
@@ -72,7 +93,7 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
     <Transition.Root show={true} as={Fragment}>
       <Dialog
         as="div"
-        className="relative z-10"
+        className="relative z-10 h-screen"
         onClose={() => setIsModalOpen(false)}
       >
         <Transition.Child
@@ -98,8 +119,8 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl sm:min-h-[50vh] h-[40vw]">
+                <div className="bg-white px-4 pb-4 pt-5  sm:p-6 sm:pb-4">
                   <div className="sm:flex sm:items-start">
                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                       <Dialog.Title
@@ -132,34 +153,28 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
                             leaveTo="transform opacity-0 scale-95"
                           >
                             <MenuItems className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                              {["adventure", "romance", "mystery"].map(
-                                (category) => (
-                                  <MenuItem key={category}>
-                                    {({ active }) => (
-                                      <button
-                                        className={`${
-                                          active
-                                            ? "bg-indigo-600 text-white"
-                                            : "text-gray-900"
-                                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                        onClick={() => toggleCategory(category)}
-                                      >
-                                        <input
-                                          type="checkbox"
-                                          checked={selectedCategories.includes(
-                                            category
-                                          )}
-                                          onChange={() =>
-                                            toggleCategory(category)
-                                          }
-                                          className="mr-2"
-                                        />
-                                        {category}
-                                      </button>
-                                    )}
-                                  </MenuItem>
-                                )
-                              )}
+                              {categories.map((category) => (
+                                <MenuItem key={category._id}>
+                                  {({ active }) => (
+                                    <button
+                                      className={`${
+                                        active
+                                          ? "bg-indigo-600 text-white"
+                                          : "text-gray-900"
+                                      } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                      onClick={() => toggleCategory(category.name)}
+                                    >
+                                      <input
+                                        type="checkbox"
+                                        checked={selectedCategories.includes(category.name)}
+                                        onChange={() => toggleCategory(category.name)}
+                                        className="mr-2"
+                                      />
+                                      {category.name}
+                                    </button>
+                                  )}
+                                </MenuItem>
+                              ))}
                             </MenuItems>
                           </Transition>
                         </Menu>

@@ -42,13 +42,13 @@ const Pricing = () => {
         </div>
 
         <div className="flex flex-col justify-center items-center lg:relative lg:w-1/2">
-          <div className="relative w-80 lg:w-auto mt-10 lg:mt-0 flex flex-col items-center">
+          <div className="relative w-[70vw] lg:w-auto mt-10 lg:mt-0 flex flex-col items-center">
             <Image src={Group16} alt="" />
-            <div className="text-center absolute top-32">
-              <h2 className="text-4xl font-bold">Free</h2>
+            <div className="text-center absolute top-[20%]">
+              <h2 className="text-[4vw] font-bold">Free</h2>
             </div>
 
-            <div className="text-center flex flex-col gap-y-10 absolute top-52">
+            <div className="text-center flex flex-col gap-y-10 absolute top-[50%]">
               <div>
                 <ul>
                   <li className="text-[18px]">•⁠ View all writings</li>
@@ -65,39 +65,39 @@ const Pricing = () => {
           </div>
         </div>
 
-        <div className="flex flex-col justify-center items-center lg:relative overflow-hidden  lg:w-1/2">
-          <div className="relative w-80 lg:w-auto mt-10 lg:mt-0 flex flex-col gap-y-8 items-center">
+        <div className="flex flex-col justify-center items-center relative lg:relative overflow-hidden  lg:w-1/2">
+          <div className="relative w-[70vw] lg:w-auto mt-10 lg:mt-0 flex flex-col gap-y-8 items-center">
             <Image src={Group15} alt="" />
-            <div className="text-center absolute top-20 sm:top-20 lg:top-28 md:top-32 flex flex-col justify-center items-center w-10/12">
+            <div className="text-center absolute top-[20%] flex flex-col justify-center items-center w-10/12">
               {!isSubcriptionActive ? (
                 <>
-                  <div className="flex justify-center items-center">
-                    <TbCurrencyPound className="text-5xl" />
-                    <h2 className="text-4xl font-comic text-center font-bold">
+                  <div className="flex top-[30%] justify-center items-center">
+                    <TbCurrencyPound className="text-[5vw]" />
+                    <h2 className="text-[4vw] font-comic text-center font-bold">
                       20
                     </h2>
-                    <span className="pt-4">/month</span>
+                    <span className="pt-4 text-[4vw]">/month</span>
                   </div>
                 </>
               ) : (
-                <div>
-                  <div className="flex items-center gap-y-4">
-                    <TbCurrencyPound className="text-5xl" />
-                    <h2 className="text-4xl font-comic text-center font-bold">
+                <div className="absolute top-[5%]">
+                  <div className="flex items-center justify-center ">
+                    <TbCurrencyPound className="text-[5vw]" />
+                    <h2 className="text-[5vw] font-comic text-center font-bold">
                       20
                     </h2>
                     <span className="pt-4">/month</span>
                   </div>
-                  <div className="text-center py-4 font-comic font-bold text-2xl">
+                  <div className="text-center font-comic font-bold text-[1vw]">
                     {subscriptionRemainingDays} days left
                   </div>
                 </div>
               )}
             </div>
-            <div className="text-center flex flex-col gap-y-2 absolute sm:top-48 top-48  md:top-60 w-10/12 mx-auto">
+            <div className="text-center flex flex-col gap-y-2 absolute top-[50%]  w-10/12 mx-auto">
               <div>
                 {/* <h2 className="p-4 text-2xl font-black underline">Subscription benefits</h2> */}
-                <ul className="flex sm:text-sm lg:text-xl  flex-col px-4  items-start ">
+                <ul className="flex sm:text-[1vw] lg:text-xl text-[3vw] flex-col px-4  items-start ">
                   <li className=" text-start">
                     •⁠ ⁠Unlimited writing practices with immediate GPT markings
                   </li>
