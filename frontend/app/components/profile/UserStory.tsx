@@ -1,12 +1,13 @@
-'use client';
-import React, { useState, Fragment } from 'react';
-import { usePDF } from 'react-to-pdf';
-import { diffChars } from 'diff';
-import StoryEditor from './Editor'; // Adjust the import path as necessary
-import { TUser } from '@/app/utils/types';
-import { axiosInstance } from '@/app/utils/config/axios';
-import { Dialog, Transition } from '@headlessui/react';
-import { useRouter } from 'next/navigation';
+"use client";
+import React, { useState, Fragment } from "react";
+import { usePDF } from "react-to-pdf";
+import { diffChars } from "diff";
+import StoryEditor from "./Editor"; // Adjust the import path as necessary
+import { TUser } from "@/app/utils/types";
+import { axiosInstance } from "@/app/utils/config/axios";
+import { Dialog, Transition } from "@headlessui/react";
+import { useRouter } from "next/navigation";
+import { diff_match_patch } from "diff-match-patch";
 interface CardProps {
   id: string;
   title: string;
@@ -17,7 +18,7 @@ interface CardProps {
   promptTitle: string;
   contestTitle: string;
   contributors: TUser[];
-  onsuccess:()=>void;
+  onsuccess: () => void;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -30,7 +31,7 @@ const Card: React.FC<CardProps> = ({
   promptTitle,
   prompt_id,
   contributors,
-  onsuccess
+  onsuccess,
 }) => {
   const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
   const [showFullDescription, setShowFullDescription] = useState(false);
@@ -69,14 +70,6 @@ const Card: React.FC<CardProps> = ({
       );
     }
 
-    if (!corrections) {
-      return (
-        <span style={{ color: "green", backgroundColor: "lightgreen" }}>
-          No corrections provided.
-        </span>
-      );
-    }
-
     const diff = diffChars(description, corrections);
     return diff.map((part, index) => {
       const style = {
@@ -91,6 +84,30 @@ const Card: React.FC<CardProps> = ({
       return (
         <span key={index} style={style}>
           {part.value}
+        </span>
+      );
+    });
+  };
+  const getDiff = (original: string, corrected: string) => {
+    const dmp = new diff_match_patch();
+    const diff = dmp.diff_main(original, corrected);
+    dmp.diff_cleanupSemantic(diff);
+
+
+    return diff.map((part, index) => {
+      const style = {
+        backgroundColor:
+          part[0] === 1
+            ? "lightgreen"
+            : part[0] === -1
+            ? "lightcoral"
+            : "transparent",
+        textDecoration: part[0] === -1 ? "line-through" : "none",
+        color: part[0] === 1 ? "green" : part[0] === -1 ? "red" : "black",
+      };
+      return (
+        <span key={index} style={style}>
+          {part[1]}
         </span>
       );
     });
@@ -124,9 +141,11 @@ const Card: React.FC<CardProps> = ({
           </p>
           {showDiff && (
             <div className="mt-4">
-              <h3 className="px-5 text-lg font-semibold">Corrections:</h3>
-              <p className="py-4 px-5">
-                {compareSentences(description, corrections)}
+              <h3 className=" text-lg font-semibold">Corrections:</h3>
+              <p className="py-4">
+                {corrections
+                  ? getDiff(description, corrections)
+                  : "Correction is being done in background hold on please !"}
               </p>
             </div>
           )}
@@ -171,7 +190,11 @@ const Card: React.FC<CardProps> = ({
       </div>
 
       <Transition appear show={isDeleteDialogOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={() => setIsDeleteDialogOpen(false)}>
+        <Dialog
+          as="div"
+          className="relative z-10"
+          onClose={() => setIsDeleteDialogOpen(false)}
+        >
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -196,12 +219,16 @@ const Card: React.FC<CardProps> = ({
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-gray-900"
+                  >
                     Are you sure you want to delete this item?
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      This action cannot be undone. Are you sure you want to proceed?
+                      This action cannot be undone. Are you sure you want to
+                      proceed?
                     </p>
                   </div>
 

@@ -162,7 +162,9 @@ class GptService {
   }
 
   async generateCorrectionSummary(originalText, corrections, score) {
-    const prompt = `The user submitted the following story as his original writing \n. ${originalText} \n The text was scored ${score}. Here are the corrections that you made: \n ${corrections}. \n 
+    const prompt = `The user submitted the following story as his original writing \n. ${originalText} \n ${
+      score ? `The text was scored ${score}.` : ""
+    }  Here are the corrections that you made: \n ${corrections}. \n 
     You are a professional teacher. Provide a summary explaining why these corrections were needed and why the story received the given score based on content, organization, and technical accuracy. Provide the response as like you are instructing the student.`;
 
     try {
@@ -344,7 +346,6 @@ class GptService {
       response.data.on("data", (chunk) => {
         const chunkString = chunk.toString();
         buffer += chunkString;
-        console.log("chunk string: ", chunkString);
         // Split the buffer into potential complete JSON strings
         const parts = buffer.split("\n\n");
         // Process each part
@@ -385,6 +386,48 @@ class GptService {
     } catch (error) {
       console.error("Error in generating score from GPT:", error);
       throw new Error("Error interacting with GPT API.");
+    }
+  }
+
+  async generateCorrection(storyText, taskType, wordCount) {
+    const systemMessage = {
+      grammar: "Proofread this text but only fix grammar",
+      rewrite: "Rewrite this text improving clarity and flow",
+      improve: "Proofread this text improving clarity and flow",
+    };
+
+    try {
+      const totalTokens = wordCount + 50;
+      const response = await axios({
+        method: "post",
+        url: "https://api.openai.com/v1/chat/completions",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.apiKey}`,
+        },
+        data: {
+          model: "gpt-4-turbo",
+          messages: [
+            {
+              role: "system",
+              content:
+                "You are a master proofreader. Only proofread the given text, don't add new text to the document. The instructions are often in English, but keep the proofread text in the same language as the language being asked to proofread.",
+            },
+            {
+              role: "user",
+              content: `${systemMessage[taskType]}:\n\n${storyText}`,
+            },
+          ],
+          max_tokens: totalTokens,
+          temperature: 0.5,
+        },
+      });
+      console.log("response", response);
+      const data = response.data.choices[0].message.content;
+      console.log("data", data);
+      return data;
+    } catch (error) {
+      console.log(error);
     }
   }
 }
