@@ -65,12 +65,10 @@ export function SimpleEditor({
     const diff: Change[] = diffWords(original, corrected);
     let text = "";
     diff.forEach((node) => {
-      console.log(node);
 
       if (node.added) {
         text += `<u>${node.value}</u>`;
       } else if (node.removed) {
-        console.log(node.value);
         text += `<del>${node.value}</del>`;
       } else {
         text += node.value;
@@ -90,15 +88,20 @@ export function SimpleEditor({
 
     diff.forEach((part) => {
       if (part[0] === -1) {
-        text += `<del>${part[1]}</del>`;
+
+        text += `<del>${part[1]}</del>`
+        
       } else if (part[0] === 1) {
+
         text += `<u>${part[1]}</u>`;
+
+
       } else {
         text += part[1];
       }
     });
     let stringWithoutPTags = text.replace(/<p><\/p>/g, "");
-    return stringWithoutPTags;
+    return text;
   };
 
   useEffect(() => {
@@ -218,7 +221,9 @@ export function SimpleEditor({
 
   const handleUpdate = () => {
     if (editor) {
-      editor.commands.setContent(`${getDiff(inputText, correctedText)}`);
+      const result = getDiff(inputText, correctedText);
+      console.log(result);
+      editor.commands.setContent(result);
     }
   };
   const toggleBold = useCallback(() => {
@@ -347,6 +352,7 @@ export function SimpleEditor({
                 isLoading ? "opacity-50 cursor-not-allowed" : ""
               }  h-[600px] overflow-y-auto scrollbar-hide`}
               editor={editor}
+              
               style={{
                 overflowY: "auto",
                 scrollbarWidth: "none",

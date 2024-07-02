@@ -29,10 +29,8 @@ async function processGeneratingCorrectionSummary({
 }
 
 async function scoreStory(req, res) {
-  console.log("score story", req.body);
   const { userId, title, content, taskType, storyType, prompt, hasSaved } =
     req.body;
-  console.log(content);
 
   const wordCount = content.split(" ").length; // Calculate word count
   let corrections = null;

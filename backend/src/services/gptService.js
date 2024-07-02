@@ -343,9 +343,8 @@ class GptService {
 
       response.data.on("data", (chunk) => {
         const chunkString = chunk.toString();
-        console.log(chunkString);
         buffer += chunkString;
-
+        console.log("chunk string: ", chunkString);
         // Split the buffer into potential complete JSON strings
         const parts = buffer.split("\n\n");
         // Process each part
@@ -366,7 +365,6 @@ class GptService {
             try {
               const jsonObject = JSON.parse(jsonString);
               const choices = jsonObject.choices;
-              console.log(choices);
               if (choices[0] && choices[0].delta?.content) {
                 let data = choices[0].delta?.content;
                 if (cb) {
