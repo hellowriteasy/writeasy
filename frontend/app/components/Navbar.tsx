@@ -25,8 +25,8 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
     <>
       <div className="flex items-center justify-between w-11/12">
         <Link href="/">
-          <div className="flex w-60 cursor-pointer items-center flex-shrink-0 mr-6">
-            <Image src={Logo} alt='logo' />
+          <div className="flex min-w-20 cursor-pointer items-center flex-shrink-0 mr-6">
+            <Image src={Logo} layout="responsive" objectFit="contain" alt='logo' />
           </div>
         </Link>
         <div className="hidden md:flex md:flex-grow justify-center">
@@ -38,14 +38,12 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
                   key={`${link.label}-${link.path}`}
                   className={
                     isActive
-                      ? "active sm:px-6 py-2 rounded-full text-center "
-                      : " sm:px-6 py-2  rounded-full text-center "
+                      ? "active sm:px-6 py-2 rounded-full text-center"
+                      : "sm:px-6 py-2 rounded-full text-center"
                   }
                 >
-                  <Link href={link.path}
-                    className="pt-5 text-[1.5vw]    cursor-pointer">
-                      {link.label}
-                    
+                  <Link href={link.path} className="pt-5 text-[1.2vw] cursor-pointer">
+                    {link.label}
                   </Link>
                 </li>
               );
@@ -74,17 +72,16 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
   // Conditional rendering based on the path
   if (path.includes("admin") || path.includes("signup") || path.includes("login")) {
     return null; // Hide navbar for admin, signup, and login pages
-
   }
 
   return (
-    <nav className="navbar flex w-screen sticky top-0 h-28 justify-between items-center bg-custom-yellow p-6 z-50">
+    <nav className="navbar flex w-full sticky top-0 h-28 justify-between items-center bg-custom-yellow p-6 z-50">
       {navContent}
-      <div className={`fixed top-0 left-0 h-full bg-custom-yellow p-4 flex flex-col items-center space-y-4 z-50 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out md:hidden`}>
+      <div className={`fixed top-0 left-0 h-full w-72 bg-custom-yellow p-6 flex flex-col items-center space-y-6 z-50 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out md:hidden`}>
         <button onClick={toggleMenu} className="self-end text-black focus:outline-none mb-4">
           <XMarkIcon className="h-8 w-8" />
         </button>
-        <ul className="flex flex-col items-center gap-20 font-comic text-md">
+        <ul className="flex flex-col items-center gap-6 font-comic text-md">
           {titles.map(link => {
             const isActive = path.startsWith(link.path) || path.includes(link.path);
             return (
@@ -92,26 +89,24 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
                 key={`${link.label}-${link.path}`}
                 className={
                   isActive
-                    ? "active  py-2 text-center "
-                    : "  text-center "
+                 ? "active sm:px-6 py-2 rounded-full text-center"
+                      : "sm:px-6 py-2 rounded-full text-center"
                 }
               >
-                <Link className="pt-5 text-lg cursor-pointer" href={link.path}
-                   onClick={toggleMenu}>
-                    {link.label}
-                 
+                <Link className="pt-2 text-lg cursor-pointer" href={link.path} onClick={toggleMenu}>
+                  {link.label}
                 </Link>
               </li>
             );
           })}
         </ul>
-        <div className="flex flex-col gap-4">
+        <div className="flex justify-center items-center flex-col gap-4 w-full">
           {loggedIn ? (
             <UserMenu />
           ) : (
             <>
-              <button onClick={() => { router.push('/login'); toggleMenu(); }} className="text-lg sm:text-2xl font-bold text-center bg-custom-yellow border-2 w-32 h-12 hover:bg-white rounded-3xl border-black text-black font-comic">Login</button>
-              <button onClick={() => { router.push('/signup'); toggleMenu(); }} className="text-lg sm:text-2xl font-bold text-center bg-black border-2 w-32 h-12 rounded-3xl hover:opacity-80 border-black text-white font-comic">Sign up</button>
+              <button onClick={() => { router.push('/login'); toggleMenu(); }} className="text-lg sm:text-2xl font-bold text-center bg-custom-yellow border-2 w-full h-12 hover:bg-white rounded-3xl border-black text-black font-comic">Login</button>
+              <button onClick={() => { router.push('/signup'); toggleMenu(); }} className="text-lg sm:text-2xl font-bold text-center bg-black border-2 w-full h-12 rounded-3xl hover:opacity-80 border-black text-white font-comic">Sign up</button>
             </>
           )}
         </div>
