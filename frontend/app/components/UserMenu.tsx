@@ -33,22 +33,22 @@ const UserMenu = () => {
 
   return (
     <div 
-      className="relative font-comic w-60 cursor-pointer" 
+      className="relative  font-comic w-[15vw] cursor-pointer" 
       onMouseEnter={() => setShowOptions(true)} 
-      onMouseLeave={() => setShowOptions(false)} // Add onMouseLeave here
+      onMouseLeave={() => setShowOptions(false)} 
     >
       <div className="relative font-comic">
-        <div className="w-full text-white h-14 text-center font-bold text-md font-comic bg-black border border-black rounded-3xl px-4 py-3 focus:outline-none focus:border-black">
+        <div className="w-full text-[1vw] text-white  font-bold text-center font-comic bg-black border border-black rounded-3xl px-4 py-4 focus:outline-none focus:border-black">
           {selectedOption || `${username}`}
         </div>
         <div className="pointer-events-none absolute inset-y-0 -left-2 bg-white rounded-full flex items-center px-2 text-white">
-          <IoPersonSharp className="w-10 h-5 text-black" />
+          <IoPersonSharp className="text-[2vw]  text-black" />
         </div>
         <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center px-2 text-white">
-          <FaAngleDown className="text-3xl" />
+          <FaAngleDown className="text-[2vw]" />
         </div>
       </div>
-      {/* Custom dropdown options */}
+     
       {showOptions && (
         <div className="absolute w-full  text-slate-900 bg-white border border-black rounded-lg shadow-lg">
           <Link href="/profile">
@@ -83,7 +83,7 @@ const UserMenu = () => {
                   setShowOptions(false);
                 }}
               >
-                Admin Page
+                Admin
               </div>
             </Link>
           )}

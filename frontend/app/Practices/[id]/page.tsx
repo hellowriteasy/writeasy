@@ -104,31 +104,29 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
                   />
                 </div>
                 <div className="flex w-full flex-col gap-8">
-                  <div className="flex flex-wrap justify-center gap-4 font-comic">
-                    {["grammar", "rewrite", "improve"].map((type) => (
-                      <div key={type}>
-                        <button
-                          className={`w-[12vw] h-[8vh] bg-black text-white ${
-                            taskType === type
-                              ? "bg-custom-yellow text-black"
-                              : ""
-                          } hover:opacity-80 font-bold text-[1.6vw] rounded-3xl`}
-                          value={type}
-                          type="button"
-                          onClick={
-                            type !== "pdf"
-                              ? (e) => {
-                                  handleTaskTypeClick(e);
-                                }
-                              : undefined
-                          }
-                          // disabled={type !== "pdf" && triggerGrammarCheck}
-                        >
-                          {type.charAt(0).toUpperCase() + type.slice(1)}
-                        </button>
-                      </div>
-                    ))}
-                  </div>
+                <div className="flex flex-wrap justify-center gap-4 font-comic">
+  {["grammar", "rewrite", "improve"].map((type) => (
+    <div key={type} className="flex">
+      <button
+        className={`w-[30vw] sm:w-[20vw] md:w-[15vw] lg:w-[12vw] h-[10vh] sm:h-[8vh] md:h-[7vh] lg:h-[6vh] bg-black text-white ${
+          taskType === type ? "bg-custom-yellow text-black" : ""
+        } hover:opacity-80 font-bold text-[4vw] sm:text-[2.5vw] md:text-[2vw] lg:text-[1.6vw] rounded-3xl`}
+        value={type}
+        type="button"
+        onClick={
+          type !== "pdf"
+            ? (e) => {
+                handleTaskTypeClick(e);
+              }
+            : undefined
+        }
+      >
+        {type.charAt(0).toUpperCase() + type.slice(1)}
+      </button>
+    </div>
+  ))}
+</div>
+
                 </div>
               </div>
             </form>
