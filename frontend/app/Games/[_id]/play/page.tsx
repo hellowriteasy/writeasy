@@ -136,7 +136,7 @@ const Page = () => {
   const fetchPromptById = async () => {
     try {
       const { data } = await AxiosIns.get(`/prompts/${promptId}`);
-      setPrompt(data);
+      setPrompt(data)
     } catch (error) {
       //
     }
@@ -246,13 +246,14 @@ const Page = () => {
 
   const handleInvite = async (e: SyntheticEvent) => {
     e.preventDefault();
-
+  
     const storyId = currentStory?._id;
-    // const emailList = selectedUsers.join('","');
-    // // if (!email) {
-    //   toast.error("Please enter an email address.");
-    //   return;
-    // }
+  
+    if (!selectedUsers || selectedUsers.length === 0) {
+      toast.error("Please select at least one user.");
+      return;
+    }
+  
     setInviting(true);
     try {
       const invitePayload = {
@@ -261,11 +262,11 @@ const Page = () => {
         promptID: promptId,
         userID: userId,
       };
-
-      const { data } = await AxiosIns.post(
-        `/collaborative-stories/invite`,
-        invitePayload
-      );
+  
+      if (invitePayload) {
+        const { data } = await AxiosIns.post(`/collaborative-stories/invite`, invitePayload);
+      }
+  
       setInviting(false);
       router.push("/profile/game");
       handleStoryDetailsInputChange("refresh", !storyDetails.refresh);

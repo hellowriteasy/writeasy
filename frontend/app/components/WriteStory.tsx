@@ -49,6 +49,7 @@ export function SimpleEditor({
   setTriggerGrammarCheck,
 }: SimpleEditorProps) {
   const [inputText, setInputText] = useState("");
+  const [initialContent, setInitialContent] = useState(""); // New state variable for initial content
   const [correctedText, setCorrectedText] = useState("");
   const [copied, setCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -60,6 +61,8 @@ export function SimpleEditor({
   const [wordLimitExceeded, setWordLimitExceeded] = useState(false);
   const { token } = useAuthStore();
   const [isSaving, setIsSaving] = useState(false);
+  const [Apicall, setApicall] = useState(false);
+
   useEffect(() => {
     setStoredFunction(toPDF);
   }, [toPDF, setStoredFunction]);
@@ -114,20 +117,32 @@ export function SimpleEditor({
     editorProps: {
       attributes: {
         class:
-          "prose dark:prose-invert prose-sm sm:prose-base px-4 w-full h-full inline-block lg:prose-lg xl:prose-2xl outline-none scroll",
+          "prose dark:prose-invert prose-sm  sm:prose-base px-4 w-full h-full inline-block lg:prose-lg xl:prose-2xl outline-none scroll",
       },
     },
     onUpdate: ({ editor }) => {
       const textContent = editor.getText();
+      if (!Apicall) {
+        setInitialContent(textContent);
+        console.log(textContent);
+      }
       const words = textContent.split(/\s+/).filter(Boolean).length;
       setWordCount(words);
       setWordLimitExceeded(words > 1000);
     },
   }) as Editor;
 
+  useEffect(() => {
+    // Set initial content into the editor when it's first initialized
+    if (editor && initialContent) {
+      editor.commands.setContent(initialContent);
+    }
+  }, [editor, initialContent]);
+
   const handleExport = () => {
     toPDF();
   };
+
   useEffect(() => {
     if (!triggerGrammarCheck) return;
     handleClickFeature(taskType, new MouseEvent("click"), false);
@@ -142,6 +157,11 @@ export function SimpleEditor({
   ) => {
     event.preventDefault();
     try {
+
+      if (initialContent) {
+        editor.commands.setContent(initialContent);
+      }
+
       const currentContent = editor.getText();
       if (!currentContent) {
         toast.warn("Please enter content before submitting.");
@@ -155,7 +175,7 @@ export function SimpleEditor({
       const payload = {
         userId: userId,
         title: title,
-        content: hasSaved ? inputText : currentContent,
+        content: initialContent,
         taskType: type || "improve",
         storyType: "practice",
         prompt: _id,
@@ -164,8 +184,9 @@ export function SimpleEditor({
 
       if (hasSaved) {
         await axiosIns.post("/stories/practise/save", payload);
+        setApicall(true);
         setIsSaving(false);
-        toast.success("Story saved succesfully");
+        toast.success("Story saved successfully");
         router.push(`/profile`);
       }
       if (!hasSaved) {
@@ -187,7 +208,7 @@ export function SimpleEditor({
 
           const reader = response.body.getReader();
           const decoder = new TextDecoder("utf-8");
-          setCorrectedText(""); // Reset the response text
+          setCorrectedText(""); 
 
           while (true) {
             const { done, value } = await reader.read();
@@ -211,10 +232,10 @@ export function SimpleEditor({
   const handleUpdate = () => {
     if (editor) {
       const result = getDiff(inputText, correctedText);
-      // console.log(result);
       editor.commands.setContent(result);
     }
   };
+
   const toggleBold = useCallback(() => {
     editor.chain().focus().toggleBold().run();
   }, [editor]);
