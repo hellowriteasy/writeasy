@@ -142,6 +142,44 @@ const UserController = {
         .json({ message: error?.message || "Internal server error" });
     }
   },
+  async updateSubscription(req, res) {
+    //
+    const { user_id, end_date } = req.body;
+    try {
+      const userExist = await User.findById(user_id);
+      if (!userExist) {
+        throw new Error("User not found ");
+      }
+
+      const subscription = await Subscription.findOne({
+        userId: user_id,
+      });
+      if (subscription && subscription.isActive) {
+        throw new Error("User already has an active subscription");
+      }
+      if (subscription) {
+        subscription.isActive = true;
+        await subscription.save();
+      }
+      if (!subscription) {
+        const newSubscription = new Subscription({
+          userId: user_id,
+          paidAt: Date.now(),
+          expiresAt: end_date,
+          isActive: true,
+        });
+        await newSubscription.save();
+      }
+      res.status(201).json({
+        message: "Subscription updated successfully",
+        success: true,
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: error.message || "Internal server error" });
+    }
+  },
 };
 
 module.exports = UserController;
