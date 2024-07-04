@@ -167,6 +167,7 @@ const UserController = {
           paidAt: Date.now(),
           expiresAt: end_date,
           isActive: true,
+          stripe_session_id:""
         });
         await newSubscription.save();
       }
