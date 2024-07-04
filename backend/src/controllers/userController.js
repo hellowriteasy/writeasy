@@ -14,7 +14,7 @@ const UserController = {
         password
       );
 
-      // Fetch the new user information from the database
+
       const user = await User.findById(_id);
 
       res.json({
@@ -167,7 +167,7 @@ const UserController = {
           paidAt: Date.now(),
           expiresAt: end_date,
           isActive: true,
-          stripe_session_id:""
+          stripe_session_id:"test"
         });
         await newSubscription.save();
       }
