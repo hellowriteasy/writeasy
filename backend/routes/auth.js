@@ -279,4 +279,54 @@ router.put("/users/profile/:user_id", UserController.updateProfile);
 
 router.get("/users/search", UserController.searchUser);
 
+/**
+ * @openapi
+ * /api/auth/users/subscribe:
+ *   put:
+ *     tags:
+ *       - Authentication
+ *     summary: Update a user's subscription
+ *     description: Updates a user's subscription, activating it if it's inactive or creating a new one if it doesn't exist.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               user_id:
+ *                 type: string
+ *                 description: The ID of the user.
+ *                 example: "60b725f10c9f1c71b64b8b98"
+ *               end_date:
+ *                 type: string
+ *                 format: date
+ *                 description: The end date of the subscription.
+ *                 example: "2024-12-31"
+ *     responses:
+ *       201:
+ *         description: Subscription updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Subscription updated successfully
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *       400:
+ *         description: Bad request. User ID or end date is missing or invalid.
+ *       404:
+ *         description: User not found.
+ *       409:
+ *         description: User already has an active subscription.
+ *       500:
+ *         description: Internal server error.
+ */
+
+router.put("/users/subscribe", UserController.updateSubscription);
+
 module.exports = router;

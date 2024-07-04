@@ -21,6 +21,7 @@ import useAuthStore from "../store/useAuthStore";
 import { axiosInstance } from "../utils/config/axios";
 import { TTaskType } from "../utils/types";
 import { useRouter } from "next/navigation";
+import HardBreak from "@tiptap/extension-hard-break";
 
 interface SimpleEditorProps {
   triggerGrammarCheck: any;
@@ -72,16 +73,24 @@ export function SimpleEditor({
 
     let text = "";
 
+    let store = "";
     diff.forEach((part) => {
+      // Replace \n\n with <br> and single \n with a space (to handle single line breaks)
+      const partText = part[1].replace(/\n\n/g, "<br>").replace(/\n/g, " ");
+
+      store += partText;
+
       if (part[0] === -1) {
-        text += `<del>${part[1]}</del>`;
+        text += `<del>${partText}</del>`;
       } else if (part[0] === 1) {
-        text += `<u>${part[1]}</u>`;
+        text += `<u>${partText}</u>`;
       } else {
-        text += part[1];
+        text += partText;
       }
     });
-    let stringWithoutPTags = text.replace(/<p><\/p>/g, "");
+
+    localStorage.setItem("correction", JSON.stringify({ value: store }));
+
     return text;
   };
 
@@ -100,6 +109,7 @@ export function SimpleEditor({
       Italic,
       Strike,
       Code,
+      HardBreak,
     ],
     editorProps: {
       attributes: {
@@ -201,7 +211,7 @@ export function SimpleEditor({
   const handleUpdate = () => {
     if (editor) {
       const result = getDiff(inputText, correctedText);
-      console.log(result);
+      // console.log(result);
       editor.commands.setContent(result);
     }
   };
