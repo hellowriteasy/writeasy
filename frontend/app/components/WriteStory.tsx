@@ -22,6 +22,9 @@ import { axiosInstance } from "../utils/config/axios";
 import { TTaskType } from "../utils/types";
 import { useRouter } from "next/navigation";
 import HardBreak from "@tiptap/extension-hard-break";
+import InsertedText from "./tiptap/Inserted";
+import DeletedText from "./tiptap/Deleted";
+import PDF from "./PDF";
 
 interface SimpleEditorProps {
   triggerGrammarCheck: any;
@@ -58,7 +61,7 @@ export function SimpleEditor({
   const { token } = useAuthStore();
   const [isSaving, setIsSaving] = useState(false);
   const [initialText, setInitialText] = useState("");
-  const [isEditorDisabled,setIsEditorDisabled] = useState(false);
+  const [isEditorDisabled, setIsEditorDisabled] = useState(false);
   useEffect(() => {
     setStoredFunction(toPDF);
   }, [toPDF, setStoredFunction]);
@@ -73,12 +76,11 @@ export function SimpleEditor({
     let text = "";
 
     let store = "";
+
     diff.forEach((part) => {
       // Replace \n\n with <br> and single \n with a space (to handle single line breaks)
       const partText = part[1].replace(/\n\n/g, "<br>").replace(/\n/g, " ");
-
       store += partText;
-
       if (part[0] === -1) {
         text += `<del>${partText}</del>`;
       } else if (part[0] === 1) {
@@ -99,6 +101,8 @@ export function SimpleEditor({
 
   const editor = useEditor({
     extensions: [
+      InsertedText,
+      DeletedText,
       Document,
       History,
       Paragraph,
@@ -123,13 +127,6 @@ export function SimpleEditor({
       setWordLimitExceeded(words > 1000);
     },
   }) as Editor;
-
-  // useEffect(() => {
-  //   // Set initial content into the editor when it's first initialized
-  //   if (editor && initialContent) {
-  //     editor.commands.setContent(initialContent);
-  //   }
-  // }, [editor, initialContent]);
 
   const handleExport = () => {
     toPDF();
@@ -211,7 +208,7 @@ export function SimpleEditor({
           setIsLoading(false);
           setTriggerGrammarCheck(false);
         }
-      };
+      }
     } catch (error) {
       setIsLoading(false);
       setTriggerGrammarCheck(false);
@@ -344,9 +341,21 @@ export function SimpleEditor({
               >
                 <Icons.Code />
               </button>
+              <button
+                className={classNames("menu-button bg-black text-white p-1 rounded-md ml-auto", {
+                  "is-active": editor.isActive("code"),
+                })}
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleExport();
+                }}
+              >
+                export to pdf
+              </button>
             </div>
           </div>
-          <div className="mt-10">
+          <div className="mt-10" ref={targetRef}>
             <EditorContent
               className={`scroll-m-2 w-[100%]  mt-10 ${
                 isLoading ? "opacity-50 cursor-not-allowed" : ""
@@ -375,6 +384,9 @@ export function SimpleEditor({
         >
           {isSaving ? "Saving to profile..." : "Save to Profile"}
         </button>
+      </div>
+      <div ref={targetRef} className="relative z-[-10] ">
+        <PDF corrected={correctedText} originals={initialText} />
       </div>
     </>
   );

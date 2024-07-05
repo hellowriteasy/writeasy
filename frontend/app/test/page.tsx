@@ -1,127 +1,66 @@
+// PDFComponent.js
 "use client";
+import React from "react";
+import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
 
-import { useEditor, EditorContent, Editor } from "@tiptap/react";
-import Document from "@tiptap/extension-document";
-import Text from "@tiptap/extension-text";
-import Bold from "@tiptap/extension-bold";
-import Italic from "@tiptap/extension-italic";
-import Strike from "@tiptap/extension-strike";
-import Code from "@tiptap/extension-code";
-import History from "@tiptap/extension-history";
-import React, { useEffect, useState } from "react";
-import Paragraph from "@tiptap/extension-paragraph";
-import Underline from "@tiptap/extension-underline";
-import { Change, diffChars } from "diff";
-function ProofreadComponent() {
-  const [storyText, setStoryText] = useState("");
-  const [taskType, setTaskType] = useState("grammar");
-  const [responseText, setResponseText] = useState("");
-  const [inputText, setInputText] = useState("");
-  const getCorrectedContent = (original: string, corrected: string) => {
-    original = original.replace(/<\/?p>/g, "");
-    const diff: Change[] = diffChars(original, corrected);
-    let text = "";
-    diff.forEach((node) => {
-      if (node.added) {
-        text += `<u>${node.value}</u>`;
-      } else if (node.removed) {
-        text += `<del>${node.value}</del>`;
-      } else {
-        text += node.value;
+const styles = StyleSheet.create({
+  page: {
+    flexDirection: "row",
+    backgroundColor: "#E4E4E4",
+    padding: 20,
+  },
+  section: {
+    margin: 10,
+    padding: 10,
+    display:"flex",
+    flexGrow: 1,
+  },
+  title: {
+    fontSize: 23,
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  text: {
+    fontSize: 13,
+    textAlign: "justify",
+  },
+  removed: {
+    fontSize: 13,
+    textDecoration: "line-through",
+    color: "red",
+    backgroundColor: "#ffb7b7",
+  },
+  inserted: {
+    fontSize: 13,
+    textDecoration: "underline",
+    color: "green",
+    backgroundColor: "#acf7b7",
+  },
+});
+
+const PDFComponent = () => (
+  <Document>
+    <Page size="A4" style={styles.page}>
+      <View style={styles.section}>
+        <Text style={styles.text}>As it is</Text>
+        <Text style={styles.removed}>I am removed</Text>
+        <Text style={styles.inserted}>I am inserted</Text>
+      </View>
+    </Page>
+  </Document>
+);
+const App = () => (
+  <div
+    style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+  >
+    <PDFComponent />
+    <PDFDownloadLink document={<PDFComponent />} fileName="sample.pdf">
+      {({ blob, url, loading, error }) =>
+        loading ? "Loading document..." : "Download now!"
       }
-    });
+    </PDFDownloadLink>
+  </div>
+);
 
-    let stringWithoutPTags = text.replace(/<p><\/p>/g, "");
-    return stringWithoutPTags;
-  };
-  useEffect(() => {
-    handleUpdate();
-  }, [responseText]);
-
-  const handleSubmit = async () => {
-    const currentContent = editor.getText();
-    if (!currentContent) return;
-    setInputText(currentContent);
-    const response = await fetch("http://localhost:8000/api/stream", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ storyText: currentContent, taskType: "grammer" }),
-    });
-
-    if (response.ok) {
-      if (response.body === null) {
-        return;
-      }
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder("utf-8");
-      setResponseText(""); // Reset the response text
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        const chunk = decoder.decode(value, { stream: true });
-        setResponseText((prev) => prev + chunk);
-      }
-    } else {
-      console.error("Failed to fetch data from the server");
-    }
-  };
-  const editor = useEditor({
-    extensions: [
-      Document,
-      History,
-      Paragraph,
-      Text,
-      Bold,
-      Underline,
-      Italic,
-      Strike,
-      Code,
-    ],
-    editorProps: {
-      attributes: {
-        class:
-          "prose dark:prose-invert prose-sm sm:prose-base w-full inline-block lg:prose-lg xl:prose-2xl outline-none min-h-96",
-      },
-    },
-    content: "hello",
-    onUpdate: ({ editor }) => {
-      // const textContent = editor.getText();
-      // const words = textContent.split(/\s+/).filter(Boolean).length;
-      // handleStoryDetailsInputChange("wordCount", words);
-      // handleStoryDetailsInputChange("wordLimitExceeded", words > 1000);
-    },
-  }) as Editor;
-
-  const handleUpdate = () => {
-    if (editor) {
-      editor.commands.setContent(
-        `${getCorrectedContent(inputText, responseText)}`
-      );
-    }
-  };
-  if (!editor) {
-    return <>hello</>;
-  }
-  return (
-    <div>
-      <div className=" bg-black rounded-full w-full ">
-        <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
-          <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute"></div>
-          <div className={`w-[50vw] rounded-3xl  `}>
-            <EditorContent
-              editor={editor}
-              className={`scroll-m-2 w-[100%] min-h-96 mt-10 `}
-            />
-          </div>
-        </div>
-      </div>
-      <button onClick={handleSubmit}>handleSubmit</button>
-    </div>
-  );
-}
-
-export default ProofreadComponent;
+export default App;

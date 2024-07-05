@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { usePDF } from "react-to-pdf";
-import { Change, diffChars } from "diff";
 import usePdfStore from "@/app/store/usePDFStore";
+import diff_match_patch from "diff-match-patch";
 
 type Props = {
   originals: string;
   corrected: string;
 };
-
 const PDF: React.FC<Props> = ({ originals, corrected }) => {
   const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
   const [improved, setImproved] = useState<React.ReactElement[]>([]);
@@ -20,24 +19,21 @@ const PDF: React.FC<Props> = ({ originals, corrected }) => {
     original: string,
     corrected: string
   ): React.ReactElement[] => {
-    original 
-    corrected 
+    original;
+    corrected;
 
-    const diff: Change[] = diffChars(original, corrected);
+    const dmp = new diff_match_patch();
+    const diff = dmp.diff_main(original, corrected);
+    dmp.diff_cleanupSemantic(diff);
     const result: React.ReactElement[] = [];
 
-    diff.forEach((part: Change, index: number) => {
-      const color: string = part.added
-        ? "green"
-        : part.removed
-        ? "red"
-        : "black";
-      const backgroundColor = part.added
-        ? "#51d80e6d"
-        : part.removed
-        ? "#f0232366"
-        : "";
-      const textDecoration = part.added ? "underline" : part.removed ? "" : "";
+    diff.forEach((part: any, index: number) => {
+      const color: string =
+        part[0] === 1 ? "green" : part[0] === -1 ? "red" : "black";
+      const backgroundColor =
+        part[0] === 1 ? "#51d80e6d" : part[0] === -1 ? "#f0232366" : "";
+      const textDecoration =
+        part[0] === 1 ? "underline" : part[0] === -1 ? "line-through" : "";
 
       const style: React.CSSProperties = {
         color: color,
@@ -48,7 +44,7 @@ const PDF: React.FC<Props> = ({ originals, corrected }) => {
       };
       const span: React.ReactElement = (
         <div key={index} style={style}>
-          {part.value}
+          {part[1]}
         </div>
       );
       result.push(span);
@@ -59,18 +55,12 @@ const PDF: React.FC<Props> = ({ originals, corrected }) => {
 
   useEffect(() => {
     setImproved(compareSentences(originals, corrected));
-  }, [corrected]);
-
+  }, [corrected, originals]);
+  console.log("improved", improved);
   return (
-    <div className="w-full  relative  z-[-5] ">
-      <button
-        className="bg-slate-100 border border-slate-500 p-1 text-sm rounded-md"
-        onClick={() => toPDF()}
-      >
-        PDF
-      </button>
+    <div className="w-full   ">
       <div
-        className="flex items-center   h-[100vh] flex-col w-full "
+        className="flex items-center  border  h-[100vh] flex-col w-full "
         ref={targetRef}
       >
         <div className="w-11/12 ">
@@ -87,6 +77,7 @@ const PDF: React.FC<Props> = ({ originals, corrected }) => {
           </div>
         </div>
       </div>
+  
     </div>
   );
 };
