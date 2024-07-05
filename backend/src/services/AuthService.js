@@ -61,7 +61,7 @@ class AuthService {
     const payload = ticket.getPayload();
 
     let user = await User.findOne({ email: payload.email });
-
+    console.log("user", user);
     if (!user) {
       user = new User({
         username: payload.name || payload.email,
@@ -70,11 +70,11 @@ class AuthService {
       });
       await user.save();
     }
-
     const userPayload = { user: { id: user.id } };
     const jwtToken = jwt.sign(userPayload, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
+
     return { token: jwtToken, _id: user.id }; // Return token and _id
   }
 }

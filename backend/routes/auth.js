@@ -163,7 +163,7 @@ router.get("/google/callback", async (req, res) => {
     const token = await AuthService.prototype.googleSignInOrRegister(
       tokens.id_token
     );
-    res.redirect(`/success?token=${token}`); // Redirect to the new success endpoint with token
+    res.redirect(`/success?token=${token.token}&user_id=${token._id}`); // Redirect to the new success endpoint with token
   } catch (error) {
     console.error("Error during Google callback: ", error);
     res.status(500).send("An error occurred during Google authentication");
