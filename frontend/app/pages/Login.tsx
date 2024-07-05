@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, SyntheticEvent, useState ,useEffect} from "react";
+import React, { ChangeEvent, SyntheticEvent, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
@@ -17,7 +17,7 @@ import useAuthStore from "../store/useAuthStore";
 import { useRouter } from "next/navigation";
 import Earth from "../../public/Landingpage-img/earth.svg";
 import { axiosInstance } from "../utils/config/axios";
-import type { NextPage } from 'next';
+import type { NextPage } from "next";
 
 const Login: NextPage = () => {
   const [email, setEmail] = useState("");
@@ -25,18 +25,14 @@ const Login: NextPage = () => {
   const [error, setError] = useState("");
   const login = useAuthStore((state) => state.login);
   const router = useRouter();
-  const AxiosIns=axiosInstance("")
+  const AxiosIns = axiosInstance("");
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     try {
-      const response = await AxiosIns.post(
-        `/auth/login`,
-        {
-          email,
-          password,
-        }
-      );
-
+      const response = await AxiosIns.post(`/auth/login`, {
+        email,
+        password,
+      });
       const {
         _id: userId,
         token,
@@ -44,19 +40,16 @@ const Login: NextPage = () => {
         role,
         subscriptionType,
       } = response.data;
-      login(userId,token);
-
+      login(userId, token);
       router.push("/", { scroll: false });
     } catch (error: any) {
       setError(error.response?.data?.message || "Login failed");
     }
   };
-   
+
   useEffect(() => {
-   
-    if (typeof window !== 'undefined' && "Notification" in window) {
-   const permission=   Notification.requestPermission();
-    
+    if (typeof window !== "undefined" && "Notification" in window) {
+      const permission = Notification.requestPermission();
     }
   }, []);
 
@@ -79,20 +72,24 @@ const Login: NextPage = () => {
             types="email"
             placeholder="Email"
             value={email}
-            onChange={(e:ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setEmail(e.target.value)
+            }
           />
           <InputField
             types="password"
             placeholder="Password"
             value={password}
-            onChange={(e:ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setPassword(e.target.value)
+            }
           />
           <h1 className="text-end pt-4  font-comic text-sm underline font-bold">
             <Link href="#">Forgot Password?</Link>
           </h1>
           <button className="text-center border rounded-3xl m-y-4 text-white hover:opacity-80 min-w-full  sm:min-w-60 sm:w-72 md:w-80 lg:w-96 mt-5 bg-black h-12 sm:h-14 text-xl sm:text-2xl">
-             Login
-            </button>
+            Login
+          </button>
           {error && <p className="text-red-500">{error}</p>}
           <h1 className="text-center pt-2 font-bold">or</h1>
           <Button type="google" />
