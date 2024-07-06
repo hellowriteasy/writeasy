@@ -33,7 +33,7 @@ const PDF: React.FC<Props> = ({ originals, corrected }) => {
       const backgroundColor =
         part[0] === 1 ? "#51d80e6d" : part[0] === -1 ? "#f0232366" : "";
       const textDecoration =
-        part[0] === 1 ? "underline" : part[0] === -1 ? "line-through" : "";
+        part[0] === 1 ? "underline" : part[0] === -1 ? "" : "";
 
       const style: React.CSSProperties = {
         color: color,
@@ -77,7 +77,6 @@ const PDF: React.FC<Props> = ({ originals, corrected }) => {
           </div>
         </div>
       </div>
-  
     </div>
   );
 };
