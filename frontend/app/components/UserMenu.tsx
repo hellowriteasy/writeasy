@@ -1,25 +1,25 @@
 // components/UserMenu.js
-'use client'
+"use client";
 import { useState, useEffect } from "react";
 import { FaAngleDown } from "react-icons/fa6";
 import { IoPersonSharp } from "react-icons/io5";
 import axios from "axios";
-import useAuthStore from '../store/useAuthStore';
+import useAuthStore from "../store/useAuthStore";
 import Link from "next/link";
 import { axiosInstance } from "../utils/config/axios";
 
 const UserMenu = () => {
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState("");
   const [showOptions, setShowOptions] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const logout = useAuthStore((state) => state.logout);
   const username = useAuthStore((state) => state.username);
   const role = useAuthStore((state) => state.role); // Get the user's role
   const AxiosIns = axiosInstance("");
-  
+
   const handleLogout = async () => {
     try {
-      await AxiosIns.post("http://localhost:8000/api/auth/logout");
+      await AxiosIns.post("/auth/logout");
       logout();
     } catch (error) {
       console.error("Failed to logout", error);
@@ -29,13 +29,12 @@ const UserMenu = () => {
   useEffect(() => {
     setShowOptions(false);
   }, []);
- 
 
   return (
-    <div 
-      className="relative  font-comic w-[15vw] cursor-pointer" 
-      onMouseEnter={() => setShowOptions(true)} 
-      onMouseLeave={() => setShowOptions(false)} 
+    <div
+      className="relative  font-comic w-[15vw] cursor-pointer"
+      onMouseEnter={() => setShowOptions(true)}
+      onMouseLeave={() => setShowOptions(false)}
     >
       <div className="relative font-comic">
         <div className="w-full text-[1vw] text-white  font-bold text-center font-comic bg-black border border-black rounded-3xl px-4 py-4 focus:outline-none focus:border-black">
@@ -48,14 +47,14 @@ const UserMenu = () => {
           <FaAngleDown className="text-[2vw]" />
         </div>
       </div>
-     
+
       {showOptions && (
         <div className="absolute w-full  text-slate-900 bg-white border border-black rounded-lg shadow-lg">
           <Link href="/profile">
             <div
               className="px-4 py-2 h-9 cursor-pointer hover:bg-gray-200"
               onClick={() => {
-                setSelectedOption('My Profile');
+                setSelectedOption("My Profile");
                 setShowOptions(false);
               }}
             >
@@ -66,7 +65,7 @@ const UserMenu = () => {
             <div
               className="px-4 py-2 h-9 cursor-pointer hover:bg-gray-200"
               onClick={() => {
-                setSelectedOption('Settings');
+                setSelectedOption("Settings");
                 setShowOptions(false);
               }}
             >
@@ -74,12 +73,12 @@ const UserMenu = () => {
             </div>
           </Link>
           {/* Conditionally render the Admin Page option based on the user's role */}
-          {role === 'admin' && (
+          {role === "admin" && (
             <Link href="/admin/practices">
               <div
                 className="px-4 py-2 h-9 cursor-pointer hover:bg-gray-200"
                 onClick={() => {
-                  setSelectedOption('Admin Page');
+                  setSelectedOption("Admin Page");
                   setShowOptions(false);
                 }}
               >
@@ -91,7 +90,7 @@ const UserMenu = () => {
             className="px-4 py-2 h-9 cursor-pointer hover:bg-gray-200"
             onClick={() => {
               handleLogout();
-              setSelectedOption('Logout');
+              setSelectedOption("Logout");
               setShowOptions(false);
             }}
           >
@@ -101,6 +100,6 @@ const UserMenu = () => {
       )}
     </div>
   );
-}
+};
 
 export default UserMenu;
