@@ -164,7 +164,7 @@ router.get("/google/callback", async (req, res) => {
       tokens.id_token
     );
     res.redirect(
-      `${process.env.FRONTEND_URL}/auth/google/success?token=${token.token}&user_id=${token._id}`
+      `${process.env.FRONTEND_BASE_URL}/auth/google/success?token=${token.token}&user_id=${token._id}`
     ); // Redirect to the new success endpoint with token
   } catch (error) {
     console.error("Error during Google callback: ", error);
