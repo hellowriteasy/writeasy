@@ -342,7 +342,7 @@ export function SimpleEditor({
                 <Icons.Code />
               </button>
               <button
-                className={classNames("menu-button bg-black text-white p-1 rounded-md ml-auto", {
+                className={classNames("menu-button bg-black text-sm text-white p-2 rounded-md ml-auto", {
                   "is-active": editor.isActive("code"),
                 })}
                 type="button"
@@ -385,7 +385,7 @@ export function SimpleEditor({
           {isSaving ? "Saving to profile..." : "Save to Profile"}
         </button>
       </div>
-      <div ref={targetRef} className="relative z-[-10] ">
+      <div ref={targetRef} className="relative z-0 left-[1900px] top-50 ">
         <PDF corrected={correctedText} originals={initialText} />
       </div>
     </>

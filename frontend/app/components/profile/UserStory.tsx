@@ -125,7 +125,7 @@ const Card: React.FC<CardProps> = ({
   }
 
   return (
-    <div className="bg-white w-full sm:w-3/4 border-2 border-slate-300 shadow-sm rounded-3xl p-6 transition-all duration-300">
+    <div className="bg-white w-1/2  mt-3 sm-h-60 border-2 border-slate-300 shadow-sm rounded-3xl p-6 transition-all duration-300">
       <div ref={targetRef} className="flex flex-col mb-4">
         <h1 className="text-2xl font-bold mb-4">
           {contestTitle ? `${contestTitle} > ` : ""} {promptTitle}
@@ -151,7 +151,7 @@ const Card: React.FC<CardProps> = ({
           )}
         </div>
       </div>
-      <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4 mt-4">
+      <div className="flex gap-4  mt-4">
         <button
           onClick={() => {
             setShowFullDescription(true);
@@ -183,7 +183,7 @@ const Card: React.FC<CardProps> = ({
         </button>
         <button
           onClick={toggleDescription}
-          className="bg-black text-white px-4 py-2 rounded"
+          className="bg-black text-white px-4 py-2 rounded-2xl"
         >
           {showFullDescription ? "Show Less" : "Read More"}
         </button>

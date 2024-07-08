@@ -62,8 +62,8 @@ const Page: React.FC = () => {
         <Image className="w-[10vw]" src={moon} alt="moon" />
       </div>
       <div className="w-10/12 min-h-screen ms-12">
-        <div className="w-full h-[30vh] relative pt-4">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold font-comic">
+        <div className="w-full h-[30vh] sm:h-40 relative pt-4">
+          <h1 className="text-3xl md:text-4xl sm:text-sm lg:text-5xl xl:text-6xl font-bold font-comic">
             Practice Your Craft
           </h1>
           <div className="absolute top-10 right-48">
@@ -72,18 +72,18 @@ const Page: React.FC = () => {
           <div className="absolute -top-6 right-96">
             <Image className="w-[10vw] md-hide" src={pencilman} alt="group" />
           </div>
-          <p className="text-lg md:text-xl lg:text-2xl font-comic pt-4">
+          <p className="text-lg md:text-xl sm:text-sm lg:text-2xl font-comic pt-4">
             Refine your skills with our AI-powered editor.
           </p>
         </div>
 
-        <div className="flex w-full gap-x-5 h-auto relative -mt-10 justify-around sm:justify-start ">
+        <div className="flex w-full gap-x-5 h-auto relative -mt-10 justify-around items-center sm:justify-start ">
           <div className="absolute -top-28 -left-32">
             <Image className="w-[10vw]" src={Bee} alt="bee" />
           </div>
           <div className="gap-8 practice-mobile-view relative flex flex-col">
-            <div className="w-[50vw] flex justify-between items-center h-20">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl ps-2 sm:ps-4 md:ps-6 lg:ps-8 xl:ps-10 font-comic font-bold">
+            <div className="w-full flex justify-between gap-7 items-center h-20">
+              <h1 className="text-2xl sm:text-sm   md:text-4xl lg:text-5xl xl:text-7xl font-comic font-bold">
                 All Prompts
               </h1>
               <SelectMenu
@@ -103,10 +103,10 @@ const Page: React.FC = () => {
             <div className="w-full mt-10 text-lg md:text-xl font-comic ">
               <ReactPaginate
                 previousLabel={
-                  <FaAngleLeft className="w-6 h-6 md:w-8 md:w-10 lg:w-10" />
+                  <FaAngleLeft className="w-6 h-6 md:w-8 lg:w-10" />
                 }
                 nextLabel={
-                  <FaAngleRight className="w-6 h-6 md:w-8 md:w-10 lg:w-10" />
+                  <FaAngleRight className="w-6 h-6 md:w-8 lg:w-10" />
                 }
                 breakLabel="..."
                 breakClassName="break-me"

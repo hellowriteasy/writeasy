@@ -30,13 +30,13 @@ const UserManagement: React.FC = () => {
 
   const handleUpdateSubscription = async (userId: string) => {
     try {
-      await AxiosIns.put('/auth/users/subscribe', {
+    await AxiosIns.put('/auth/users/subscribe', {
         user_id: userId,
         end_date: endDate,
       });
      toast.success("subscription updated successfully")
     } catch (error) {
-      toast.error('Error updating subscription:');
+      toast.error('failed to update subscription, it might be because user has already has an active subscription');
     }
   };
 

@@ -227,3 +227,9 @@ u{
    background-size: cover;
    background-position: center;
 }
+
+@media (min-width: 1800px) {
+  .fixed-position {
+    position: fixed;
+  }
+}

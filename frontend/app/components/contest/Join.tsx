@@ -40,13 +40,13 @@ const Join = () => {
               className="flex flex-col font-comic rounded-3xl w-full max-w-4xl h-auto gap-4 bg-white border-2 border-gray-300 p-8"
             >
               <div className="flex flex-col gap-y-2 text-center">
-                  <p className="text-lg sm:text-xl md:text-2xl lg:text-2xl">
+                  <p className="text-lg sm:text-sm md:text-2xl lg:text-2xl">
                     <span className="">Until </span>
                     {moment(contest.submissionDeadline).format("llll")}
                   </p>
                 </div>
               <div className="flex flex-col items-center gap-y-4">
-                <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-center">
+                <div className="text-xl sm:text-sm md:text-3xl lg:text-4xl text-center">
                   {contest.contestTheme}
                 </div>
               
@@ -54,7 +54,7 @@ const Join = () => {
               <div className="flex justify-center mt-4 sm:mt-6">
                 <button
                   onClick={() => router.push(`/Contests/${contest._id}`)}
-                  className="bg-black font-comic rounded-3xl text-white h-10 sm:h-12 w-32 sm:w-40 text-center text-lg sm:text-2xl md:text-3xl"
+                  className="bg-black font-comic rounded-3xl text-white h-10 sm:h-10 sm:text-sm w-32 sm:w-28 text-center text-lg  md:text-3xl"
                 >
                   Join
                 </button>

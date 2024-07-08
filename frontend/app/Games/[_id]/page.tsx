@@ -102,14 +102,14 @@ const Page: React.FC<PageProps> = ({ params }) => {
         <div className="absolute left-0">
           <Image className="w-[9vw]" src={shootingstar} alt="shootingstar" />
         </div>
-        <div className="w-4/5 font-comic flex flex-col gap-10 mt-20 mb-10">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold font-comic">
+        <div className="w-4/5 font-comic flex flex-col gap-10 sm:gap-5 sm:my-10 mt-20 mb-10">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl sm:text-xl font-bold font-comic">
             {currentGame?.title}
           </h1>
-          <p>{currentGame?.description}</p>
+          <p className="sm:text-md">{currentGame?.description}</p>
           <button
             onClick={handleCreateStory}
-            className="w-fit px-10 bg-black hover:opacity-80 text-center text-white rounded-3xl border h-20 text-xl md:text-2xl lg:text-3xl xl:text-4xl"
+            className="w-fit px-10 sm:px-2 sm:text-sm sm:h-14 bg-black hover:opacity-80 text-center text-white rounded-3xl border h-20 text-xl md:text-2xl lg:text-3xl xl:text-4xl"
           >
             {userGameStory ? "Continue your story" : "    Create your Story"}
           </button>

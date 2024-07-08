@@ -29,7 +29,7 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
             <Image src={Logo} layout="responsive" objectFit="contain" alt='logo' />
           </div>
         </Link>
-        <div className="hidden md:flex md:flex-grow justify-center">
+        <div className="mid:hidden md:flex md:flex-grow justify-center">
           <ul className="flex justify-center w-full items-center font-comic text-xl space-x-4">
             {titles.map(link => {
               const isActive = path.startsWith(link.path) || path.includes(link.path);
@@ -38,8 +38,8 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
                   key={`${link.label}-${link.path}`}
                   className={
                     isActive
-                      ? "active sm:px-6 py-2 rounded-full text-center"
-                      : "sm:px-6 py-2 rounded-full text-center"
+                      ? "active px-6 py-2 rounded-full text-center"
+                      : "py-2 px-6 rounded-full text-center"
                   }
                 >
                   <Link href={link.path} className="pt-5 text-[1.2vw] cursor-pointer">
@@ -50,7 +50,7 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
             })}
           </ul>
         </div>
-        <div className="hidden md:flex items-center space-x-4">
+        <div className="hidden md:flex mid:hidden items-center space-x-4">
           {loggedIn ? (
             <UserMenu />
           ) : (
@@ -60,7 +60,7 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
             </div>
           )}
         </div>
-        <div className="md:hidden flex items-center">
+        <div className="md:hidden mid:block flex items-center">
           <button onClick={toggleMenu} className="text-black focus:outline-none">
             {isOpen ? <XMarkIcon className="h-8 w-8" /> : <Bars3Icon className="h-8 w-8" />}
           </button>
@@ -77,7 +77,7 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
   return (
     <nav className="navbar flex w-full sticky top-0 h-28 justify-between items-center bg-custom-yellow p-6 z-50">
       {navContent}
-      <div className={`fixed top-0 left-0 h-full w-72 bg-custom-yellow p-6 flex flex-col items-center space-y-6 z-50 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out md:hidden`}>
+      <div className={`fixed top-0 left-0 h-full w-72 bg-custom-yellow p-6 flex flex-col items-center space-y-6 z-50 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out `}>
         <button onClick={toggleMenu} className="self-end text-black focus:outline-none mb-4">
           <XMarkIcon className="h-8 w-8" />
         </button>
@@ -100,7 +100,7 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
             );
           })}
         </ul>
-        <div className="flex justify-center items-center flex-col gap-4 w-full">
+        <div className="flex justify-center items-center  flex-col gap-4 w-full">
           {loggedIn ? (
             <UserMenu />
           ) : (
