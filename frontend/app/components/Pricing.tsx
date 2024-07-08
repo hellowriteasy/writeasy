@@ -65,9 +65,9 @@ const Pricing = () => {
           </div>
         </div>
 
-        <div className="flex flex-col justify-center items-center relative lg:relative overflow-hidden  lg:w-1/2">
-          <div className="relative w-[70vw] lg:w-auto mt-10 lg:mt-0 flex flex-col gap-y-8 items-center">
-            <Image src={Group15} alt="" />
+        <div className="flex flex-col w-[70vw] justify-center items-center relative lg:relative overflow-hidden  lg:w-1/2">
+          <div className="relative    lg:w-auto mt-10 lg:mt-0 flex flex-col gap-y-8 items-center">
+            <Image className="w-full" src={Group15} alt="" />
             <div className="text-center absolute top-[20%] flex flex-col justify-center items-center w-10/12">
               {!isSubcriptionActive ? (
                 <>
@@ -94,10 +94,10 @@ const Pricing = () => {
                 </div>
               )}
             </div>
-            <div className="text-center flex flex-col gap-y-2 absolute top-[50%]  w-10/12 mx-auto">
+            <div className="text-center flex flex-col gap-y-2 absolute top-[50%]    w-10/12 mx-auto">
               <div>
-                {/* <h2 className="p-4 text-2xl font-black underline">Subscription benefits</h2> */}
-                <ul className="flex sm:text-[1vw] lg:text-xl text-[3vw] flex-col px-4  items-start ">
+              
+                <ul className="flex sm:text-sm   text-[1vw] flex-col px-4  items-start ">
                   <li className=" text-start">
                     •⁠ ⁠Unlimited writing practices with immediate GPT markings
                   </li>
