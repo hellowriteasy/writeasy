@@ -6,8 +6,9 @@ import StoryEditor from "./Editor"; // Adjust the import path as necessary
 import { TUser } from "@/app/utils/types";
 import { axiosInstance } from "@/app/utils/config/axios";
 import { Dialog, Transition } from "@headlessui/react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { diff_match_patch } from "diff-match-patch";
+
 interface CardProps {
   id: string;
   title: string;
@@ -39,6 +40,8 @@ const Card: React.FC<CardProps> = ({
   const [showEditor, setShowEditor] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const AxiosIns = axiosInstance("");
+  const router = useRouter();
+  const pathname = usePathname();
 
   const toggleDescription = () => setShowFullDescription(!showFullDescription);
 
@@ -49,7 +52,7 @@ const Card: React.FC<CardProps> = ({
     descriptionWords.length > previewWords
       ? descriptionWords.slice(0, previewWords).join(" ") + "..."
       : descriptionText;
-  const router = useRouter();
+
   const deleteClick = () => {
     AxiosIns.delete(`/stories/${id}`)
       .then(() => {
@@ -88,11 +91,11 @@ const Card: React.FC<CardProps> = ({
       );
     });
   };
+
   const getDiff = (original: string, corrected: string) => {
     const dmp = new diff_match_patch();
     const diff = dmp.diff_main(original, corrected);
     dmp.diff_cleanupSemantic(diff);
-
 
     return diff.map((part, index) => {
       const style = {
@@ -124,16 +127,18 @@ const Card: React.FC<CardProps> = ({
     );
   }
 
+  const shouldHideButtons = pathname.endsWith("contest") || pathname.endsWith("game");
+
   return (
-    <div className="bg-white w-1/2  mt-3 sm-h-60 border-2 border-slate-300 shadow-sm rounded-3xl p-6 transition-all duration-300">
+    <div className="bg-white w-1/2 mt-3 sm-h-60 border-2 border-slate-300 shadow-sm rounded-3xl p-6 transition-all duration-300">
       <div ref={targetRef} className="flex flex-col mb-4">
         <h1 className="text-2xl font-bold mb-4">
           {contestTitle ? `${contestTitle} > ` : ""} {promptTitle}
         </h1>
         <div>
-          <h2 className=" py-2 font-bold ">{title}</h2>
+          <h2 className="py-2 font-bold">{title}</h2>
           <p
-            className={`text-gray-700   transition-all duration-300 ${
+            className={`text-gray-700 transition-all duration-300 ${
               showFullDescription ? "max-h-full" : "max-h-20 overflow-hidden"
             }`}
           >
@@ -141,26 +146,28 @@ const Card: React.FC<CardProps> = ({
           </p>
           {showDiff && (
             <div className="mt-4">
-              <h3 className=" text-lg font-semibold">Corrections:</h3>
+              <h3 className="text-lg font-semibold">Corrections:</h3>
               <p className="py-4">
                 {corrections
                   ? getDiff(description, corrections)
-                  : "Correction is being done in background hold on please !"}
+                  : "Correction is being done in background hold on please!"}
               </p>
             </div>
           )}
         </div>
       </div>
-      <div className="flex gap-4  mt-4">
-        <button
-          onClick={() => {
-            setShowFullDescription(true);
-            toPDF();
-          }}
-          className="bg-white border-2 rounded-2xl border-slate-700 text-black px-4 py-2"
-        >
-          PDF
-        </button>
+      <div className="flex gap-4 mt-4">
+        {!shouldHideButtons && (
+          <button
+            onClick={() => {
+              setShowFullDescription(true);
+              toPDF();
+            }}
+            className="bg-white border-2 rounded-2xl border-slate-700 text-black px-4 py-2"
+          >
+            PDF
+          </button>
+        )}
         {type === "game" && (
           <button
             onClick={() => router.push(`/Games/${prompt_id}/play`)}
@@ -169,12 +176,14 @@ const Card: React.FC<CardProps> = ({
             Contribute
           </button>
         )}
-        <button
-          onClick={() => setShowDiff(!showDiff)}
-          className="bg-white border-2 rounded-2xl border-slate-700 text-black px-4 py-2"
-        >
-          {showDiff ? "Original" : "Marked"}
-        </button>
+        {!shouldHideButtons && (
+          <button
+            onClick={() => setShowDiff(!showDiff)}
+            className="bg-white border-2 rounded-2xl border-slate-700 text-black px-4 py-2"
+          >
+            {showDiff ? "Original" : "Marked"}
+          </button>
+        )}
         <button
           onClick={() => setIsDeleteDialogOpen(true)}
           className="bg-white border-2 rounded-2xl border-slate-700 text-black px-4 py-2"
