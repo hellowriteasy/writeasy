@@ -14,7 +14,6 @@ const UserController = {
         password
       );
 
-
       const user = await User.findById(_id);
 
       res.json({
@@ -135,7 +134,19 @@ const UserController = {
           }
         : {};
       const users = await User.find(keyword).select("-password");
-      res.status(200).json(users);
+      const data = await Promise.all(
+        users.map(async (user) => {
+          const subscription = await Subscription.findOne({
+            userId: user._id,
+          });
+
+          return {
+            ...user._doc,
+            expiresAt: subscription.expiresAt,
+          };
+        })
+      );
+      res.status(200).json(data);
     } catch (error) {
       res
         .status(500)
@@ -167,7 +178,7 @@ const UserController = {
           paidAt: Date.now(),
           expiresAt: end_date,
           isActive: true,
-          stripe_session_id:"test"
+          stripe_session_id: "test",
         });
         await newSubscription.save();
       }

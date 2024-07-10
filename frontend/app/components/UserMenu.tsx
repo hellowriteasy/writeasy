@@ -32,7 +32,7 @@ const UserMenu = () => {
 
   return (
     <div
-      className="relative  font-comic w-[15vw] cursor-pointer"
+      className="relative min-w-60 max-w-90 w- font-comic  cursor-pointer"
       onMouseEnter={() => setShowOptions(true)}
       onMouseLeave={() => setShowOptions(false)}
     >

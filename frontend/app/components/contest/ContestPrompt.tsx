@@ -64,12 +64,12 @@ const ContestPrompt: React.FC<PromptProps> = ({
       className="flex justify-center px-4 md:px-0 w-5/6   bg-white border-2 border-gray-300 rounded-3xl "
       onClick={handleRedirectToPromptWritings}
     >
-      <div className="w-full  h-auto md:h-40 flex relative overflow-hidden mb-4">
+      <div className="w-full  h-auto md:h-40   relative overflow-hidden mb-4">
         <div className="px-4 py-4 md:px-6 md:py-4 w-full md:w-5/6">
           <div className="font-bold  font-comic text-wrap text-base md:text-xl mb-2 overflow-hidden overflow-ellipsis whitespace-nowrap">
             {promptText}
           </div>
-          <p className="text-gray-700 font-bold text-wrap font-comic pt-4 md:pt-8 text-sm md:text-base">
+          <p className="text-gray-700 font-bold sm:text-[8px] text-wrap font-comic pt-1  text-sm md:text-base">
             Category: {promptCategory.join(",")}
           </p>
         </div>
@@ -90,18 +90,18 @@ const ContestPrompt: React.FC<PromptProps> = ({
             </div>
           ) : (
             <div
-              className="absolute right-4 top-5 md:right-10 md:top-10 flex cursor-pointer justify-end"
+              className=" flex  cursor-pointer"
               onClick={handleRedirectToStory}
             >
-              <button className="border text-2xl mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl text-white w-60 h-14">
+              <button className="border  text-2xl mid:text-[8px]  mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl text-white mid:w-20 mid:h-8 w-60 h-14">
                 View your story
               </button>
             </div>
           )
         ) : null}
-
       </div>
     </div>
+
   );
 };
 

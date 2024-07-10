@@ -77,8 +77,8 @@ const CreateContest = () => {
 
     try {
       const currentContent = editor.getText();
-      if (!title || !currentContent) {
-        toast.warn("Please enter both title and content before submitting.");
+      if (!currentContent) {
+        toast.warn("Please enter both  content before submitting.");
         return;
       }
 

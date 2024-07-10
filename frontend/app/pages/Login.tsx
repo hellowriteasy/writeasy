@@ -2,7 +2,6 @@
 import React, { ChangeEvent, SyntheticEvent, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import axios from "axios";
 import logo from "@/public/Landingpage-img/logo.svg";
 import Rocket from "../../public/Loginsignup-img/rocket.svg";
 import Group2 from "../../public/Loginsignup-img/Group.svg";
@@ -47,11 +46,7 @@ const Login: NextPage = () => {
     }
   };
 
-  useEffect(() => {
-    if (typeof window !== "undefined" && "Notification" in window) {
-      const permission = Notification.requestPermission();
-    }
-  }, []);
+
 
   return (
     <div className="overflow-hidden  two-line-bg">

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const Sidebar = () => {
-  const links = ['practices', 'contests', 'games', 'stories', 'email','faq','notification','category','user'];
+  const links = ['practices', 'contests', 'games', 'stories', 'email','faq','category','user'];
   const path = usePathname();
 
   return (

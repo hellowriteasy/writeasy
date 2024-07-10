@@ -197,10 +197,6 @@ const Page = () => {
       const currentContent = editor.getText();
       // early return
       if (!storyId) return;
-      if (!storyDetails.title || !currentContent) {
-        toast.error("Please enter both title and content before submitting.");
-        return;
-      }
       if (storyDetails.wordLimitExceeded) {
         toast.error("Word limit exceeded. Please reduce the number of words.");
         return;
@@ -398,13 +394,13 @@ const Page = () => {
         <div className="w-full  relative pt-4 flex flex-col gap-y-4">
           <div className="flex flex-col gap-y-4">
             <div className="flex flex-col gap-y-2">
-              <h1 className="text-6xl pt-4 font-bold font-comic">
+              <h1 className="text-6xl sm:text-2xl pt-4 py-2 font-bold font-comic">
                 {prompt?.title || ""}
               </h1>
-              <p className="font-comic text-xl">{prompt?.description}</p>
+              <p className="font-comic sm:text-sm text-xl">{prompt?.description}</p>
             </div>
             {!currentStory && (
-              <div className="flex flex-col gap-y-6">
+              <div className="flex flex-col sm:gap-y-0 gap-y-6">
                 <h1 className="font-comic text-2xl font-bold">
                   Join the Collaborative Story Game!
                 </h1>

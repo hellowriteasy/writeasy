@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Image from "next/image";
 import PromptComponent from "../../components/contest/ContestPrompt";
 import TopWriting from "../../components/Others/TopWriting";
@@ -53,7 +52,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
       }
     };
     fetchPromptsOfContest();
-  }, [contestId]);
+  }, [contestId, AxiosIns]);
 
   useEffect(() => {
     if (!contestId) {
@@ -74,9 +73,8 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
         setError(err.message);
       }
     };
-
     fetchContestById();
-  }, [contestId]);
+  }, [contestId, AxiosIns]);
 
   useEffect(() => {
     if (contest) {
@@ -98,15 +96,21 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
   if (!contest) return <p>No contest available at the moment.</p>;
 
   return (
-    <div className="w-full min-h-screen mt-6 z-0 relative flex justify-center">
+    <div className="w-full min-h-screen  z-0 relative flex justify-center">
       <div className="w-10/12 h-auto ms-12">
-        <div className="flex mt-8">
+        <div className="flex w-full ">
+          <p className="text-xl text-center sm:text-md font-comic">
+            <b className="font-bold"> Until </b> -
+            {moment(contest.submissionDeadline).format("llll")}
+          </p>
+        </div>
+        <div className="flex mt-8 sm:mt-0">
           <div className="p-6 mb-6 flex flex-col gap-y-4">
             <div className="flex gap-y-3 flex-col">
-              <h2 className="text-4xl font-comic font-bold">
+              <h2 className="text-4xl font-comic sm:text-xl font-bold">
                 {contest.contestTheme}
               </h2>
-              <p className="text-xl w-10/12">
+              <p className="text-xl sm:text-sm w-10/12">
                 {contest.description ||
                   "Paragraphs are the building blocks of papers. Many students define paragraphs in terms of length: a paragraph is a group of at least five sentences, a paragraph is half a page long, etc. In reality, though, the unity and coherence of ideas among sentences is what constitutes a paragraph."}
               </p>

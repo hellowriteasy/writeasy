@@ -39,6 +39,7 @@ const router = express.Router();
  *       500:
  *         description: Internal server error
  */
+
 router.post("/checkout", PaymentController.createStripeCheckoutSession);
 
 /**

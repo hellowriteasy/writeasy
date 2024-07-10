@@ -52,14 +52,14 @@ const Games: React.FC = () => {
         <Image className="w-[5vw]" src={halfmoon} alt="halfmoon" />
       </div>
       <div className="w-10/12 min-h-screen ms-12">
-        <div className="w-full h-60 relative pt-4">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold font-comic">
+        <div className="w-full h-60 sm:h-40 relative pt-4">
+          <h1 className="text-3xl sm:text-xl md:text-4xl lg:text-5xl xl:text-6xl font-bold font-comic">
             Embark on a Collaborative Adventure
           </h1>
           <div className="absolute top-2 -right-14">
             <Image className="w-[14vw] md-hide" src={group} alt="group" />
           </div>
-          <p className="text-lg md:text-xl lg:text-2xl font-comic pt-4">
+          <p className="text-lg sm:text-sm md:text-xl lg:text-2xl font-comic pt-4">
             Team up with friends to create captivating stories together.
           </p>
         </div>

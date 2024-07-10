@@ -79,7 +79,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
   if (!prompt) return <div>Loading...</div>;
 
   return (
-    <div className="w-full min-h-screen mt-6 z-0 relative flex justify-center">
+    <div className="w-full min-h-screen h-[1200px] mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 min-h-screen ms-12 flex flex-col items-center gap-y-4 ">
         <div className="w-4/5 mx-auto h-20 relative pt-2 ">
           <h1 className="text-5xl text-center font-bold font-comic">
@@ -104,13 +104,13 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
                   />
                 </div>
                 <div className="flex w-full flex-col gap-8">
-                <div className="flex flex-wrap justify-center gap-4 font-comic">
+                <div className="flex flex-wrap justify-center gap-4 sm:gap-1 font-comic">
   {["grammar", "rewrite", "improve"].map((type) => (
     <div key={type} className="flex">
       <button
-        className={`w-[30vw] sm:w-[20vw] md:w-[15vw] lg:w-[12vw] h-[10vh] sm:h-[8vh] md:h-[7vh] lg:h-[6vh] bg-black text-white ${
+        className={` sm:h-10 sm:w-20  md:h-[7vh] w-32 h-12 text-md bg-black text-white ${
           taskType === type ? "bg-custom-yellow text-black" : ""
-        } hover:opacity-80 font-bold text-[4vw] sm:text-[2.5vw] md:text-[2vw] lg:text-[1.6vw] rounded-3xl`}
+        } hover:opacity-80 font-bold text-md sm:text-[2.5vw] rounded-3xl`}
         value={type}
         type="button"
         onClick={
