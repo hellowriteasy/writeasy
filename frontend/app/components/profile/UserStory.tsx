@@ -130,15 +130,15 @@ const Card: React.FC<CardProps> = ({
   const shouldHideButtons = pathname.endsWith("contest") || pathname.endsWith("game");
 
   return (
-    <div className="bg-white w-1/2 mt-3 sm-h-60 border-2 border-slate-300 shadow-sm rounded-3xl p-6 transition-all duration-300">
+    <div className="bg-white flex sm:w-10/12 flex-col justify-between w-3/4 mt-3 min-h-72 border-2 border-slate-300 shadow-sm rounded-3xl p-6 transition-all duration-300">
       <div ref={targetRef} className="flex flex-col mb-4">
-        <h1 className="text-2xl font-bold mb-4">
+        <h1 className="text-2xl sm:text-sm font-bold mb-4">
           {contestTitle ? `${contestTitle} > ` : ""} {promptTitle}
         </h1>
         <div>
           <h2 className="py-2 font-bold">{title}</h2>
           <p
-            className={`text-gray-700 transition-all duration-300 ${
+            className={`text-gray-700 sm:text-sm  transition-all duration-300 ${
               showFullDescription ? "max-h-full" : "max-h-20 overflow-hidden"
             }`}
           >
@@ -163,7 +163,7 @@ const Card: React.FC<CardProps> = ({
               setShowFullDescription(true);
               toPDF();
             }}
-            className="bg-white border-2 rounded-2xl border-slate-700 text-black px-4 py-2"
+            className="bg-white border-2 sm:p-0 sm:w-20 sm:h-8 sm:rounded sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
           >
             PDF
           </button>
@@ -171,7 +171,7 @@ const Card: React.FC<CardProps> = ({
         {type === "game" && (
           <button
             onClick={() => router.push(`/Games/${prompt_id}/play`)}
-            className="bg-white border-2 rounded-2xl border-slate-700 text-black px-4 py-2"
+            className="bg-white border-2 sm:px-1 sm:w-20 sm:h-8 sm:rounded sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
           >
             Contribute
           </button>
@@ -179,20 +179,20 @@ const Card: React.FC<CardProps> = ({
         {!shouldHideButtons && (
           <button
             onClick={() => setShowDiff(!showDiff)}
-            className="bg-white border-2 rounded-2xl border-slate-700 text-black px-4 py-2"
+            className="bg-white border-2 sm:p-1 sm:w-20 sm:h-8 sm:rounded sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
           >
             {showDiff ? "Original" : "Marked"}
           </button>
         )}
         <button
           onClick={() => setIsDeleteDialogOpen(true)}
-          className="bg-white border-2 rounded-2xl border-slate-700 text-black px-4 py-2"
+          className="bg-white border-2 sm:p-1 sm:w-20 sm:h-8 sm:rounded sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
         >
           Delete
         </button>
         <button
           onClick={toggleDescription}
-          className="bg-black text-white px-4 py-2 rounded-2xl"
+          className="bg-black sm:p-1 sm:w-20 sm:h-8 sm:rounded sm:text-[10px] text-white px-4 py-2 rounded-2xl"
         >
           {showFullDescription ? "Show Less" : "Read More"}
         </button>
