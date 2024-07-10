@@ -197,10 +197,6 @@ const Page = () => {
       const currentContent = editor.getText();
       // early return
       if (!storyId) return;
-      if (!storyDetails.title || !currentContent) {
-        toast.error("Please enter both title and content before submitting.");
-        return;
-      }
       if (storyDetails.wordLimitExceeded) {
         toast.error("Word limit exceeded. Please reduce the number of words.");
         return;

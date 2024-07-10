@@ -7,7 +7,7 @@ import { axiosInstance } from "@/app/utils/config/axios";
 import useAuthStore from "@/app/store/useAuthStore";
 import Link from "next/link";
 
-const WeeklyTest = () => {
+const   WeeklyTest = () => {
   const [contest, setContest] = useState<TContest | null>(null);
   const {token} = useAuthStore()
   const { submissionDeadline, prompts } = contest || {}; // Use default values if contest is null
@@ -47,7 +47,7 @@ const WeeklyTest = () => {
         <div className="text-center font-comic mid:text-xl w-11/12 text-3xl font-bold">
           <h2 className="py-5">Enter Our Weekly Contests!</h2>
 
-          <ul className="p-2 mid:text-sm">
+          <ul className="p-2  mid:text-sm">
             <li>{contest.contestTheme}</li>
             {/* {prompts?.map((prompt) => (
               <li key={prompt._id}>{prompt.title}</li>
@@ -68,7 +68,7 @@ const WeeklyTest = () => {
           <p className="font-comic  ">
             No Ongoing Contest !
           </p>
-          <h1 className="font-comic text-[2vw] py-1 font-bold ">
+          <h1 className="font-comic text-[1vw] py-1 font-bold ">
             Contest will be started soon ...
           </h1>
         </div> // Display a loading message while fetching
