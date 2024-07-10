@@ -1,10 +1,10 @@
 import Image from "next/image";
 import mic from "@/public/Game/Clip path group.svg";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { TContest } from "@/app/utils/types";
 import { axiosInstance } from "@/app/utils/config/axios";
 import useAuthStore from "@/app/store/useAuthStore";
+import moment from "moment"
 import Link from "next/link";
 
 const WeeklyTest = () => {
@@ -54,8 +54,9 @@ const WeeklyTest = () => {
             ))} */}
           </ul>
           <p className="text-sm pt-2">
-            <span className="font-bold">Closes</span>
-            {new Date(contest.submissionDeadline).toLocaleString()}
+            <span className="font-bold">Closes at  </span>
+            {/* {new Date(contest.submissionDeadline).toLocaleString()} */}
+            {moment(contest.submissionDeadline).format("lll")}
           </p>
           <Link href={`/Contests/${contest._id}`}>
             <button className="text-sm w-40 h-12 mt-4 bg-black font-bold font-comic text-white rounded-2xl ">
