@@ -26,9 +26,9 @@ const Page = ({ params }: { params: { id: string } }) => {
   }, []);
 
   // Filter stories based on contest ID
-  const filteredStories = stories.filter(
-    (story) => story.contest?._id === contest_id
-  );
+  // const filteredStories = stories.filter(
+  //   (story) => story.contest?._id === contest_id
+  // );
 
   return (
     <ProtectedRoute>
@@ -37,7 +37,7 @@ const Page = ({ params }: { params: { id: string } }) => {
           <div className="flex-1 flex flex-col p-6 space-y-6">
             <StoryNav />
             <div className="bg-white shadow-sm p-4 rounded-lg border w-5/6 border-gray-200 space-y-4">
-              {filteredStories.map((story) => (
+              {stories.map((story) => (
                 <Card key={story._id} contest={story} />
               ))}
             </div>

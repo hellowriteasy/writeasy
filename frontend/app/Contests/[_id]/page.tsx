@@ -100,12 +100,6 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
   return (
     <div className="w-full min-h-screen mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 h-auto ms-12">
-        <div className="flex w-full ">
-          <p className="text-xl text-center font-comic">
-            <b className="font-bold"> Until </b> -
-            {moment(contest.submissionDeadline).format("llll")}
-          </p>
-        </div>
         <div className="flex mt-8">
           <div className="p-6 mb-6 flex flex-col gap-y-4">
             <div className="flex gap-y-3 flex-col">
@@ -116,6 +110,12 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
                 {contest.description ||
                   "Paragraphs are the building blocks of papers. Many students define paragraphs in terms of length: a paragraph is a group of at least five sentences, a paragraph is half a page long, etc. In reality, though, the unity and coherence of ideas among sentences is what constitutes a paragraph."}
               </p>
+              <div className="flex w-full ">
+                <p className="text-xl text-center font-comic">
+                  <b className="font-bold"> Submission deadline </b> -
+                  {moment(contest.submissionDeadline).format("llll")}
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -139,11 +139,9 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
                 ))
               ) : null
             ) : (
-             
               <PromptNotPublished
                 publishDate={moment(contest.promptPublishDate).format("llll")}
               />
-           
             )}
             <div className="w-full ms-28">
               <Pagination />
