@@ -49,8 +49,8 @@ const Contest = () => {
         <Image className="w-[9vw]" src={earth} alt="earth" />
       </div>
       <div className="w-10/12 h-screen ms-12">
-        <div className="w-full h-60 relative pt-4">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold font-comic">
+        <div className="w-full h-60 sm:h-40 relative pt-4">
+          <h1 className="text-3xl sm:text-xl md:text-5xl lg:text-6xl font-bold font-comic">
             Enter the Contest Arena
           </h1>
           <div className="absolute top-6 md-hide right-20 ">
@@ -59,21 +59,21 @@ const Contest = () => {
           <div className="absolute top-10 md-hide right-48  ">
             <Image className="w-[12vw]" src={Dumbelman} alt="group" />
           </div>
-          <p className="text-lg sm:text-xl md:text-2xl font-comic pt-4">
+          <p className="text-lg sm:text-sm md:text-2xl font-comic pt-4">
             Compete with young writers worldwide and unleash your creativity.
           </p>
         </div>
 
-        <div className="flex w-full h-auto relative mt-0 justify-around gap-x-5">
+        <div className="flex w-full h-auto relative mt-0 justify-around gap-x-5 sm:gap-x-0">
           <div className="w-full">
             <div className="absolute top-40 -left-32">
               <Image className="w-[12vw]" src={Bee} alt="bee" />
             </div>
-            <div className="gap-8 relative flex flex-col gap-y-20 w-full ">
+            <div className="gap-8 relative flex flex-col gap-y-20 sm:gap-9 w-full ">
               <div className="flex flex-col gap-y-3">
                 <Join />
               </div>
-              <div className="flex flex-col  gap-y-3 w-full ">
+              <div className="flex flex-col  gap-y-3 sm:gap-y-0 w-full ">
                 {endedContests.map((contest, index) => (
                   <Contestitle key={index} contest={contest} />
                 ))}

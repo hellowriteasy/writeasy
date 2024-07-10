@@ -29,8 +29,8 @@ const TopWriting: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full md:w-[360px] h-auto flex justify-center relative yellow border-4 border-yellow-500 rounded-3xl p-4 md:p-0">
-      <div className="absolute -top-6 md:-top-9 right-4 md:right-[-12px]">
+    <div className="w-96 mid:w-[200px]   h-auto flex justify-center relative yellow border-4 border-yellow-500 rounded-3xl p-4 md:p-0">
+      <div className="absolute -top-6 sm-hide md:-top-9 right-4 md:right-[-12px]">
         <Image src={Crown} alt="Crown" width={40} height={40} className="md:w-auto md:h-auto" />
       </div>
 

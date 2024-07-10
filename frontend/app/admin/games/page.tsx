@@ -70,7 +70,7 @@ const Games = () => {
               </div>
 
               <div className="flex justify-between space-y-4 h-12 rounded-lg">
-                <div className="text-xl font-semibold">All Story Titles</div>
+                <div className="text-xl font-semibold">All Games</div>
               </div>
             </div>
             {gamePrompts.map((prompt) => (

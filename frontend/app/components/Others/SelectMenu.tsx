@@ -35,9 +35,9 @@ const SelectMenu: React.FC<SelectMenuProps> = ({ selectedOption, onSelectOption 
   };
 
   return (
-    <div className="relative ms-2 z-10 w-48 cursor-pointer">
+    <div className="relative ms-2 z-10 w-48 sm:w-28 cursor-pointer">
       <div className="relative" onClick={toggleOptions}>
-        <div className="w-full h-14 text-center font-bold text-2xl font-comic bg-white border border-black rounded-3xl px-4 py-2 pr-10 focus:outline-none focus:border-black">
+        <div className="w-full h-14 sm:h-8 text-center font-bold text-2xl sm:text-sm flex  items-center font-comic bg-white border border-black rounded-3xl px-4 py-2 pr-10 focus:outline-none focus:border-black">
           {selectedOption || "Types"}
         </div>
         <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center px-2 text-black">
@@ -50,7 +50,7 @@ const SelectMenu: React.FC<SelectMenuProps> = ({ selectedOption, onSelectOption 
             <div
               key={option._id}
               className="px-4 py-2 h-9 border-y border-slate-400 cursor-pointer hover:bg-gray-100"
-              onClick={() => {
+              onClick={() => {  
                 onSelectOption(option.name);
                 setShowOptions(false);
               }}

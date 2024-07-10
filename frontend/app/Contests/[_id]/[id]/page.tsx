@@ -54,7 +54,7 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
   if (stories.length === 0) return <NotFound text="No Stories to show !!" />;
 
   return (
-    <div className="w-full h-auto mt-6 z-0 relative flex justify-center">
+    <div className="w-full min-h-screen mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 h-auto ms-12">
         <div className="w-full text-center text-2xl font-comic relative pt-4">
           CONTEST ENDED
