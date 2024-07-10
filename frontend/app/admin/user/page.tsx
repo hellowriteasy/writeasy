@@ -1,16 +1,16 @@
-'use client'
-
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import {axiosInstance} from '@/app/utils/config/axios'
+import { axiosInstance } from '@/app/utils/config/axios';
+
 const UserManagement: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [users, setUsers] = useState([]);
   const [endDate, setEndDate] = useState('');
-  const [filteredUsers, setFilteredUsers] = useState([]);
-  const AxiosIns = axiosInstance("")
+  const AxiosIns = axiosInstance('');
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -30,13 +30,13 @@ const UserManagement: React.FC = () => {
 
   const handleUpdateSubscription = async (userId: string) => {
     try {
-    await AxiosIns.put('/auth/users/subscribe', {
+      await AxiosIns.put('/auth/users/subscribe', {
         user_id: userId,
         end_date: endDate,
       });
-     toast.success("subscription updated successfully")
+      toast.success('Subscription updated successfully');
     } catch (error) {
-      toast.error('failed to update subscription, it might be because user has already has an active subscription');
+      toast.error('Failed to update subscription. It might be because the user already has an active subscription.');
     }
   };
 
@@ -62,7 +62,7 @@ const UserManagement: React.FC = () => {
           value={searchQuery}
           onChange={handleSearchChange}
           placeholder="Search by username or email"
-          className="px-3 py-2 border w-5/6 border-yellow-300 rounded-md  outline-none "
+          className="px-3 py-2 border w-5/6 border-yellow-300 rounded-md outline-none"
         />
         {searchQuery && (
           <button
@@ -74,31 +74,38 @@ const UserManagement: React.FC = () => {
         )}
       </div>
       <div>
-        {users.map((user: any) => (
-          <div key={user._id} className="bg-white  shadow-md rounded-md p-4 px-14 mb-4">
-            <p className="text-lg font-bold">{user.username}</p>
-            <p className="text-gray-600">{user.email}</p>
-            <p className="text-gray-600">Role: {user.role}</p>
-            <p className="text-gray-600">Last Login: {new Date(user.lastLogin).toLocaleString()}</p>
-            {user.subscriptionType && (
-              <p className="text-gray-600">Subscription Type: {user.subscriptionType}</p>
-            )}
-            <div className="mt-2">
-              <input
-                type="date"
-                value={endDate}
-                onChange={handleEndDateChange}
-                className="px-3 py-2 border border-gray-300 rounded-md "
-              />
-              <button
-                className="ml-2 px-4 py-2 bg-black text-white rounded-md "
-                onClick={() => handleUpdateSubscription(user._id)}
-              >
-                Update Subscription
-              </button>
+        {users.map((user: any) => {
+          const isExpired = new Date(user.expiresAt) < new Date();
+
+          return (
+            <div key={user._id} className="bg-white shadow-md rounded-md p-4 px-14 mb-4">
+              <p className="text-lg font-bold">{user.username}</p>
+              <p className="text-gray-600">{user.email}</p>
+              <p className="text-gray-600">Role: {user.role}</p>
+              <p className="text-gray-600">
+              Subscription expiry date: {isExpired ? 'Subscription Expired' : new Date(user.expiresAt).toLocaleString()}
+              </p>
+              <p className="text-gray-600">Last Login: {new Date(user.lastLogin).toLocaleString()}</p>
+              {user.subscriptionType && (
+                <p className="text-gray-600">Subscription Type: {user.subscriptionType}</p>
+              )}
+              <div className="mt-2">
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={handleEndDateChange}
+                  className="px-3 py-2 border border-gray-300 rounded-md"
+                />
+                <button
+                  className="ml-2 px-4 py-2 bg-black text-white rounded-md"
+                  onClick={() => handleUpdateSubscription(user._id)}
+                >
+                  Update Subscription
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
         {users.length === 0 && searchQuery && (
           <p className="text-gray-600">No users found for "{searchQuery}".</p>
         )}
@@ -116,6 +123,3 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-
-
-

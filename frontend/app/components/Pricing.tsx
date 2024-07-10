@@ -88,7 +88,7 @@ const Pricing = () => {
                     </h2>
                     <span className="pt-4">/month</span>
                   </div>
-                  <div className="text-center font-comic font-bold text-[1vw]">
+                  <div className="text-center font-comic font-bold text-xl sm:text-sm">
                     {subscriptionRemainingDays} days left
                   </div>
                 </div>
@@ -97,7 +97,7 @@ const Pricing = () => {
             <div className="text-center flex flex-col gap-y-2 absolute top-[50%]    w-10/12 mx-auto">
               <div>
               
-                <ul className="flex sm:text-sm   text-[1vw] flex-col px-4  items-start ">
+                <ul className="flex sm:text-[12px]  md:text-xl  flex-col px-4  items-start ">
                   <li className=" text-start">
                     •⁠ ⁠Unlimited writing practices with immediate GPT markings
                   </li>
