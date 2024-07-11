@@ -70,18 +70,48 @@ const deleteContest = async (req, res) => {
 };
 
 const getOngoingContests = async (req, res) => {
+  const page = req.query.page || 1; // Default page is 1
+  const perPage = req.query.perPage || 5; // Default page size is 10
+  const skip = (page - 1) * perPage;
+  const limit = +perPage || 5;
   try {
-    const ongoingContests = await ContestService.getOngoingContests();
-    res.json(ongoingContests);
+    const { data, total } = await ContestService.getOngoingContests(
+      skip,
+      limit
+    );
+    res.json({
+      data,
+      pageData: {
+        page,
+        perPage,
+        total,
+      },
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
 const getEndedContests = async (req, res) => {
+  
+  const page = req.query.page || 1; // Default page is 1
+  const perPage = req.query.perPage || 5; // Default page size is 10
+  const skip = (page - 1) * perPage;
+  const limit = +perPage || 5;
+
   try {
-    const endedContest = await ContestService.getEndedContests();
-    res.json(endedContest);
+
+    const { data, total } = await ContestService.getEndedContests(skip, limit);
+
+    res.json({
+      data,
+      pageData: {
+        page,
+        perPage,
+        total,
+      },
+    });
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

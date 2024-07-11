@@ -25,7 +25,7 @@ const Games: React.FC = () => {
     const fetchPrompts = async () => {
       try {
         const response = await AxiosIns.get("/prompts/game-prompts");
-        setPrompts(response.data.reverse());
+        setPrompts(response.data?.data.reverse());
       } catch (error: any) {
         setError(error.message);
       }

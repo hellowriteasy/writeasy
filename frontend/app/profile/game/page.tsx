@@ -20,7 +20,7 @@ const Page: React.FC = () => {
   useEffect(() => {
     const fetchUserStories = async () => {
       try {
-        const response = await AxiosIns.get<TStory[]>('/stories/user', {
+        const response = await AxiosIns.get('/stories/user', {
           params: {
             userId:userId,
             storyType: 'game',
@@ -29,7 +29,7 @@ const Page: React.FC = () => {
           }
         });
         
-        setUserStories(response.data.reverse());
+        setUserStories(response.data?.data?.reverse());
 
       } catch (error:any) {
     
@@ -38,12 +38,12 @@ const Page: React.FC = () => {
     };
 
     fetchUserStories();
-  }, [currentPage]);
+  }, [currentPage,userId]);
   
   async function  onSuccess(){
     const fetchUserStories = async () => {
       try {
-        const response = await AxiosIns.get<TStory[]>('/stories/user', {
+        const response = await AxiosIns.get('/stories/user', {
           params: {
             userId:userId,
             storyType: 'game',
@@ -52,7 +52,7 @@ const Page: React.FC = () => {
           }
         });
         
-        setUserStories(response.data.reverse());
+        setUserStories(response.data?.data?.reverse());
 
       } catch (error:any) {
     
