@@ -11,30 +11,14 @@ interface CardProps {
   id: string;
 }
 
-interface Category {
-  name: string;
-  _id: string;
-}
 
-const Card: React.FC<CardProps> = ({ title, type = [], id }) => {
+
+const   Card: React.FC<CardProps> = ({ title, type = [], id }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [Title, setTitle] = useState(title);
-  const [Categories, setCategories] = useState<string[]>(type);
-  const [availableCategories, setAvailableCategories] = useState<Category[]>([]);
   const AxiosIns = axiosInstance("");
 
-  useEffect(() => {
-    const getCategory = async () => {
-      try {
-        const { data } = await AxiosIns.get<{ categories: Category[] }>('/category');
-        setAvailableCategories(data.categories);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-
-    getCategory();
-  }, []);
+  
 
   const handleDeleteContest = async () => {
     try {
@@ -49,13 +33,11 @@ const Card: React.FC<CardProps> = ({ title, type = [], id }) => {
     try {
       await AxiosIns.put(`/prompts/${id}`, {
         promptText: Title,
-        promptCategory: Categories,
         promptType: 'contest'
       });
 
       // Update title and categories if the response is successful
       setTitle(Title);
-      setCategories(Categories);
 
       toast.success("Contest updated successfully!");
       setIsModalOpen(false);
@@ -65,16 +47,7 @@ const Card: React.FC<CardProps> = ({ title, type = [], id }) => {
     }
   };
 
-  const toggleCategory = (category: string) => {
-    setCategories((prev) => {
-      if (prev.includes(category)) {
-        return prev.filter((cat) => cat !== category);
-      } else {
-        return [...prev, category];
-      }
-    });
-  };
-
+ 
   return (
     <>
       <div className="bg-white border border-gray-300 shadow-md rounded-lg p-4 mb-4">
@@ -89,7 +62,7 @@ const Card: React.FC<CardProps> = ({ title, type = [], id }) => {
             </button>
           </div>
         </div>
-        <div className="text-gray-600">Categories: {Categories.join(', ')}</div>
+      
       </div>
 
       {isModalOpen && (
@@ -133,43 +106,7 @@ const Card: React.FC<CardProps> = ({ title, type = [], id }) => {
                               value={Title}
                               onChange={(e) => setTitle(e.target.value)}
                             />
-                            <Menu as="div" className="relative h-full mt-3">
-                              <MenuButton className="w-96 text-left rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                                {Categories.length ? Categories.join(', ') : 'Select Categories'}
-                              </MenuButton>
-                              <Transition
-                                as={Fragment}
-                                enter="transition ease-out duration-100"
-                                enterFrom="transform opacity-0 scale-95"
-                                enterTo="opacity-100 scale-100"
-                                leave="transition ease-in duration-75"
-                                leaveFrom="transform opacity-100 scale-100"
-                                leaveTo="transform opacity-0 scale-95"
-                              >
-                                <MenuItems className="absolute  mt-1 w-full h-96 z-20 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                  {availableCategories.map((category) => (
-                                    <MenuItem key={category._id}>
-                                      {({ active }) => (
-                                        <button
-                                          className={`${
-                                            active ? 'bg-indigo-600 text-white' : 'text-gray-900'
-                                          } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                          onClick={() => toggleCategory(category.name)}
-                                        >
-                                          <input
-                                            type="checkbox"
-                                            checked={Categories.includes(category.name)}
-                                            onChange={() => toggleCategory(category.name)}
-                                            className="mr-2"
-                                          />
-                                          {category.name}
-                                        </button>
-                                      )}
-                                    </MenuItem>
-                                  ))}
-                                </MenuItems>
-                              </Transition>
-                            </Menu>
+                           
                           </div>
                         </div>
                       </div>

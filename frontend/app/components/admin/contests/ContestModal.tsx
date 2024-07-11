@@ -18,30 +18,13 @@ interface ModalProps {
   onAddPrompt: (prompt: TPromptAdd) => void;
 }
 
-interface Category {
-  name: string;
-  _id: string;
-}
+
 
 const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
   const [promptTitle, setPromptTitle] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
   const AxiosIns = axiosInstance("");
 
-  useEffect(() => {
-    const getCategory = async () => {
-      try {
-        const { data } = await AxiosIns.get<{ categories: Category[] }>('/category');
-        setCategories(data.categories);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-
-    getCategory();
-  }, []);
-
+  
   useEffect(() => {
     const handleBeforeUnload = (event: any) => {
       event.preventDefault();
@@ -61,14 +44,13 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
     try {
       const response = await AxiosIns.post("/prompts", {
         title: promptTitle,
-        promptCategory: selectedCategories,
+      
         promptType: "contest",
       });
       const { _id } = response.data;
       onAddPrompt({
         _id,
         promptText: promptTitle,
-        promptCategory: selectedCategories,
         title: promptTitle,
       });
       toast.success("Prompt added successfully!");
@@ -79,15 +61,7 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
     }
   };
 
-  const toggleCategory = (category: string) => {
-    setSelectedCategories((prev) => {
-      if (prev.includes(category)) {
-        return prev.filter((cat) => cat !== category);
-      } else {
-        return [...prev, category];
-      }
-    });
-  };
+ 
 
   return (
     <Transition.Root show={true} as={Fragment}>
@@ -137,47 +111,7 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onAddPrompt }) => {
                           value={promptTitle}
                           onChange={(e) => setPromptTitle(e.target.value)}
                         />
-                        <Menu as="div" className="relative mt-3">
-                          <MenuButton className="w-96 text-left rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                            {selectedCategories.length
-                              ? selectedCategories.join(", ")
-                              : "Select Categories"}
-                          </MenuButton>
-                          <Transition
-                            as={Fragment}
-                            enter="transition ease-out duration-100"
-                            enterFrom="transform opacity-0 scale-95"
-                            enterTo="opacity-100 scale-100"
-                            leave="transition ease-in duration-75"
-                            leaveFrom="transform opacity-100 scale-100"
-                            leaveTo="transform opacity-0 scale-95"
-                          >
-                            <MenuItems className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                              {categories.map((category) => (
-                                <MenuItem key={category._id}>
-                                  {({ active }) => (
-                                    <button
-                                      className={`${
-                                        active
-                                          ? "bg-indigo-600 text-white"
-                                          : "text-gray-900"
-                                      } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                      onClick={() => toggleCategory(category.name)}
-                                    >
-                                      <input
-                                        type="checkbox"
-                                        checked={selectedCategories.includes(category.name)}
-                                        onChange={() => toggleCategory(category.name)}
-                                        className="mr-2"
-                                      />
-                                      {category.name}
-                                    </button>
-                                  )}
-                                </MenuItem>
-                              ))}
-                            </MenuItems>
-                          </Transition>
-                        </Menu>
+                       
                       </div>
                     </div>
                   </div>
