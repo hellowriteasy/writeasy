@@ -49,9 +49,9 @@ const TopWriting: React.FC = () => {
           Top writings of previous week
         </h2>
         {isLoading ? (
-          <p>Loading...</p>
+          <p className="font-comic">Loading...</p>
         ) : error ? (
-          <p>{error}</p>
+          <p className="font-comic">{error}</p>
         ) : (
           <ul className="p-4 w-full flex flex-col gap-y-1">
             {topStories.map((story, index) => (
