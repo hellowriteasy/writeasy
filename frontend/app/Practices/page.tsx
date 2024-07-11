@@ -98,16 +98,14 @@ const Page: React.FC = () => {
                 <Prompt key={prompt._id} prompt={prompt} />
               ))
             ) : (
-              <NotFound text={`Nothing to show for ${selectedOption} `} />
+              <NotFound text={`No practise prompt available... `} />
             )}
             <div className="w-full mt-10 text-lg md:text-xl font-comic ">
               <ReactPaginate
                 previousLabel={
                   <FaAngleLeft className="w-6 h-6 md:w-8 lg:w-10" />
                 }
-                nextLabel={
-                  <FaAngleRight className="w-6 h-6 md:w-8 lg:w-10" />
-                }
+                nextLabel={<FaAngleRight className="w-6 h-6 md:w-8 lg:w-10" />}
                 breakLabel="..."
                 breakClassName="break-me"
                 pageCount={pageCount}
