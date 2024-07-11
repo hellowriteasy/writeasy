@@ -1,4 +1,6 @@
 const Prompt = require("../models/prompt");
+const Story = require("../models/story");
+
 const ContestService = require("../services/contestService");
 
 const createContest = async (req, res) => {
@@ -55,7 +57,13 @@ const updateContest = async (req, res) => {
 const deleteContest = async (req, res) => {
   try {
     await ContestService.deleteContest(req.params.id);
-    res.status(204).json({ message: "Contest deleted successfully" });
+    await Prompt.deleteMany({
+      contestId: req.params.id,
+    });
+    await Story.deleteMany({
+      contest: req.params.id,
+    });
+    await res.status(204).json({ message: "Contest deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
