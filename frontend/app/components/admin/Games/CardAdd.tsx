@@ -10,21 +10,16 @@ interface CardProps {
   title: string;
   description: string;
   id: string;
-  categories: string[];
+
   onSuccess: () => void; 
 }
-interface Category{
-  _id:string,
-  name:string
-}
 
-const CardAdd: React.FC<CardProps> = ({ title, description, id, categories,onSuccess }) => {
+
+const CardAdd: React.FC<CardProps> = ({ title, description, id,onSuccess }) => {
   const [open, setOpen] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [promptTitle, setPromptTitle] = useState(title);
   const [promptDescription, setPromptDescription] = useState(description);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>(categories);
-  const [Categories, setCategories] = useState<Category[]>([]);
   const cancelButtonRef = useRef(null);
   const AxiosIns = axiosInstance("");
 
@@ -34,7 +29,6 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id, categories,onSuc
         title: promptTitle,
         description: promptDescription,
         promptType: 'game',
-        promptCategory: selectedCategories,
       });
       setOpen(false);
       onSuccess();
@@ -60,26 +54,8 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id, categories,onSuc
     }
   };
   
-  const toggleCategory = (category: string) => {
-    setSelectedCategories((prevCategories) =>
-      prevCategories.includes(category)
-        ? prevCategories.filter((cat) => cat !== category)
-        : [...prevCategories, category]
-    );
-  };
-  useEffect(() => {
-    const getCategory = async () => {
-      try {
-        const { data } = await AxiosIns.get<{ categories: Category[] }>('/category');
-        setCategories(data.categories);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-
-    getCategory();
-  }, []);
-
+ 
+ 
 
 
   return (
@@ -140,26 +116,7 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id, categories,onSuc
                             onChange={(e) => setPromptTitle(e.target.value)}
                           />
                         </div>
-                        <div className="mt-4">
-                          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="categories">
-                            Categories
-                          </label>
-                          <div className="flex flex-wrap gap-2">
-                            {Categories.map((category) => (
-                              <button
-                                key={category._id}
-                                className={`px-3 py-1 rounded-full border ${
-                                  selectedCategories.includes(category.name)
-                                    ? 'bg-black text-white'
-                                    : 'bg-gray-200 text-gray-700'
-                                }`}
-                                onClick={() => toggleCategory(category.name)}
-                              >
-                                {category.name}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
+                       
                         <div className="mt-4">
                           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
                             Description

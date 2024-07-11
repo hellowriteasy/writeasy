@@ -8,16 +8,11 @@ interface ModalProps {
   setIsModalOpen: (isOpen: boolean) => void;
   onSuccess : ()=>void;
 }
-interface Category{
-  name:string;
-  _id:string
-}
+
 
 const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen ,onSuccess}) => {
   const [promptTitle, setPromptTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [Categories, setCategories] = useState<Category[]>([]);
   const [error, setError] = useState<string | null>(null);
   const AxiosIns = axiosInstance("");
 
@@ -27,7 +22,7 @@ const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen ,onSuccess}) => {
         title: promptTitle,
         description: description,
         promptType: 'game',
-        promptCategory: selectedCategories,
+      
       });
       console.log('Response:', response.data);
       setIsModalOpen(false);
@@ -38,26 +33,7 @@ const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen ,onSuccess}) => {
       console.error('Error:', err);
     }
   };
-  useEffect(() => {
-    const getCategory = async () => {
-      try {
-        const { data } = await AxiosIns.get<{ categories: Category[] }>('/category');
-        setCategories(data.categories);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
-
-    getCategory();
-  }, []);
-  const toggleCategory = (category: string) => {
-    setSelectedCategories((prevCategories) =>
-      prevCategories.includes(category)
-        ? prevCategories.filter((cat) => cat !== category)
-        : [...prevCategories, category]
-    );
-  };
-  
+ 
 
 
   return (
@@ -91,7 +67,7 @@ const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen ,onSuccess}) => {
                   <div className="sm:flex sm:items-start">
                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                       <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                        Add Prompt
+                 
                       </Dialog.Title>
                       <div className="mt-2">
                         <input
@@ -102,29 +78,10 @@ const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen ,onSuccess}) => {
                           onChange={(e) => setPromptTitle(e.target.value)}
                         />
                       </div>
-                      <div className="mt-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="categories">
-                          Categories
-                        </label>
-                        <div className="flex flex-wrap gap-2">
-                          {Categories.map((data) => (
-                            <button
-                              key={data._id}
-                              className={`px-3 py-1 rounded-full border ${
-                                selectedCategories.includes(data.name)
-                                  ? 'bg-black text-white'
-                                  : 'bg-gray-200 text-gray-700'
-                              }`}
-                              onClick={() => toggleCategory(data.name)}
-                            >
-                              {data.name}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
+                   
                       <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
-                          Description
+                        
                         </label>
                         <textarea
                           id="description"

@@ -6,15 +6,16 @@ import ProtectedRoute from "@/app/utils/ProtectedRoute";
 import { useCustomToast } from "@/app/utils/hooks/useToast";
 import { axiosInstance } from "@/app/utils/config/axios";
 import DatePicker from "react-datepicker";
+import { useRouter } from "next/navigation";
 import "react-datepicker/dist/react-datepicker.css";
 export interface TPromptAdd {
   _id: string;
   title: string;
-  promptCategory: string[];
   promptText: string;
 }
 
 const Page = () => {
+  const Router=useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [promptCards, setPromptCards] = useState<TPromptAdd[]>([]);
   const [contestDetails, setContestDetails] = useState({
@@ -50,6 +51,7 @@ const Page = () => {
           contestTheme: "",
         }));
         toast("Contest created successfully.", "success");
+        Router.push("/admin/contests")
       }
     } catch (error) {
       toast("Faield to create contest.", "error");
@@ -204,7 +206,7 @@ const Page = () => {
                   onSuccess={() => {}}
                   key={index}
                   title={prompt.title}
-                  // type={prompt.promptCategories.join(",")}
+              
                   id={prompt._id}
                   deadline="234"
                 />
