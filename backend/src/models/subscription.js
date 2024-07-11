@@ -27,16 +27,16 @@ const subscriptionSchema = new mongoose.Schema(
   }
 );
 // Pre-save middleware to update expiresAt based on paidAt
-subscriptionSchema.pre("save", function (next) {
-  if (this.isModified("paidAt") || this.isNew) {
-    if (this.paidAt) {
-      const thirtyDaysLater = new Date(this.paidAt);
-      thirtyDaysLater.setDate(thirtyDaysLater.getDate() + 30);
-      this.expiresAt = thirtyDaysLater;
-    }
-  }
-  next();
-});
+// subscriptionSchema.pre("save", function (next) {
+//   if (this.isModified("paidAt") || this.isNew) {
+//     if (this.paidAt) {
+//       const thirtyDaysLater = new Date(this.paidAt);
+//       thirtyDaysLater.setDate(thirtyDaysLater.getDate() + 30);
+//       this.expiresAt = thirtyDaysLater;
+//     }
+//   }
+//   next();
+// });
 
 const Subscription = mongoose.model("Subscription", subscriptionSchema);
 
