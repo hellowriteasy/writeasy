@@ -11,6 +11,7 @@ const {
   getStoryOfAuserByPrompt,
   getStoriesByContentAndPrompt,
   savePractiseStoryToProfile,
+  getTopStoriesForContest,
 } = require("../src/controllers/storyController");
 const { practiseStory } = require("../src/controllers/StoryScoreController");
 /**
@@ -222,7 +223,6 @@ router.delete("/:id", deleteStory);
  *         description: Error occurred while processing the story.
  */
 
-
 router.post("/practise/save", savePractiseStoryToProfile);
 
 router.post("/score", practiseStory);
@@ -359,7 +359,66 @@ router.get("/user/:prompt_id/:user_id", getStoryOfAuserByPrompt);
  */
 
 router.get("/contest/prompt", getStoriesByContentAndPrompt);
-
-
+/**
+ * @swagger
+ * /api/stories/contest/top-writings/{id}:
+ *   get:
+ *     summary: Get top stories for a contest
+ *     tags: [Stories]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Contest ID
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number
+ *       - in: query
+ *         name: perPage
+ *         schema:
+ *           type: integer
+ *           default: 5
+ *         description: Number of items per page
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       // Define the story properties here
+ *                 pageData:
+ *                   type: object
+ *                   properties:
+ *                     page:
+ *                       type: integer
+ *                     perPage:
+ *                       type: integer
+ *                     total:
+ *                       type: integer
+ *       500:
+ *         description: An error occurred while fetching stories
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 error:
+ *                   type: object
+ */
+router.get("/contest/top-writings/:id", getTopStoriesForContest);
 
 module.exports = router;

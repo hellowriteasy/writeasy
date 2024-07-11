@@ -94,12 +94,14 @@ const Card: React.FC<CardProps> = ({ contest }) => {
             </button> */}
           </div>
         </div>
-        <div className="text-gray-600">User: {contest.user.username}</div>
-        <div className="text-gray-600">
+        <div className="text-gray-700">Prompt : {contest.prompt.title}</div>
+        <div className="text-gray-700">User: {contest.user.username}</div>
+        <div className="text-gray-700">Score: {contest.score}</div>
+
+        <div className="text-gray-700">
           Submission Date:{" "}
           {new Date(contest.submissionDateTime).toLocaleString()}
         </div>
-        <div className="text-gray-600">Score: {contest.score}</div>
       </div>
 
       <Transition.Root show={open} as={Fragment}>
