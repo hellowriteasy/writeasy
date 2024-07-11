@@ -1,6 +1,11 @@
 const stripe = require("../../config/stripe");
 
 const createStripeCheckout = async () => {
+  const today = new Date();
+  const startDate = today.toISOString().split("T")[0]; // Format: YYYY-MM-DD
+  const endDateObj = new Date(today);
+  endDateObj.setDate(endDateObj.getDate() + 30);
+  const endDate = endDateObj.toISOString().split("T")[0]; // Format: YYYY-MM-DD
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -15,10 +20,10 @@ const createStripeCheckout = async () => {
             currency: "gbp",
             product_data: {
               images: [
-                "https://images.pexels.com/photos/19992420/pexels-photo-19992420/free-photo-of-hindu-goddess-decorated-with-flowers.jpeg?auto=compress&cs=tinysrgb&w=800",
+                "https://firebasestorage.googleapis.com/v0/b/debai-d0809.appspot.com/o/images%2FGroup%2067.png?alt=media&token=316c8233-f993-4a08-a163-148ce0902271",
               ],
               name: "Writeasy monthly subscription",
-              description: `TYPE: Monthly Subscription  \nStart Date: 8th June 2024 \nEnd Date: 8th July 2024`,
+              description: `TYPE: Monthly Subscription  \nStart Date: ${startDate} \nEnd Date: ${endDate}`,
             },
             unit_amount: Math.round(25.29 * 100),
           },
