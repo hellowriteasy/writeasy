@@ -27,6 +27,9 @@ const storySchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  position: {
+    type: Number,
+  },
   contest: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Contest",

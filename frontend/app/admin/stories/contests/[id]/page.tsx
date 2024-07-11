@@ -8,7 +8,6 @@ import { axiosInstance } from "@/app/utils/config/axios";
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [stories, setStories] = useState<TStory[]>([]);
-  const contest_id = params.id;
   const AxiosIns = axiosInstance("");
   useEffect(() => {
     const fetchStories = async () => {
@@ -16,7 +15,7 @@ const Page = ({ params }: { params: { id: string } }) => {
         const response = await AxiosIns.get(
           `/stories/contest/prompt?contest_id=${params.id}&sortKey=score`
         );
-        setStories(response.data);
+        setStories(response.data?.data);
       } catch (error) {
         console.error("Error fetching stories:", error);
       }
