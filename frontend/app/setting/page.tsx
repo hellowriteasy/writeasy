@@ -31,9 +31,11 @@ const Page = () => {
 
   const { uploadFile } = useUploadFile();
   const upload = () => {
+    console.log(fileInputRef.current)
     if (!fileInputRef.current) return;
     fileInputRef.current.click();
   };
+  
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -91,6 +93,7 @@ const Page = () => {
         className="w-40 h-40 bg-slate-700 rounded-full cursor-pointer"
         onClick={upload}
       >
+        <input type="file" hidden ref={fileInputRef} onChange={handleFileChange}/>
         {profile_picture || file ? (
           <img
             className="w-full h-full rounded-full object-cover"
@@ -100,7 +103,8 @@ const Page = () => {
         ) : (
           <div className="w-full h-full rounded-full bg-gray-300 flex items-center justify-center">
             <span className="text-white">Upload</span>
-          </div>
+            </div>
+            
         )}
       </div>
 

@@ -1,6 +1,5 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import UserStory from '@/app/components/profile/UserStory';
 import ReactPaginate from 'react-paginate';
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
@@ -30,7 +29,7 @@ const ContestPage: React.FC = () => {
             limit: itemsPerPage
           }
         });
-        setUserStories(response.data.reverse());
+        setUserStories(response.data?.data.reverse());
         setLoading(false);
       } catch (error) {
    
@@ -49,7 +48,7 @@ const ContestPage: React.FC = () => {
           limit: itemsPerPage
         }
       });
-      setUserStories(response.data.reverse());
+      setUserStories(response.data?.data.reverse());
       setLoading(false);
     } catch (error) {
  
