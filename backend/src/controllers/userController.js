@@ -142,7 +142,8 @@ const UserController = {
 
           return {
             ...user._doc,
-            expiresAt: subscription.expiresAt,
+            isSubcriptionActive: !!subscription,
+            expiresAt: subscription?.expiresAt || null,
           };
         })
       );
