@@ -9,7 +9,9 @@ import Pagination from "@/app/components/Pagination";
 import Storycard from "@/app/components/Storycard";
 import { axiosInstance } from "@/app/utils/config/axios";
 import NotFound from "@/app/components/Others/NotFound";
-import { TStory } from "@/app/utils/types";
+import { TPrompt, TStory } from "@/app/utils/types";
+import ReactPaginate from "react-paginate";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 
 interface Prompt {
   _id: string;
@@ -32,23 +34,44 @@ interface ViewContestProps {
 
 const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
   const [stories, setStories] = useState<TStory[]>([]);
+  const [prompt, setPrompt] = useState<TPrompt | null>(null);
   const AxiosIns = axiosInstance("");
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageDetails, setPageDetails] = useState({
+    page: 1,
+    perPage: 10,
+    total: 0,
+  });
 
   useEffect(() => {
     const fetchStories = async () => {
       try {
         const response = await AxiosIns.get(
-          `/stories/contest/prompt?prompt_id=${params.id}&sortKey=score`
+          `/stories/contest/prompt?prompt_id=${params.id}&sortKey=score&page=${currentPage}&exclude_top_writings=true`
         );
-        setStories(response.data);
+        setStories(response.data?.data);
+        setPageDetails(response.data?.pageData);
       } catch (err: any) {
         setError(err.message);
       }
     };
+    const fetchPromptDetails = async () => {
+      try {
+        const { data } = await AxiosIns.get(`/prompts/${params.id}`);
+        setPrompt(data);
+      } catch (error) {
+        //
+      }
+    };
 
     fetchStories();
-  }, [params.id]);
+    fetchPromptDetails();
+  }, [params.id, currentPage]);
+
+  const handlePageClick = (event: { selected: number }) => {
+    setCurrentPage(event.selected + 1);
+  };
 
   if (error) return <p>{error}</p>;
   if (stories.length === 0) return <NotFound text="No Stories to show !!" />;
@@ -56,8 +79,8 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
   return (
     <div className="w-full min-h-screen mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 h-auto ms-12">
-        <div className="w-full text-center text-2xl font-comic relative pt-4">
-          CONTEST ENDED
+        <div className="w-full text-center text-5xl font-bold font-comic relative pt-4">
+          {prompt?.title}
         </div>
         <div className="flex justify-center mt-8"></div>
         <div className="flex w-full h-auto relative mt-0 justify-around">
@@ -69,13 +92,10 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
               {/* <h1 className="text-6xl font-comic font-bold p-10">
                 {prompt_title}
               </h1> */}
-        
-            {stories.map((story, index) => {
+            {stories.map((story) => {
               let starType: "main" | "second" | "none" = "none";
-              if (index === 0) {
+              if (story.position) {
                 starType = "main";
-              } else if (index === 1 || index === 2) {
-                starType = "second";
               }
               return (
                 <Storycard
@@ -86,9 +106,37 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
                   starType={starType}
                   username={story.user.username}
                   email={story.user.email}
+                  profile_image={story.user.profile_picture}
                 />
               );
             })}
+
+            {pageDetails && pageDetails.total > 5 && (
+              <div className="w-full ms-28">
+                <ReactPaginate
+                  previousLabel={
+                    <FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+                  }
+                  nextLabel={
+                    <FaAngleRight className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+                  }
+                  breakLabel="..."
+                  breakClassName="break-me"
+                  pageCount={Math.ceil(pageDetails.total / pageDetails.perPage)}
+                  marginPagesDisplayed={2}
+                  pageRangeDisplayed={5}
+                  onPageChange={handlePageClick}
+                  containerClassName="flex justify-center gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
+                  pageClassName=""
+                  pageLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                  previousClassName=""
+                  previousLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                  nextClassName=""
+                  nextLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                  activeClassName="bg-black text-white rounded-full"
+                />
+              </div>
+            )}
             <div className="absolute bottom-80 sm-hide  -right-40">
               <Image src={Cloud} alt="Cloud" />
             </div>

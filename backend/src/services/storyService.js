@@ -6,8 +6,15 @@ const createStory = async (data) => {
   return await story.save();
 };
 
-const getAllStories = async () => {
-  return await Story.find()
+const getAllStories = async (skip, limit) => {
+  return await Story.find(
+    {},
+    {},
+    {
+      ...(limit ? { limit } : null),
+      ...(skip ? { skip } : null),
+    }
+  )
     .populate({
       select: {
         password: 0,
@@ -23,15 +30,27 @@ const getAllStories = async () => {
     });
 };
 
-const getStoriesByUserAndType = async (userId, storyType) => {
+const getStoriesByUserAndType = async (userId, storyType, limit, skip) => {
   const objectId = new mongoose.Types.ObjectId(userId);
   const isPractiseStory = storyType === "practice";
   if (storyType === "practice" || storyType === "contest") {
-    return await Story.find({
+    const total = await Story.countDocuments({
       user: objectId,
       storyType: storyType,
       ...(isPractiseStory ? { hasSaved: true } : null),
-    })
+    });
+    const data = await Story.find(
+      {
+        user: objectId,
+        storyType: storyType,
+        ...(isPractiseStory ? { hasSaved: true } : null),
+      },
+      {},
+      {
+        ...(limit ? { limit } : null),
+        ...(skip ? { skip } : null),
+      }
+    )
       .populate("user")
       .populate("contest")
       .populate("prompt")
@@ -39,8 +58,12 @@ const getStoriesByUserAndType = async (userId, storyType) => {
         path: "contributors",
         select: { password: 0 },
       });
+    return {
+      data,
+      total,
+    };
   } else if (storyType === "game") {
-    return await Story.find({
+    const total = await Story.countDocuments({
       storyType: "game",
       $or: [
         { user: objectId },
@@ -50,7 +73,26 @@ const getStoriesByUserAndType = async (userId, storyType) => {
           },
         },
       ],
-    })
+    });
+    
+    const data =  await Story.find(
+      {
+        storyType: "game",
+        $or: [
+          { user: objectId },
+          {
+            contributors: {
+              $in: [objectId],
+            },
+          },
+        ],
+      },
+      {},
+      {
+        ...(limit ? { limit } : null),
+        ...(skip ? { skip } : null),
+      }
+    )
       .populate("user")
       .populate("prompt")
       .populate("contest")
@@ -58,6 +100,10 @@ const getStoriesByUserAndType = async (userId, storyType) => {
         path: "contributors",
         select: { password: 0 },
       });
+    return {
+      data,
+      total
+    }
   } else {
     throw new Error("Invalid storyType");
   }
@@ -110,7 +156,9 @@ const getStoryofUserByPromptId = async (user_id, prompt_id) => {
         },
       },
     ],
-  }).populate("contributors").populate("user")
+  })
+    .populate("contributors")
+    .populate("user");
 };
 
 module.exports = {

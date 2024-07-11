@@ -25,6 +25,7 @@ export type TStory = {
   storyType: string;
   contributors: TUser[];
   hasEnded: boolean;
+  position?: number;
 };
 
 export type TPrompt = {
@@ -35,6 +36,7 @@ export type TPrompt = {
   __v: number;
   description: string;
   type: string;
+  contestId?:TContest
 };
 
 export type TContest = {
@@ -60,3 +62,9 @@ export type TFAQ = {
   place: number;
 };
 export type TTaskType = "improve" | "grammer" | "rewrite";
+
+export type TPageDetails = {
+  page: number;
+  total: number;
+  perPage: number;
+}

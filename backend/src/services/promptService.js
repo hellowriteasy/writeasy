@@ -2,9 +2,9 @@ const Prompt = require("../models/prompt");
 const Contest = require("../models/contest"); // Import Contest model
 
 const createPrompt = async (data) => {
-  console.log(data)
+  console.log(data);
   const { promptType } = data;
-  if (!["practice", "contest","game"].includes(promptType)) {
+  if (!["practice", "contest", "game"].includes(promptType)) {
     throw new Error("Invalid prompt type");
   }
 
@@ -12,20 +12,29 @@ const createPrompt = async (data) => {
   return await prompt.save();
 };
 
-const getPromptsByType = async (type) => {
-  return await Prompt.find({ promptType: type });
+const getPromptsByType = async (type, skip, limit) => {
+  const total = await Prompt.countDocuments({ promptType: type });
+  const data = await Prompt.find(
+    { promptType: type },
+    {},
+    {
+      ...(limit ? { limit } : null),
+      ...(skip ? { skip } : null),
+    }
+  );
+  return { data, total };
 };
 
-const getPracticePrompts = () => {
-  return getPromptsByType("practice");
+const getPracticePrompts = (skip, limit) => {
+  return getPromptsByType("practice", skip, limit);
 };
 
-const getContestPrompts = () => {
-  return getPromptsByType("contest");
+const getContestPrompts = (skip, limit) => {
+  return getPromptsByType("contest", skip, limit);
 };
 
-const getGamePrompts = () => {
-  return getPromptsByType("game");
+const getGamePrompts = (skip, limit) => {
+  return getPromptsByType("game", skip, limit);
 };
 
 const getPromptById = async (promptId) => {
@@ -45,16 +54,29 @@ const getPromptsByContestId = async (contestId) => {
     .populate("prompts")
     .lean()
     .exec();
-  
+
   if (!contest) {
     return null; // Contest not found
   }
 
   return contest.prompts; // Return prompts belonging to the contest
 };
-const getPromptsOfContestId = async (contestId) => {
-  return await Prompt.find({contestId})
-}
+const getPromptsOfContestId = async (contestId, skip, limit) => {
+  const data = await Prompt.find(
+    { contestId },
+    {},
+    {
+      ...(limit ? { limit } : null),
+      ...(skip ? { skip } : null),
+      skip,
+    }
+  );
+  const total = await Prompt.countDocuments({ contestId });
+  return {
+    total,
+    data,
+  };
+};
 module.exports = {
   createPrompt,
   getPracticePrompts,

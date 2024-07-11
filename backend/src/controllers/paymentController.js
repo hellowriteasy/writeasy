@@ -49,13 +49,17 @@ const confirmStripeCheckoutSession = async (req, res) => {
       throw new Error("Payment failed ");
     }
 
+    const paidAt = new Date();
+    const thirtyDaysLater = new Date(paidAt);
+    thirtyDaysLater.setDate(thirtyDaysLater.getDate() + 30);
     await Subscription.updateOne(
       {
         stripe_session_id: stripe_session_id,
       },
       {
         $set: {
-          paidAt: new Date(),
+          paidAt,
+          expiresAt: thirtyDaysLater,
           isActive: true,
         },
       }

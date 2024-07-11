@@ -12,6 +12,7 @@ interface StorycardProps {
   starType: "main" | "second" | "none";
   username: string;
   email: string;
+  profile_image?: string;
 }
 
 const Storycard: React.FC<StorycardProps> = ({
@@ -21,6 +22,7 @@ const Storycard: React.FC<StorycardProps> = ({
   username,
   email,
   starType,
+  profile_image,
 }) => {
   const [showFullContent, setShowFullContent] = useState(false);
 
@@ -50,9 +52,12 @@ const Storycard: React.FC<StorycardProps> = ({
         <div className="flex items-center my-8 justify-between px-4 sm:px-6 py-4">
           <div className="flex items-center">
             <div className="mr-4 rounded-full border border-gray-400 h-12 w-12 overflow-hidden flex items-center justify-center">
-              <Image src={Logo} alt="Image" width={50} height={50} />
+              {profile_image && profile_image.startsWith("https") ? (
+                <img className="w-full h-full" src={profile_image} alt="" />
+              ) : (
+                <Image src={Logo} alt="Image" width={50} height={50} />
+              )}
             </div>
-            {/* username  */}
             <div>
               <h1 className="text-base sm:text-lg md:text-xl">{username}</h1>
               <p className="text-[2vw] sm:text-sm md:text-lg">{email}</p>

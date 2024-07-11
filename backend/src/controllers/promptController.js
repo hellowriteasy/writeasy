@@ -10,27 +10,66 @@ const createPrompt = async (req, res) => {
 };
 
 const getPracticePrompts = async (req, res) => {
+  let { page, perPage, limit } = req.query;
+
+  perPage = +perPage || 5;
+  page = +page || 1;
+  limit = +limit || 10;
+  const skip = (page - 1) * perPage;
+
   try {
-    const prompts = await PromptService.getPracticePrompts();
-    res.json(prompts);
+    const { data, total } = await PromptService.getPracticePrompts(skip, limit);
+    res.json({
+      data,
+      pageData: {
+        page,
+        perPage,
+        total: total,
+      },
+    });
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
 const getContestPrompts = async (req, res) => {
+  let { page, perPage, limit } = req.query;
+  perPage = +perPage || 5;
+  page = +page || 1;
+  limit = +limit || 10;
+  const skip = (page - 1) * perPage;
   try {
-    const prompts = await PromptService.getContestPrompts();
-    res.json(prompts);
+    const { data, total } = await PromptService.getContestPrompts(skip, limit);
+    res.json({
+      data,
+      pageData: {
+        page,
+        perPage,
+        total: total,
+      },
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
 const getGamePrompts = async (req, res) => {
+  let { page, perPage, limit } = req.query;
+  perPage = +perPage || 5;
+  page = +page || 1;
+  limit = +limit || 10;
+  const skip = (page - 1) * perPage;
   try {
-    const prompts = await PromptService.getGamePrompts();
-    res.json(prompts);
+    const { data, total } = await PromptService.getGamePrompts(skip, limit);
+    res.json({
+      data,
+      pageData: {
+        page,
+        perPage,
+        total: total,
+      },
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -60,6 +99,7 @@ const updatePrompt = async (req, res) => {
   }
 };
 
+
 const deletePrompt = async (req, res) => {
   try {
     await PromptService.deletePrompt(req.params.id);
@@ -86,11 +126,27 @@ const getPromptsByContestId = async (req, res) => {
 const getAllPromptsOfContest = async (req, res) => {
   try {
     const { contestId } = req.params;
+    let { page, perPage, limit } = req.query;
+    perPage = +perPage || 5;
+    page = +page || 1;
+    limit = +limit || 10;
+    const skip = (page - 1) * perPage;
     if (!contestId) {
       return res.status(400).json({ message: "Please provide contest id" });
     }
-    const listOfPrompts = await PromptService.getPromptsOfContestId(contestId);
-    return res.status(200).json(listOfPrompts);
+    const { data, total } = await PromptService.getPromptsOfContestId(
+      contestId,
+      skip,
+      limit
+    );
+    return res.status(200).json({
+      data,
+      pageData: {
+        page,
+        perPage,
+        total: total,
+      },
+    });
   } catch (error) {
     res.status(500).json({ message: error.message || "Internal server error" });
   }

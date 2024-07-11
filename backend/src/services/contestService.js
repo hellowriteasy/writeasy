@@ -21,17 +21,46 @@ const deleteContest = async (id) => {
   return await Contest.findByIdAndDelete(id);
 };
 
-const getOngoingContests = async () => {
+const getOngoingContests = async (skip, limit) => {
   const currentDateTime = new Date();
-  return await Contest.find({
+  const total = await Contest.countDocuments({
     isActive: true,
     submissionDeadline: { $gt: currentDateTime },
-  }).populate("prompts");
+  });
+  const data = await Contest.find(
+    {
+      isActive: true,
+      submissionDeadline: { $gt: currentDateTime },
+    },
+    {},
+    {
+      ...(skip ? { skip } : null),
+      ...(limit ? { limit } : null),
+    }
+  ).populate("prompts");
+  return {
+    total,
+    data,
+  };
 };
-const getEndedContests = async () => {
-  return await Contest.find({
+const getEndedContests = async (skip, limit) => {
+  const total = await Contest.countDocuments({
     isActive: false,
   });
+  const data = await Contest.find(
+    {
+      isActive: false,
+    },
+    {},
+    {
+      ...(skip ? { skip } : null),
+      ...(limit ? { limit } : null),
+    }
+  );
+  return {
+    total,
+    data,
+  };
 };
 
 module.exports = {
