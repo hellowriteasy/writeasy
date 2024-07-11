@@ -48,6 +48,56 @@ router.post("/", createPrompt);
  *       500:
  *         description: Server error when fetching prompts.
  */
+/**
+ * @swagger
+ * /api/prompts/practice-prompts:
+ *   get:
+ *     tags:
+ *       - Prompts
+ *     summary: Retrieve a list of practice prompts
+ *     description: Retrieve a list of practice prompts with pagination options.
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: Page number
+ *       - in: query
+ *         name: perPage
+ *         schema:
+ *           type: integer
+ *         description: Number of items per page
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: Maximum number of items to return
+ *     responses:
+ *       200:
+ *         description: A list of practice prompts
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       // Add properties of your practice prompts here
+ *                 pageData:
+ *                   type: object
+ *                   properties:
+ *                     page:
+ *                       type: integer
+ *                     perPage:
+ *                       type: integer
+ *                     total:
+ *                       type: integer
+ *       500:
+ *         description: Internal server error
+ */
 router.get("/practice-prompts", getPracticePrompts);
 
 /**

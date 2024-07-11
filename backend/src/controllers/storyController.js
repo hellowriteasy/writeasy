@@ -57,7 +57,10 @@ const getStories = async (req, res) => {
 
 const getStoriesByUserAndType = async (req, res) => {
   const { userId, storyType } = req.query;
-
+  const page = req.query.page || 1; // Default page is 1
+  const perPage = req.query.perPage || 5; // Default page size is 10
+  const skip = (page - 1) * perPage;
+  const limit = +perPage || 5;
   if (!userId || !storyType) {
     return res
       .status(400)
@@ -65,11 +68,20 @@ const getStoriesByUserAndType = async (req, res) => {
   }
 
   try {
-    const stories = await StoryService.getStoriesByUserAndType(
+    const { data, total } = await StoryService.getStoriesByUserAndType(
       userId,
-      storyType
+      storyType,
+      limit,
+      skip
     );
-    res.json(stories);
+    res.json({
+      data,
+      pageData: {
+        page,
+        perPage,
+        total,
+      },
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error.message });
@@ -160,18 +172,24 @@ const getTopContestStories = async (req, res) => {
 const getTopStoriesByPrompt = async (req, res) => {
   const { prompt_id } = req.params;
   const page = req.query.page || 1; // Default page is 1
-  const perPage = req.query.perPage || 10; // Default page size is 10
+  const perPage = req.query.perPage || 5; // Default page size is 10
   const skip = (page - 1) * perPage;
+  const limit = +perPage || 5;
   try {
-    const topStories = await Story.find({
-      prompt: prompt_id,
-    })
+    const topStories = await Story.find(
+      {
+        prompt: prompt_id,
+      },
+      {},
+      {
+        ...(skip ? { skip } : null),
+        ...(limit ? { limit } : null),
+      }
+    )
       .populate("user")
       .populate("contest")
       .populate("contributors")
-      .sort({ score: "desc" })
-      .skip(skip)
-      .limit(perPage);
+      .sort({ score: "desc" });
 
     const total = await Story.countDocuments({
       prompt: prompt_id,
@@ -210,15 +228,27 @@ const getStoryOfAuserByPrompt = async (req, res) => {
 const getStoriesByContentAndPrompt = async (req, res) => {
   const { prompt_id, contest_id } = req.query;
   const page = req.query.page || 1; // Default page is 1
-  const perPage = req.query.perPage || 10; // Default page size is 10
+  const perPage = req.query.perPage || 5; // Default page size is 10
   const skip = (page - 1) * perPage;
+  const limit = +perPage || 5;
   const sortKey = req.query.sortKey || "createdAt";
 
   try {
-    const stories = await Story.find({
+    const total = await Story.countDocuments({
       ...(contest_id ? { contest: contest_id } : null),
       ...(prompt_id ? { prompt: prompt_id } : null),
-    })
+    });
+    const stories = await Story.find(
+      {
+        ...(contest_id ? { contest: contest_id } : null),
+        ...(prompt_id ? { prompt: prompt_id } : null),
+      },
+      {},
+      {
+        ...(skip ? { skip } : null),
+        ...(limit ? { limit } : null),
+      }
+    )
       .populate({
         select: {
           username: 1,
@@ -232,7 +262,14 @@ const getStoriesByContentAndPrompt = async (req, res) => {
       .skip(skip)
       .limit(perPage);
 
-    return res.status(200).json(stories);
+    return res.status(200).json({
+      data: stories,
+      pageData: {
+        page,
+        total,
+        perPage,
+      },
+    });
   } catch (error) {
     res.status(500).json({ message: error?.message || "Something went wrong" });
   }
@@ -290,7 +327,7 @@ const processCorrectionAndSummary = async ({
   wordCount,
 }) => {
   try {
-    console.log("processing correction and summary 1",story_id);
+    console.log("processing correction and summary 1", story_id);
     const correction = await gptService.generateCorrection(
       content,
       taskType,

@@ -32,19 +32,19 @@ const ContestPrompt: React.FC<PromptProps> = ({
 
   // fetch api here and
   useEffect(() => {
+    const handleFetchStoryOfAUserByPromptId = async () => {
+      try {
+        const { data } = await axiosIns.get(
+          `/stories/user/${promptId}/${userId}`
+        );
+        setHasSubmittedStory(!!data);
+      } catch (error) {
+        //
+      }
+    };
     handleFetchStoryOfAUserByPromptId();
-  }, [promptId]);
+  }, [promptId, userId]);
 
-  const handleFetchStoryOfAUserByPromptId = async () => {
-    try {
-      const { data } = await axiosIns.get(
-        `/stories/user/${promptId}/${userId}`
-      );
-      setHasSubmittedStory(!!data);
-    } catch (error) {
-      //
-    }
-  };
   const handleRedirectToCreateStory = () => {
     router.push(`/Contests/${contestId}/prompt/${promptId}/story/create`);
   };
@@ -101,7 +101,6 @@ const ContestPrompt: React.FC<PromptProps> = ({
         ) : null}
       </div>
     </div>
-
   );
 };
 

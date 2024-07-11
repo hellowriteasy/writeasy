@@ -20,7 +20,7 @@ const Page: React.FC = () => {
   useEffect(() => {
     const fetchUserStories = async () => {
       try {
-        const response = await AxiosIns.get<TStory[]>('/stories/user', {
+        const response = await AxiosIns.get('/stories/user', {
           params: {
             userId:userId,
             storyType: 'practice',
@@ -29,7 +29,7 @@ const Page: React.FC = () => {
           }
         });
        
-        setUserStories(response.data.reverse());
+        setUserStories(response.data?.data.reverse());
         
       } catch (error:any) {
         setError('Error fetching user stories: ' + error.message);

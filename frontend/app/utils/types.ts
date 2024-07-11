@@ -60,3 +60,9 @@ export type TFAQ = {
   place: number;
 };
 export type TTaskType = "improve" | "grammer" | "rewrite";
+
+export type TPageDetails = {
+  page: number;
+  total: number;
+  perPage: number;
+}

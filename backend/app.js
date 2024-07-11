@@ -17,8 +17,7 @@ const faqRoutes = require("./routes/faq");
 const paymentRoutes = require("./routes/paymentRoute");
 const categoriesRoute=require("./routes/category")
 const scheduleJob = require("./config/cron");
-const Subscription = require("./src/models/subscription");
-
+const morgan = require("morgan")
 dotenv.config();
 
 connectDB();
@@ -33,6 +32,7 @@ app.use(
 );
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan("dev"))
 cron.schedule("*/3 * * * * *", () => scheduleJob());
 
 // Use routes
