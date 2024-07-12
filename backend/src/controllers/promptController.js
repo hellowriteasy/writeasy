@@ -22,7 +22,7 @@ const getPracticePrompts = async (req, res) => {
       data,
       pageData: {
         page,
-        perPage,
+        perPage: limit,
         total: total,
       },
     });
