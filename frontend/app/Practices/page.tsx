@@ -17,33 +17,44 @@ import { axiosInstance } from "../utils/config/axios";
 
 const Page: React.FC = () => {
   const itemsPerPage = 5;
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [promptData, setPromptData] = useState<TPrompt[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedOption, setSelectedOption] = useState<string>("");
+  const [pageDetails, setPageDetails] = useState({
+    page: 1,
+    perPage: 10,
+    total: 0,
+  });
   const AxiosIns = axiosInstance("");
 
-  useEffect(() => {
+  const fetchPrompts = async (page = 1, perPage = itemsPerPage) => {
     setIsLoading(true);
-    AxiosIns.get("/prompts/practice-prompts")
-      .then((response) => {
-        setPromptData(response.data.reverse());
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error("There was an error fetching the data!", error);
-        setIsLoading(false);
+    try {
+      const response = await AxiosIns.get(`/prompts/practice-prompts`, {
+        params: {
+          page
+        },
       });
-  }, []);
-
-  const handlePageClick = (event: { selected: number }) => {
-    setCurrentPage(event.selected);
+      setPromptData(response.data.data.reverse());
+      setPageDetails(response.data.pageData);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("There was an error fetching the data!", error);
+      setIsLoading(false);
+    }
   };
+
+  useEffect(() => {
+    fetchPrompts(currentPage, itemsPerPage);
+  }, [currentPage]);
+
+
 
   const handleSelectOption = (selectedOption: string) => {
     console.log(selectedOption);
     setSelectedOption(selectedOption);
-    setCurrentPage(0); // Reset to the first page whenever a new option is selected
+    setCurrentPage(1); // Reset to the first page whenever a new option is selected
   };
 
   const filteredPrompts = selectedOption
@@ -52,10 +63,12 @@ const Page: React.FC = () => {
       )
     : promptData;
 
-  const offset = currentPage * itemsPerPage;
-  const currentPrompts = filteredPrompts.slice(offset, offset + itemsPerPage);
-  const pageCount = Math.ceil(filteredPrompts.length / itemsPerPage);
-
+    const handlePageClick = (event: { selected: number }) => {
+      setCurrentPage(event.selected + 1);
+    };
+  
+    const offset = currentPage * itemsPerPage;
+    console.log("page data", pageDetails);
   return (
     <div className="w-full min-h-screen mt-6 z-0 relative flex justify-center">
       <div className="absolute -top-10 right-0">
@@ -93,34 +106,39 @@ const Page: React.FC = () => {
             </div>
             {isLoading ? (
               <LoadingAnimation />
-            ) : currentPrompts.length > 0 ? (
-              currentPrompts.map((prompt) => (
+            ) : promptData.length > 0 ? (
+              promptData.map((prompt) => (
                 <Prompt key={prompt._id} prompt={prompt} />
               ))
             ) : (
               <NotFound text={`Nothing to show for ${selectedOption} `} />
             )}
-            <div className="w-full mt-10 text-lg md:text-xl font-comic ">
-              <ReactPaginate
-                previousLabel={
-                  <FaAngleLeft className="w-6 h-6 md:w-8 lg:w-10" />
-                }
-                nextLabel={
-                  <FaAngleRight className="w-6 h-6 md:w-8 lg:w-10" />
-                }
-                breakLabel="..."
-                breakClassName="break-me"
-                pageCount={pageCount}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={5}
-                onPageChange={handlePageClick}
-                containerClassName="flex justify-center gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
-                pageLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
-                previousLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
-                nextLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
-                activeClassName="bg-black text-white rounded-full"
-              />
-            </div>
+           {pageDetails && pageDetails.total > 5 && (
+              <div className="w-full ms-28">
+                <ReactPaginate
+                  previousLabel={
+                    <FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+                  }
+                  nextLabel={
+                    <FaAngleRight className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+                  }
+                  breakLabel="..."
+                  breakClassName="break-me"
+                  pageCount={Math.ceil(pageDetails.total / pageDetails.perPage)}
+                  marginPagesDisplayed={2}
+                  pageRangeDisplayed={5}
+                  onPageChange={handlePageClick}
+                  containerClassName="flex justify-center gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
+                  pageClassName=""
+                  pageLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                  previousClassName=""
+                  previousLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                  nextClassName=""
+                  nextLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                  activeClassName="bg-black text-white rounded-full"
+                />
+              </div>
+            )}
           </div>
           <div className="vvsm-hide">
             <TopWriting />

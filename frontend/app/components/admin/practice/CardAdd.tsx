@@ -8,7 +8,6 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/react";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { axiosInstance } from "@/app/utils/config/axios";
 import DeleteModal from "@/app/components/DeleteModal"; // Adjust the import path as necessary

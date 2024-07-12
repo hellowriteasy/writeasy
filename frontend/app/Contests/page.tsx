@@ -10,6 +10,7 @@ import Cloud from "../../public/Game/cloud.svg";
 import Image from "next/image";
 import Join from "../components/contest/Join";
 import Contestitle from "../components/contest/Contestitle";
+import axios from "axios";
 import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { axiosInstance } from "../utils/config/axios";
@@ -17,38 +18,33 @@ import { axiosInstance } from "../utils/config/axios";
 const Contest = () => {
   const itemsPerPage = 5;
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const [endedContests, setEndedContests] = useState([]);
+
   const [error, setError] = useState<string | null>(null);
   const AxiosIns = axiosInstance("");
-  const [pageDetails, setPageDetails] = useState({
-    page: 1,
-    perPage: 10,
-    total: 0,
-  });
   useEffect(() => {
-    AxiosIns.get(`/contests/ended?page=${currentPage}`)
+    AxiosIns.get("/contests/ended")
       .then((response) => {
-        setEndedContests(response.data?.data.reverse());
-        setPageDetails(response.data?.pageData);
+        setEndedContests(response.data.reverse());
       })
       .catch((error) => {
         setError("Error fetching contest data: " + error.message);
       });
-  }, [currentPage]);
+  }, []);
 
   const handlePageClick = (event: { selected: number }) => {
-    setCurrentPage(event.selected + 1);
+    setCurrentPage(event.selected);
   };
 
   const offset = currentPage * itemsPerPage;
-  console.log("page data", pageDetails);
+
   // infite scrolll library
 
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="w-full h-auto mt-6 z-0 relative flex justify-center">
+    <div className="w-full h-[1300px] mt-6 z-0 relative flex justify-center">
       <div className="absolute sm-hide -top-14 right-0">
         <Image className="w-[9vw]" src={earth} alt="earth" />
       </div>
@@ -86,32 +82,30 @@ const Contest = () => {
                 <Image className="w-[7vw]" src={Cloud} alt="Cloud" />
               </div>
             </div>
-            {pageDetails && pageDetails.total > 5 && (
-              <div className="w-full ms-28">
-                <ReactPaginate
-                  previousLabel={
-                    <FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
-                  }
-                  nextLabel={
-                    <FaAngleRight className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
-                  }
-                  breakLabel="..."
-                  breakClassName="break-me"
-                  pageCount={Math.ceil(pageDetails.total / pageDetails.perPage)}
-                  marginPagesDisplayed={2}
-                  pageRangeDisplayed={5}
-                  onPageChange={handlePageClick}
-                  containerClassName="flex justify-center gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
-                  pageClassName=""
-                  pageLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
-                  previousClassName=""
-                  previousLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
-                  nextClassName=""
-                  nextLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
-                  activeClassName="bg-black text-white rounded-full"
-                />
-              </div>
-            )}
+            {/* <div className="w-full mt-10 text-lg md:text-xl font-comic">
+              <ReactPaginate
+                previousLabel={
+                  <FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+                }
+                nextLabel={
+                  <FaAngleRight className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+                }
+                breakLabel="..."
+                breakClassName="break-me"
+                pageCount={pageCount}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                onPageChange={handlePageClick}
+                containerClassName="flex justify-center gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
+                pageClassName=""
+                pageLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                previousClassName=""
+                previousLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                nextClassName=""
+                nextLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                activeClassName="bg-black text-white rounded-full"
+              />
+            </div> */}
           </div>
 
           <div className="flex flex-col vsm-hide gap-8">
