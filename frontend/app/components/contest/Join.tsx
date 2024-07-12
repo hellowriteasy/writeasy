@@ -8,7 +8,8 @@ import { axiosInstance } from "@/app/utils/config/axios";
 import useAuthStore from "@/app/store/useAuthStore";
 import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
-
+import live from "@/public/others/live.svg"
+import Image from "next/image";
 const Join = () => {
   const router = useRouter();
   const [contests, setContests] = useState<TContest[]>([]);
@@ -48,11 +49,12 @@ const Join = () => {
               key={contest._id}
               className="flex flex-col font-comic rounded-3xl w-full max-w-4xl h-auto gap-4 bg-white border-2 border-gray-300 p-8"
             >
-              <div className="flex flex-col gap-y-2 text-center">
-                <p className="text-lg sm:text-sm md:text-2xl lg:text-2xl">
+              <div className="flex justify-center text-xl items-center gap-x-2 gap-y-2 text-center">
+                
+                  <Image src={live} alt="live icon"></Image>
                   <span className="">Until </span>
                   {moment(contest.submissionDeadline).format("llll")}
-                </p>
+                
               </div>
               <div className="flex flex-col items-center gap-y-4">
                 <div className="text-xl sm:text-sm md:text-3xl lg:text-4xl text-center">

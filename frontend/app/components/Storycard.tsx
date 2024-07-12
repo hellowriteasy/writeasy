@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Image from "next/image"
+import Image from "next/image";
 import mainstar from "@/public/others/main_star.svg";
 import Logo from "@/public/Landingpage-img/logo.svg";
 
@@ -22,13 +22,15 @@ const Storycard: React.FC<StorycardProps> = ({
 }) => {
   const [showFullContent, setShowFullContent] = useState(false);
 
- 
   const getShortContent = (text: string, wordLimit: number) => {
     const words = text.split(" ");
     return words.length > wordLimit
       ? words.slice(0, wordLimit).join(" ") + "..."
       : text;
   };
+
+  const wordLimit = 75;
+
 
   return (
     <div className="relative my-6">
@@ -52,18 +54,19 @@ const Storycard: React.FC<StorycardProps> = ({
         <div className="px-4 sm:px-6 flex flex-col gap-y-2">
           <h2 className="text-lg sm:text-xl md:text-2xl font-bold">{title}</h2>
           <p className="text-sm sm:text-md md:text-lg text-gray-900">
-            {showFullContent ? content : getShortContent(content, 75)}
+            {showFullContent ? content : getShortContent(content, wordLimit)}
           </p>
         </div>
-
-        <div className="px-4 sm:px-6 py-4 flex justify-end">
-          <button
-            onClick={() => setShowFullContent(!showFullContent)}
-            className="bg-black text-white py-2 px-4 rounded-3xl"
-          >
-            {showFullContent ? "Show less" : "Read more"}
-          </button>
-        </div>
+        {showFullContent ?(
+          <div className="px-4 sm:px-6 py-4 flex justify-end">
+            <button
+              onClick={() => setShowFullContent(!showFullContent)}
+              className="bg-black text-white py-2 px-4 rounded-3xl"
+            >
+              {showFullContent ? "Show less" : "Read more"}
+            </button>
+          </div>
+        ): (<div className="py-4"></div>)}
       </div>
     </div>
   );
