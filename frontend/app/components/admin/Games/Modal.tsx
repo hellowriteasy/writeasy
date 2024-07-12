@@ -71,7 +71,7 @@ const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen ,onSuccess}) => {
                       </Dialog.Title>
                       <div className="mt-2">
                         <input
-                          type="text"
+                          type="text" 
                           className="mt-1 block w-96 h-12 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
                           placeholder="Prompt Title"
                           value={promptTitle}

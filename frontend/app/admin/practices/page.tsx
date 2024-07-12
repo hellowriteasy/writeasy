@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Card from "../../components/admin/practice/CardAdd";
 import Modal from "../../components/admin/practice/Modal";
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
-import { TPrompt } from "@/app/utils/types";
+import { TPrompt,TPageDetails } from "@/app/utils/types";
 import { axiosInstance } from "@/app/utils/config/axios";
 import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
