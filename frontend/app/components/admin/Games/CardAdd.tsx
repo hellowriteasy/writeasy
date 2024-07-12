@@ -1,21 +1,25 @@
-import { useState, Fragment, useRef,useEffect } from 'react';
-import { FaEdit, FaTrash } from 'react-icons/fa';
-import { Dialog, Transition, Menu, MenuItem } from '@headlessui/react';
-import axios from 'axios';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { axiosInstance } from '@/app/utils/config/axios';
-import DeleteModal from '../../DeleteModal';
+"use client";
+import { useState, Fragment, useRef } from "react";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import { Dialog, Transition } from "@headlessui/react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { axiosInstance } from "@/app/utils/config/axios";
+import DeleteModal from "../../DeleteModal";
+
 interface CardProps {
   title: string;
   description: string;
   id: string;
-
-  onSuccess: () => void; 
+  onSuccess: () => void;
 }
 
-
-const CardAdd: React.FC<CardProps> = ({ title, description, id,onSuccess }) => {
+const CardAdd: React.FC<CardProps> = ({
+  title,
+  description,
+  id,
+  onSuccess,
+}) => {
   const [open, setOpen] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [promptTitle, setPromptTitle] = useState(title);
@@ -28,35 +32,29 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id,onSuccess }) => {
       await AxiosIns.put(`/prompts/${id}`, {
         title: promptTitle,
         description: promptDescription,
-        promptType: 'game',
+        promptType: "game",
       });
       setOpen(false);
       onSuccess();
-      toast.success('Prompt updated successfully!');
+      // toast.success("Prompt updated successfully!");
     } catch (error) {
-      toast.error('Error updating prompt.');
-      console.error('Error:', error);
+      // toast.error("Error updating prompt.");
+      console.error("Error:", error);
     }
   };
 
   const handleDelete = async () => {
     try {
-      setOpenDeleteModal(true)
       await AxiosIns.delete(`/prompts/${id}`);
-      setOpenDeleteModal(false)
+      setOpenDeleteModal(false);
       onSuccess();
-      toast.success('Prompt deleted successfully!');
-      // Optionally, remove the prompt from the UI here or refresh the list.
+      // toast.success("Prompt deleted successfully!");
     } catch (error) {
-      setOpenDeleteModal(false)
-      toast.error('Error deleting prompt.');
-      console.error('Error:', error);
+      setOpenDeleteModal(false);
+      // toast.error("Error deleting prompt.");
+      console.error("Error:", error);
     }
   };
-  
- 
- 
-
 
   return (
     <>
@@ -67,7 +65,10 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id,onSuccess }) => {
             <button className="text-black" onClick={() => setOpen(true)}>
               <FaEdit size={30} />
             </button>
-            <button className="text-black text-3xl" onClick={() => setOpenDeleteModal(true)}>
+            <button
+              className="text-black text-3xl"
+              onClick={() => setOpenDeleteModal(true)}
+            >
               <FaTrash size={30} />
             </button>
           </div>
@@ -76,7 +77,12 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id,onSuccess }) => {
       </div>
 
       <Transition.Root show={open} as={Fragment}>
-        <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setOpen}>
+        <Dialog
+          as="div"
+          className="relative z-10"
+          initialFocus={cancelButtonRef}
+          onClose={() => setOpen(false)}
+        >
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -104,7 +110,10 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id,onSuccess }) => {
                   <div className="bg-white h-auto px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                     <div className="sm:flex sm:items-start">
                       <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                        <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
+                        <Dialog.Title
+                          as="h3"
+                          className="text-base font-semibold leading-6 text-gray-900"
+                        >
                           Edit Prompt
                         </Dialog.Title>
                         <div className="mt-2">
@@ -116,9 +125,12 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id,onSuccess }) => {
                             onChange={(e) => setPromptTitle(e.target.value)}
                           />
                         </div>
-                       
+
                         <div className="mt-4">
-                          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
+                          <label
+                            className="block text-gray-700 text-sm font-bold mb-2"
+                            htmlFor="description"
+                          >
                             Description
                           </label>
                           <textarea
@@ -127,7 +139,9 @@ const CardAdd: React.FC<CardProps> = ({ title, description, id,onSuccess }) => {
                             className="mt-1 block w-full h-40 rounded-md border p-4 border-gray-300 shadow-sm outline-none focus:ring-indigo-500 focus:border-indigo-500"
                             placeholder="Description"
                             value={promptDescription}
-                            onChange={(e) => setPromptDescription(e.target.value)}
+                            onChange={(e) =>
+                              setPromptDescription(e.target.value)
+                            }
                           />
                         </div>
                       </div>

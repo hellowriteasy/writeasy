@@ -62,10 +62,10 @@ const Card: React.FC<CardProps> = ({ title, type, id, onSuccess }) => {
       });
       setOpenEditModal(false);
       onSuccess();
-      toast.success("Prompt updated successfully!");
+      // toast.success("Prompt updated successfully!");
     } catch (error) {
       console.error("Error updating prompt:", error);
-      toast.error("Failed to update prompt.");
+      // toast.error("Failed to update prompt.");
     }
   };
 
@@ -75,10 +75,10 @@ const Card: React.FC<CardProps> = ({ title, type, id, onSuccess }) => {
       const response = await AxiosIns.delete(`/prompts/${id}`);
       setOpenDeleteModal(false);
       onSuccess();
-      toast.success("Prompt deleted successfully!");
+      // toast.success("Prompt deleted successfully!");
     } catch (error) {
       console.error("Error deleting prompt:", error);
-      toast.error("Failed to delete prompt.");
+      // toast.error("Failed to delete prompt.");
     }
   };
 

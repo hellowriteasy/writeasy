@@ -10,12 +10,11 @@ const createPrompt = async (req, res) => {
 };
 
 const getPracticePrompts = async (req, res) => {
-  let { page, perPage, limit } = req.query;
+  let { page, perPage } = req.query;
 
-  perPage = +perPage || 5;
   page = +page || 1;
-  limit = +limit || 10;
   const skip = (page - 1) * perPage;
+  const limit = +perPage || 5;
 
   try {
     const { data, total } = await PromptService.getPracticePrompts(skip, limit);
@@ -27,7 +26,6 @@ const getPracticePrompts = async (req, res) => {
         total: total,
       },
     });
-
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -55,11 +53,10 @@ const getContestPrompts = async (req, res) => {
 };
 
 const getGamePrompts = async (req, res) => {
-  let { page, perPage, limit } = req.query;
-  perPage = +perPage || 5;
+  let { page, perPage } = req.query;
   page = +page || 1;
-  limit = +limit || 10;
-  const skip = (page - 1) * perPage;
+  let limit = +perPage || 5;
+  const skip = (page - 1) * limit;
   try {
     const { data, total } = await PromptService.getGamePrompts(skip, limit);
     res.json({
@@ -98,7 +95,6 @@ const updatePrompt = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 const deletePrompt = async (req, res) => {
   try {

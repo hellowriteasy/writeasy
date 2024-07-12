@@ -1,9 +1,9 @@
-'use client';
+"use client";
 import { useState, useEffect } from "react";
 import Card from "../../components/admin/practice/CardAdd";
 import Modal from "../../components/admin/practice/Modal";
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
-import { TPrompt,TPageDetails } from "@/app/utils/types";
+import { TPrompt, TPageDetails } from "@/app/utils/types";
 import { axiosInstance } from "@/app/utils/config/axios";
 import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
@@ -12,9 +12,10 @@ const Page = () => {
   const itemsPerPage = 5; // Adjust the items per page as needed
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [prompts, setPrompts] = useState<TPrompt[]>([]);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const AxiosIns = axiosInstance("");
+  const [refetch, setRefetch] = useState(false);
 
   const handleAddClick = () => {
     setIsModalOpen(true);
@@ -22,29 +23,29 @@ const Page = () => {
 
   const fetchPrompts = async (page = 1, perPage = itemsPerPage) => {
     try {
-      const response = await AxiosIns.get('/prompts/practice-prompts', {
+      const response = await AxiosIns.get("/prompts/practice-prompts", {
         params: {
           page,
           perPage,
         },
       });
-      setPrompts(response.data.data.reverse());
-      setTotalItems(response.data.total); // Adjust according to your API response
+      setPrompts(response.data.data);
+      setTotalItems(response.data?.pageData?.total); // Adjust according to your API response
     } catch (error) {
-      console.error('Error fetching prompts:', error);
+      console.error("Error fetching prompts:", error);
     }
   };
 
   useEffect(() => {
-    fetchPrompts(currentPage + 1, itemsPerPage); // Pages are 1-indexed in the API
-  }, [currentPage]);
+    fetchPrompts(currentPage, itemsPerPage); // Pages are 1-indexed in the API
+  }, [currentPage, refetch]);
 
   const onSuccess = () => {
-    fetchPrompts(currentPage + 1, itemsPerPage);
+    setRefetch(!refetch);
   };
 
   const handlePageClick = (event: { selected: number }) => {
-    setCurrentPage(event.selected);
+    setCurrentPage(event.selected + 1);
   };
 
   return (
@@ -53,7 +54,9 @@ const Page = () => {
         <div className="flex h-screen">
           <div className="flex-1 flex flex-col p-6 space-y-6">
             <div className="flex justify-between items-center w-5/6 bg-white shadow-sm p-4 rounded-lg border border-gray-200">
-              <div className="text-2xl font-semibold text-gray-700">Practices</div>
+              <div className="text-2xl font-semibold text-gray-700">
+                Practices
+              </div>
               <button
                 className="bg-black text-white px-4 py-2 rounded-lg"
                 onClick={handleAddClick}
@@ -64,7 +67,9 @@ const Page = () => {
 
             <div className="bg-white shadow-sm p-4 rounded-lg border border-gray-200">
               <div className="flex justify-between items-center">
-                <div className="text-xl font-semibold text-gray-700">All prompts</div>
+                <div className="text-xl font-semibold text-gray-700">
+                  All prompts
+                </div>
                 <div className="text-lg flex gap-4 text-gray-500">
                   <i className="fas fa-plus cursor-pointer"></i>
                   <i className="fas fa-hashtag cursor-pointer"></i>
@@ -72,7 +77,13 @@ const Page = () => {
               </div>
               <div className="mt-4 space-y-4">
                 {prompts.map((prompt, index) => (
-                  <Card key={index} id={prompt._id} title={prompt.title} onSuccess={onSuccess} type={prompt.promptCategory} />
+                  <Card
+                    key={index}
+                    id={prompt._id}
+                    title={prompt.title}
+                    onSuccess={onSuccess}
+                    type={prompt.promptCategory}
+                  />
                 ))}
               </div>
               {totalItems > itemsPerPage && (
@@ -103,7 +114,9 @@ const Page = () => {
               )}
             </div>
           </div>
-          {isModalOpen && <Modal setIsModalOpen={setIsModalOpen} onSuccess={onSuccess} />}
+          {isModalOpen && (
+            <Modal setIsModalOpen={setIsModalOpen} onSuccess={onSuccess} />
+          )}
         </div>
       </div>
     </ProtectedRoute>
