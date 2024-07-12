@@ -6,11 +6,11 @@ import { axiosInstance } from "@/app/utils/config/axios";
 import useAuthStore from "@/app/store/useAuthStore";
 import Link from "next/link";
 
-const   WeeklyTest = () => {
+const WeeklyTest = () => {
   const [contest, setContest] = useState<TContest | null>(null);
-  const {token} = useAuthStore()
+  const { token } = useAuthStore();
   const { submissionDeadline, prompts } = contest || {}; // Use default values if contest is null
-  const AxiosIns = axiosInstance(token||"")
+  const AxiosIns = axiosInstance(token || "");
 
   const formattedDate = submissionDeadline
     ? new Date(submissionDeadline).toLocaleDateString("en-US", {
@@ -23,13 +23,13 @@ const   WeeklyTest = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await AxiosIns.get(
-          "/contests/ongoing"
-        );
-        setContest(response.data[0]);
+        const response = await AxiosIns.get("/contests/ongoing");
+        const currentContest = response.data?.data[0];
+        if (currentContest) {
+          setContest(currentContest);
+        }
       } catch (error) {
         console.error("Error fetching contest data:", error);
-
       }
     };
 
@@ -44,7 +44,7 @@ const   WeeklyTest = () => {
 
       {contest ? ( // Conditionally render content only if contest data is available
         <div className="text-center font-comic mid:text-xl w-11/12 text-3xl font-bold">
-          <h2 className="py-5">Enter Our Weekly Contests!</h2>
+          <h2 className="py-5 leading-normal">Enter Our Weekly Contests!</h2>
 
           <ul className="p-2  mid:text-sm">
             <li>{contest.contestTheme}</li>
@@ -53,7 +53,7 @@ const   WeeklyTest = () => {
             ))} */}
           </ul>
           <p className="text-sm mid:text-[10px] pt-2">
-            <span className="font-bold">Closes</span>
+            <span className="font-bold">Closes - </span>
             {new Date(contest.submissionDeadline).toLocaleString()}
           </p>
           <Link href={`/Contests/${contest._id}`}>
@@ -64,9 +64,7 @@ const   WeeklyTest = () => {
         </div>
       ) : (
         <div className="flex flex-col items-center gap-y-3">
-          <p className="font-comic  ">
-            No Ongoing Contest !
-          </p>
+          <p className="font-comic  ">No Ongoing Contest !</p>
           <h1 className="font-comic text-[1vw] py-1 font-bold ">
             Contest will be started soon ...
           </h1>

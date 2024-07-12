@@ -12,6 +12,7 @@ const {
   getStoriesByContentAndPrompt,
   savePractiseStoryToProfile,
   getTopStoriesForContest,
+  getPreviousWeekTopStories,
 } = require("../src/controllers/storyController");
 const { practiseStory } = require("../src/controllers/StoryScoreController");
 /**
@@ -421,4 +422,38 @@ router.get("/contest/prompt", getStoriesByContentAndPrompt);
  */
 router.get("/contest/top-writings/:id", getTopStoriesForContest);
 
+/**
+ * @swagger
+ * /api/stories/contest/previous-week-top-stories:
+ *   get:
+ *     summary: Get previous week's top stories
+ *     tags: [Stories]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       // Define story properties here
+ *       500:
+ *         description: An error occurred while fetching previous week's top stories
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 error:
+ *                   type: object
+ */
+
+router.get("/contest/previous-week-top-stories", getPreviousWeekTopStories);
 module.exports = router;

@@ -403,10 +403,22 @@ const getPreviousWeekTopStories = async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(1);
 
-    await Story.find({
+    const lastWeekContestTopStories = await Story.find({
       contest: lastWeekContest[0]._id,
+      position: { $exists: true },
+    }).populate({
+      path: "user",
+      select:"-password"
+    })
+
+    res.status(200).json({ data: lastWeekContestTopStories });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "An error occurred while fetching previous week top stories.",
+      error,
     });
-  } catch (error) {}
+  }
 };
 
 module.exports = {
@@ -423,4 +435,5 @@ module.exports = {
   getStoriesByContentAndPrompt,
   savePractiseStoryToProfile,
   getTopStoriesForContest,
+  getPreviousWeekTopStories,
 };
