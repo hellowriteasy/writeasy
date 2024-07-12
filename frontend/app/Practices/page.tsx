@@ -113,7 +113,7 @@ const Page: React.FC = () => {
             ) : (
               <NotFound text={`No practise prompt available... `} />
             )}
-<<<<<<< HEAD
+
            {pageDetails && pageDetails.total > 5 && (
               <div className="w-full ms-28">
                 <ReactPaginate
@@ -140,27 +140,6 @@ const Page: React.FC = () => {
                 />
               </div>
             )}
-=======
-            <div className="w-full mt-10 text-lg md:text-xl font-comic ">
-              <ReactPaginate
-                previousLabel={
-                  <FaAngleLeft className="w-6 h-6 md:w-8 lg:w-10" />
-                }
-                nextLabel={<FaAngleRight className="w-6 h-6 md:w-8 lg:w-10" />}
-                breakLabel="..."
-                breakClassName="break-me"
-                pageCount={pageCount}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={5}
-                onPageChange={handlePageClick}
-                containerClassName="flex justify-center gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
-                pageLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
-                previousLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
-                nextLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
-                activeClassName="bg-black text-white rounded-full"
-              />
-            </div>
->>>>>>> 7d155c6f2319bcc1847f0c9fcd958160b006f414
           </div>
           <div className="vvsm-hide">
             <TopWriting />
