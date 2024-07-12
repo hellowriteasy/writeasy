@@ -14,7 +14,7 @@ import LoadingAnimation from "../loading";
 import { TPrompt } from "../utils/types";
 import NotFound from "../components/Others/NotFound";
 import { axiosInstance } from "../utils/config/axios";
-
+import WeeklyTest from "../components/Others/WeeklyTest";
 const Page: React.FC = () => {
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
@@ -90,11 +90,11 @@ const Page: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex w-full gap-x-5 h-auto relative -mt-10 justify-around items-center sm:justify-start ">
+        <div className="flex w-full gap-x-5 h-auto relative  justify-around items-center sm:justify-start ">
           <div className="absolute -top-28 -left-32">
             <Image className="w-[10vw]" src={Bee} alt="bee" />
           </div>
-          <div className="gap-8 practice-mobile-view relative flex flex-col">
+          <div className="gap-8 practice-mobile-view relative w-1/2 flex flex-col">
             <div className="w-full flex justify-between gap-7 items-center h-20">
               <h1 className="text-2xl sm:text-sm   md:text-4xl lg:text-5xl xl:text-7xl font-comic font-bold">
                 All Prompts
@@ -141,7 +141,8 @@ const Page: React.FC = () => {
               </div>
             )}
           </div>
-          <div className="vvsm-hide">
+          <div className="vvsm-hide flex flex-col gap-y-4">
+          <WeeklyTest></WeeklyTest>
             <TopWriting />
           </div>
         </div>

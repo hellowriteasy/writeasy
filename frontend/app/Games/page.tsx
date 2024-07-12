@@ -16,16 +16,28 @@ import { axiosInstance } from "../utils/config/axios";
 import NotFound from "../components/Others/NotFound";
 
 const Games: React.FC = () => {
+;
   const itemsPerPage = 5;
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [prompts, setPrompts] = useState<TPrompt[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = useState<string>("");
+  const [pageDetails, setPageDetails] = useState({
+    page: 1,
+    perPage: 10,
+    total: 0,
+  });
   const AxiosIns = axiosInstance("");
   useEffect(() => {
-    const fetchPrompts = async () => {
+    const fetchPrompts = async (page = 1, perPage = itemsPerPage) => {
       try {
-        const response = await AxiosIns.get("/prompts/game-prompts");
+        const response = await AxiosIns.get("/prompts/game-prompts",{
+          params: {
+            page
+          },
+        });
         setPrompts(response.data?.data.reverse());
+        setPageDetails(response.data.pageData);
       } catch (error: any) {
         setError(error.message);
       }
@@ -33,13 +45,19 @@ const Games: React.FC = () => {
     fetchPrompts();
   }, []);
 
+
+
+  const handleSelectOption = (selectedOption: string) => {
+    console.log(selectedOption);
+    setSelectedOption(selectedOption);
+    setCurrentPage(1); // Reset to the first page whenever a new option is selected
+  };
+
   const handlePageClick = (event: { selected: number }) => {
-    setCurrentPage(event.selected);
+    setCurrentPage(event.selected + 1);
   };
 
   const offset = currentPage * itemsPerPage;
-  const currentPrompts = prompts.slice(offset, offset + itemsPerPage);
-  const pageCount = Math.ceil(prompts.length / itemsPerPage);
 
   if (error) return <p>Error: {error}</p>;
   function handlePromptClick() {}
@@ -69,8 +87,8 @@ const Games: React.FC = () => {
             <Image className="w-[12vw]" src={Bee} alt="bee" />
           </div>
           <div className="gap-8 w-full relative flex flex-col">
-            {currentPrompts.length > 0 ? (
-              currentPrompts.map((prompt) => (
+            {prompts.length > 0 ? (
+              prompts.map((prompt) => (
                 <Prompt key={prompt._id} prompt={prompt} />
               ))
             ) : (
@@ -85,30 +103,32 @@ const Games: React.FC = () => {
             <TopWriting />
           </div>
         </div>
-        <div className="w-full mt-10 text-lg md:text-xl font-comic">
-          <ReactPaginate
-            previousLabel={
-              <FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
-            }
-            nextLabel={
-              <FaAngleRight className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
-            }
-            breakLabel="..."
-            breakClassName="break-me"
-            pageCount={pageCount}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
-            onPageChange={handlePageClick}
-            containerClassName="flex justify-center gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
-            pageClassName=""
-            pageLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
-            previousClassName=""
-            previousLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
-            nextClassName=""
-            nextLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
-            activeClassName="bg-black text-white rounded-full"
-          />
-        </div>
+        {pageDetails && pageDetails.total > 5 && (
+              <div className="w-full ms-28">
+                <ReactPaginate
+                  previousLabel={
+                    <FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+                  }
+                  nextLabel={
+                    <FaAngleRight className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+                  }
+                  breakLabel="..."
+                  breakClassName="break-me"
+                  pageCount={Math.ceil(pageDetails.total / pageDetails.perPage)}
+                  marginPagesDisplayed={2}
+                  pageRangeDisplayed={5}
+                  onPageChange={handlePageClick}
+                  containerClassName="flex justify-center gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
+                  pageClassName=""
+                  pageLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                  previousClassName=""
+                  previousLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                  nextClassName=""
+                  nextLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                  activeClassName="bg-black text-white rounded-full"
+                />
+              </div>
+            )}
       </div>
     </div>
   );

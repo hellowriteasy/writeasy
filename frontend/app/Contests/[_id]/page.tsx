@@ -23,16 +23,19 @@ interface ContestPageProps {
 
 const Page: React.FC<ContestPageProps> = ({ params }) => {
   const { _id: contestId } = params;
-
+  const itemsPerPage = 5;
+  const [currentPage, setCurrentPage] = useState(1);
   const [contest, setContest] = useState<TContest | null>(null);
   const [promptList, setPromptList] = useState<TPrompt[]>([]);
+  
+  const [error, setError] = useState<string | null>(null);
+  const [hasPromptPublished, setHasPromptPublished] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<string>("");
   const [pageDetails, setPageDetails] = useState({
     page: 1,
     perPage: 10,
     total: 0,
   });
-  const [error, setError] = useState<string | null>(null);
-  const [hasPromptPublished, setHasPromptPublished] = useState(false);
   const [selectedPrompt, setSelectedPrompt] = useState<{
     contestId: string;
     promptId: string;
@@ -46,13 +49,19 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
       return;
     }
 
-    const fetchPromptsOfContest = async () => {
+    const fetchPromptsOfContest = async (page = 1, perPage = itemsPerPage) => {
       try {
-        const response = await AxiosIns.get(`/prompts/list/${contestId}`);
+        const response = await AxiosIns.get(`/prompts/list/${contestId}`,{
+          params: {
+            page
+          },}
+        );
         if (response.status !== 200) {
           throw new Error(`Error: ${response.status}`);
         }
+
         setPromptList(response.data?.data);
+       
         setPageDetails(response.data?.pageData);
       } catch (err: any) {
         setError(err.message);
@@ -98,7 +107,17 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
   ) => {
     setSelectedPrompt({ contestId, promptId, title });
   };
+  const handleSelectOption = (selectedOption: string) => {
+    console.log(selectedOption);
+    setSelectedOption(selectedOption);
+    setCurrentPage(1); // Reset to the first page whenever a new option is selected
+  };
 
+  const handlePageClick = (event: { selected: number }) => {
+    setCurrentPage(event.selected + 1);
+  };
+
+  const offset = currentPage * itemsPerPage;
   if (error) return <p>{error}</p>;
   if (!contest) return <p>No contest available at the moment.</p>;
 
@@ -114,9 +133,9 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
               <h2 className="text-4xl font-comic sm:text-xl font-bold">
                 {contest.contestTheme}
               </h2>
-              <p className="text-xl sm:text-sm w-10/12">
-                {contest.description ||
-                  "Paragraphs are the building blocks of papers. Many students define paragraphs in terms of length: a paragraph is a group of at least five sentences, a paragraph is half a page long, etc. In reality, though, the unity and coherence of ideas among sentences is what constitutes a paragraph."}
+              <p className="text-xl py-4 sm:text-sm w-10/12">
+             {contest.description}
+               
               </p>
               <div className="flex w-full ">
                 <p className="text-xl text-center font-comic">
@@ -154,7 +173,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
             <div className="absolute md-hide bottom-80 -left-32">
               <Image src={Cloud} alt="Cloud" />
             </div>
-            {pageDetails.total > 0 && (
+            {pageDetails && pageDetails.total > 5 && (
               <div className="w-full ms-28">
                 <ReactPaginate
                   previousLabel={
@@ -168,7 +187,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
                   pageCount={Math.ceil(pageDetails.total / pageDetails.perPage)}
                   marginPagesDisplayed={2}
                   pageRangeDisplayed={5}
-                  onPageChange={() => {}}
+                  onPageChange={handlePageClick}
                   containerClassName="flex justify-center gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
                   pageClassName=""
                   pageLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"

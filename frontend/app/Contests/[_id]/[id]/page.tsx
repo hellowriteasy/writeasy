@@ -11,8 +11,8 @@ import NotFound from "@/app/components/Others/NotFound";
 import { TPrompt, TStory } from "@/app/utils/types";
 import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
-import Storycard from "@/app/components/Storycard";
-
+import Storycard from "@/app/components/StoryCard";
+import { useParams } from 'next/navigation';
 interface Prompt {
   _id: string;
   promptText: string;
@@ -28,11 +28,14 @@ interface Contest {
 
 interface ViewContestProps {
   params: {
+    _id:string;
     id: string;
   };
 }
 
 const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
+  
+  const { _id, id } = useParams();
   const [stories, setStories] = useState<TStory[]>([]);
   const [prompt, setPrompt] = useState<TPrompt | null>(null);
   const AxiosIns = axiosInstance("");
@@ -47,8 +50,9 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
   useEffect(() => {
     const fetchTopStories = async () => {
       try {
+    
         const response = await AxiosIns.get(
-          `/stories/contest/top-writings/668f349406e27ea5eef6f74e`
+          `/stories/contest/top-writings/${_id}`
         );
         setTopStories(response.data?.data);
       
@@ -68,7 +72,7 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
     const fetchStories = async () => {
       try {
         const response = await AxiosIns.get(
-          `/stories/contest/prompt?prompt_id=${params.id}&sortKey=score&page=${currentPage}&exclude_top_writings=true`
+          `/stories/contest/prompt?prompt_id=${id}&sortKey=score&page=${currentPage}&exclude_top_writings=true`
         );
         setStories(response.data?.data);
         setPageDetails(response.data?.pageData);
