@@ -5,8 +5,8 @@ import axios from "axios";
 import Image from "next/image";
 import Cloud from "@/public/Game/cloud.svg";
 import Cloud2 from "@/public/Game/cloud3.svg";
-import Pagination from "@/app/components/Pagination";
-import Storycard from "@/app/components/Storycard";
+import Storycard from "@/app/components/StoryCard"
+import TopWriting from "@/app/components/contest/TopWritings";
 import { axiosInstance } from "@/app/utils/config/axios";
 import NotFound from "@/app/components/Others/NotFound";
 import { TPrompt, TStory } from "@/app/utils/types";
@@ -36,6 +36,7 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
   const [stories, setStories] = useState<TStory[]>([]);
   const [prompt, setPrompt] = useState<TPrompt | null>(null);
   const AxiosIns = axiosInstance("");
+  const [topStories, setTopStories] = useState<TStory[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageDetails, setPageDetails] = useState({
@@ -43,6 +44,25 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
     perPage: 10,
     total: 0,
   });
+  useEffect(() => {
+    const fetchTopStories = async () => {
+      try {
+        const response = await AxiosIns.get(
+          `/stories/contest/top-writings/668f349406e27ea5eef6f74e`
+        );
+        setTopStories(response.data?.data);
+      
+      } catch (err: any) {
+        setError(err.message);
+      
+    };
+    
+      
+    };
+
+    fetchTopStories();
+  
+  }, [params.id]);
 
   useEffect(() => {
     const fetchStories = async () => {
@@ -92,9 +112,27 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
               {/* <h1 className="text-6xl font-comic font-bold p-10">
                 {prompt_title}
               </h1> */}
+                {topStories.map((story) => {
+              let starType: "main" | "none" = "none";
+              if (story) {
+                starType = "main";
+              }
+              return (
+                <TopWriting
+                  key={story._id}
+                  title={story.title}
+                  content={story.content}
+                  corrections={story.corrections}
+                  
+                  username={story.user.username}
+                  email={story.user.email}
+                  profile_image={story.user.profile_picture}
+                />
+              );
+            })}
             {stories.map((story) => {
-              let starType: "main" | "second" | "none" = "none";
-              if (story.position) {
+              let starType: "main" | "none" = "none";
+              if (story) {
                 starType = "main";
               }
               return (
@@ -103,7 +141,7 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
                   title={story.title}
                   content={story.content}
                   corrections={story.corrections}
-                  starType={starType}
+                
                   username={story.user.username}
                   email={story.user.email}
                   profile_image={story.user.profile_picture}

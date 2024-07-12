@@ -106,10 +106,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
     <div className="w-full min-h-screen  z-0 relative flex justify-center">
       <div className="w-10/12 h-auto ms-12">
         <div className="flex w-full ">
-          {/* <p className="text-xl text-center sm:text-md font-comic">
-            <b className="font-bold"> Until </b> -
-            {moment(contest.submissionDeadline).format("llll")}
-          </p> */}
+       
         </div>
         <div className="flex mt-8 sm:mt-0">
           <div className="p-6 mb-6 flex flex-col gap-y-4">
@@ -141,7 +138,6 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
                   <PromptComponent
                     key={prompt._id}
                     promptText={prompt.title}
-                    promptCategory={prompt.promptCategory}
                     contestId={contest._id}
                     promptId={prompt._id}
                     onSelectPrompt={handleSelectPrompt}

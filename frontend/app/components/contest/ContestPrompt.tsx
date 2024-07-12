@@ -8,7 +8,6 @@ import useAuthStore from "@/app/store/useAuthStore";
 
 interface PromptProps {
   promptText: string;
-  promptCategory: string[];
   contestId: string;
   promptId: string;
   onSelectPrompt: (contestId: string, promptId: string, title: string) => void;
@@ -17,7 +16,6 @@ interface PromptProps {
 
 const ContestPrompt: React.FC<PromptProps> = ({
   promptText,
-  promptCategory,
   contestId,
   promptId,
   onSelectPrompt,
@@ -69,9 +67,7 @@ const ContestPrompt: React.FC<PromptProps> = ({
           <div className="font-bold  font-comic text-wrap text-base md:text-xl mb-2 overflow-hidden overflow-ellipsis whitespace-nowrap">
             {promptText}
           </div>
-          <p className="text-gray-700 font-bold sm:text-[8px] text-wrap font-comic pt-1  text-sm md:text-base">
-            Category: {promptCategory.join(",")}
-          </p>
+       
         </div>
 
         {isActive && hasSubmittedStory !== null ? (
