@@ -30,10 +30,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-      <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className="two-line-bg">
-        <Navbar titles={navTitles}></Navbar> 
+      <body className="two-line-bg font-comic">
+        <Navbar titles={navTitles}></Navbar>
         <ToastContainer />
         {children}
         <Footer></Footer>
