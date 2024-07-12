@@ -1,44 +1,45 @@
-import { Fragment, useState,useEffect } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { axiosInstance } from '@/app/utils/config/axios';
+"use client";
+import { Fragment, useState } from "react";
+import { Dialog, Transition } from "@headlessui/react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { axiosInstance } from "@/app/utils/config/axios";
 
 interface ModalProps {
   setIsModalOpen: (isOpen: boolean) => void;
-  onSuccess : ()=>void;
+  onSuccess: () => void;
 }
 
-
-const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen ,onSuccess}) => {
-  const [promptTitle, setPromptTitle] = useState('');
-  const [description, setDescription] = useState('');
+const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen, onSuccess }) => {
+  const [promptTitle, setPromptTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [error, setError] = useState<string | null>(null);
   const AxiosIns = axiosInstance("");
 
   const handleUpdate = async () => {
     try {
-      const response = await AxiosIns.post('/prompts', {
+      const response = await AxiosIns.post("/prompts", {
         title: promptTitle,
         description: description,
-        promptType: 'game',
-      
+        promptType: "game",
       });
-      console.log('Response:', response.data);
+      console.log("Response:", response.data);
       setIsModalOpen(false);
       onSuccess();
-      toast.success('Prompt added successfully!');
+      // toast.success("Prompt added successfully!");
     } catch (err: any) {
-      setError('Error submitting the prompt');
-      console.error('Error:', err);
+      setError("Error submitting the prompt");
+      console.error("Error:", err);
     }
   };
- 
-
 
   return (
     <Transition.Root show={true} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={() => setIsModalOpen(false)}>
+      <Dialog
+        as="div"
+        className="relative z-10"
+        onClose={() => setIsModalOpen(false)}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -66,22 +67,28 @@ const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen ,onSuccess}) => {
                 <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                   <div className="sm:flex sm:items-start">
                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                      <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                 
+                      <Dialog.Title
+                        as="h3"
+                        className="text-base font-semibold leading-6 text-gray-900"
+                      >
+                        Add New Game Prompt
                       </Dialog.Title>
                       <div className="mt-2">
                         <input
-                          type="text" 
+                          type="text"
                           className="mt-1 block w-96 h-12 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
                           placeholder="Prompt Title"
                           value={promptTitle}
                           onChange={(e) => setPromptTitle(e.target.value)}
                         />
                       </div>
-                   
+
                       <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
-                        
+                        <label
+                          className="block text-gray-700 text-sm font-bold mb-2"
+                          htmlFor="description"
+                        >
+                          Description
                         </label>
                         <textarea
                           id="description"

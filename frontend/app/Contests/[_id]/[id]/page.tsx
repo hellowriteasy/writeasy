@@ -5,13 +5,13 @@ import axios from "axios";
 import Image from "next/image";
 import Cloud from "@/public/Game/cloud.svg";
 import Cloud2 from "@/public/Game/cloud3.svg";
-import Storycard from "@/app/components/StoryCard"
 import TopWriting from "@/app/components/contest/TopWritings";
 import { axiosInstance } from "@/app/utils/config/axios";
 import NotFound from "@/app/components/Others/NotFound";
 import { TPrompt, TStory } from "@/app/utils/types";
 import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
+import Storycard from "@/app/components/Storycard";
 
 interface Prompt {
   _id: string;

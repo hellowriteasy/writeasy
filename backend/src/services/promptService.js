@@ -21,7 +21,7 @@ const getPromptsByType = async (type, skip, limit) => {
       ...(limit ? { limit } : null),
       ...(skip ? { skip } : null),
     }
-  );
+  ).sort({ createdAt: -1 });
   return { data, total };
 };
 

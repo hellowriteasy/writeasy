@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useState, useEffect } from "react";
 import CardAdd from "@/app/components/admin/Games/CardAdd";
 import ModalGame from "@/app/components/admin/Games/Modal";
@@ -9,25 +9,25 @@ import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 
 const Games: React.FC = () => {
-  const itemsPerPage = 5; // Adjust the items per page as needed
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [gamePrompts, setGamePrompts] = useState<TPrompt[]>([]);
-  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalItems, setTotalItems] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const AxiosIns = axiosInstance("");
+  const [refetch, setRefetch] = useState(false);
 
-  const fetchGamePrompts = async (page = 1, perPage = itemsPerPage): Promise<void> => {
+  const fetchGamePrompts = async (): Promise<void> => {
     try {
       const response = await AxiosIns.get("prompts/game-prompts", {
         params: {
-          page,
-          perPage,
+          page: currentPage,
         },
       });
-      setGamePrompts(response.data.data.reverse());
-      setTotalItems(response.data.total); // Adjust according to your API response
+
+      setGamePrompts(response.data.data);
+      setTotalItems(response.data?.pageData?.total); // Adjust according to your API response
       setIsLoading(false);
     } catch (err) {
       setError("Error fetching game prompts");
@@ -36,11 +36,11 @@ const Games: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchGamePrompts(currentPage + 1, itemsPerPage); // Pages are 1-indexed in the API
-  }, [currentPage]);
+    fetchGamePrompts();
+  }, [refetch, currentPage]);
 
   const onSuccess = (): void => {
-    fetchGamePrompts(currentPage + 1, itemsPerPage);
+    setRefetch((prev) => !prev);
   };
 
   const handleAddClick = (): void => {
@@ -48,7 +48,7 @@ const Games: React.FC = () => {
   };
 
   const handlePageClick = (event: { selected: number }): void => {
-    setCurrentPage(event.selected);
+    setCurrentPage(event.selected + 1);
   };
 
   if (isLoading) return <p>Loading...</p>;
@@ -74,16 +74,17 @@ const Games: React.FC = () => {
                 <div className="text-xl font-semibold">All Games</div>
               </div>
             </div>
-            {gamePrompts.map((prompt) => (
-              <CardAdd
-                key={prompt._id}
-                id={prompt._id}
-                onSuccess={onSuccess}
-                title={prompt.title}
-                description={prompt.description}
-              />
-            ))}
-            {totalItems > itemsPerPage && (
+            {gamePrompts &&
+              gamePrompts.map((prompt) => (
+                <CardAdd
+                  key={prompt._id}
+                  id={prompt._id}
+                  onSuccess={onSuccess}
+                  title={prompt.title}
+                  description={prompt.description}
+                />
+              ))}
+            {totalItems > 5 && (
               <div className="mt-4">
                 <ReactPaginate
                   previousLabel={
@@ -94,7 +95,7 @@ const Games: React.FC = () => {
                   }
                   breakLabel="..."
                   breakClassName="break-me"
-                  pageCount={Math.ceil(totalItems / itemsPerPage)}
+                  pageCount={Math.ceil(totalItems / 5)}
                   marginPagesDisplayed={2}
                   pageRangeDisplayed={5}
                   onPageChange={handlePageClick}
@@ -111,10 +112,7 @@ const Games: React.FC = () => {
             )}
           </div>
           {isModalOpen && (
-            <ModalGame
-              setIsModalOpen={setIsModalOpen}
-              onSuccess={onSuccess}
-            />
+            <ModalGame setIsModalOpen={setIsModalOpen} onSuccess={onSuccess} />
           )}
         </div>
       </div>

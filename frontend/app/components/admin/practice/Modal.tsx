@@ -43,11 +43,11 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen,onSuccess }) => {
         setPromptCards([...promptCards, newPrompt]); // Add the new prompt card to the state
         setIsModalOpen(false);
         onSuccess();
-        toast.success('Prompt added successfully!');
+        // toast.success('Prompt added successfully!');
       })
       .catch(error => {
         console.error('There was an error posting the data!', error);
-        toast.error('Failed to add prompt.');
+        // toast.error('Failed to add prompt.');
       });
   };
 
