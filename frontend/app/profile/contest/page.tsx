@@ -11,41 +11,48 @@ import { axiosInstance } from '@/app/utils/config/axios';
 
 
 const ContestPage: React.FC = () => {
+  const itemsPerPage = 5;
+  const [currentPage, setCurrentPage] = useState(1);
   const [userStories, setUserStories] = useState<TStory[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [selectedOption, setSelectedOption] = useState<string>("");
+  const [pageDetails, setPageDetails] = useState({
+    page: 1,
+    perPage: 10,
+    total: 0,
+  });
   const {userId}=useAuthStore();
-  const itemsPerPage = 5;
+
  const AxiosIns=axiosInstance("")
-  useEffect(() => {
-    const fetchData = async () => {
+  
+    const fetchData = async (page = 1, perPage = itemsPerPage) => {
       try {
         const response = await AxiosIns.get('/stories/user', {
           params: {
             userId:userId,
             storyType: 'contest',
-            skip: currentPage * itemsPerPage,
-            limit: itemsPerPage
+           page
           }
         });
         setUserStories(response.data?.data.reverse());
+        setPageDetails(response.data.pageData);
         setLoading(false);
       } catch (error) {
    
         setLoading(false);
       }
     };
-    fetchData();
-  }, [currentPage]);
+    useEffect(() => {
+      fetchData(currentPage, itemsPerPage);
+    }, [currentPage]);
  async function onsuccess(){
     try {
       const response = await AxiosIns.get('/stories/user', {
         params: {
           userId:userId,
           storyType: 'contest',
-          skip: currentPage * itemsPerPage,
-          limit: itemsPerPage
+  
         }
       });
       setUserStories(response.data?.data.reverse());
@@ -56,16 +63,14 @@ const ContestPage: React.FC = () => {
     }
   };
 
-  
-
-  const handlePageClick = (data:{selected:number}) => {
-    const selectedPage = data.selected;
-    setCurrentPage(selectedPage);
+  const handlePageClick = (event: { selected: number }) => {
+    setCurrentPage(event.selected + 1);
   };
 
-  const pageCount = Math.ceil(userStories.length / itemsPerPage);
+  const offset = currentPage * itemsPerPage;
 
   
+
   return (
     <div className="font-poppins">
       <ProfileTabs />
@@ -95,8 +100,12 @@ const ContestPage: React.FC = () => {
             ) : (
               <NotFound text="No Contest To Show !!" />
             )}
-            {userStories.length > 0 ? (
-              <div className="w-full mt-10 text-lg md:text-xl font-comic">
+         
+          </>
+        )}
+      </div>
+      {pageDetails && pageDetails.total > 5 && (
+              <div className="w-full ms-28">
                 <ReactPaginate
                   previousLabel={
                     <FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
@@ -106,23 +115,21 @@ const ContestPage: React.FC = () => {
                   }
                   breakLabel="..."
                   breakClassName="break-me"
-                  pageCount={pageCount}
+                  pageCount={Math.ceil(pageDetails.total / pageDetails.perPage)}
                   marginPagesDisplayed={2}
                   pageRangeDisplayed={5}
                   onPageChange={handlePageClick}
                   containerClassName="flex justify-center gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
+                  pageClassName=""
                   pageLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                  previousClassName=""
                   previousLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                  nextClassName=""
                   nextLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
                   activeClassName="bg-black text-white rounded-full"
                 />
               </div>
-            ) : (
-              ""
             )}
-          </>
-        )}
-      </div>
     </div>
   );
 };

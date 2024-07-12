@@ -11,35 +11,39 @@ import { axiosInstance } from '@/app/utils/config/axios';
 
 const Page: React.FC = () => {
   const [userStories, setUserStories] = useState<TStory[]>([]);
-
-  const [error, setError] = useState<string|null>(null);
-  const [currentPage, setCurrentPage] = useState(0);
-  const userId = useAuthStore((state) => state.userId);
   const itemsPerPage = 5;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [error, setError] = useState<string|null>(null);
+  const userId = useAuthStore((state) => state.userId);
+  const [selectedOption, setSelectedOption] = useState<string>("");
+  const [pageDetails, setPageDetails] = useState({
+    page: 1,
+    perPage: 10,
+    total: 0,
+  });
   const AxiosIns=axiosInstance("")
-  useEffect(() => {
-    const fetchUserStories = async () => {
+
+    const fetchUserStories = async (page = 1, perPage = itemsPerPage) => {
       try {
         const response = await AxiosIns.get('/stories/user', {
           params: {
             userId:userId,
             storyType: 'game',
-            skip: currentPage * itemsPerPage,
-            limit: itemsPerPage
+            page
           }
         });
         
         setUserStories(response.data?.data?.reverse());
-
+        setPageDetails(response.data.pageData);
       } catch (error:any) {
     
 
       }
     };
 
-    fetchUserStories();
-  }, [currentPage,userId]);
-  
+  useEffect(() => {
+    fetchUserStories(currentPage, itemsPerPage);
+  }, [currentPage]);
   async function  onSuccess(){
     const fetchUserStories = async () => {
       try {
@@ -47,8 +51,7 @@ const Page: React.FC = () => {
           params: {
             userId:userId,
             storyType: 'game',
-            skip: currentPage * itemsPerPage,
-            limit: itemsPerPage
+            
           }
         });
         
@@ -65,14 +68,11 @@ const Page: React.FC = () => {
   
   };
     
+  const handlePageClick = (event: { selected: number }) => {
+    setCurrentPage(event.selected + 1);
+  };
 
-  const handlePageClick = (data:{selected:number}) => {
-    const selectedPage = data.selected;
-    setCurrentPage(selectedPage);
-    };
- 
-   
-  const pageCount = Math.ceil(userStories.length / itemsPerPage);
+  const offset = currentPage * itemsPerPage;
 
   
   if (error) return <p>{error}</p>;
@@ -97,25 +97,32 @@ const Page: React.FC = () => {
           />
         )) :<NotFound text='No Games To Show !!'/>}
       </div>
-      {
-        userStories.length >0 ? <div className="w-full mt-10 text-lg md:text-xl font-comic">
-          <ReactPaginate
-            previousLabel={<FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />}
-            nextLabel={<FaAngleRight className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />}
-            breakLabel="..."
-            breakClassName="break-me"
-            pageCount={pageCount}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
-            onPageChange={handlePageClick}
-            containerClassName="flex justify-center gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
-            pageLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
-            previousLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
-            nextLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
-            activeClassName="bg-black text-white rounded-full"
-          />
-        </div>:""
-      }
+      {pageDetails && pageDetails.total > 5 && (
+              <div className="w-full ms-28">
+                <ReactPaginate
+                  previousLabel={
+                    <FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+                  }
+                  nextLabel={
+                    <FaAngleRight className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+                  }
+                  breakLabel="..."
+                  breakClassName="break-me"
+                  pageCount={Math.ceil(pageDetails.total / pageDetails.perPage)}
+                  marginPagesDisplayed={2}
+                  pageRangeDisplayed={5}
+                  onPageChange={handlePageClick}
+                  containerClassName="flex justify-center gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
+                  pageClassName=""
+                  pageLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                  previousClassName=""
+                  previousLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                  nextClassName=""
+                  nextLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                  activeClassName="bg-black text-white rounded-full"
+                />
+              </div>
+            )}
      
     </div>
   );

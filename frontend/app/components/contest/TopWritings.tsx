@@ -3,7 +3,7 @@ import Image from "next/image"
 import mainstar from "@/public/others/main_star.svg";
 import Logo from "@/public/Landingpage-img/logo.svg";
 
-interface StorycardProps {
+interface TopWritingProps {
   title: string;
   content: string;
   corrections: string;
@@ -12,10 +12,9 @@ interface StorycardProps {
   profile_image?: string;
 }
 
-const Storycard: React.FC<StorycardProps> = ({
+const TopWriting: React.FC<TopWritingProps> = ({
   title,
   content,
-  corrections,
   username,
   email,
   profile_image,
@@ -32,6 +31,7 @@ const Storycard: React.FC<StorycardProps> = ({
 
   return (
     <div className="relative my-6">
+      <div className="absolute -top-12 left-4"> <Image src={mainstar} alt="main star" /></div>
       <div className="w-11/12 mx-auto border-2 font-comic border-gray-300 bg-white rounded-2xl h-[fit-content] overflow-hidden">
         <div className="flex items-center my-8 justify-between px-4 sm:px-6 py-4">
           <div className="flex items-center">
@@ -69,4 +69,4 @@ const Storycard: React.FC<StorycardProps> = ({
   );
 };
 
-export default Storycard;
+export default TopWriting;
