@@ -90,7 +90,7 @@ const Page = () => {
       </div>
 
       <div
-        className="w-40 h-40 bg-slate-700 rounded-full cursor-pointer"
+        className="w-40 h-40 sm:w-20 sm:h-20 bg-slate-700 my-4 rounded-full cursor-pointer"
         onClick={upload}
       >
         <input type="file" hidden ref={fileInputRef} onChange={handleFileChange}/>
@@ -103,18 +103,17 @@ const Page = () => {
         ) : (
           <div className="w-full h-full rounded-full bg-gray-300 flex items-center justify-center">
             <span className="text-white">Upload</span>
-            </div>
-            
+          </div>
         )}
       </div>
 
-      <div className="flex justify-center gap-4">
+      <div className="flex justify-center gap-4 w-full px-4 sm:px-8 md:px-16 lg:px-24">
         <form
           onSubmit={handleSubmit}
-          className="w-[70%] h-60 ms-72 flex mt-10 flex-wrap gap-2"
+          className="w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 gap-4"
         >
           <input
-            className="border border-gray-500 w-96 z-10 text-xl rounded-3xl indent-7 h-14 focus:outline-none focus:border-yellow-600"
+            className="border border-gray-500 sm:text-sm w-full text-xl rounded-3xl indent-7 h-14 focus:outline-none focus:border-yellow-600"
             type="email"
             name="email"
             placeholder="Email"
@@ -122,7 +121,7 @@ const Page = () => {
             onChange={handleInputChange}
           />
           <input
-            className="border border-gray-500 w-96 z-10 text-xl rounded-3xl indent-7 h-14 focus:outline-none focus:border-yellow-600"
+            className="border sm:text-sm border-gray-500 w-full text-xl rounded-3xl indent-7 h-14 focus:outline-none focus:border-yellow-600"
             type="text"
             placeholder="Username"
             name="username"
@@ -130,7 +129,7 @@ const Page = () => {
             onChange={handleInputChange}
           />
           <input
-            className="border border-gray-500 w-96 z-10 text-xl rounded-3xl indent-7 h-14 focus:outline-none focus:border-yellow-600"
+            className="border border-gray-500 w-full text-xl rounded-3xl indent-7 h-14 focus:outline-none focus:border-yellow-600"
             type="password"
             name="old_password"
             placeholder="Old Password"
@@ -138,17 +137,17 @@ const Page = () => {
             onChange={handleInputChange}
           />
           <input
-            className="border border-gray-500 w-96 z-10 text-xl rounded-3xl indent-7 h-14 focus:outline-none focus:border-yellow-600"
+            className="border border-gray-500 w-full text-xl rounded-3xl indent-7 h-14 focus:outline-none focus:border-yellow-600"
             type="password"
             placeholder="New Password"
             name="password"
             value={userDetails.password}
             onChange={handleInputChange}
           />
-          <div className="w-full flex justify-start mt-4">
+          <div className="w-full flex justify-center md:col-span-2 mt-4">
             <button
               type="submit"
-              className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-96 h-14"
+              className="text-white bg-black text-2xl font-bold font-comic rounded-full w-full h-14"
             >
               Update
             </button>
