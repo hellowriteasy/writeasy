@@ -342,7 +342,7 @@ export function SimpleEditor({
                 <Icons.Code />
               </button>
               <button
-                className={classNames("menu-button bg-black text-sm text-white p-2 rounded-md ml-auto", {
+                className={classNames("menu-button bg-black text-sm font-comic text-white p-2 rounded-md ml-auto", {
                   "is-active": editor.isActive("code"),
                 })}
                 type="button"
@@ -374,7 +374,7 @@ export function SimpleEditor({
           </div>
         </div>
         <button
-          className={`text-white bg-black text-2xl  ${
+          className={`text-white font-comic bg-black text-2xl  ${
             isSaving ? "text-black bg-custom-yellow" : ""
           } w-96 h-16 rounded-full mx-auto mt-10 `}
           onClick={(e) => {
