@@ -115,13 +115,13 @@ const Page: React.FC = () => {
             )}
 
            {pageDetails && pageDetails.total > 5 && (
-              <div className="w-full ms-28">
+              <div className="w-full ms-28 ">
                 <ReactPaginate
                   previousLabel={
                     <FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
                   }
                   nextLabel={
-                    <FaAngleRight className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+                    <FaAngleRight className="w-6 h-6 font-comic text-xl md:w-8 md:h-8 lg:w-10 lg:h-10" />
                   }
                   breakLabel="..."
                   breakClassName="break-me"
@@ -129,13 +129,13 @@ const Page: React.FC = () => {
                   marginPagesDisplayed={2}
                   pageRangeDisplayed={5}
                   onPageChange={handlePageClick}
-                  containerClassName="flex justify-center gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
+                  containerClassName="flex justify-center  gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
                   pageClassName=""
-                  pageLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                  pageLinkClassName="w-8 h-8 md:w-12 md:h-12  lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
                   previousClassName=""
-                  previousLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                  previousLinkClassName="w-8 h-8 md:w-12 md:h-12  lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
                   nextClassName=""
-                  nextLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                  nextLinkClassName="w-8 h-8 md:w-12 md:h-12  text-black text-xl font-comic lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
                   activeClassName="bg-black text-white rounded-full"
                 />
               </div>

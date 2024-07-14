@@ -1,10 +1,10 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useRouter } from "next/navigation"; // Changed from 'next/navigation' to 'next/router'
+import { useRouter } from "next/navigation";
 import Earth from "../../public/Landingpage-img/earth.svg";
 import Group from "../../public/Loginsignup-img/Group (2).svg";
 import Group2 from "../../public/Loginsignup-img/Group.svg";
@@ -14,10 +14,10 @@ import Vector1 from "../../public/Loginsignup-img/Vector.svg";
 import Rocket from "../../public/Loginsignup-img/rocket.svg";
 import Sun from "../../public/Loginsignup-img/sun.svg";
 import logo from "../../public/Landingpage-img/logo.svg";
-import InputField from "../components/InputFIelds";
 import Link from "next/link";
 import { axiosInstance } from "../utils/config/axios";
 import Button from "../components/Button";
+import { FaEyeSlash, FaEye } from "react-icons/fa";
 
 const schema = z
   .object({
@@ -46,6 +46,17 @@ const Signup = () => {
   } = useForm<FormFields>({
     resolver: zodResolver(schema),
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
 
   const AxiosIns = axiosInstance("");
 
@@ -110,45 +121,77 @@ const Signup = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="relative flex flex-col items-center gap-2 font-comic mt-10 z-10"
         >
-          <InputField
-            types="text"
-            placeholder="Email"
-            value={getValues("email")}
-            {...register("email")}
-          />
-          {errors.email && (
-            <div className="text-red-500">{errors.email.message}</div>
-          )}
+          <div className="relative w-full flex flex-col justify-center items-center mt-4">
+            <input
+              className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-3xl indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"
+              type="text"
+              placeholder="Email"
+              {...register("email")}
+            />
+            {errors.email && (
+              <div className="text-red-500">{errors.email.message}</div>
+            )}
+          </div>
 
-          <InputField
-            value={getValues("username")}
-            types="text"
-            placeholder="Username"
-            {...register("username")}
-          />
-          {errors.username && (
-            <div className="text-red-500">{errors.username.message}</div>
-          )}
+          <div className="relative w-full flex flex-col justify-center items-center mt-4">
+            <input
+              className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-3xl indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"
+              type="text"
+              placeholder="Username"
+              {...register("username")}
+            />
+            {errors.username && (
+              <div className="text-red-500">{errors.username.message}</div>
+            )}
+          </div>
 
-          <InputField
-            types="password"
-            value={getValues("password")}
-            placeholder="Password"
-            {...register("password")}
-          />
-          {errors.password && (
-            <div className="text-red-500">{errors.password.message}</div>
-          )}
+          <div className="relative w-full flex flex-col justify-center items-center mt-4">
+            <input
+              className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-3xl indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              {...register("password")}
+            />
+            <button
+              type="button"
+              className="absolute right-3 sm:right-4 md:right-5 lg:right-6 z-20"
+              onClick={togglePasswordVisibility}
+            >
+              {showPassword ? (
+                <FaEye className="text-lg sm:text-xl" />
+              ) : (
+                <FaEyeSlash className="text-lg sm:text-xl" />
+              )}
+            </button>
+            {errors.password && (
+              <div className="text-red-500">{errors.password.message}</div>
+            )}
+          </div>
 
-          <InputField
-            types="password"
-            value={getValues("confirmPassword")}
-            placeholder="Confirm Password"
-            {...register("confirmPassword")}
-          />
-          {errors.confirmPassword && (
-            <div className="text-red-500">{errors.confirmPassword.message}</div>
-          )}
+          <div className="relative w-full flex flex-col justify-center items-center mt-4">
+            <input
+              className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-3xl indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"
+              type={showConfirmPassword ? "text" : "password"}
+              placeholder="Confirm Password"
+              {...register("confirmPassword")}
+            />
+            <button
+              type="button"
+              className="absolute right-3 sm:right-4 md:right-5 lg:right-6 z-20"
+              onClick={toggleConfirmPasswordVisibility}
+            >
+              {showConfirmPassword ? (
+                <FaEye className="text-lg sm:text-xl" />
+              ) : (
+                <FaEyeSlash className="text-lg sm:text-xl" />
+              )}
+            </button>
+            {errors.confirmPassword && (
+              <div className="text-red-500">
+                {errors.confirmPassword.message}
+              </div>
+            )}
+          </div>
 
           <button className="text-center border rounded-3xl text-white hover:opacity-80 w-full sm:w-72 md:w-80 lg:w-96 mt-5 bg-black h-12 sm:h-14 text-xl sm:text-2xl">
             Sign Up

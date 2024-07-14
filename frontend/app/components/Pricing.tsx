@@ -32,11 +32,11 @@ const Pricing = () => {
   };
 
   return (
-    <div className="w-full h-auto py-10  font-comic">
+    <div className="w-full h-auto   font-comic">
       <h1 className="text-center text-4xl font-crayon pt-10 font-bold">
         Pricing
       </h1>
-      <div className="flex flex-col lg:flex-row justify-center items-center h-full w-full relative py-10">
+      <div className="flex flex-col lg:flex-row justify-center items-center h-full w-full relative ">
         <div className="absolute -top-20 right-0">
           <Image width={80} height={40} src={Group14} alt="" />
         </div>

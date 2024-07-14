@@ -48,7 +48,7 @@ const Contest = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="w-full h-[1300px] mt-6 z-0 relative flex justify-center">
+    <div className="w-full h-[1800px] mt-6 z-0 relative flex justify-center">
       <div className="absolute sm-hide -top-14 right-0">
         <Image className="w-[9vw]" src={earth} alt="earth" />
       </div>
