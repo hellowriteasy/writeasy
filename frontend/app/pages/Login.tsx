@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, SyntheticEvent, useState, useEffect } from "react";
+import React, { ChangeEvent, SyntheticEvent, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/public/Landingpage-img/logo.svg";
@@ -11,20 +11,22 @@ import Group from "../../public/Loginsignup-img/Group (2).svg";
 import Group3 from "../../public/Loginsignup-img/Group (1).svg";
 import Vector1 from "../../public/Loginsignup-img/Vector.svg";
 import Button from "../components/Button";
-import InputField from "../components/InputFIelds";
 import useAuthStore from "../store/useAuthStore";
 import { useRouter } from "next/navigation";
 import Earth from "../../public/Landingpage-img/earth.svg";
 import { axiosInstance } from "../utils/config/axios";
+import { FaEyeSlash, FaEye } from "react-icons/fa";
 import type { NextPage } from "next";
 
 const Login: NextPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const login = useAuthStore((state) => state.login);
   const router = useRouter();
   const AxiosIns = axiosInstance("");
+
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     try {
@@ -46,7 +48,9 @@ const Login: NextPage = () => {
     }
   };
 
-
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
     <div className="overflow-hidden  two-line-bg">
@@ -55,7 +59,7 @@ const Login: NextPage = () => {
           <Image src={logo} alt="logo" />
         </div>
       </Link>
-      <div className="flex flex-col w-full  h-full items-center">
+      <div className="flex flex-col w-full h-full items-center">
         <h1 className="text-center font-comic sm:text-2xl lg:text-4xl md:text-5xl pt-6">
           <span className="font-bold">Hello!</span> Welcome to Writeasy
         </h1>
@@ -63,26 +67,45 @@ const Login: NextPage = () => {
           onSubmit={handleSubmit}
           className="relative flex flex-col font-comic mt-14 z-10"
         >
-          <InputField
-            types="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setEmail(e.target.value)
-            }
-          />
-          <InputField
-            types="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setPassword(e.target.value)
-            }
-          />
-          <h1 className="text-end pt-4  font-comic text-sm underline font-bold">
+          <div className="relative w-full flex flex-col justify-center items-center mt-4">
+            <input
+              className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-3xl indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setEmail(e.target.value)
+              }
+            />
+          </div>
+
+          <div className="relative w-full flex flex-col justify-center items-center mt-4">
+            <input
+              className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-3xl indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setPassword(e.target.value)
+              }
+            />
+            <button
+              type="button"
+              className="absolute right-3 sm:right-4 md:right-5 lg:right-6 z-20"
+              onClick={togglePasswordVisibility}
+            >
+              {showPassword ? (
+                <FaEye className="text-lg sm:text-xl" />
+              ) : (
+                <FaEyeSlash className="text-lg sm:text-xl" />
+              )}
+            </button>
+          </div>
+
+          <h1 className="text-end pt-4 font-comic text-sm underline font-bold">
             <Link href="#">Forgot Password?</Link>
           </h1>
-          <button className="text-center border rounded-3xl m-y-4 text-white hover:opacity-80 min-w-full  sm:min-w-60 sm:w-72 md:w-80 lg:w-96 mt-5 bg-black h-12 sm:h-14 text-xl sm:text-2xl">
+          <button className="text-center border rounded-3xl my-4 text-white hover:opacity-80 min-w-full sm:min-w-60 sm:w-72 md:w-80 lg:w-96 mt-5 bg-black h-12 sm:h-14 text-xl sm:text-2xl">
             Login
           </button>
           {error && <p className="text-red-500">{error}</p>}
