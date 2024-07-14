@@ -58,10 +58,9 @@ const Hero = () => {
       </div>
       <div className="w-full mt-40 text-xl text-center">
         <h2>
-          &ldquo;The writer is by nature a dreamer - a conscious dreamer.
-          &rdquo;
+          &ldquo;Feedback is one of the most powerful influences on learning and achievement&rdquo;
         </h2>
-        <h2 className="font-bold">- Carson McCullers</h2>
+        <h2 className="font-bold">- John Hattie</h2>
       </div>
       <div className="w-full h-[610px] flex relative  flex-col justify-center items-center">
         <div className="absolute top-0 left-0">
