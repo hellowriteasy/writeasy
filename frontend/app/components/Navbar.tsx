@@ -51,14 +51,9 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
           </ul>
         </div>
         <div className="hidden md:flex mid:hidden items-center space-x-4">
-          {loggedIn ? (
+         
             <UserMenu />
-          ) : (
-            <div className="flex gap-2 sm:gap-4">
-              <button onClick={() => router.push('/login')} className="text-lg sm:text-2xl font-bold text-center bg-custom-yellow border-2 w-16 sm:w-20 h-10 sm:h-12 hover:bg-white rounded-3xl border-black text-black font-comic">Login</button>
-              <button onClick={() => router.push('/signup')} className="text-lg sm:text-2xl font-bold text-center bg-black border-2 w-24 sm:w-32 h-10 sm:h-12 rounded-3xl hover:opacity-80 border-black text-white font-comic">Sign up</button>
-            </div>
-          )}
+        
         </div>
         <div className="md:hidden mid:block flex items-center">
           <button onClick={toggleMenu} className="text-black focus:outline-none">
@@ -101,14 +96,9 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
           })}
         </ul>
         <div className="flex justify-center items-center  flex-col gap-4 w-full">
-          {loggedIn ? (
+        
             <UserMenu />
-          ) : (
-            <>
-              <button onClick={() => { router.push('/login'); toggleMenu(); }} className="text-lg sm:text-2xl font-bold text-center bg-custom-yellow border-2 w-full h-12 hover:bg-white rounded-3xl border-black text-black font-comic">Login</button>
-              <button onClick={() => { router.push('/signup'); toggleMenu(); }} className="text-lg sm:text-2xl font-bold text-center bg-black border-2 w-full h-12 rounded-3xl hover:opacity-80 border-black text-white font-comic">Sign up</button>
-            </>
-          )}
+          
         </div>
       </div>
     </nav>
