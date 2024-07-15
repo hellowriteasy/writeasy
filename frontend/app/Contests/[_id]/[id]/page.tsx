@@ -11,8 +11,8 @@ import NotFound from "@/app/components/Others/NotFound";
 import { TPrompt, TStory } from "@/app/utils/types";
 import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
-import Storycard from "@/app/components/StoryCard";
 import { useParams } from 'next/navigation';
+import Storycard from "@/app/components/Storycard";
 interface Prompt {
   _id: string;
   promptText: string;
