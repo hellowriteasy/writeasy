@@ -54,7 +54,7 @@ const inviteCollaborators = [
     let story;
     try {
       if (storyID) {
-        story = await Story.findById(storyID);
+        story = await Story.findById(storyID).populate("contributors");
         if (!story) {
           console.log("Story not found with ID:", storyID);
           return res.status(404).json({ message: "Story not found." });
@@ -65,12 +65,20 @@ const inviteCollaborators = [
           storyType: "game",
           user: userID,
         });
+
+        await story.populate({
+          path: "contributors.subscriptionId",
+          model: "Subscription",
+        });
       }
 
       const newContributorUsers = await User.find({
         email: {
           $in: email,
         },
+      }).populate({
+        path: "subscriptionId",
+        model: "Subscription",
       });
 
       if (newContributorUsers.length !== email.length) {
@@ -78,6 +86,15 @@ const inviteCollaborators = [
           message:
             "Please check the email is valid . Some of the user not found with given email. ",
         });
+      }
+
+
+      if (
+        newContributorUsers.some(
+          (user) => user.subscriptionId?.isActive !== true
+        )
+      ) {
+        throw new Error("Invited user is not a paid user");
       }
 
       const isAlreadyContributor = story.contributors.some((contributorId) => {
@@ -101,7 +118,9 @@ const inviteCollaborators = [
         .json({ message: "User invited successfully as contributor." });
     } catch (error) {
       console.error("Error inviting collaborator:", error);
-      res.status(500).json({ message: "Server error occurred." });
+      res
+        .status(500)
+        .json({ message: error.message || "Server error occurred." });
     }
   },
 ];

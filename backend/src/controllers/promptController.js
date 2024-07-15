@@ -13,7 +13,7 @@ const getPracticePrompts = async (req, res) => {
   let { page, perPage } = req.query;
 
   page = +page || 1;
-  const limit = +perPage || 5;
+const limit = +perPage || 5;
   const skip = (page - 1) * limit;
 
   try {

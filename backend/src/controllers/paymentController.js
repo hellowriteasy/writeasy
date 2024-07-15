@@ -1,4 +1,5 @@
 const Subscription = require("../models/subscription");
+const User = require("../models/user");
 const StripeService = require("../services/stripeService");
 const createStripeCheckoutSession = async (req, res) => {
   const { user_id } = req.body;
@@ -44,14 +45,22 @@ const confirmStripeCheckoutSession = async (req, res) => {
       stripe_session_id
     );
 
-    console.log("payment status", session.data.payment_status);
     if (session.data?.payment_status !== "paid") {
       throw new Error("Payment failed ");
+    }
+
+    const subscriptionExist = await Subscription.findOne({
+      stripe_session_id: stripe_session_id,
+    });
+
+    if (!subscriptionExist) {
+      throw new Error("Subscription not found.");
     }
 
     const paidAt = new Date();
     const thirtyDaysLater = new Date(paidAt);
     thirtyDaysLater.setDate(thirtyDaysLater.getDate() + 30);
+
     await Subscription.updateOne(
       {
         stripe_session_id: stripe_session_id,
@@ -64,6 +73,10 @@ const confirmStripeCheckoutSession = async (req, res) => {
         },
       }
     );
+
+    await User.findByIdAndUpdate(subscriptionExist.userId, {
+      subscriptionId: subscriptionExist._id,
+    });
     return res.status(200).json({ message: "session confirmation success" });
   } catch (error) {
     return res.status(500).json({
