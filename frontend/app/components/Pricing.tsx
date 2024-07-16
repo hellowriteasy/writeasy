@@ -13,7 +13,7 @@ const Pricing = () => {
   const { userId, isSubcriptionActive, subscriptionRemainingDays } =
     useAuthStore();
   const AxiosIns = axiosInstance("");
-  const router = useRouter()
+  const router = useRouter();
 
   const handleSignUp = async () => {
     try {
@@ -96,7 +96,6 @@ const Pricing = () => {
             </div>
             <div className="text-center flex flex-col gap-y-2 absolute top-[50%]    w-10/12 mx-auto">
               <div>
-              
                 <ul className="flex sm:text-[12px]  md:text-xl  flex-col px-4  items-start ">
                   <li className=" text-start">
                     •⁠ ⁠Unlimited writing practices with immediate GPT markings
@@ -110,7 +109,9 @@ const Pricing = () => {
                 <button
                   onClick={handleSignUp}
                   className="border text-2xl sm:text-3xl mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl text-white w-40 sm:w-48 md:w-56 lg:w-60 h-12 sm:h-14"
-                >Sign up</button>
+                >
+                  Sign up
+                </button>
               ) : !isSubcriptionActive ? (
                 <button
                   onClick={handleSignUp}
@@ -129,6 +130,4 @@ const Pricing = () => {
   );
 };
 
-
 export default Pricing;
-
