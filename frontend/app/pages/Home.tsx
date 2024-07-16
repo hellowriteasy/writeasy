@@ -43,8 +43,8 @@ const Hero = () => {
             <Image src={smCLoud} alt="small cloud" />
           </div>
         </div>
-        <div className="h-[75vh] border-4 object-cover border-slate-900 rounded-2xl absolute w-[70vw]">
-          <video autoPlay muted loop playsInline className="w-[100%] h-[100%]">
+        <div className="h-[75vh]  border-slate-900 rounded-2xl absolute w-[70vw]">
+          <video autoPlay muted loop playsInline className="w-[100%] object-cover h-[100%]">
             <source src="/videos/heroVideo.mp4" type="video/mp4" />
           </video>
         
@@ -70,7 +70,7 @@ const Hero = () => {
         </div>
         </div>
         <div className="absolute top-[40%]  text-xl font-comic">
-        <h2 className=" mid:text-[2vw] ">
+        <h2 className=" sm:text-[10px] sm:leading-3 leading-7 text-center">
           &ldquo;Feedback is one of the most powerful influences on learning and achievement&rdquo;
         </h2>
         <h2 className="font-bold sm:text-sm text-center py-3">- John Hattie</h2>
