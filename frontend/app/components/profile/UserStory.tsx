@@ -67,7 +67,7 @@ const Card: React.FC<CardProps> = ({
   const compareSentences = (description = "", corrections = "") => {
     if (!description) {
       return (
-        <span style={{ color: "red", backgroundColor: "lightcoral" }}>
+        <span style={{ color: "red", backgroundColor: "#FFD3D1" }}>
           No original description provided.
         </span>
       );
@@ -77,9 +77,9 @@ const Card: React.FC<CardProps> = ({
     return diff.map((part, index) => {
       const style = {
         backgroundColor: part.added
-          ? "lightgreen"
+          ? "#D6EDD4"
           : part.removed
-          ? "lightcoral"
+          ? "#FFD3D1"
           : "transparent",
         textDecoration: part.removed ? "line-through" : "none",
         color: part.added ? "green" : part.removed ? "red" : "black",
@@ -101,9 +101,9 @@ const Card: React.FC<CardProps> = ({
       const style = {
         backgroundColor:
           part[0] === 1
-            ? "lightgreen"
+            ? "#D6EDD4"
             : part[0] === -1
-            ? "lightcoral"
+            ? "#FFD3D1"
             : "transparent",
         textDecoration: part[0] === -1 ? "line-through" : "none",
         color: part[0] === 1 ? "green" : part[0] === -1 ? "red" : "black",
