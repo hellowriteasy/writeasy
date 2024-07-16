@@ -43,7 +43,7 @@ const Hero = () => {
             <Image src={smCLoud} alt="small cloud" />
           </div>
         </div>
-        <div className="h-[75vh] border-4 border-slate-900 rounded-2xl absolute w-[70vw]">
+        <div className="h-[75vh] border-4 object-cover border-slate-900 rounded-2xl absolute w-[70vw]">
           <video autoPlay muted loop playsInline className="w-[100%] h-[100%]">
             <source src="/videos/heroVideo.mp4" type="video/mp4" />
           </video>
@@ -81,14 +81,14 @@ const Hero = () => {
         <div className="absolute w-[12vw] top-28 right-28 sm-hide">
         <Image className="" src={nocloud} alt="nocloud" />
         </div>
-        <div className="absolute w-[15vw] top-72 left-0">
+        <div className="absolute w-[15vw] sm-hide top-72 left-0">
           <Image src={Paperplane} alt="Paperplane" />
         </div>
         <div className="absolute top-40  right-1/3">
           <Image className="w-[3vw]" src={Group9} alt="Group9" />
         </div>
       </div>
-        <div className="w-full h-[100vh] relative text-xl text-center">  
+        <div className="w-full my-6  relative text-xl text-center">  
         <div className="flex flex-wrap justify-evenly">
   <div className="w-full flex justify-center mr-[5%]">   
     <Link href={'/Contests'}>
@@ -115,7 +115,7 @@ const Hero = () => {
 </div>
 
       </div>
-      <div className="bg-custom-yellow -mt-40">
+      <div className="bg-custom-yellow ">
         <Pricing />
       </div>
       <div>
