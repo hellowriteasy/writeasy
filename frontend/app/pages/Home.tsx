@@ -1,13 +1,4 @@
-
 import Image from "next/image";
-import Buttonbg from "../../public/Landingpage-img/path102.svg";
-import Arrow from "../../public/Landingpage-img/path64.svg";
-import Rocket from "../../public/Landingpage-img/rocket1.svg";
-import Moon from "../../public/Landingpage-img/moon.svg";
-import Group1 from "../../public/Landingpage-img/Group (1).svg";
-import Group2 from "../../public/Landingpage-img/Group (2).svg";
-import Group from "../../public/Landingpage-img/Group.svg";
-import Star from "../../public/Landingpage-img/Group (13).svg";
 import Group4 from "../../public/Landingpage-img/Group (3).svg";
 import Group5 from "../../public/Landingpage-img/Group (5).svg";
 import Group6 from "../../public/Landingpage-img/Group (6).svg";

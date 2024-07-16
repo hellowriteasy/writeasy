@@ -69,4 +69,6 @@ const closeContestAfterDeadline = async () => {
   }
 };
 
+
+
 module.exports = scheduleJob;

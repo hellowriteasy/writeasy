@@ -327,7 +327,7 @@ class GptService {
             {
               role: "system",
               content:
-                "You are a master proofreader. Only proofread the given text, don't add new text to the document. The instructions are often in English, but keep the proofread text in the same language as the language being asked to proofread.",
+                "You are a master proofreader. The instructions are often in English, but keep the proofread text in the same language as the language being asked to proofread.",
             },
             {
               role: "user",
