@@ -25,7 +25,7 @@ const createStripeCheckout = async () => {
               name: "Writeasy monthly subscription",
               description: `TYPE: Monthly Subscription  \nStart Date: ${startDate} \nEnd Date: ${endDate}`,
             },
-            unit_amount: Math.round(25.29 * 100),
+            unit_amount: Math.round(20 * 100),
           },
           quantity: 1,
         },
