@@ -1,6 +1,6 @@
 const stripe = require("../../config/stripe");
 
-const createStripeCheckout = async () => {
+const createStripeCheckout = async (email) => {
   const today = new Date();
   const startDate = today.toISOString().split("T")[0]; // Format: YYYY-MM-DD
   const endDateObj = new Date(today);
@@ -30,7 +30,7 @@ const createStripeCheckout = async () => {
           quantity: 1,
         },
       ],
-
+      customer_email: email,
       success_url: `${process.env.FRONTEND_BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}&type=stripe`,
       cancel_url: `${process.env.FRONTEND_BASE_URL}/failure?session_id={CHECKOUT_SESSION_ID}&type=string`,
     });

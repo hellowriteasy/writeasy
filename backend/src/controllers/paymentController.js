@@ -8,7 +8,13 @@ const createStripeCheckoutSession = async (req, res) => {
     if (!user_id) {
       throw new Error("Please provide user id");
     }
-    const checkoutRes = await StripeService.createStripeCheckout(user_id);
+    const userExist = await User.findById(user_id);
+    if (!userExist) {
+      throw new Error("User not found");
+    }
+    const checkoutRes = await StripeService.createStripeCheckout(
+      userExist.email
+    );
     const subscriptionExist = await Subscription.findOne({ userId: user_id });
     if (!subscriptionExist) {
       const userSubscription = new Subscription({
