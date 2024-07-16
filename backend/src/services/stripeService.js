@@ -20,7 +20,7 @@ const createStripeCheckout = async (email) => {
             currency: "gbp",
             product_data: {
               images: [
-                "https://firebasestorage.googleapis.com/v0/b/debai-d0809.appspot.com/o/images%2FGroup%2067.png?alt=media&token=316c8233-f993-4a08-a163-148ce0902271",
+                "https://firebasestorage.googleapis.com/v0/b/debai-d0809.appspot.com/o/images%2Flogo.png?alt=media&token=0b709800-aa9c-4557-88e2-6f462f6aa9b3",
               ],
               name: "Writeasy monthly subscription",
               description: `TYPE: Monthly Subscription  \nStart Date: ${startDate} \nEnd Date: ${endDate}`,
