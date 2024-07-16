@@ -33,93 +33,96 @@ import smCLoud from "@/public/Landingpage-img/herosmcloud.svg";
 import heroMan from "@/public/Landingpage-img/heroman.svg";
 import heroRocket from "@/public/Landingpage-img/rockethome.svg";
 import heroLine from "@/public/Landingpage-img/heroLines.svg";
-
+import bulbgrp from "@/public/Landingpage-img/bulbgrp.svg"
+import games from "@/public/Landingpage-img/Games.svg"
+import contest from "@/public/Landingpage-img/Contests.svg"
+import practice from "@/public/Landingpage-img/Practices.svg"
+import nocloud from "@/public/Landingpage-img/notcloud.svg"
+import Link from "next/link";
 const Hero = () => {
   return (
-    <div className="Hero two-line-bg w-full h-full relative overflow-hidden">
-      <div className="absolute top-0 right-28">
-        <Image className="sm-hide" src={heroLine} alt="heroline" />
-      </div>
-      <div className="h-[80vh] mt-10 flex justify-between items-center">
-        <div>
-          <div className="sm-hide">
+    <div className="Hero two-line-bg w-full h-full  overflow-hidden">
+       
+      <div className="h-[80vh] relative mt-4  mid:mt-0 flex justify-center items-center">
+        <div className="absolute left-[2%] top-[10%]">
+          <div className=" w-[13vw] ">
             <Image src={heroRocket} alt="Rocket" />
           </div>
-          <div className="sm-hide">
+          <div className=" w-[5vw]  ">
             <Image src={smCLoud} alt="small cloud" />
           </div>
         </div>
-        <div>
-          <Image src={HeroImage} alt="video" />
+        <div className="h-[75vh] border-4 border-slate-900 rounded-2xl absolute w-[70vw]">
+          <video autoPlay muted loop playsInline className="w-[100%] h-[100%]">
+            <source src="/videos/heroVideo.mp4" type="video/mp4" />
+          </video>
+        
+        <div className="absolute vsm-hide w-[6vw] -top-[5%] -right-[8%]">
+          <Image className="" src={heroLine} alt="heroline" />
         </div>
-        <div className="sm-hide">
+          
+        </div>
+        <div className=" absolute top-[30%] sm:top-20 right-[2%] ">
+        <div className="w-[11vw]">
           <Image src={heroMan} alt="man" />
         </div>
+        </div>
       </div>
-      <div className="w-full mt-40 text-xl text-center">
-        <h2>
+     
+      <div className="w-full h-[200px]  flex relative   justify-center items-center">
+        <div >
+        <div className="absolute w-[20vw] -top-[50%] -left-20">
+          <Image className="" src={Group4} alt="Group4" />
+        </div>
+        <div className="absolute w-[8vw] top-32 left-28 sm-hide">
+        <Image className="" src={Group5} alt="Group5" />
+        </div>
+        </div>
+        <div className="absolute top-[40%]  text-xl font-comic">
+        <h2 className=" mid:text-[2vw] ">
           &ldquo;Feedback is one of the most powerful influences on learning and achievement&rdquo;
         </h2>
-        <h2 className="font-bold">- John Hattie</h2>
-      </div>
-      <div className="w-full h-[610px] flex relative  flex-col justify-center items-center">
-        <div className="absolute top-0 left-0">
-          <Image className="w-[20vw]" src={Group4} alt="Group4" />
+        <h2 className="font-bold sm:text-sm text-center py-3">- John Hattie</h2>
         </div>
-        <div className="absolute top-0 right-0 -mx-0">
-          <Image className="w-[18vw]" src={Group10} alt="Group10" />
+        <div className="absolute w-[18vw] -top-32 -right-14 -mx-0">
+          <Image className="" src={Group10} alt="Group10" />
         </div>
-        <div className="absolute top-32 left-96 sm-hide">
-          <Image className="w-[7vw]" src={Group11} alt="Group11" />
+        <div className="absolute w-[12vw] top-28 right-28 sm-hide">
+        <Image className="" src={nocloud} alt="nocloud" />
         </div>
-        <div className="absolute top-20 right-80 sm-hide ">
-          <Image className="w-[10vw]" src={Group5} alt="Group5" />
-        </div>
-        <div className="absolute -top-10 right-60 sm-hide">
-          <Image className="w-[7vw]" src={Group6} alt="Group6" />
-        </div>
-        <div className="absolute sm-hide top-60 z-10 left-1/3">
-          <Image className="w-[14vw] absolute z-10" src={Group8} alt="Group8" />
-
-          <div className="relative ms-20 top-0">
-            <Image className="w-[22vw]" src={Note} alt="Note" />
-          </div>
-        </div>
-
-        <div className="absolute sm-hide top-96 left-0">
+        <div className="absolute w-[15vw] top-72 left-0">
           <Image src={Paperplane} alt="Paperplane" />
         </div>
-        <div className="absolute top-96 sm-hide right-60">
-          <Image className="w-[4vw]" src={Group9} alt="Group9" />
+        <div className="absolute top-40  right-1/3">
+          <Image className="w-[3vw]" src={Group9} alt="Group9" />
         </div>
       </div>
-      <div className="relative flex h-[540px] sm-hide justify-center items-center">
-        <div className="absolute left-40 top-0">
-          <Image className="w-[20vw]" src={Note2} alt="Note2" />
-        </div>
-        <div className="absolute left-14 top-48">
-          <Image className="w-[9vw]" src={Group13} alt="Group13" />
-        </div>
-        <div className="absolute right-28 top-8">
-          <Image className="w-[20vw]" src={Note3} alt="Note3" />
-        </div>
-        <div className="absolute right-10 top-56">
-          <Image className="w-[13vw]" src={Group12} alt="Group12" />
-        </div>
-        <div className="h-full">
-          <div className="absolute -top-10">
-            <Image className="w-[1.5vw]" src={Arrow1} alt="Arrow1" />
-          </div>
-          <div className="absolute top-20 -ms-14">
-            <Image className="w-[9vw]" src={Bulb} alt="Bulb" />
-          </div>
-          <div className="left-1/3 ms-10 top-28 absolute">
-            <Image className="w-[8vw]" src={Arrow2} alt="Arrow2" />
-          </div>
-          <div className="right-1/3 top-32 absolute">
-            <Image className="w-[8vw]" src={Arrow3} alt="Arrow3" />
-          </div>
-        </div>
+        <div className="w-full h-[100vh] relative text-xl text-center">  
+        <div className="flex flex-wrap justify-evenly">
+  <div className="w-full flex justify-center mr-[5%]">   
+    <Link href={'/Contests'}>
+      <Image className="w-[22vw] tilt-left" src={contest} alt="Contests" />
+    </Link> 
+  </div>
+  <div className="">
+    <div>
+      <Link href={'/Practices'}>
+        <Image className="w-[20vw] tilt-left" src={practice} alt="Practices" />
+      </Link>
+    </div>
+  </div>
+  <div className="w-[24vw]">
+    <Image className="" src={bulbgrp} alt="Bulb" />
+  </div>
+  <div className="">
+    <div>
+      <Link href={'/Games'}>
+        <Image className="w-[20vw] tilt-right" src={games} alt="Games" />
+      </Link>
+    </div>
+  </div>
+</div>
+
       </div>
       <div className="bg-custom-yellow -mt-40">
         <Pricing />

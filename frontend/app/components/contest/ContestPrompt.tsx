@@ -72,18 +72,16 @@ const ContestPrompt: React.FC<PromptProps> = ({
 
         {isActive && hasSubmittedStory !== null ? (
           !hasSubmittedStory ? (
-            <div
+            <div className="absolute right-4 top-4 md:right-10 md:top-10 flex cursor-pointer justify-end">
+            <Image 
               onClick={handleRedirectToCreateStory}
-              className="absolute right-4 top-5 md:right-10 md:top-10 flex cursor-pointer justify-end"
-            >
-              <Image
-                src={Pencil}
-                alt="Pencil"
-                width={24}
-                height={24}
-                className="md:w-auto md:h-auto"
-              />
-            </div>
+              src={Pencil} 
+              alt="Pencil" 
+              width={24} 
+              height={24} 
+              className="transition-transform md:w-auto md:h-auto sm:w-8  duration-300 ease-in-out transform hover:scale-125" 
+            />
+          </div>
           ) : (
             <div
               className=" flex  cursor-pointer"
