@@ -24,7 +24,13 @@ const Prompt: React.FC<PromptProps> = ({ prompt }) => {
         </div>
         <Link href={`/Practices/${prompt._id}`}>
           <div className="absolute right-4 top-4 md:right-10 md:top-10 flex cursor-pointer justify-end">
-            <Image src={Pencil} alt="Pencil" width={24} height={24} className="md:w-auto md:h-auto" />
+            <Image 
+              src={Pencil} 
+              alt="Pencil" 
+              width={24} 
+              height={24} 
+              className="transition-transform md:w-auto md:h-auto sm:w-8  duration-300 ease-in-out transform hover:scale-125" 
+            />
           </div>
         </Link>
       </div>

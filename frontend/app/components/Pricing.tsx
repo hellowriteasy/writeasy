@@ -32,7 +32,7 @@ const Pricing = () => {
   };
 
   return (
-    <div className="w-full h-auto   font-comic">
+    <div className="w-full py-10 h-auto   font-comic">
       <h1 className="text-center text-4xl font-crayon pt-10 font-bold">
         Pricing
       </h1>
