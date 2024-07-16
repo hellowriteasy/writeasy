@@ -74,7 +74,7 @@ const Page: React.FC = () => {
       <div className="absolute -top-10 right-0">
         <Image className="w-[10vw]" src={moon} alt="moon" />
       </div>
-      <div className="w-10/12 min-h-screen ms-12">
+      <div className="w-10/12 min-h-screen ">
         <div className="w-full h-[30vh] sm:h-40 relative pt-4">
           <h1 className="text-3xl md:text-4xl sm:text-sm lg:text-5xl xl:text-6xl font-bold font-comic">
             Practice Your Craft
@@ -115,7 +115,7 @@ const Page: React.FC = () => {
             )}
 
            {pageDetails && pageDetails.total > 5 && (
-              <div className="w-full ms-28 ">
+              <div className="w-full ">
                 <ReactPaginate
                   previousLabel={
                     <FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
