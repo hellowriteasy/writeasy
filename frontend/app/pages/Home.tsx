@@ -43,7 +43,7 @@ const Hero = () => {
             <Image src={smCLoud} alt="small cloud" />
           </div>
         </div>
-        <div className="h-[75vh]  border-slate-900 rounded-2xl absolute w-[70vw]">
+        <div className="h-[75vh]   absolute w-[70vw] rounded-md overflow-hidden ">
           <video autoPlay muted loop playsInline className="w-[100%] object-cover h-[100%]">
             <source src="/videos/heroVideo.mp4" type="video/mp4" />
           </video>
