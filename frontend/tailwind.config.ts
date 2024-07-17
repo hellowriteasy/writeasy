@@ -10,13 +10,14 @@ const config: Config = {
     fontFamily: {
       poppins: ["Poppins", "sans-serif"],
       crayon: ['"DK Crayon Crumble"', "cursive"],
-    comic: ['"sans-comic-sans"',"cursive"],
+      comic: ["Comic Neue", "cursive"],
+      school: ["Schoolbell", "cursive"],
     },
     extend: {
       screens: {
         custom: "1000px",
-        'sm':{'max': '600px'},
-        'mid':{'max':"1200px"},  
+        sm: { max: "600px" },
+        mid: { max: "1200px" },
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
