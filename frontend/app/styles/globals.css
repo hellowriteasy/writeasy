@@ -1,5 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Schoolbell&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* @font-face {
   font-family: "sans-comic-sans";
   src: url("https://fonts.cdnfonts.com/s/22017/Sans-Comic-Sans.woff2") format("woff2"),
@@ -8,9 +10,6 @@
   font-style: normal;
 } */
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 @layer utilities {
   .text-balance {
@@ -28,7 +27,7 @@ body {
   background-color: #f5f5f5;
 }
 .two-line-bg {
-  background-image: url("../public/bg.png");
+  background-image: url("../../public/others/two-line.png");
   background-repeat: repeat;
   background-attachment: fixed;
   background-size: cover;
@@ -51,11 +50,11 @@ h1 {
   border-bottom: 6px solid rgb(194, 190, 190);
 }
 .active {
-  background-image: url("../public/navbg.svg");
+  background-image: url("../../public/navbg.svg");
   background-size: cover;
 }
 .navbar ul li:hover {
-  background-image: url("../public/navbg.svg");
+  background-image: url("../../public/navbg.svg");
   background-size: cover;
 }
 button:hover {
@@ -96,7 +95,7 @@ u {
 }
 
 .paid-card {
-  background-image: url("../public/Landingpage-img/Group\ \(15\).svg");
+  background-image: url("../../public/Landingpage-img/Group\ \(15\).svg");
   background-attachment: fixed;
   background-size: cover;
   background-position: center;
@@ -236,7 +235,7 @@ u {
   display: none; /* Safari and Chrome */
 }
 .faq {
-  background-image: url("../public/bg.png");
+  background-image: url("../../public/others/two-line.png");
   background-repeat: repeat;
   background-attachment: fixed;
   background-size: cover;

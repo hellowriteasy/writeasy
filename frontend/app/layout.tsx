@@ -1,12 +1,13 @@
 // layout.tsx
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Head from "next/head";
+import "./styles/globals.css";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -29,7 +30,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <Head>
+      <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link
           href="https://fonts.googleapis.com/css2?family=Schoolbell&display=swap"
@@ -43,7 +44,7 @@ export default function RootLayout({
           href="https://fonts.cdnfonts.com/css/sans-comic-sans"
           rel="stylesheet"
         ></link>
-      </Head>
+      </head>
       <body className="two-line-bg font-comic">
         <Navbar titles={navTitles}></Navbar>
         <ToastContainer />
