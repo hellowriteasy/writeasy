@@ -1,80 +1,73 @@
+@import url("https://fonts.googleapis.com/css2?family=Schoolbell&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap");
+/* @font-face {
+  font-family: "sans-comic-sans";
+  src: url("https://fonts.cdnfonts.com/s/22017/Sans-Comic-Sans.woff2") format("woff2"),
+       url("https://fonts.cdnfonts.com/s/22017/Sans-Comic-Sans.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+} */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.cdnfonts.com/css/dk-crayon-crumble');
-
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-
-@import url('https://fonts.cdnfonts.com/css/sans-comic-sans');
-@font-face {
-  font-family: 'sans-comic-sans';
-  src: url('https://fonts.cdnfonts.com/css/sans-comic-sans') format('woff2'),
-       url('https://fonts.cdnfonts.com/css/sans-comic-sans') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
-  
 }
-body{
+body {
   background-color: #f5f5f5;
-  /* font-family: "Poppins"; */
   overflow-x: hidden;
-  font-family: "sans-comic-sans" !important;
+  font-family: "Comic Neue", cursive;
+  /* font-family: "Schoolbell", sans-serif; */
 }
-.white{
+
+.white {
   background-color: #f5f5f5;
 }
 .two-line-bg {
   background-image: url("../public/bg.png");
- background-repeat: repeat;
- background-attachment: fixed;
+  background-repeat: repeat;
+  background-attachment: fixed;
   background-size: cover;
   background-position: center;
-  }  
+}
 
-.yellow{
-  background-color: #FCD800;
+.yellow {
+  background-color: #fcd800;
 }
 .navbar {
   position: sticky;
   top: 10;
   z-index: 1000; /* Ensure it's above other elements */
   width: 100%;
- 
 }
-h1{
+h1 {
   font-family: crayon cramble;
 }
-.border-game{
+.border-game {
   border-bottom: 6px solid rgb(194, 190, 190);
-
 }
 .active {
-    background-image: url("../public/navbg.svg");
-    
-    background-size:cover 
-    
+  background-image: url("../public/navbg.svg");
+
+  background-size: cover;
 }
 .navbar ul li:hover {
   background-image: url("../public/navbg.svg");
-  background-size:cover 
+  background-size: cover;
 }
-button:hover{
+button:hover {
   opacity: 80%;
 }
-s{
+s {
   text-decoration: line-through;
   color: red;
   background-color: rgba(255, 0, 0, 0.202);
-  
 }
-u{
+u {
   text-decoration: underline;
   color: green;
   background-color: rgba(8, 165, 8, 0.2);
@@ -83,48 +76,57 @@ u{
   .sm-hide {
     display: none;
   }
- 
 }
 @media (max-width: 1400px) {
   .md-hide {
     display: none;
   }
- 
 }
 @media (max-width: 800px) {
   .vsm-hide {
     display: none;
-  }}
-  @media (max-width: 700px) {
-    .vvsm-hide {
-      display: none;
-    }
-    .practice-mobile-view{
-      width: 100vw;
-    }
   }
- 
+}
+@media (max-width: 700px) {
+  .vvsm-hide {
+    display: none;
+  }
+  .practice-mobile-view {
+    width: 100vw;
+  }
+}
 
-.paid-card{
+.paid-card {
   background-image: url("../public/Landingpage-img/Group\ \(15\).svg");
-  
   background-attachment: fixed;
-   background-size: cover;
-   background-position: center;
+  background-size: cover;
+  background-position: center;
 }
 /* components/LoadingAnimation.css */
 @keyframes ldio-x2uulkbinbj-1 {
-  0% { transform: rotate(0deg) }
-  50% { transform: rotate(-45deg) }
-  100% { transform: rotate(0deg) }
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-45deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
 }
 @keyframes ldio-x2uulkbinbj-2 {
-  0% { transform: rotate(180deg) }
-  50% { transform: rotate(225deg) }
-  100% { transform: rotate(180deg) }
+  0% {
+    transform: rotate(180deg);
+  }
+  50% {
+    transform: rotate(225deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
 }
 .ldio-x2uulkbinbj > div:nth-child(2) {
-  transform: translate(-15px,0);
+  transform: translate(-15px, 0);
 }
 .ldio-x2uulkbinbj > div:nth-child(2) div {
   position: absolute;
@@ -145,9 +147,17 @@ u{
   animation: none;
 }
 @keyframes ldio-x2uulkbinbj-3 {
-  0% { transform: translate(170.05px,0); opacity: 0 }
-  20% { opacity: 1 }
-  100% { transform: translate(62.65px,0); opacity: 1 }
+  0% {
+    transform: translate(170.05px, 0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(62.65px, 0);
+    opacity: 1;
+  }
 }
 .ldio-x2uulkbinbj > div:nth-child(1) {
   display: block;
@@ -162,9 +172,15 @@ u{
   background: #ffac00;
   animation: ldio-x2uulkbinbj-3 1.25s linear infinite;
 }
-.ldio-x2uulkbinbj > div:nth-child(1) div:nth-child(1) { animation-delay: -0.536s; }
-.ldio-x2uulkbinbj > div:nth-child(1) div:nth-child(2) { animation-delay: -0.264s; }
-.ldio-x2uulkbinbj > div:nth-child(1) div:nth-child(3) { animation-delay: 0s; }
+.ldio-x2uulkbinbj > div:nth-child(1) div:nth-child(1) {
+  animation-delay: -0.536s;
+}
+.ldio-x2uulkbinbj > div:nth-child(1) div:nth-child(2) {
+  animation-delay: -0.264s;
+}
+.ldio-x2uulkbinbj > div:nth-child(1) div:nth-child(3) {
+  animation-delay: 0s;
+}
 .loadingio-spinner-bean-eater-nq4q5u6dq7r {
   width: 179px;
   height: 179px;
@@ -180,7 +196,9 @@ u{
   backface-visibility: hidden;
   transform-origin: 0 0;
 }
-.ldio-x2uulkbinbj div { box-sizing: content-box; }
+.ldio-x2uulkbinbj div {
+  box-sizing: content-box;
+}
 .bg-lightgreen {
   background-color: lightgreen;
 }
@@ -199,31 +217,31 @@ u{
 .loader {
   width: 30px;
   aspect-ratio: 1;
-  --_c:no-repeat linear-gradient(orange 0 0) 50%; 
-  background: 
-    var(--_c)/100% 50%,
-    var(--_c)/50% 100%;
+  --_c: no-repeat linear-gradient(orange 0 0) 50%;
+  background: var(--_c) / 100% 50%, var(--_c) / 50% 100%;
   border-radius: 50%;
   animation: l29 2s infinite linear;
 }
 @keyframes l29 {
-  100% {transform: rotate(1turn)}
+  100% {
+    transform: rotate(1turn);
+  }
 }
 
 .hide-scrollbar {
   scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* IE 10+ */
+  -ms-overflow-style: none; /* IE 10+ */
 }
 
 .hide-scrollbar::-webkit-scrollbar {
   display: none; /* Safari and Chrome */
 }
-.faq{
+.faq {
   background-image: url("../public/bg.png");
   background-repeat: repeat;
   background-attachment: fixed;
-   background-size: cover;
-   background-position: center;
+  background-size: cover;
+  background-position: center;
 }
 
 @media (min-width: 1800px) {
@@ -232,7 +250,8 @@ u{
   }
 }
 @keyframes tilt-left {
-  0%, 100% {
+  0%,
+  100% {
     transform: rotate(0);
   }
   50% {
@@ -241,7 +260,8 @@ u{
 }
 
 @keyframes tilt-right {
-  0%, 100% {
+  0%,
+  100% {
     transform: rotate(0);
   }
   50% {

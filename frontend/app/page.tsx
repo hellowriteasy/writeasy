@@ -20,7 +20,7 @@ export default function Home() {
 //     }, [setSubscriptionActive]);
 
     return (
-      <main className="font-poppins flex justify-center items-baseline flex-col two-line-bg">
+      <main className="font-school flex justify-center items-baseline flex-col two-line-bg ">
         <Hero />
       </main>
     );
