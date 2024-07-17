@@ -120,7 +120,7 @@ const UserController = {
     }
   },
   async searchUser(req, res) {
-    const { search_query } = req.query;
+    const { search_query, exclude_unpaid_user } = req.query;
     try {
       let keyword = {};
       keyword = search_query
@@ -134,19 +134,24 @@ const UserController = {
           }
         : {};
       const users = await User.find(keyword).select("-password");
-      const data = await Promise.all(
+      let data = await Promise.all(
         users.map(async (user) => {
           const subscription = await Subscription.findOne({
             userId: user._id,
           });
-
+          console.log("subscription", subscription);
           return {
             ...user._doc,
-            isSubcriptionActive: !!subscription,
+            isSubcriptionActive: !!subscription?.isActive,
             expiresAt: subscription?.expiresAt || null,
           };
         })
       );
+
+      if (exclude_unpaid_user === "true") {
+        data = data.filter((user) => user.isSubcriptionActive);
+      }
+
       res.status(200).json(data);
     } catch (error) {
       res
@@ -158,6 +163,9 @@ const UserController = {
     //
     const { user_id, end_date } = req.body;
     try {
+      if (!user_id || !end_date) {
+        throw new Error("Please provide all the fields");
+      }
       const userExist = await User.findById(user_id);
       if (!userExist) {
         throw new Error("User not found ");
@@ -166,11 +174,13 @@ const UserController = {
       const subscription = await Subscription.findOne({
         userId: user_id,
       });
-      if (subscription && subscription.isActive) {
-        throw new Error("User already has an active subscription");
-      }
+      // if (subscription && subscription.isActive) {
+      //   throw new Error("User already has an active subscription");
+      // }
       if (subscription) {
+        subscription.expiresAt = new Date(end_date);
         subscription.isActive = true;
+        subscription.payment_type = "cash_payment";
         await subscription.save();
       }
       if (!subscription) {
@@ -180,6 +190,7 @@ const UserController = {
           expiresAt: end_date,
           isActive: true,
           stripe_session_id: "test",
+          payment_type: "cash_payment",
         });
         await newSubscription.save();
       }
@@ -191,6 +202,34 @@ const UserController = {
       res
         .status(500)
         .json({ message: error.message || "Internal server error" });
+    }
+  },
+  async getCashPaymentUsers(req, res) {
+    try {
+      let users = await Subscription.find({
+        payment_type: "cash_payment",
+      })
+        .populate({
+          path: "userId",
+          model: "User",
+          select: "-password",
+        })
+        .sort({
+          updatedAt: "desc",
+        });
+
+      users = users.map((user) => {
+        return {
+          ...user.userId._doc,
+          isSubcriptionActive: !!user.isActive,
+          expiresAt: user.expiresAt,
+        };
+      });
+      res.status(200).json({ data: users, success: true });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: error?.message || "Internal server error" });
     }
   },
 };

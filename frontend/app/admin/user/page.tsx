@@ -1,42 +1,63 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { axiosInstance } from '@/app/utils/config/axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { axiosInstance } from "@/app/utils/config/axios";
 
 const UserManagement: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [users, setUsers] = useState([]);
-  const [endDate, setEndDate] = useState('');
-  const AxiosIns = axiosInstance('');
-
+  const [endDate, setEndDate] = useState("");
+  const AxiosIns = axiosInstance("");
+  const fetchCashPaymentUsers = async () => {
+    try {
+      const { data } = await AxiosIns.get(`/auth/users/cash-payers`);
+      if (data.data) {
+        setUsers(data.data);
+      }
+    } catch (error) {
+      //
+    }
+  };
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await AxiosIns.get(`/auth/users/search?search_query=${searchQuery}`);
+        const response = await AxiosIns.get(
+          `/auth/users/search?search_query=${searchQuery}`
+        );
         setUsers(response.data);
       } catch (error) {
-        console.error('Error fetching users:', error);
+        console.error("Error fetching users:", error);
       }
     };
 
-    if (searchQuery.trim() !== '') {
+    if (searchQuery.trim() !== "") {
       fetchUsers();
     } else {
       setUsers([]);
     }
   }, [searchQuery]);
 
+  useEffect(() => {
+    fetchCashPaymentUsers();
+  }, []);
+
   const handleUpdateSubscription = async (userId: string) => {
+    if (!endDate) {
+      return;
+    }
     try {
-      await AxiosIns.put('/auth/users/subscribe', {
+      await AxiosIns.put("/auth/users/subscribe", {
         user_id: userId,
         end_date: endDate,
       });
-      toast.success('Subscription updated successfully');
+      toast.success("Subscription updated successfully");
+      await fetchCashPaymentUsers();
     } catch (error) {
-      toast.error('Failed to update subscription. It might be because the user already has an active subscription.');
+      toast.error(
+        "Failed to update subscription. It might be because the user already has an active subscription."
+      );
     }
   };
 
@@ -49,13 +70,15 @@ const UserManagement: React.FC = () => {
   };
 
   const handleClearSearch = () => {
-    setSearchQuery('');
+    setSearchQuery("");
     setUsers([]);
   };
 
   return (
     <div className="container font-poppins mx-auto py-4">
-      <h1 className="text-2xl px-6 font-bold font-poppins mb-4">User Management</h1>
+      <h1 className="text-2xl px-6 font-bold font-poppins mb-4">
+        User Management
+      </h1>
       <div className="mb-4 px-6 w-full">
         <input
           type="text"
@@ -78,16 +101,26 @@ const UserManagement: React.FC = () => {
           const isExpired = new Date(user.expiresAt) < new Date();
 
           return (
-            <div key={user._id} className="bg-white shadow-md rounded-md p-4 px-14 mb-4">
+            <div
+              key={user._id}
+              className="bg-white shadow-md rounded-md p-4 px-14 mb-4"
+            >
               <p className="text-lg font-bold">{user.username}</p>
               <p className="text-gray-600">{user.email}</p>
               <p className="text-gray-600">Role: {user.role}</p>
               <p className="text-gray-600">
-              Subscription expiry date: {isExpired ? 'Subscription Expired' : new Date(user.expiresAt).toLocaleString()}
+                Subscription expiry date:{" "}
+                {isExpired
+                  ? "Subscription Expired"
+                  : new Date(user.expiresAt).toLocaleString()}
               </p>
-              <p className="text-gray-600">Last Login: {new Date(user.lastLogin).toLocaleString()}</p>
+              <p className="text-gray-600">
+                Last Login: {new Date(user.lastLogin).toLocaleString()}
+              </p>
               {user.subscriptionType && (
-                <p className="text-gray-600">Subscription Type: {user.subscriptionType}</p>
+                <p className="text-gray-600">
+                  Subscription Type: {user.subscriptionType}
+                </p>
               )}
               <div className="mt-2">
                 <input

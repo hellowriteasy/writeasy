@@ -104,7 +104,7 @@ const Page = () => {
       // }
       setShowCard(true);
       const { data } = await AxiosIns.get(
-        `/auth/users/search?search_query=${searchQuery}`
+        `/auth/users/search?search_query=${searchQuery}&exclude_unpaid_user=true`
       );
       const filtered = data.filter((user: any) => user._id !== userId);
       setSearchResults(filtered);
@@ -136,7 +136,7 @@ const Page = () => {
   const fetchPromptById = async () => {
     try {
       const { data } = await AxiosIns.get(`/prompts/${promptId}`);
-      setPrompt(data)
+      setPrompt(data);
     } catch (error) {
       //
     }
@@ -242,14 +242,14 @@ const Page = () => {
 
   const handleInvite = async (e: SyntheticEvent) => {
     e.preventDefault();
-  
+
     const storyId = currentStory?._id;
-  
+
     if (!selectedUsers || selectedUsers.length === 0) {
       toast.error("Please select at least one user.");
       return;
     }
-  
+
     setInviting(true);
     try {
       const invitePayload = {
@@ -258,11 +258,14 @@ const Page = () => {
         promptID: promptId,
         userID: userId,
       };
-  
+
       if (invitePayload) {
-        const { data } = await AxiosIns.post(`/collaborative-stories/invite`, invitePayload);
+        const { data } = await AxiosIns.post(
+          `/collaborative-stories/invite`,
+          invitePayload
+        );
       }
-  
+
       setInviting(false);
       router.push("/profile/game");
       handleStoryDetailsInputChange("refresh", !storyDetails.refresh);
@@ -397,7 +400,9 @@ const Page = () => {
               <h1 className="text-6xl sm:text-2xl pt-4 py-2 font-bold font-comic">
                 {prompt?.title || ""}
               </h1>
-              <p className="font-comic sm:text-sm text-xl">{prompt?.description}</p>
+              <p className="font-comic sm:text-sm text-xl">
+                {prompt?.description}
+              </p>
             </div>
             {!currentStory && (
               <div className="flex flex-col sm:gap-y-0 gap-y-6">

@@ -49,13 +49,9 @@ class EmailService {
       <table  align="center" width="100%" class="" border="0" cellPadding="0" cellSpacing="0" role="presentation" style="max-width:45.5em; padding-top:30px;background-color:white;">
         <tbody>
           <tr style="width:100%">
-            <td><img alt="writeasy" height="60" width="60" src="https://firebasestorage.googleapis.com/v0/b/debai-d0809.appspot.com/o/images%2FGroup%2067.png?alt=media&token=316c8233-f993-4a08-a163-148ce0902271" style="display:block;outline:none;border:none;text-decoration:none;margin-left:auto;margin-right:auto" />
+            <td><img alt="writeasy" height="60" width="60" src= "https://firebasestorage.googleapis.com/v0/b/debai-d0809.appspot.com/o/images%2Flogo.png?alt=media&token=0b709800-aa9c-4557-88e2-6f462f6aa9b3" style="display:block;outline:none;border:none;text-decoration:none;margin-left:auto;margin-right:auto" />
               <div style="padding-left:1.5rem;padding-right:1.5rem;padding-bottom:2rem;">
-              ${
-                heading
-                  ? `<p class="" style="font-size:30px;line-height:30px;margin:16px 0;text-align:center;font-weight:600;padding-top:0.6rem">${heading}</p>`
-                  : ""
-              }
+            
              ${
                receiver_name
                  ? `<p style="color:#4F5D68;font-size:1.125rem;line-height: 1.75rem;padding-bottom:4px;padding-top:5px">Dear ${receiver_name},</p>`
@@ -84,7 +80,7 @@ class EmailService {
            }
           </div>
             </div>
-            <div style="background-color:##fcba03">
+            <div style="background-color:">
             <div style="padding-left:2.5rem;padding-right:2.5rem;padding-top:0.2rem;padding-bottom:0.2rem">
             <p style="font-size: 1rem;color:black;height:17px">Contact Us</p>
             <div style="height:36px"">
@@ -103,12 +99,9 @@ class EmailService {
             <img style="display:inline-block;" src="https://youroshc-dev-sydney-public.s3.ap-southeast-2.amazonaws.com/public/pin.png" />
             <p style=" margin-left:10px;font-size:0.75rem;line-height:1rem;color:black;display:inline-block;">Suite 109, Level 1, 83 York Street Sydney NSW 2000</p>
             </div>
-            <div style="margin-top:2px">
-            <p style="font-size:1rem;line-height:1.5rem;margin:5px 0px;font-weight:400;text-align:center;color:black">Disclaimer</p>
-            <p style="font-size:0.875rem;line-height:1.25rem;margin:5px 0;text-align:left;font-weight:300;color:black"> The content of this email is confidential and intended for the recipient specified in the message only. It is strictly forbidden to share any part of this message with any third party, without the written consent of the sender. If you received this message by mistake, please reply to this message and follow with its deletion, so that we can ensure such a mistake does not occur in the future.</p>
-            </div>
+          
             <div style="padding-bottom:6px">
-            <p style="background-color:##fcba03;font-size:1rem;line-height:1.5rem; color: black; padding-top:10px;padding-bottom:10px;padding-left:40px;padding-right:20px;border-radius:4px"> Writeasy deeply values your ongoing support, Thank you.</p>
+            <p style="background-color:;font-size:1rem;line-height:1.5rem; color: black; padding-top:10px;padding-bottom:10px;padding-left:40px;padding-right:20px;border-radius:4px"> Writeasy deeply values your ongoing support, Thank you.</p>
             </div>
             </div>     
             </div>

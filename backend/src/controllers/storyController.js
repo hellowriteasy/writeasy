@@ -404,14 +404,14 @@ const getPreviousWeekTopStories = async (req, res) => {
       .limit(1);
 
     const lastWeekContestTopStories = await Story.find({
-      contest: lastWeekContest[0]._id,
+      contest: lastWeekContest[0]?._id,
       position: { $exists: true },
     }).populate({
       path: "user",
-      select:"-password"
-    })
+      select: "-password",
+    });
 
-    res.status(200).json({ data: lastWeekContestTopStories });
+    res.status(200).json({ data: lastWeekContestTopStories || [] });
   } catch (error) {
     console.error(error);
     return res.status(500).json({

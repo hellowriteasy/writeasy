@@ -33,7 +33,8 @@ const Page: React.FC = () => {
     try {
       const response = await AxiosIns.get(`/prompts/practice-prompts`, {
         params: {
-          page
+          page,
+          category: selectedOption,
         },
       });
       setPromptData(response.data.data.reverse());
@@ -47,9 +48,7 @@ const Page: React.FC = () => {
 
   useEffect(() => {
     fetchPrompts(currentPage, itemsPerPage);
-  }, [currentPage]);
-
-
+  }, [currentPage, selectedOption]);
 
   const handleSelectOption = (selectedOption: string) => {
     console.log(selectedOption);
@@ -63,12 +62,12 @@ const Page: React.FC = () => {
       )
     : promptData;
 
-    const handlePageClick = (event: { selected: number }) => {
-      setCurrentPage(event.selected + 1);
-    };
-  
-    const offset = currentPage * itemsPerPage;
-    console.log("page data", pageDetails);
+  const handlePageClick = (event: { selected: number }) => {
+    setCurrentPage(event.selected + 1);
+  };
+
+  const offset = currentPage * itemsPerPage;
+  console.log("page data", pageDetails);
   return (
     <div className="w-full min-h-screen mt-6 z-0 relative flex justify-center">
       <div className="absolute -top-10 right-0">
@@ -114,7 +113,7 @@ const Page: React.FC = () => {
               <NotFound text={`No practise prompt available... `} />
             )}
 
-           {pageDetails && pageDetails.total > 5 && (
+            {pageDetails && pageDetails.total > 5 && (
               <div className="w-full ">
                 <ReactPaginate
                   previousLabel={
@@ -142,7 +141,7 @@ const Page: React.FC = () => {
             )}
           </div>
           <div className="vvsm-hide flex flex-col gap-y-4">
-          <WeeklyTest></WeeklyTest>
+            <WeeklyTest></WeeklyTest>
             <TopWriting />
           </div>
         </div>
