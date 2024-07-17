@@ -21,13 +21,12 @@ const Page = ({ params }: PageProps) => {
     description: "",
     contestTheme: "",
   });
-  const [loading, setLoading] = useState(false); // Add loading state if needed
   const AxiosIns = axiosInstance("");
 
   useEffect(() => {
     const fetchContest = async () => {
       try {
-        setLoading(true);
+
         const response = await AxiosIns.get(`/contests/${_id}`);
         const contest: TContest = response.data;
 
@@ -48,10 +47,10 @@ const Page = ({ params }: PageProps) => {
           contestTheme: contest.contestTheme,
         });
 
-        setLoading(false);
+     
       } catch (error) {
         console.error("Error fetching contest:", error);
-        setLoading(false);
+     
       }
     };
 
@@ -66,19 +65,19 @@ const Page = ({ params }: PageProps) => {
 
   const handleSubmitContest = async () => {
     try {
-      setLoading(true);
+  
       const response = await AxiosIns.put(`/contests/${_id}`, {
         prompts: promptCards.map((prompt) => prompt._id),
         contestTheme: contestDetails.contestTheme,
         submissionDeadline: contestDetails.submissionDeadline,
-        // Include other fields as needed
+        
       });
 
       // Handle success state if necessary
     } catch (error) {
       console.error("Error updating contest:", error);
     } finally {
-      setLoading(false);
+    
     }
   };
 
@@ -97,9 +96,8 @@ const Page = ({ params }: PageProps) => {
   return (
     <ProtectedRoute>
       <div>
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
+       
+        
           <div className="flex h-screen">
             <div className="flex-1 p-6">
               <div className="bg-white shadow-md rounded-lg p-4 mb-4">
@@ -196,7 +194,7 @@ const Page = ({ params }: PageProps) => {
               </div>
             </div>
           </div>
-        )}
+        
         {isModalOpen && (
           <Modal
             setIsModalOpen={setIsModalOpen}
