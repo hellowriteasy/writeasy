@@ -1,4 +1,5 @@
 const PromptService = require("../services/promptService");
+const StoryService = require("../services/storyService");
 
 const createPrompt = async (req, res) => {
   try {
@@ -13,7 +14,7 @@ const getPracticePrompts = async (req, res) => {
   let { page, perPage } = req.query;
 
   page = +page || 1;
-const limit = +perPage || 5;
+  const limit = +perPage || 5;
   const skip = (page - 1) * limit;
 
   try {
@@ -99,7 +100,8 @@ const updatePrompt = async (req, res) => {
 const deletePrompt = async (req, res) => {
   try {
     await PromptService.deletePrompt(req.params.id);
-    res.status(204).send();
+    await StoryService.deleteStoriesByPromptId(req.params.id);
+    res.status(204).send({ data: "Prompt deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

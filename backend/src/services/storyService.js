@@ -74,8 +74,8 @@ const getStoriesByUserAndType = async (userId, storyType, limit, skip) => {
         },
       ],
     });
-    
-    const data =  await Story.find(
+
+    const data = await Story.find(
       {
         storyType: "game",
         $or: [
@@ -102,8 +102,8 @@ const getStoriesByUserAndType = async (userId, storyType, limit, skip) => {
       });
     return {
       data,
-      total
-    }
+      total,
+    };
   } else {
     throw new Error("Invalid storyType");
   }
@@ -119,6 +119,12 @@ const updateStory = async (id, data) => {
 
 const deleteStory = async (id) => {
   return await Story.findByIdAndDelete(id);
+};
+
+const deleteStoriesByPromptId = async (prompt_id) => {
+  return await Story.deleteMany({
+    prompt: prompt_id,
+  });
 };
 
 const getTopContestStories = async () => {
@@ -170,4 +176,5 @@ module.exports = {
   getTopContestStories,
   getStoriesByUserAndType,
   getStoryofUserByPromptId,
+  deleteStoriesByPromptId,
 };

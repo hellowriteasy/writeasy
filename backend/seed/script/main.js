@@ -1,11 +1,11 @@
 const { connectDB } = require("../../config/db");
-const assignSubscriptionIdToUser = require("./assignSubscriptionIdToUser");
+const deleteGameStories = require("./deleteGameStory");
 require("dotenv").config();
 
 const main = async () => {
   await connectDB();
   console.log("script started");
-  await assignSubscriptionIdToUser();
+  await deleteGameStories();
   console.log("script ended");
   process.exit(1);
 };
