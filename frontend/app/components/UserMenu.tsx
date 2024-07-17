@@ -43,8 +43,8 @@ const UserMenu = () => {
             <div className="w-full text-md text-white font-bold text-center bg-black border border-black rounded-3xl px-4 py-4 focus:outline-none focus:border-black">
               {selectedOption || `${username}`}
             </div>
-            <div className="pointer-events-none absolute inset-y-0 -left-2 bg-white rounded-full  flex items-center px-2 text-white">
-              <IoPersonSharp className="text-[2vw]  text-black " />
+            <div className="pointer-events-none absolute w-14 h-14 inset-y-0 -left-2 bg-gray-100 rounded-full  flex items-center px-3 text-white">
+              <IoPersonSharp className=" text-3xl  text-center text-black " />
             </div>
             <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center px-2 text-white">
               <FaAngleDown className="text-[2vw]" />

@@ -24,7 +24,6 @@ interface Story {
 
 const Page: React.FC = () => {
   const [stories, setStories] = useState<Story[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const AxiosIns = axiosInstance("");
 
@@ -33,10 +32,8 @@ const Page: React.FC = () => {
       try {
         const response = await AxiosIns.get<Story[]>("/stories");
         setStories(response.data.reverse());
-        setLoading(false);
       } catch (error: any) {
         setError(error.message);
-        setLoading(false);
       }
     };
 
@@ -53,9 +50,7 @@ const Page: React.FC = () => {
     }
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+
 
   if (error) {
     return <div>Error: {error}</div>;
