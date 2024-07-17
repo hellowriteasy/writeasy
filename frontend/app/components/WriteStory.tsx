@@ -147,6 +147,7 @@ export function SimpleEditor({
     event.preventDefault();
     try {
       let currentContent = "";
+      console.log("initial text", initialText);
       if (!initialText) {
         currentContent = editor.getText();
         setInitialText(currentContent);
@@ -342,9 +343,12 @@ export function SimpleEditor({
                 <Icons.Code />
               </button>
               <button
-                className={classNames("menu-button bg-black text-sm font-comic text-white p-2 rounded-md ml-auto", {
-                  "is-active": editor.isActive("code"),
-                })}
+                className={classNames(
+                  "menu-button bg-black text-sm font-comic text-white p-2 rounded-md ml-auto",
+                  {
+                    "is-active": editor.isActive("code"),
+                  }
+                )}
                 type="button"
                 onClick={(e) => {
                   e.preventDefault();

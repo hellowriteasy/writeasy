@@ -1,8 +1,10 @@
 const Contest = require("../src/models/contest");
 const Story = require("../src/models/story");
+const Subscription = require("../src/models/subscription");
 
 async function scheduleJob() {
   await closeContestAfterDeadline();
+  await closeSubscriptionWhenDeadline();
 }
 
 const closeContestAfterDeadline = async () => {
@@ -61,7 +63,7 @@ const closeContestAfterDeadline = async () => {
           }
         })
       );
-    } 
+    }
 
     console.log("Cron job finished");
   } catch (error) {
@@ -69,6 +71,20 @@ const closeContestAfterDeadline = async () => {
   }
 };
 
+const closeSubscriptionWhenDeadline = async () => {
+  try {
+    const currentDate = new Date();
 
+    const updated = await Subscription.updateMany(
+      { expiresAt: { $lt: currentDate }, isActive: true },
+      { $set: { isActive: false } }
+    );
+    if (updated.modifiedCount > 0) {
+      console.log("subscirption closed ");
+    }
+  } catch (error) {
+    console.log("Cron job : error while closing subscription", error);
+  }
+};
 
 module.exports = scheduleJob;
