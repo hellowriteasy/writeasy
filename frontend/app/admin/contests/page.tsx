@@ -17,7 +17,6 @@ interface Contest {
 const Page: React.FC = () => {
   const router = useRouter();
   const [contests, setContests] = useState<Contest[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error | null>(null);
 const AxiosIns=axiosInstance("");
   useEffect(() => {
@@ -25,14 +24,14 @@ const AxiosIns=axiosInstance("");
       try {
         const response = await AxiosIns.get<Contest[]>("/contests");
         setContests(response.data.reverse());
-        setLoading(false);
+     
       } catch (error) {
         if (axios.isAxiosError(error)) {
           setError(error);
         } else {
           setError(new Error("An unknown error occurred"));
         }
-        setLoading(false);
+       
       }
     };
 
@@ -82,11 +81,7 @@ const AxiosIns=axiosInstance("");
               </div>
             </div>
             <div className="mt-4 space-y-4 w-5/6">
-              {loading ? (
-                <p>Loading...</p>
-              ) : error ? (
-                <p>Error: {error.message}</p>
-              ) : (
+             {
                 contests.map((contest) => (
                   <Card
                     key={contest.id}
@@ -95,8 +90,8 @@ const AxiosIns=axiosInstance("");
                     deadline={contest.submissionDeadline}
                     onSuccess={onsuccess}
                   />
-                ))
-              )}
+                ))}
+              
             </div>
           </div>
         </div>

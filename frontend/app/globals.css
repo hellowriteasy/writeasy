@@ -52,7 +52,6 @@ h1 {
 }
 .active {
   background-image: url("../public/navbg.svg");
-
   background-size: cover;
 }
 .navbar ul li:hover {
