@@ -14,7 +14,6 @@ const ContestPage: React.FC = () => {
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const [userStories, setUserStories] = useState<TStory[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [pageDetails, setPageDetails] = useState({
@@ -37,10 +36,10 @@ const ContestPage: React.FC = () => {
         });
         setUserStories(response.data?.data.reverse());
         setPageDetails(response.data.pageData);
-        setLoading(false);
+     
       } catch (error) {
    
-        setLoading(false);
+    
       }
     };
     useEffect(() => {
@@ -56,10 +55,10 @@ const ContestPage: React.FC = () => {
         }
       });
       setUserStories(response.data?.data.reverse());
-      setLoading(false);
+     
     } catch (error) {
  
-      setLoading(false);
+  
     }
   };
 
@@ -75,11 +74,8 @@ const ContestPage: React.FC = () => {
     <div className="font-poppins">
       <ProfileTabs />
       <div className="flex flex-col items-center gap-10 min-h-[500px]">
-        {loading ? (
-          <p>Loading...</p>
-        ) : error ? (
-          <p>{error}</p>
-        ) : (
+        { 
+        (
           <>
             {userStories.length > 0 ? (
               userStories.map((story, index) => (
