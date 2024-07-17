@@ -331,4 +331,5 @@ router.get("/users/search", UserController.searchUser);
 
 router.put("/users/subscribe", UserController.updateSubscription);
 
+router.get("/users/cash-payers", UserController.getCashPaymentUsers);
 module.exports = router;

@@ -12,21 +12,41 @@ const createPrompt = async (data) => {
   return await prompt.save();
 };
 
-const getPromptsByType = async (type, skip, limit) => {
-  const total = await Prompt.countDocuments({ promptType: type });
+const getPromptsByType = async (type, skip, limit, category) => {
+  const total = await Prompt.countDocuments({
+    promptType: type,
+    ...(category
+      ? {
+          promptCategory: {
+            $in: category ? [category] : [], // Ensure category is properly handled as an array
+          },
+        }
+      : null),
+  });
+
   const data = await Prompt.find(
-    { promptType: type },
-    {},
     {
-      ...(limit ? { limit } : null),
-      ...(skip ? { skip } : null),
+      promptType: type,
+      ...(category
+        ? {
+            promptCategory: {
+              $in: category ? [category] : [], // Ensure category is properly handled as an array
+            },
+          }
+        : null),
+    },
+    null, // Use null instead of an empty object for the projection parameter
+    {
+      limit: limit || undefined, // Only add limit if it's defined
+      skip: skip || undefined, // Only add skip if it's defined
+      sort: { createdAt: -1 }, // Keep sort inside the third argument object
     }
-  ).sort({ createdAt: -1 });
+  );
   return { data, total };
 };
 
-const getPracticePrompts = (skip, limit) => {
-  return getPromptsByType("practice", skip, limit);
+const getPracticePrompts = (skip, limit, category) => {
+  return getPromptsByType("practice", skip, limit, category);
 };
 
 const getContestPrompts = (skip, limit) => {

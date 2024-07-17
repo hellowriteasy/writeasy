@@ -11,14 +11,18 @@ const createPrompt = async (req, res) => {
 };
 
 const getPracticePrompts = async (req, res) => {
-  let { page, perPage } = req.query;
+  let { page, perPage, category } = req.query;
 
   page = +page || 1;
   const limit = +perPage || 5;
   const skip = (page - 1) * limit;
 
   try {
-    const { data, total } = await PromptService.getPracticePrompts(skip, limit);
+    const { data, total } = await PromptService.getPracticePrompts(
+      skip,
+      limit,
+      category
+    );
     res.json({
       data,
       pageData: {

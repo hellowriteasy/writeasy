@@ -21,6 +21,11 @@ const subscriptionSchema = new mongoose.Schema(
     expiresAt: {
       type: Date,
     },
+    payment_type: {
+      type: String,
+      enum: ["cash_payment", "online_payment"],
+      default: "online_payment",
+    },
   },
   {
     timestamps: true,
