@@ -194,8 +194,10 @@ class GptService {
   async generateScoreInChunk(storyText, taskType, wordCount, cb) {
     const systemMessage = {
       grammar: "Proofread this text but only fix grammar",
-      rewrite: "Rewrite this text improving clarity and flow",
-      improve: "Proofread this text improving clarity and flow",
+      rewrite:
+        "Rewrite this text improving clarity and flow . You may also add new line to make writings more good.",
+      improve:
+        "Proofread this text improving clarity and flow.Dont add new line just modify the text",
     };
 
     const detailedPrompt = `
