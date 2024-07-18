@@ -52,7 +52,7 @@ const SelectMenu: React.FC<SelectMenuProps> = ({
       {showOptions && (
         <div className="absolute w-full mt-2 bg-white border border-black rounded-lg shadow-lg">
           <div
-            className="px-4 py-2 h-9 border-y border-slate-400 cursor-pointer hover:bg-gray-100"
+            className="px-4 py-2 h-9  cursor-pointer hover:font-bold"
             onClick={() => {
               onSelectOption("");
               setShowOptions(false);
@@ -64,7 +64,7 @@ const SelectMenu: React.FC<SelectMenuProps> = ({
             options.map((option) => (
               <div
                 key={option._id}
-                className="px-4 py-2 h-9 border-y border-slate-400 cursor-pointer hover:bg-gray-100"
+                className="px-4 py-2 h-9  cursor-pointer hover:font-bold"
                 onClick={() => {
                   onSelectOption(option.name);
                   setShowOptions(false);

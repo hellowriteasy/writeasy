@@ -8,7 +8,7 @@ const gptService = new GptService(process.env.GPT_API_KEY); // Initialize GPT se
 const createStory = async (req, res) => {
   try {
     const { contestId } = req.body;
-    
+
     const { content } = req.body;
     const wordCount = content.split(" ").length;
     const story = await StoryService.createStory({ ...req.body, wordCount });
@@ -402,7 +402,9 @@ const getTopStoriesForContest = async (req, res) => {
 const getPreviousWeekTopStories = async (req, res) => {
   try {
     const lastWeekContest = await Contest.find({ isActive: false })
-      .sort({ createdAt: -1 })
+      .sort({
+        createdAt: "descending",
+      })
       .limit(1);
 
     const lastWeekContestTopStories = await Story.find({

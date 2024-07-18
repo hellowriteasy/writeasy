@@ -1,24 +1,25 @@
 const User = require("../models/user");
-const { sendEmail, EmailTemplate } = require("./emailService");
+const emailServiceClass = require("./emailService");
 
 class UserService {
   async emailAllUsers(subject, content) {
+    const emailService = new emailServiceClass();
     const allUsers = await User.find({
       role: "user",
+      $or: [
+        { email_unsubscribed: { $ne: true } },
+        { email_unsubscribed: { $exists: false } },
+      ],
     });
     // send email
     const emails = allUsers.map((user) => user.email);
     console.log("sending emails to ", emails);
-    await sendEmail({
+    await emailService.sendEmail({
       email: emails,
-      html: EmailTemplate({
-        heading: subject,
-        message: content,
-      }),
       subject,
-      text: subject,
+      message: content,
     });
   }
 }
 
-module.exports = new UserService();
+module.exports = UserService;

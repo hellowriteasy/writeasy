@@ -106,7 +106,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
           <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl sm:text-xl font-bold font-comic">
             {currentGame?.title}
           </h1>
-          <p className="sm:text-md">{currentGame?.description}</p>
+          <p className="sm:text-md text-xl font-semibold">{currentGame?.description}</p>
           <button
             onClick={handleCreateStory}
             className="w-fit px-10 sm:px-2 sm:text-sm sm:h-14 bg-black hover:opacity-80 text-center text-white rounded-3xl border h-20 text-xl md:text-2xl lg:text-3xl xl:text-4xl"

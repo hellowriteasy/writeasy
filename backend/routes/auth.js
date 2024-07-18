@@ -332,4 +332,8 @@ router.get("/users/search", UserController.searchUser);
 router.put("/users/subscribe", UserController.updateSubscription);
 
 router.get("/users/cash-payers", UserController.getCashPaymentUsers);
+
+router.post("/users/unsubscribe-email", UserController.unsubscribeEmail);
+router.post("/users/subscribe-email", UserController.subscribeEmail);
+
 module.exports = router;

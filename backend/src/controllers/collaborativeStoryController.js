@@ -88,7 +88,6 @@ const inviteCollaborators = [
         });
       }
 
-
       if (
         newContributorUsers.some(
           (user) => user.subscriptionId?.isActive !== true
@@ -108,9 +107,11 @@ const inviteCollaborators = [
           message: "One of the user of these email is already a contributor.",
         });
       }
+      console.log("new contributors", newContributorUsers);
       story.contributors.push(
         ...newContributorUsers.map((user) => user._id.toString())
       );
+      console.log("story", story);
       await story.save();
 
       res

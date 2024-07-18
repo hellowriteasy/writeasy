@@ -14,7 +14,6 @@ const Prompt: React.FC<PromptProps> = ({ prompt }) => {
     <div className="w-11/12 h-40 sm:h-28 flex relative bg-white border-2 border-gray-300 rounded-3xl overflow-hidden">
       <div className="px-6 py-4 w-5/6">
       <div className="font-bold font-comic text-lg mid:text-sm md:text-2xl lg:text-3xl mb-2">{prompt.title}</div>
-<div className="font-bold font-comic text-lg sm:text-xl mid:text-sm md:text-2xl lg:text-3xl mb-2">{prompt.promptCategory.join(",")}</div>
 
         
       </div>

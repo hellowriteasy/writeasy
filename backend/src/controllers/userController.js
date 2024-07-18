@@ -232,6 +232,47 @@ const UserController = {
         .json({ message: error?.message || "Internal server error" });
     }
   },
+  async unsubscribeEmail(req, res) {
+    const { email } = req.body;
+    try {
+      const userExist = await User.findOne({ email });
+      if (!userExist) {
+        throw new Error("User not found with this email");
+      }
+      if (userExist.email_unsubscribed) {
+        throw new Error("This email is already unsubscribed");
+      }
+      userExist.email_unsubscribed = true;
+      await userExist.save();
+      res.status(200).json({message:"Email unsubscribed successfully",success:true});
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: error?.message || "Internal server error" });
+    }
+  },
+  async subscribeEmail(req, res) {
+    const { email } = req.body;
+    try {
+      const userExist = await User.findOne({ email });
+      if (!userExist) {
+        throw new Error("User not found with this email");
+      }
+      if (!userExist.email_unsubscribed) {
+        throw new Error("You are  already subscribed");
+      }
+      userExist.email_unsubscribed = false;
+      await userExist.save();
+      res
+        .status(200)
+        .json({ message: "Email subscribed successfully", success: true });
+
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: error?.message || "Internal server error" });
+    }
+  },
 };
 
 module.exports = UserController;
