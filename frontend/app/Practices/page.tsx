@@ -74,27 +74,27 @@ const Page: React.FC = () => {
         <Image className="w-[10vw]" src={moon} alt="moon" />
       </div>
       <div className="w-10/12 min-h-screen ">
-        <div className="w-full h-[30vh] sm:h-40 relative pt-4">
+        <div className="w-full sm:h-40 h-60 relative pt-4">
           <h1 className="text-3xl md:text-4xl sm:text-sm lg:text-5xl xl:text-6xl font-bold font-comic">
             Practice Your Craft
           </h1>
-          <div className="absolute top-10 right-48">
+          <div className="absolute top-6 right-48">
             <Image className="w-[6vw] sm-hide" src={book} alt="group" />
           </div>
           <div className="absolute -top-6 right-96">
             <Image className="w-[10vw] md-hide" src={pencilman} alt="group" />
           </div>
-          <p className="text-lg md:text-xl sm:text-sm lg:text-2xl font-comic pt-4">
+          <p className="text-lg md:text-xl font-bold sm:text-sm lg:text-2xl font-comic pt-4">
             Refine your skills with our AI-powered editor.
           </p>
         </div>
 
-        <div className="flex w-full gap-x-5 h-auto relative  justify-around items-center sm:justify-start ">
-          <div className="absolute -top-28 -left-32">
+          <div className="absolute top-24 left-2">
             <Image className="w-[10vw]" src={Bee} alt="bee" />
           </div>
-          <div className="gap-8 practice-mobile-view relative w-1/2 flex flex-col">
-            <div className="w-full flex justify-between gap-7 items-center h-20">
+        <div className="flex w-full gap-x-5 min-h-[1000px] relative  justify-around  sm:justify-start ">
+          <div className="gap-8 mid-w-full   flex flex-col">
+            <div className=" flex justify-between gap-7 items-center h-20">
               <h1 className="text-2xl sm:text-sm   md:text-4xl lg:text-5xl xl:text-7xl font-comic font-bold">
                 All Prompts
               </h1>
@@ -140,7 +140,7 @@ const Page: React.FC = () => {
               </div>
             )}
           </div>
-          <div className="vvsm-hide flex flex-col gap-y-4">
+          <div className="vvsm-hide flex  mt-3 flex-col gap-y-4">
             <WeeklyTest></WeeklyTest>
             <TopWriting />
           </div>

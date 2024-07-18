@@ -50,7 +50,7 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
                 >
                   <Link
                     href={link.path}
-                    className="pt-5 text-[1.2vw] cursor-pointer"
+                    className="pt-5 text-[1.4vw] font-bold cursor-pointer"
                   >
                     {link.label}
                   </Link>
