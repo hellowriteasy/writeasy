@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema({
     ref: "Subscription",
   },
   lastLogin: { type: Date, default: Date.now },
+  email_unsubscribed: { type: Boolean, default: false },
   role: { type: String, enum: ["user", "admin"], default: "user" },
 });
 

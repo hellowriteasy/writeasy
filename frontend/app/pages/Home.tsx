@@ -59,8 +59,8 @@ const Hero = () => {
             <Image className="" src={Group5} alt="Group5" />
           </div>
         </div>
-        <div className="absolute top-[40%]  text-xl font-school">
-          <h2 className=" sm:text-[10px] sm:leading-3 leading-7 text-center">
+        <div className="absolute top-[40%]  text-2xl font-school">
+          <h2 className=" sm:text-[12px] font-bold sm:leading-3 leading-7 text-center">
             &ldquo;Feedback is one of the most powerful influences on learning
             and achievement&rdquo;
           </h2>
