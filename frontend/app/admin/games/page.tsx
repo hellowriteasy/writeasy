@@ -14,7 +14,6 @@ const Games: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalItems, setTotalItems] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   const AxiosIns = axiosInstance("");
   const [refetch, setRefetch] = useState(false);
 
@@ -30,7 +29,6 @@ const Games: React.FC = () => {
       setTotalItems(response.data?.pageData?.total); // Adjust according to your API response
       setIsLoading(false);
     } catch (err) {
-      setError("Error fetching game prompts");
       setIsLoading(false);
     }
   };
@@ -52,7 +50,6 @@ const Games: React.FC = () => {
   };
 
   if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>{error}</p>;
 
   return (
     <ProtectedRoute>

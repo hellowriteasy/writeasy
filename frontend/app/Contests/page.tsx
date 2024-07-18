@@ -43,9 +43,7 @@ const Contest = () => {
 
   const offset = currentPage * itemsPerPage;
   console.log("page data", pageDetails);
-  // infite scrolll library
 
-  if (error) return <p>{error}</p>;
 
   return (
     <div className="w-full h-[1800px] mt-6 z-0 relative flex justify-center">
@@ -55,7 +53,7 @@ const Contest = () => {
       <div className="w-10/12 h-screen ms-12">
         <div className="w-full h-60 sm:h-40 relative pt-4">
           <h1 className="text-3xl sm:text-xl md:text-5xl lg:text-6xl font-bold font-comic">
-            Enter the Contest Arena
+          Weekly Writing Contests
           </h1>
           <div className="absolute top-6 md-hide right-20 ">
             <Image className=" w-[7vw]" src={A} alt="group" />

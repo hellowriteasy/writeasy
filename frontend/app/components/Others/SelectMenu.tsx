@@ -49,7 +49,7 @@ const SelectMenu: React.FC<SelectMenuProps> = ({ selectedOption, onSelectOption 
           { options &&  options.map((option) => (
             <div
               key={option._id}
-              className="px-4 py-2 h-9 border-y border-slate-400 cursor-pointer hover:bg-gray-100"
+              className="px-4 py-2 h-9  cursor-pointer hover:font-bold"
               onClick={() => {  
                 onSelectOption(option.name);
                 setShowOptions(false);

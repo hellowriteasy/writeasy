@@ -118,8 +118,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
   };
 
   const offset = currentPage * itemsPerPage;
-  if (error) return <p>{error}</p>;
-  if (!contest) return <p>No contest available at the moment.</p>;
+  if (!contest) return <p></p>;
 
   return (
     <div className="w-full min-h-screen  z-0 relative flex justify-center">

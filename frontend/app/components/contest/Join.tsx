@@ -13,7 +13,6 @@ import Image from "next/image";
 const Join = () => {
   const router = useRouter();
   const [contests, setContests] = useState<TContest[]>([]);
-  const [error, setError] = useState<string | null>(null);
   const { token } = useAuthStore();
   const axiosIns = axiosInstance(token || "");
   const [pageDetails, setPageDetails] = useState<TPageDetails | null>(null);
@@ -27,7 +26,6 @@ const Join = () => {
         setContests(data.data);
         setPageDetails(data?.pageData);
       } catch (err: any) {
-        setError(err.message);
       }
     };
     fetchContests();
@@ -38,7 +36,6 @@ const Join = () => {
   };
 
   console.log("debug 1 ", pageDetails);
-  if (error) return <p>{error}</p>;
 
   return (
     <div className="flex">
@@ -51,7 +48,7 @@ const Join = () => {
             >
               <div className="flex justify-center text-xl items-center gap-x-2 gap-y-2 text-center">
                 
-                  <Image src={live} alt="live icon"></Image>
+                 <div className="text-yellow-400 text-xl pr-3 font-bold">LIVE</div>
                   <span className="">Until </span>
                   {moment(contest.submissionDeadline).format("llll")}
                 
