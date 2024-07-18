@@ -6,9 +6,11 @@ const createStory = async (data) => {
   return await story.save();
 };
 
-const getAllStories = async (skip, limit) => {
+const getAllStories = async (type, skip, limit) => {
   return await Story.find(
-    {},
+    {
+      ...(type ? { storyType: type } : null),
+    },
     {},
     {
       ...(limit ? { limit } : null),

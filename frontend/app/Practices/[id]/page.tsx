@@ -81,7 +81,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
   return (
     <div className="w-full min-h-screen h-[1200px] mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 min-h-screen ms-12 flex flex-col items-center gap-y-4 ">
-        <div className="w-4/5 mx-auto h-20 relative pt-2 ">
+        <div className="w-4/5 mx-auto  relative pt-2 ">
           <h1 className="text-5xl text-center font-bold font-comic">
             {prompt.title}
           </h1>
