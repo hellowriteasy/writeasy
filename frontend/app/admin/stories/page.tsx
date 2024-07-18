@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useState, useEffect } from "react";
 import Card from "../../components/admin/stories/StoryTitleCard";
 import StoryNav from "@/app/components/admin/stories/StoryNav";
@@ -30,8 +30,10 @@ const Page: React.FC = () => {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const response = await AxiosIns.get<Story[]>("/stories");
-        setStories(response.data.reverse());
+        const response = await AxiosIns.get<Story[]>(
+          "/stories?storyType=practice"
+        );
+        setStories(response.data);
       } catch (error: any) {
         setError(error.message);
       }
@@ -42,15 +44,15 @@ const Page: React.FC = () => {
 
   const onDeleteSuccess = async () => {
     try {
-      const response = await AxiosIns.get<Story[]>("/stories");
-      setStories(response.data.reverse());
+      const response = await AxiosIns.get<Story[]>(
+        "/stories?storyType=practice"
+      );
+      setStories(response.data);
     } catch (error) {
-      console.error('Error fetching stories after deletion:', error);
-      toast.error('Failed to refresh stories after deletion.');
+      console.error("Error fetching stories after deletion:", error);
+      toast.error("Failed to refresh stories after deletion.");
     }
   };
-
-
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -63,7 +65,9 @@ const Page: React.FC = () => {
           <div className="flex-1 flex flex-col p-6 space-y-6">
             <StoryNav />
             <div className="flex justify-between items-center w-5/6 bg-white shadow-sm p-4 rounded-lg border border-gray-200">
-              <div className="text-2xl font-semibold text-gray-700">All Stories</div>
+              <div className="text-2xl font-semibold text-gray-700">
+                All Stories
+              </div>
             </div>
             <div className="bg-white shadow-sm p-4 rounded-lg border border-gray-200 space-y-4">
               {stories.map((story) => (

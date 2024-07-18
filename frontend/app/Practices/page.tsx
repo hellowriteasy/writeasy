@@ -74,7 +74,7 @@ const Page: React.FC = () => {
         <Image className="w-[10vw]" src={moon} alt="moon" />
       </div>
       <div className="w-10/12 min-h-screen ">
-        <div className="w-full sm:h-40 h-60 relative pt-4">
+        {/* <div className="w-full sm:h-40 h-60 relative pt-4">
           <h1 className="text-3xl md:text-4xl sm:text-sm lg:text-5xl xl:text-6xl font-bold font-comic">
             Practice Your Craft
           </h1>
@@ -87,7 +87,7 @@ const Page: React.FC = () => {
           <p className="text-lg md:text-xl font-bold sm:text-sm lg:text-2xl font-comic pt-4">
             Refine your skills with our AI-powered editor.
           </p>
-        </div>
+        </div> */}
 
           <div className="absolute top-24 left-2">
             <Image className="w-[10vw]" src={Bee} alt="bee" />

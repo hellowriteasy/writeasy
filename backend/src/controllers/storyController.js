@@ -49,8 +49,9 @@ async function processStoryForScoring(storyId, content, wordCount) {
 }
 
 const getStories = async (req, res) => {
+  const storyType=req.query.storyType
   try {
-    const stories = await StoryService.getAllStories();
+    const stories = await StoryService.getAllStories(storyType);
     res.json(stories);
   } catch (error) {
     res.status(500).json({ message: error.message });
