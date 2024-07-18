@@ -7,6 +7,8 @@ const gptService = new GptService(process.env.GPT_API_KEY); // Initialize GPT se
 
 const createStory = async (req, res) => {
   try {
+    const { contestId } = req.body;
+    
     const { content } = req.body;
     const wordCount = content.split(" ").length;
     const story = await StoryService.createStory({ ...req.body, wordCount });
