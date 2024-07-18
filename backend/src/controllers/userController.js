@@ -223,6 +223,7 @@ const UserController = {
           ...user.userId._doc,
           isSubcriptionActive: !!user.isActive,
           expiresAt: user.expiresAt,
+          payment_type: user.payment_type,
         };
       });
       res.status(200).json({ data: users, success: true });
@@ -244,7 +245,9 @@ const UserController = {
       }
       userExist.email_unsubscribed = true;
       await userExist.save();
-      res.status(200).json({message:"Email unsubscribed successfully",success:true});
+      res
+        .status(200)
+        .json({ message: "Email unsubscribed successfully", success: true });
     } catch (error) {
       res
         .status(500)
@@ -266,7 +269,6 @@ const UserController = {
       res
         .status(200)
         .json({ message: "Email subscribed successfully", success: true });
-
     } catch (error) {
       res
         .status(500)

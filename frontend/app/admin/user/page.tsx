@@ -1,14 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { toast } from "react-toastify";
 import { axiosInstance } from "@/app/utils/config/axios";
+import SubscriptionUser from "@/app/components/admin/User/SubscriptionUser";
 
 const UserManagement: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [users, setUsers] = useState([]);
-  const [endDate, setEndDate] = useState("");
   const AxiosIns = axiosInstance("");
   const fetchCashPaymentUsers = async () => {
     try {
@@ -43,30 +41,15 @@ const UserManagement: React.FC = () => {
     fetchCashPaymentUsers();
   }, []);
 
-  const handleUpdateSubscription = async (userId: string) => {
-    if (!endDate) {
-      return;
+  useEffect(() => {
+    const search = searchQuery.replace(/\s+/g, "");
+    if (!search) {
+      fetchCashPaymentUsers();
     }
-    try {
-      await AxiosIns.put("/auth/users/subscribe", {
-        user_id: userId,
-        end_date: endDate,
-      });
-      toast.success("Subscription updated successfully");
-      await fetchCashPaymentUsers();
-    } catch (error) {
-      toast.error(
-        "Failed to update subscription. It might be because the user already has an active subscription."
-      );
-    }
-  };
+  }, [searchQuery]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
-  };
-
-  const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEndDate(e.target.value);
   };
 
   const handleClearSearch = () => {
@@ -98,45 +81,14 @@ const UserManagement: React.FC = () => {
       </div>
       <div>
         {users.map((user: any) => {
-          const isExpired = new Date(user.expiresAt) < new Date();
-
           return (
-            <div
+            <SubscriptionUser
               key={user._id}
-              className="bg-white shadow-md rounded-md p-4 px-14 mb-4"
-            >
-              <p className="text-lg font-bold">{user.username}</p>
-              <p className="text-gray-600">{user.email}</p>
-              <p className="text-gray-600">Role: {user.role}</p>
-              <p className="text-gray-600">
-                Subscription expiry date:{" "}
-                {isExpired
-                  ? "Subscription Expired"
-                  : new Date(user.expiresAt).toLocaleString()}
-              </p>
-              <p className="text-gray-600">
-                Last Login: {new Date(user.lastLogin).toLocaleString()}
-              </p>
-              {user.subscriptionType && (
-                <p className="text-gray-600">
-                  Subscription Type: {user.subscriptionType}
-                </p>
-              )}
-              <div className="mt-2">
-                <input
-                  type="date"
-                  value={endDate}
-                  onChange={handleEndDateChange}
-                  className="px-3 py-2 border border-gray-300 rounded-md"
-                />
-                <button
-                  className="ml-2 px-4 py-2 bg-black text-white rounded-md"
-                  onClick={() => handleUpdateSubscription(user._id)}
-                >
-                  Update Subscription
-                </button>
-              </div>
-            </div>
+              user={user}
+              onUpdate={() => {
+                fetchCashPaymentUsers();
+              }}
+            />
           );
         })}
         {users.length === 0 && searchQuery && (
