@@ -37,7 +37,7 @@ const Page: React.FC = () => {
           category: selectedOption,
         },
       });
-      setPromptData(response.data.data.reverse());
+      setPromptData(response.data.data);
       setPageDetails(response.data.pageData);
       setIsLoading(false);
     } catch (error) {

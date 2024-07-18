@@ -15,7 +15,7 @@ export interface TPromptAdd {
 }
 
 const Page = () => {
-  const Router=useRouter();
+  const Router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [promptCards, setPromptCards] = useState<TPromptAdd[]>([]);
   const [contestDetails, setContestDetails] = useState({
@@ -51,7 +51,7 @@ const Page = () => {
           contestTheme: "",
         }));
         toast("Contest created successfully.", "success");
-        Router.push("/admin/contests")
+        Router.push("/admin/contests");
       }
     } catch (error) {
       toast("Faield to create contest.", "error");
@@ -206,7 +206,6 @@ const Page = () => {
                   onSuccess={() => {}}
                   key={index}
                   title={prompt.title}
-              
                   id={prompt._id}
                   deadline="234"
                 />

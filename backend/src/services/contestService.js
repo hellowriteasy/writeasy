@@ -30,6 +30,7 @@ const getOngoingContests = async (skip, limit) => {
   const data = await Contest.find(
     {
       isActive: true,
+      promptPublishDate: { $lt: currentDateTime },
       submissionDeadline: { $gt: currentDateTime },
     },
     {},
