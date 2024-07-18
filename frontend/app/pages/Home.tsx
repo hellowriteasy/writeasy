@@ -36,7 +36,7 @@ const Hero = () => {
             playsInline
             className="w-[100%] object-cover h-[100%]"
           >
-            <source src="/videos/heroVideo.mp4" type="video/mp4" />
+            <source src="/videos/writeasy_demo.mp4" type="video/mp4" />
           </video>
 
           <div className="absolute vsm-hide w-[6vw] -top-[5%] -right-[8%]">
