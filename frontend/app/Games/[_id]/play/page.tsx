@@ -93,7 +93,6 @@ const Page = () => {
       const textContent = editor.getText();
       const words = textContent.split(/\s+/).filter(Boolean).length;
       handleStoryDetailsInputChange("wordCount", words);
-      handleStoryDetailsInputChange("wordLimitExceeded", words > 1000);
     },
   }) as Editor;
   const fetchUsers = async () => {
@@ -197,10 +196,7 @@ const Page = () => {
       const currentContent = editor.getText();
       // early return
       if (!storyId) return;
-      if (storyDetails.wordLimitExceeded) {
-        toast.error("Word limit exceeded. Please reduce the number of words.");
-        return;
-      }
+   
 
       setSubmittingStory(true);
       if (currentStory?._id) {
@@ -423,7 +419,7 @@ const Page = () => {
           </div>
           {currentStory ? (
             <div className="w-full pt-2 flex flex-col gap-y-2">
-              <h2 className="font-comic">Contributors</h2>
+              <h2 className="font-comic">Writers</h2>
               <div className="flex gap-x-2">
                 {contributors.map((contributor, index) => (
                   <div key={contributor._id}>
@@ -486,7 +482,7 @@ const Page = () => {
                               <div className="loader mr-10 "></div>
                             )}
 
-                            <button
+                            {/* <button
                               className="menu-button mr-2"
                               type="button"
                               onClick={(e) => {
@@ -567,12 +563,12 @@ const Page = () => {
                               }}
                             >
                               <Icons.Code />
-                            </button>
-                            <div className="w-60 h-7 bg-white flex flex-col justify-center rounded-2xl shadow-sm ">
+                            </button> */}
+                            {/* <div className="w-60 h-7 bg-white flex flex-col justify-center rounded-2xl shadow-sm ">
                               <p className="text-center font-comic">
                                 Word count: {storyDetails.wordCount} / 1000
                               </p>
-                            </div>
+                            </div> */}
                           </div>
                         </div>
                         <div className={`w-[50vw] rounded-3xl  `}>

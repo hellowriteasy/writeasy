@@ -46,7 +46,7 @@ const Storycard: React.FC<StorycardProps> = ({
             </div>
             <div>
               <h1 className="text-base sm:text-lg md:text-xl">{username}</h1>
-              <p className="text-[2vw] sm:text-sm md:text-lg">{email}</p>
+              {/* <p className="text-[2vw] sm:text-sm md:text-lg">{email}</p> */}
             </div>
           </div>
         </div>

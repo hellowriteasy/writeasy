@@ -1,10 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import Image from "next/image";
 import cloud2 from "@/public/Game/cloud2.svg";
 import shootingstar from "@/public/Game/shotting_star.svg";
 import Storytitle from "@/app/components/Others/Storytitle";
-import {  TPrompt, TStory } from "@/app/utils/types";
+import { TPrompt, TStory } from "@/app/utils/types";
 import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { useRouter } from "next/navigation";
@@ -22,6 +22,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
   const [stories, setStories] = useState<TStory[]>([]);
   const [currentGame, setCurrentGame] = useState<TPrompt | null>(null);
   const [userGameStory, setUserGameStory] = useState<TStory | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
   const [pageDetails, setPageDetails] = useState({
     perPage: 10,
     page: 1,
@@ -34,9 +35,16 @@ const Page: React.FC<PageProps> = ({ params }) => {
   const fetchStories = async () => {
     try {
       const response = await AxiosIns.get(
-        `/stories/contest/prompt?prompt_id=${params._id}`
+        `/stories/contest/prompt?prompt_id=${params._id}`,
+        {
+          params: {
+            page: currentPage,
+            perPage: 5,
+          },
+        }
       );
-      const fetchedStories: TStory[] = response.data;
+      const fetchedStories: TStory[] = response.data?.data;
+      setPageDetails(response.data?.pageData);
       setStories(fetchedStories);
     } catch (error) {
       console.error("Error fetching stories:", error);
@@ -66,10 +74,13 @@ const Page: React.FC<PageProps> = ({ params }) => {
   };
   useEffect(() => {
     if (!params._id) return;
-    fetchStories();
     getContestById();
     fetchStoryOfUserByPromptId();
   }, [params._id]);
+  useEffect(() => {
+    if (!params._id) return;
+    fetchStories();
+  }, [params._id, currentPage]);
   // useEffect(() => {
   //   const filtered = stories.filter(
   //     (story) => story.storyType === "game" && story.prompt._id === params._id
@@ -85,7 +96,9 @@ const Page: React.FC<PageProps> = ({ params }) => {
     router.push(`/Games/${params._id}/play`);
   };
 
-  const handlePageClick = (event: { selected: number }) => {};
+  const handlePageClick = (event: { selected: number }) => {
+    setCurrentPage(event.selected + 1);
+  };
 
   // const offset = currentPage * itemsPerPage;
   // const currentStories = filteredStories.slice(offset, offset + itemsPerPage);
@@ -95,7 +108,6 @@ const Page: React.FC<PageProps> = ({ params }) => {
   //   return <StoryEditor id={params._id} />;
   // }
 
- 
   return (
     <div className="w-screen font-comic h-auto flex flex-col">
       <div className="h-80  relative w-full flex items-center flex-col">
@@ -106,12 +118,14 @@ const Page: React.FC<PageProps> = ({ params }) => {
           <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl sm:text-xl font-bold font-comic">
             {currentGame?.title}
           </h1>
-          <p className="sm:text-md text-xl font-semibold">{currentGame?.description}</p>
+          <p className="sm:text-md text-xl font-semibold">
+            {currentGame?.description}
+          </p>
           <button
             onClick={handleCreateStory}
             className="w-fit px-10 sm:px-2 sm:text-sm sm:h-14 bg-black hover:opacity-80 text-center text-white rounded-3xl border h-20 text-xl md:text-2xl lg:text-3xl xl:text-4xl"
           >
-            {userGameStory ? "Continue your story" : "    Create your Story"}
+            {userGameStory ? "Continue your story" : "    Create your group"}
           </button>
         </div>
         <div className="absolute right-5 sm-hide top-60">
@@ -121,7 +135,9 @@ const Page: React.FC<PageProps> = ({ params }) => {
       <div className="w-screen flex flex-col items-center">
         {stories.length > 0 ? (
           <div className="w-4/5 mt-10">
-           <h1 className="font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl pt-5 font-comic">Stories</h1>
+            <h1 className="font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl pt-5 font-comic">
+              Groups
+            </h1>
 
             <div className="mt-4 flex flex-col gap-8">
               {stories.map((story: TStory, index) => (
@@ -142,7 +158,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
                 }
                 breakLabel="..."
                 breakClassName="break-me"
-                pageCount={pageDetails.page}
+                pageCount={Math.ceil(pageDetails.total / pageDetails.perPage)}
                 marginPagesDisplayed={2}
                 pageRangeDisplayed={5}
                 onPageChange={handlePageClick}

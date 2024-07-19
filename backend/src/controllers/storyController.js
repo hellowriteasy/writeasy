@@ -49,7 +49,7 @@ async function processStoryForScoring(storyId, content, wordCount) {
 }
 
 const getStories = async (req, res) => {
-  const storyType=req.query.storyType
+  const storyType = req.query.storyType;
   try {
     const stories = await StoryService.getAllStories(storyType);
     res.json(stories);
@@ -231,8 +231,8 @@ const getStoryOfAuserByPrompt = async (req, res) => {
 const getStoriesByContentAndPrompt = async (req, res) => {
   const { prompt_id, contest_id } = req.query;
   const exclude_top_writings = req.query.exclude_top_writings === "true";
-  const page = req.query.page || 1; // Default page is 1
-  const perPage = req.query.perPage || 5; // Default page size is 10
+  const page = +req.query.page || 1; // Default page is 1
+  const perPage = +req.query.perPage || 5; // Default page size is 10
   const skip = (page - 1) * perPage;
   const limit = +perPage || 5;
   const sortKey = req.query.sortKey || "createdAt";
@@ -402,7 +402,10 @@ const getTopStoriesForContest = async (req, res) => {
 
 const getPreviousWeekTopStories = async (req, res) => {
   try {
-    const lastWeekContest = await Contest.find({ isActive: false })
+    const lastWeekContest = await Contest.find({
+      isActive: false,
+      promptPublished: true,
+    })
       .sort({
         createdAt: "descending",
       })
