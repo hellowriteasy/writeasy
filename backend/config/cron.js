@@ -5,6 +5,7 @@ const Subscription = require("../src/models/subscription");
 async function scheduleJob() {
   await closeContestAfterDeadline();
   await closeSubscriptionWhenDeadline();
+  await publishPromptAfterPromptPublishDate();
 }
 
 const closeContestAfterDeadline = async () => {
@@ -68,6 +69,30 @@ const closeContestAfterDeadline = async () => {
     console.log("Cron job finished");
   } catch (error) {
     console.error("Error while closing contests Cron Job:", error.message);
+  }
+};
+
+const publishPromptAfterPromptPublishDate = async () => {
+  try {
+    const currentDate = new Date();
+    
+    const contests = await Contest.updateMany(
+      {
+        isActive: false,
+        promptPublished: false,
+        promptPublishDate: { $lt: currentDate },
+      },
+      {
+        promptPublished: true,
+      }
+    );
+
+    if (contests.modifiedCount > 0) {
+      console.log("Prompt published ", contests.modifiedCount);
+    }
+  } catch (er) {
+    console.log("error while publishing prompt", er);
+    //
   }
 };
 

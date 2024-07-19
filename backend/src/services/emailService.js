@@ -12,31 +12,29 @@ class EmailService {
       },
     });
 
-    for (let recipient of email) {
-      // Create personalized HTML content for each recipient
+    // Create personalized HTML content for each recipient
 
-      let mailOptions = {
-        from: '"Writeasy" <' + process.env.APP_EMAIL + ">",
-        to: recipient, // Send individually to each recipient
-        subject: subject,
-        text: subject,
-        html: this.EmailTemplate({
-          heading: subject,
-          message: message,
-          email: recipient,
-        }),
-      };
+    let mailOptions = {
+      from: '"Writeasy" <' + process.env.APP_EMAIL + ">",
+      to: process.env.APP_EMAIL,
+      bcc: email,
+      subject: subject,
+      text: subject,
+      html: this.EmailTemplate({
+        heading: subject,
+        message: message,
+      }),
+    };
 
-      if (attachment) {
-        mailOptions.attachments = attachment;
-      }
+    if (attachment) {
+      mailOptions.attachments = attachment;
+    }
 
-      try {
-        let info = await transporter.sendMail(mailOptions);
-        console.log(`Email sent to ${recipient}: ${info.messageId}`);
-      } catch (error) {
-        console.log(`Error sending email to ${recipient}:`, error);
-      }
+    try {
+      let info = await transporter.sendMail(mailOptions);
+      console.log(`Email sent : ${info.messageId}`);
+    } catch (error) {
+      console.log(`Error sending email :`, error);
     }
   }
   EmailTemplate({
@@ -47,7 +45,6 @@ class EmailService {
     code,
     password,
     link_name,
-    email,
   }) {
     const htmlContent = `
       <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -91,9 +88,9 @@ class EmailService {
                   ? `<a href=${link} style="text-decoration:none;margin-left:auto;margin-right:auto margin-bottom:5px;"><button style="background-color:black;cursor:pointer; border-radius:0.5rem;border-width:1px;border-color:#ebe134;font-size:0.875rem;line-height:100%;color:#ebe134;padding-top:0.625rem;padding-bottom:0.625rem;padding-left:1.25rem;padding-right:1.25rem;text-decoration:none;display:inline-block;max-width:100%;padding:10px 20px 10px 20px" target="_blank"><span><!--[if mso]><i style="letter-spacing: 20px;mso-font-width:-100%;mso-text-raise:15" hidden>&nbsp;</i><![endif]--></span><span style="max-width:100%;display:inline-block;line-height:120%;mso-padding-alt:0px;mso-text-raise:7.5px">${link_name}</span><span><!--[if mso]><i style="letter-spacing: 20px;mso-font-width:-100%" hidden>&nbsp;</i><![endif]--></span></button></a>`
                   : ""
               }
-                  <p>If you wish to unsubscribe from our emails, please click <a target="_blank" href=${
+                  <p>If you wish to unsubscribe from our emails, please click <a target="_blank" href="${
                     process.env.FRONTEND_BASE_URL
-                  }/unsubscribe?email=${email} style="text-decoration:none">here</a>.</p>
+                  }/unsubscribe" style="text-decoration:none">here</a>.</p>
 
               </div>
                 </div>
@@ -111,4 +108,4 @@ class EmailService {
   }
 }
 
-module.exports =  EmailService;
+module.exports = EmailService;

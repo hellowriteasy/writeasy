@@ -55,6 +55,7 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
           `/stories/contest/top-writings/${_id}`
         );
         setTopStories(response.data?.data);
+        setPageDetails(response.data?.pageData);
       
       } catch (err: any) {
         setError(err.message);

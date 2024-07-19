@@ -28,7 +28,7 @@ const Storytitle: React.FC<StoryProps> = ({ story }) => {
     : [];
 
   return (
-    <div className="w-full mx-auto border-2 border-gray-200 px-5 rounded-3xl overflow-hidden">
+    <div className="w-full mx-auto border-2 border-gray-200 px-5 rounded-3xl overflow-hidden flex flex-col gap-y-2">
       {/* Card title and image */}
       <div className="flex items-center justify-between md:px-4 py-4">
         <div className="flex items-center">
@@ -37,11 +37,13 @@ const Storytitle: React.FC<StoryProps> = ({ story }) => {
           </h2>
         </div>
       </div>
-      <div className="w-full relative flex flex-wrap">
+      <div className="w-full relative flex flex-wrap gap-x-1">
         {contributors.map((contributor, index) => (
-          <div key={contributor._id}>
+          <div key={contributor._id} className="">
             <div
-              className={`w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 ml-${index * 2 + 2} bg-white flex items-center justify-center rounded-full border overflow-hidden`}
+              className={`w-10 h-10 left-${
+                index * 3 + 3
+              } bg-white flex items-center justify-center rounded-full border overflow-hidden`}
             >
               {contributor.profile_picture &&
               contributor.profile_picture.startsWith("https") ? (
@@ -56,11 +58,11 @@ const Storytitle: React.FC<StoryProps> = ({ story }) => {
             </div>
           </div>
         ))}
-       <div>
-        <h5 className=" md:left-24 pt-1 text-xs md:text-sm lg:text-base">
+        <div>
+          {/* <h5 className=" md:left-24 pt-1 text-xs md:text-sm lg:text-base">
           Story by <span className="font-bold">{story.user?.username}</span>
-        </h5>
-       </div>
+        </h5> */}
+        </div>
       </div>
       {/* Paragraph */}
       <div className="text-xs md:text-sm lg:text-base text-gray-900 ">

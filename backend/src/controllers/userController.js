@@ -181,6 +181,8 @@ const UserController = {
         subscription.expiresAt = new Date(end_date);
         subscription.isActive = true;
         subscription.payment_type = "cash_payment";
+        userExist.subscriptionId = subscription._id;
+        await userExist.save();
         await subscription.save();
       }
       if (!subscription) {
@@ -192,8 +194,11 @@ const UserController = {
           stripe_session_id: "test",
           payment_type: "cash_payment",
         });
+        userExist.subscriptionId = newSubscription._id;
+        await userExist.save();
         await newSubscription.save();
       }
+
       res.status(201).json({
         message: "Subscription updated successfully",
         success: true,

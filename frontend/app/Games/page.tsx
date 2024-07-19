@@ -16,7 +16,6 @@ import { axiosInstance } from "../utils/config/axios";
 import NotFound from "../components/Others/NotFound";
 
 const Games: React.FC = () => {
-;
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const [prompts, setPrompts] = useState<TPrompt[]>([]);
@@ -31,9 +30,9 @@ const Games: React.FC = () => {
   useEffect(() => {
     const fetchPrompts = async (page = 1, perPage = itemsPerPage) => {
       try {
-        const response = await AxiosIns.get("/prompts/game-prompts",{
+        const response = await AxiosIns.get("/prompts/game-prompts", {
           params: {
-            page
+            page: currentPage,
           },
         });
         setPrompts(response.data?.data.reverse());
@@ -43,9 +42,7 @@ const Games: React.FC = () => {
       }
     };
     fetchPrompts();
-  }, []);
-
-
+  }, [currentPage]);
 
   const handleSelectOption = (selectedOption: string) => {
     console.log(selectedOption);
@@ -86,7 +83,7 @@ const Games: React.FC = () => {
           <div className="absolute -top-40 mt-3 -left-32">
             <Image className="w-[12vw]" src={Bee} alt="bee" />
           </div>
-          <div className="gap-8 w-full relative flex flex-col">
+          <div className="gap-8 w-full relative flex flex-col ">
             {prompts.length > 0 ? (
               prompts.map((prompt) => (
                 <Prompt key={prompt._id} prompt={prompt} />
@@ -94,17 +91,12 @@ const Games: React.FC = () => {
             ) : (
               <NotFound text="No games right now !!" />
             )}
+
             <div className="absolute bottom-1/3 -left-32">
               <Image src={Cloud} alt="Cloud" />
             </div>
-          </div>
-          <div className="flex vvsm-hide flex-col gap-8">
-            <WeeklyTest />
-            <TopWriting />
-          </div>
-        </div>
-        {pageDetails && pageDetails.total > 5 && (
-              <div className="w-full ms-28">
+            {pageDetails && pageDetails.total > 5 && (
+              <div className="w-full  ">
                 <ReactPaginate
                   previousLabel={
                     <FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
@@ -129,6 +121,13 @@ const Games: React.FC = () => {
                 />
               </div>
             )}
+          </div>
+
+          <div className="flex vvsm-hide flex-col gap-8">
+            <WeeklyTest />
+            <TopWriting />
+          </div>
+        </div>
       </div>
     </div>
   );
