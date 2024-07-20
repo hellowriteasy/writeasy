@@ -78,7 +78,7 @@ const ContestPrompt: React.FC<PromptProps> = ({
     >
       <div className="w-full h-auto md:h-40 relative overflow-hidden mb-4">
         <div className="px-4 py-4 md:px-6 md:py-4 w-full md:w-5/6">
-          <div className="font-bold font-comic text-wrap text-base md:text-xl mb-2 overflow-hidden overflow-ellipsis whitespace-nowrap">
+          <div className="font-bold font-comic text-wrap text-base w-5/6 md:text-xl mb-2 overflow-hidden overflow-ellipsis whitespace-nowrap">
             {getPromptText()}
             {promptText.split(' ').length > 15 && (
               <button onClick={toggleShowFullPrompt} className="ml-2 text-yellow-500 underline">

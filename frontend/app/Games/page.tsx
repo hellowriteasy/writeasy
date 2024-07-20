@@ -66,13 +66,13 @@ const Games: React.FC = () => {
       <div className="absolute -top-14 right-0">
         <Image className="w-[5vw]" src={halfmoon} alt="halfmoon" />
       </div>
-      <div className="w-10/12 min-h-screen ms-12">
+      <div className="w-10/12 min-h-screen ">
         <div className="w-full h-60 sm:h-40 relative pt-4">
           <h1 className="text-3xl sm:text-xl md:text-4xl lg:text-5xl xl:text-6xl font-bold font-comic">
             Embark on a Collaborative Adventure
           </h1>
-          <div className="absolute top-2 -right-14">
-            <Image className="w-[14vw] md-hide" src={group} alt="group" />
+          <div className="absolute md-hide top-2 -right-14">
+            <Image className="w-[14vw] " src={group} alt="group" />
           </div>
           <p className="text-lg sm:text-sm md:text-xl lg:text-2xl font-comic pt-4">
             Team up with friends to create captivating stories together.
@@ -92,7 +92,7 @@ const Games: React.FC = () => {
               <NotFound text="No games right now !!" />
             )}
 
-            <div className="absolute bottom-1/3 -left-32">
+            <div className="absolute bottom-1/3 md-hide -left-32">
               <Image src={Cloud} alt="Cloud" />
             </div>
             {pageDetails && pageDetails.total > 5 && (
