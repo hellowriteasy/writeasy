@@ -24,7 +24,6 @@ interface Story {
 
 const Page: React.FC = () => {
   const [stories, setStories] = useState<Story[]>([]);
-  const [error, setError] = useState<string | null>(null);
   const AxiosIns = axiosInstance("");
 
   useEffect(() => {
@@ -35,7 +34,7 @@ const Page: React.FC = () => {
         );
         setStories(response.data);
       } catch (error: any) {
-        setError(error.message);
+    
       }
     };
 
@@ -54,9 +53,9 @@ const Page: React.FC = () => {
     }
   };
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+
+
+
 
   return (
     <ProtectedRoute>

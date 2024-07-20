@@ -26,9 +26,9 @@ const ContestPrompt: React.FC<PromptProps> = ({
   const [hasSubmittedStory, setHasSubmittedStory] = useState<boolean | null>(
     null
   );
+  const [showFullPrompt, setShowFullPrompt] = useState(false);
   const axiosIns = axiosInstance(token || "");
 
-  // fetch api here and
   useEffect(() => {
     const handleFetchStoryOfAUserByPromptId = async () => {
       try {
@@ -43,51 +43,66 @@ const ContestPrompt: React.FC<PromptProps> = ({
     handleFetchStoryOfAUserByPromptId();
   }, [promptId, userId]);
 
-  const handleRedirectToCreateStory = () => {
+  const handleRedirectToCreateStory = (e: React.MouseEvent) => {
+    e.stopPropagation();
     router.push(`/Contests/${contestId}/prompt/${promptId}/story/create`);
   };
 
-  const handleRedirectToStory = () => {
+  const handleRedirectToStory = (e: React.MouseEvent) => {
+    e.stopPropagation();
     router.push(`/profile/contest?search=${promptId}`);
   };
+
   const handleRedirectToPromptWritings = () => {
     if (isActive) return;
     router.push(`/Contests/${contestId}/${promptId}`);
   };
 
-  console.log(isActive && hasSubmittedStory !== null);
+  const toggleShowFullPrompt = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowFullPrompt((prevShowFullPrompt) => !prevShowFullPrompt);
+  };
+
+  const getPromptText = () => {
+    const words = promptText.split(' ');
+    if (words.length > 15) {
+      return showFullPrompt ? promptText : words.slice(0, 15).join(' ') + '...';
+    }
+    return promptText;
+  };
 
   return (
     <div
-      className="flex justify-center px-4 md:px-0 w-5/6   bg-white border-2 border-gray-300 rounded-3xl "
+      className="flex justify-center px-4 md:px-0 w-5/6 bg-white border-2 border-gray-300 rounded-3xl"
       onClick={handleRedirectToPromptWritings}
     >
-      <div className="w-full  h-auto md:h-40   relative overflow-hidden mb-4">
+      <div className="w-full h-auto md:h-40 relative overflow-hidden mb-4">
         <div className="px-4 py-4 md:px-6 md:py-4 w-full md:w-5/6">
-          <div className="font-bold  font-comic text-wrap text-base md:text-xl mb-2 overflow-hidden overflow-ellipsis whitespace-nowrap">
-            {promptText}
+          <div className="font-bold font-comic text-wrap text-base md:text-xl mb-2 overflow-hidden overflow-ellipsis whitespace-nowrap">
+            {getPromptText()}
+            {promptText.split(' ').length > 15 && (
+              <button onClick={toggleShowFullPrompt} className="ml-2 text-yellow-500 underline">
+                {showFullPrompt ? 'Read Less' : 'Read More'}
+              </button>
+            )}
           </div>
-       
         </div>
 
         {isActive && hasSubmittedStory !== null ? (
           !hasSubmittedStory ? (
             <div className="absolute right-4 top-4 md:right-10 md:top-10 flex cursor-pointer justify-end">
-            <Image 
-              onClick={handleRedirectToCreateStory}
-              src={Pencil} 
-              alt="Pencil" 
-              width={24} 
-              height={24} 
-              className="transition-transform md:w-auto md:h-auto sm:w-8  duration-300 ease-in-out transform hover:scale-125" 
-            />
-          </div>
+              <Image
+                onClick={handleRedirectToCreateStory}
+                src={Pencil}
+                alt="Pencil"
+                width={24}
+                height={24}
+                className="transition-transform md:w-auto md:h-auto sm:w-8 duration-300 ease-in-out transform hover:scale-125"
+              />
+            </div>
           ) : (
-            <div
-              className=" flex  cursor-pointer"
-              onClick={handleRedirectToStory}
-            >
-              <button className="border  text-2xl mid:text-[8px]  mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl text-white mid:w-20 mid:h-8 w-60 h-14">
+            <div className="flex cursor-pointer" onClick={handleRedirectToStory}>
+              <button className="border text-2xl mid:text-[8px] mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl text-white mid:w-20 mid:h-8 w-60 h-14">
                 View your story
               </button>
             </div>
