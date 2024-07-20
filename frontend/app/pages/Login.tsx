@@ -52,8 +52,15 @@ const Login: NextPage = () => {
     setShowPassword(!showPassword);
   };
 
+  const handleGoogleLogin = (e: SyntheticEvent) => {
+    e.preventDefault();
+    // Add the logic for Google login here
+    // For now, we'll just redirect to the signup page as a placeholder
+    router.push("/signup");
+  };
+
   return (
-    <div className="overflow-hidden  two-line-bg">
+    <div className="overflow-hidden two-line-bg">
       <Link href="/">
         <div className="ms-10 md-hide mt-10">
           <Image src={logo} alt="logo" />
@@ -110,7 +117,7 @@ const Login: NextPage = () => {
           </button>
           {error && <p className="text-red-500">{error}</p>}
           <h1 className="text-center pt-2 font-bold">or</h1>
-          <Button type="google" />
+          <Button type="google" onClick={handleGoogleLogin} />
           <h1 className="text-center font-comic pt-4">
             Don &lsquo;t have an account?{" "}
             <Link href="/signup" className="font-bold cursor-pointer">

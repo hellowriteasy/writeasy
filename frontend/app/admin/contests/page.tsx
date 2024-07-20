@@ -17,7 +17,6 @@ interface Contest {
 const Page: React.FC = () => {
   const router = useRouter();
   const [contests, setContests] = useState<Contest[]>([]);
-  const [error, setError] = useState<Error | null>(null);
 const AxiosIns=axiosInstance("");
   useEffect(() => {
     const fetchContests = async () => {
@@ -27,9 +26,9 @@ const AxiosIns=axiosInstance("");
      
       } catch (error) {
         if (axios.isAxiosError(error)) {
-          setError(error);
+     
         } else {
-          setError(new Error("An unknown error occurred"));
+        
         }
        
       }
