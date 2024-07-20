@@ -50,7 +50,7 @@ const Contest = () => {
       <div className="absolute sm-hide -top-14 right-0">
         <Image className="w-[9vw]" src={earth} alt="earth" />
       </div>
-      <div className="w-10/12 h-screen ms-12">
+      <div className="w-10/12 h-screen ">
         <div className="w-full h-60 sm:h-40 relative pt-4">
           <h1 className="text-3xl sm:text-xl md:text-5xl lg:text-6xl font-bold font-comic">
           Weekly Writing Contests
@@ -85,7 +85,7 @@ const Contest = () => {
               </div>
             </div>
             {pageDetails && pageDetails.total > 5 && (
-              <div className="w-full ms-28">
+              <div className="w-full ">
                 <ReactPaginate
                   previousLabel={
                     <FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
