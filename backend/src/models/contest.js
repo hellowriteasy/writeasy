@@ -15,7 +15,7 @@ const contestSchema = new mongoose.Schema(
       required: true,
     },
     isActive: { type: Boolean, default: true },
-    promptPublished: { type: Boolean, default: false },
+    topWritingPublished: { type: Boolean, default: false },
   },
   {
     timestamps: true,

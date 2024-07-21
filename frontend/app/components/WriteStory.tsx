@@ -25,6 +25,7 @@ import HardBreak from "@tiptap/extension-hard-break";
 import InsertedText from "./tiptap/Inserted";
 import DeletedText from "./tiptap/Deleted";
 import PDF from "./PDF";
+import { divideNewlinesByTwo } from "../Games/[_id]/play/page";
 
 interface SimpleEditorProps {
   triggerGrammarCheck: any;
@@ -147,9 +148,8 @@ export function SimpleEditor({
     event.preventDefault();
     try {
       let currentContent = "";
-      console.log("initial text", initialText);
       if (!initialText) {
-        currentContent = editor.getText();
+        currentContent = divideNewlinesByTwo(editor.getText());
         setInitialText(currentContent);
         if (!currentContent) {
           toast.warn("Please enter content before submitting.");

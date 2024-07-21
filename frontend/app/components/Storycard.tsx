@@ -30,7 +30,9 @@ const Storycard: React.FC<StorycardProps> = ({
   };
 
   const wordLimit = 75;
-
+  const contentDisplay = showFullContent
+    ? content.replace(/\n/g, "<br>")
+    : getShortContent(content, wordLimit).replace(/\n/g, "<br>");
 
   return (
     <div className="relative my-6">
@@ -53,11 +55,12 @@ const Storycard: React.FC<StorycardProps> = ({
 
         <div className="px-4 sm:px-6 flex flex-col gap-y-2">
           <h2 className="text-lg sm:text-xl md:text-2xl font-bold">{title}</h2>
-          <p className="text-sm sm:text-md md:text-lg text-gray-900">
-            {showFullContent ? content : getShortContent(content, wordLimit)}
-          </p>
+          <p
+            className="text-sm sm:text-md md:text-lg text-gray-900"
+            dangerouslySetInnerHTML={{ __html: contentDisplay }}
+          ></p>
         </div>
-        {showFullContent ?(
+        {showFullContent ? (
           <div className="px-4 sm:px-6 py-4 flex justify-end">
             <button
               onClick={() => setShowFullContent(!showFullContent)}
@@ -66,7 +69,9 @@ const Storycard: React.FC<StorycardProps> = ({
               {showFullContent ? "Show less" : "Read more"}
             </button>
           </div>
-        ): (<div className="py-4"></div>)}
+        ) : (
+          <div className="py-4"></div>
+        )}
       </div>
     </div>
   );

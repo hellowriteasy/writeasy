@@ -29,6 +29,9 @@ const TopWriting: React.FC<TopWritingProps> = ({
       : text;
   };
 
+  const displayWriting = showFullContent
+    ? content.replace(/\n/g, "<br>")
+    : getShortContent(content, 75).replace(/\n/g, "<br>");
   return (
     <div className="relative my-6">
       <div className="absolute -top-12 left-4"> <Image src={mainstar} alt="main star" /></div>
@@ -51,8 +54,8 @@ const TopWriting: React.FC<TopWritingProps> = ({
 
         <div className="px-4 sm:px-6 flex flex-col gap-y-2">
           <h2 className="text-lg sm:text-xl md:text-2xl font-bold">{title}</h2>
-          <p className="text-sm sm:text-md md:text-lg text-gray-900">
-            {showFullContent ? content : getShortContent(content, 75)}
+          <p className="text-sm sm:text-md md:text-lg text-gray-900" dangerouslySetInnerHTML={{ __html: displayWriting }}>
+       
           </p>
         </div>
 

@@ -5,7 +5,7 @@ const Subscription = require("../src/models/subscription");
 async function scheduleJob() {
   await closeContestAfterDeadline();
   await closeSubscriptionWhenDeadline();
-  await publishPromptAfterPromptPublishDate();
+  await publishWritingsAfterPromptPublishDate();
 }
 
 const closeContestAfterDeadline = async () => {
@@ -72,18 +72,17 @@ const closeContestAfterDeadline = async () => {
   }
 };
 
-const publishPromptAfterPromptPublishDate = async () => {
+const publishWritingsAfterPromptPublishDate = async () => {
   try {
     const currentDate = new Date();
-    
     const contests = await Contest.updateMany(
       {
         isActive: false,
-        promptPublished: false,
-        promptPublishDate: { $lt: currentDate },
+        topWritingPublished: false,
+        topWritingPublishDate: { $lt: currentDate },
       },
       {
-        promptPublished: true,
+        topWritingPublished: true,
       }
     );
 
