@@ -5,22 +5,29 @@ require("dotenv").config();
 const { connectDB } = require("../../config/db");
 const Subscription = require("../../src/models/subscription");
 const User = require("../../src/models/user");
+const Story = require("../../src/models/story");
+const GptService = require("../../src/services/gptService");
+const gptService = new GptService(process.env.GPT_API_KEY); // Initialize GPT service
 
 const main = async () => {
   console.log("Start");
   await connectDB();
 
-  const subscription = await Subscription.find({});
+  let stories = await Story.find({
+    contest: "669b2b1c0da4a4d7fce6b924",
+  });
 
-  // await Promise.all(
-  //   subscription.map(async (s) => {
-  //     const user = await User.findById(s.userId);
-  //     user.subscriptionId = s._id;
-  //     await user.save();
-  //   })
-  // );
+  stories = stories.map((story) => ({
+    userId: story.user.toString(),
+    writing: story.content,
+  }));
 
-  console.log("End");
+  const res = await gptService.generateScoreForBulkWritings(
+    JSON.stringify(stories)
+  );
+  console.log(res);
+
+  await console.log("End");
 };
 
 main();

@@ -138,25 +138,26 @@ const submitCollaborativePart = [
       if (!story) {
         return res.status(404).json({ message: "Story not found." });
       }
+
       story.content = text;
+      story.title = title;
+
+      await story.save();
+      res.status(200).json({ message: "Story part submitted successfully." });
+
       const correctionRes = await gptService.generateScore(
         text,
         "grammar",
         wordCount
       );
-
       const correctionSummary = await gptService.generateCorrectionSummary(
         text,
         correctionRes.corrections,
         0
       );
-
       story.correctionSummary = correctionSummary;
       story.corrections = correctionRes.corrections;
-      story.title = title;
-
       await story.save();
-      res.status(200).json({ message: "Story part submitted successfully." });
     } catch (error) {
       console.log("Error submitting story part:", error);
       res.status(500).json({ message: error.message });

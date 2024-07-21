@@ -27,6 +27,14 @@ interface SearchResult {
   username: string;
   email: string;
 }
+export function divideNewlinesByTwo(text: string): string {
+  return text.replace(/(\n+)/g, (match) => {
+    const newlineCount = match.length;
+    const newNewlineCount = Math.floor(newlineCount / 2); // Divide by 2
+    return "\n".repeat(newNewlineCount); // Repeat \n newNewlineCount times
+  });
+}
+
 interface Props {
   searchResults: SearchResult[];
   handleSelectedUser: (
@@ -193,10 +201,10 @@ const Page = () => {
     e.preventDefault();
     const storyId = currentStory?._id;
     try {
-      const currentContent = editor.getText();
+      const currentContent = divideNewlinesByTwo(editor.getText() || "");
+
       // early return
       if (!storyId) return;
-   
 
       setSubmittingStory(true);
       if (currentStory?._id) {
@@ -402,10 +410,10 @@ const Page = () => {
             </div>
             {!currentStory && (
               <div className="flex flex-col sm:gap-y-0 gap-y-6">
-               <h1 className="font-comic text-2xl font-bold">
-                  Invite friends to join Collaborative Writing 
+                <h1 className="font-comic text-2xl font-bold">
+                  Invite friends to join Collaborative Writing
                 </h1>
-                   {/*
+                {/*
                 <p className="text-xl font-comic">
                   Calling all friends! , Let team up and create stories
                   together.
@@ -477,101 +485,13 @@ const Page = () => {
                     <div className=" bg-black rounded-full w-full ">
                       <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
                         <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
-                          <div className="flex gap-3 p-3 ps-6">
+                          <div className="flex gap-3 p-3 ps-6 w-full">
                             {submittingStory && (
                               <div className="loader mr-10 "></div>
                             )}
-
-                            {/* <button
-                              className="menu-button mr-2"
-                              type="button"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                editor.chain().focus().undo().run();
-                              }}
-                              disabled={!editor.can().undo()}
-                            >
-                              <Icons.RotateLeft />
-                            </button>
-                            <button
-                              className="menu-button mr-2"
-                              type="button"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                editor.chain().focus().redo().run();
-                              }}
-                              disabled={!editor.can().redo()}
-                            >
-                              <Icons.RotateRight />
-                            </button>
-                            <button
-                              className={classNames("menu-button mr-2", {
-                                "is-active": editor.isActive("bold"),
-                              })}
-                              type="button"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                toggleBold();
-                              }}
-                            >
-                              <Icons.Bold />
-                            </button>
-                            <button
-                              className={classNames("menu-button mr-2", {
-                                "is-active": editor.isActive("underline"),
-                              })}
-                              type="button"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                toggleUnderline();
-                              }}
-                            >
-                              <Icons.Underline />
-                            </button>
-                            <button
-                              className={classNames("menu-button mr-2", {
-                                "is-active": editor.isActive("italic"),
-                              })}
-                              type="button"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                toggleItalic();
-                              }}
-                            >
-                              <Icons.Italic />
-                            </button>
-                            <button
-                              className={classNames("menu-button mr-2", {
-                                "is-active": editor.isActive("strike"),
-                              })}
-                              type="button"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                toggleStrike();
-                              }}
-                            >
-                              <Icons.Strikethrough />
-                            </button>
-                            <button
-                              className={classNames("menu-button mr-2", {
-                                "is-active": editor.isActive("code"),
-                              })}
-                              type="button"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                toggleCode();
-                              }}
-                            >
-                              <Icons.Code />
-                            </button> */}
-                            {/* <div className="w-60 h-7 bg-white flex flex-col justify-center rounded-2xl shadow-sm ">
-                              <p className="text-center font-comic">
-                                Word count: {storyDetails.wordCount} / 1000
-                              </p>
-                            </div> */}
                           </div>
                         </div>
-                        <div className={`w-[50vw] rounded-3xl  `}>
+                        <div className={`w-[50vw] rounded-3xl   `}>
                           <EditorContent
                             className={`scroll-m-2 w-[100%] min-h-96 mt-10  ${
                               !currentStory || submittingStory

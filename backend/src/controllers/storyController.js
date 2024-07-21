@@ -7,9 +7,21 @@ const gptService = new GptService(process.env.GPT_API_KEY); // Initialize GPT se
 
 const createStory = async (req, res) => {
   try {
-    const { contestId } = req.body;
+    const { content, contest, prompt } = req.body;
+    const contestExist = await Contest.findById(contest);
+    if (!contestExist) {
+      throw new Error("Contest not found");
+    }
+    if (contestExist.submissionDeadline.getTime() < new Date().getTime()) {
+      throw new Error("Contest submission deadline has been reached");
+    }
 
-    const { content } = req.body;
+    const promptExist = await Prompt.findById(prompt);
+
+    if (!promptExist) {
+      throw new Error("Prompt not found");
+    }
+
     const wordCount = content.split(" ").length;
     const story = await StoryService.createStory({ ...req.body, wordCount });
     res.status(201).json({
@@ -18,7 +30,12 @@ const createStory = async (req, res) => {
     });
 
     // Process the story for scoring in the background
-    processStoryForScoring(story._id, story.content, wordCount); // Ensuring 'content' exists in your story model
+    processStoryForScoring(
+      story._id,
+      story.content,
+      wordCount,
+      promptExist.title
+    ); // Ensuring 'content' exists in your story model
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error.message });
@@ -26,11 +43,11 @@ const createStory = async (req, res) => {
 };
 
 // Function to handle scoring
-async function processStoryForScoring(storyId, content, wordCount) {
+async function processStoryForScoring(storyId, content, wordCount, topic) {
   try {
     console.log("processing scoring", storyId, content, wordCount);
 
-    const score = await gptService.generateScore(content); // Get score from GPT API
+    const score = await gptService.generateScore(content, "", wordCount, topic); // Get score from GPT API
     const correctionSummary = await gptService.generateCorrectionSummary(
       content,
       score.corrections,
@@ -404,12 +421,11 @@ const getPreviousWeekTopStories = async (req, res) => {
   try {
     const lastWeekContest = await Contest.find({
       isActive: false,
-      promptPublished: true,
-    })
-      .sort({
-        createdAt: "descending",
-      })
-      .limit(1);
+      topWritingPublished: true,
+    }).sort({
+      createdAt: "descending",
+    });
+    console.log(lastWeekContest);
 
     const lastWeekContestTopStories = await Story.find({
       contest: lastWeekContest[0]?._id,

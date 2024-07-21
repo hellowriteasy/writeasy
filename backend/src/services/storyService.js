@@ -59,6 +59,9 @@ const getStoriesByUserAndType = async (userId, storyType, limit, skip) => {
       .populate({
         path: "contributors",
         select: { password: 0 },
+      })
+      .sort({
+        updatedAt: "desc",
       });
     return {
       data,

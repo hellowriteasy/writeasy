@@ -7,7 +7,7 @@ class GptService {
   }
 
   // Updated to handle additional user requests with more detailed prompt
-  async generateScore(storyText, taskType, wordCount) {
+  async generateScore(storyText, taskType, wordCount, topic) {
     const systemMessage = {
       grammar: "Proofread this text but only fix grammar",
       rewrite: "Rewrite this text improving clarity and flow",
@@ -15,116 +15,14 @@ class GptService {
     };
 
     const detailedPrompt = `
-      The provided text should be evaluated and scored following a detailed rubric based on the criteria of content, organisation, and technical accuracy. The story's content and organisation should be compelling or clear (depending on the quality) and effectively matched to the intended audience and purpose with a suitable tone, style, and register. Particular attention should be paid to the vocabulary and linguistic devices used, as well as the structure and coherency of ideas presented through well-linked paragraphs. 24 marks is for content and organisation and there is 16 marks for technical accuracy. The total marks is 40. So, you need to grade it accordingly.
+      The provided text should be evaluated and scored following a detailed rubric based on the criteria of content, organisation, and technical accuracy. The story's content and organisation should be compelling or clear (depending on the quality) and effectively matched to the intended audience and purpose with a suitable tone, style, and register. Particular attention should be paid to the vocabulary and linguistic devices used, as well as the structure and coherency of ideas presented through well-linked paragraphs.The title of the story is ${topic}. The total score is 100.
 
-      For each writing, please provide a detailed line-by-line analysis, evaluating the following aspects:
-
-      Content 12 marks:
-      * Communication is convincing and compelling
-      * Tone, style and register are assuredly matched to purpose and
-      audience
-      * Extensive and ambitious vocabulary with sustained crafting of
-      linguistic devices
-      Content  10 marks
-      * Communication is convincing
-      * Tone, style and register are convincingly matched to purpose and
-      audience
-      * Extensive vocabulary with conscious crafting of linguistic devices
-      Content 8 marks
-      * Communication is consistently clear
-      * Tone, style and register are clearly and consistently matched to
-      purpose and audience
-      * Increasingly sophisticated vocabulary and phrasing, chosen for
-      effect with a range of successful linguistic devices
-      Content 6 marks
-      * Communication is generally clear
-      * Tone, style and register are generally matched to purpose and
-      audience
-      * Vocabulary clearly chosen for effect and appropriate use of
-      linguistic devices
-      Content 4 marks
-      * Communicates with some sustained success
-      * Some sustained attempt to match tone, style and register to
-      purpose and audience
-      * Conscious use of vocabulary with some use of linguistic devices
-      Content 3 marks
-      * Communicates with some success
-      * Attempts to match tone, style and register to purpose and
-      audience
-      * Begins to vary vocabulary with some use of linguistic devices
-      Content 2 marks
-      * Communicates simply
-      * Simple awareness of matching tone, style and register to purpose
-      and audience
-      * Simple vocabulary; simple linguistic devices
-      ###
-      Organisation 12 marks
-      * Varied and inventive use of structural features
-      * Writing is compelling, incorporating a range of convincing and
-      complex ideas
-      * Fluently link
-      Organisation 10 marks
-      * Varied and effective structural features
-      * Writing is highly engaging with a range of developed complex
-      ideas
-      * Consistently coherent use of paragraphs with integrated discourse
-      markers
-      Organisation 8 marks
-      * Effective use of structural features
-      * Writing is engaging, using a range of clear, connected ideas
-      * Coherent paragraphs with integrated discourse markers
-      Organisation 6 marks
-      * Usually effective use of structural features
-      * Writing is engaging, with a range of connected ideas
-      * Usually coherent paragraphs with range of discourse markers
-      Organisation 4 marks
-      * Some use of structural features
-      * Increasing variety of linked and relevant ideas
-      * Some use of paragraphs and some use of discourse markers
-      Organisation 3 marks
-      * Attempts to use structural features
-      * Some linked and relevant ideas
-      * Attempt to write in paragraphs with some discourse markers, not
-      always appropriate
-      Organisation 2 marks
-      * Evidence of simple structural features
-      * One or two relevant ideas, simply linked
-      * Random paragraph structure or No paragraphs
-      ###
-      Technical Accuracy 15 marks:
-      * Sentence demarcation is consistently secure and consistently accurate
-      * Wide range of punctuation is used with a high level of accuracy
-      * Uses a full range of appropriate sentence forms for effect
-      * Uses Standard English consistently and appropriately with secure control of
-      complex grammatical structures
-      * High level of accuracy in spelling, including ambitious vocabulary
-      * Extensive and ambitious use of vocabulary
-      Technical Accuracy 11 marks:
-      * Sentence demarcation is mostly secure and mostly accurate
-      * Range of punctuation is used, mostly with success
-      * Uses a variety of sentence forms for effect
-      * Mostly uses Standard English appropriately with mostly controlled
-      grammatical structures
-      * Generally accurate spelling, including complex and irregular words
-      * Increasingly sophisticated use of vocabulary
-      Technical Accuracy 7 marks:
-      * Sentence demarcation is mostly secure and sometimes accurate
-      * Some control of a range of punctuation
-      * Attempts a variety of sentence forms
-      * Some use of Standard English with some control of agreement
-      * Some accurate spelling of more complex words
-      * Varied use of vocabulary
-      Technical Accuracy 3 marks:
-      * Occasional use of sentence demarcation
-      * Some evidence of conscious punctuation
-      * Simple range of sentence forms
-      * Occasional use of Standard English with limited control of agreement
-      * Accurate basic spelling
-      * Simple use of vocabulary
 
       If the content includes any inappropriate themes such as violence or explicit content, immediately assign a score of 0.
 
-      Please provide the numerical score strictly in the first line based solely on this rubric. Additionally, You are a master proofreader. Only proofread the given text, don't add new text to the document. \n(${systemMessage[taskType]}). \n Start this from the second line of your response. Once again, Please provide the numerical score strictly in the first line!!!
+      Please provide the numerical score strictly in the first line based solely on this rubric. Additionally, You are a master proofreader. Only proofread the given text, don't add new text to the document. \n( ${
+        taskType ? systemMessage[taskType] : ""
+      }). \n Start this from the second line of your response. Once again, Please provide the numerical score strictly in the first line!!!
     `;
 
     try {
@@ -153,7 +51,8 @@ class GptService {
       const splitMessage = fullMessage.split("\n");
       const score = parseInt(splitMessage[0].trim(), 10); // Ensuring the score is an integer
       const corrections = splitMessage.slice(1).join("\n").trim();
-
+      console.log("score", score);
+      console.log("correction", corrections);
       return { score, corrections };
     } catch (error) {
       console.error("Error in generating score from GPT:", error);
@@ -431,6 +330,94 @@ class GptService {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async generateScoreForBulkWritings(writings) {
+    const detailedPrompt = `Please evaluate each writing individually and provide a score based on the criteria of content, organization, and technical accuracy. The total score should be out of 100, with the following distribution:
+  Content and Organization: 60 marks
+  Depth and Detail (30 marks): Evaluate the richness of information, examples, and explanations provided. Minimal content should receive a lower score. A higher score is given for thorough and well-supported ideas.
+  Relevance to Topic (15 marks): Assess how well the text stays on topic and addresses the subject matter. Texts that are off-topic or only vaguely related should receive a lower score.
+  Audience and Purpose (10 marks): Evaluate how effectively the text addresses its intended audience and fulfills its purpose. Clear alignment with the audience's needs and the purpose of the writing scores higher.
+  Coherence and Structure (5 marks): Evaluate the logical flow and clear structure of ideas. Well-organized writing with clear paragraphing and transitions scores higher.
+  Technical Accuracy: 40 marks
+  Grammar and Spelling (20 marks): Assess the correctness of grammar, spelling, and punctuation. Fewer errors result in a higher score.
+  Sentence Structure and Syntax (20 marks): Evaluate the complexity and variety of sentence structures, as well as adherence to standard writing conventions.
+  The input will be an array of objects in the following json format: writings=[{ userId:'here should be user's id from the input', writing:'...'}  and so on]
+  For each writing, generate a score based on the above criteria and return an array of objects in the following format:[{ userId:'2345', score: 55 }, { userId:'9876', score: 88 }]
+  The response should consist only of the array of objects with userId and score, nothing else.`;
+
+    console.log("the prompt ", writings);
+
+    const processWritingChunks = async (writingChunks) => {
+      const totalTokens = writingChunks.length + 50;
+      try {
+        const response = await axios.post(
+          this.apiUrl,
+          {
+            model: "gpt-4-turbo",
+            messages: [
+              { role: "system", content: detailedPrompt },
+              {
+                role: "user",
+                content: `Here are the writings of the writers: ${JSON.stringify(
+                  writingChunks
+                )}`,
+              },
+            ],
+            max_tokens: totalTokens,
+            temperature: 0.5, // Adjusted for more controlled responses
+            stream: true, // Enable streaming
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${this.apiKey}`,
+            },
+            responseType: "stream",
+          }
+        );
+
+        return new Promise((resolve, reject) => {
+          let data = "";
+          response.data.on("data", (chunk) => {
+            console.log("incomingg data", chunk.toString());
+            data += chunk.toString("utf8");
+          });
+
+          response.data.on("end", () => {
+            try {
+              console.log("end", data);
+              const results = JSON.parse(data);
+              resolve(results);
+            } catch (error) {
+              reject(new Error("Error parsing the streamed response."));
+            }
+          });
+
+          response.data.on("error", (error) => {
+            reject(new Error("Error in streaming response: " + error.message));
+          });
+        });
+      } catch (error) {
+        console.error("Error in generating score from GPT:", error);
+        throw new Error("Error interacting with GPT API.");
+      }
+    };
+
+    // Divide writings into smaller chunks if necessary
+    const chunkSize = 5; // Adjust chunk size as needed
+    const writingChunks = [];
+    for (let i = 0; i < writings.length; i += chunkSize) {
+      writingChunks.push(writings.slice(i, i + chunkSize));
+    }
+
+    const allResults = [];
+    for (const chunk of writingChunks) {
+      const chunkResults = await processWritingChunks(chunk);
+      allResults.push(...chunkResults);
+    }
+
+    return allResults;
   }
 }
 

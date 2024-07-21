@@ -26,6 +26,9 @@ const Storytitle: React.FC<StoryProps> = ({ story }) => {
   const contributors = story
     ? Array.from(new Array(...story?.contributors, story?.user))
     : [];
+  const content = isExpanded
+    ? story.content.replace(/\n/g, "<br>")
+    : previewContent.replace(/\n/g, "<br>");
 
   return (
     <div className="w-full mx-auto border-2 border-gray-200 px-5 rounded-3xl overflow-hidden flex flex-col gap-y-2">
@@ -65,9 +68,10 @@ const Storytitle: React.FC<StoryProps> = ({ story }) => {
         </div>
       </div>
       {/* Paragraph */}
-      <div className="text-xs md:text-sm lg:text-base text-gray-900 ">
-        {isExpanded ? story.content : previewContent}
-      </div>
+      <div
+        className="text-xs md:text-sm lg:text-base text-gray-900"
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
       {/* Read more button */}
       <div className="md:px-4 py-4 flex justify-end">
         <button

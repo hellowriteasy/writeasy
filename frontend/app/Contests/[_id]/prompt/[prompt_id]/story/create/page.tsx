@@ -21,6 +21,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { usePathname, useRouter } from "next/navigation";
 import { axiosInstance } from "@/app/utils/config/axios";
 import { TPrompt } from "@/app/utils/types";
+import { divideNewlinesByTwo } from "@/app/Games/[_id]/play/page";
 
 const CreateContest = () => {
   const [contestId, setContestId] = useState("");
@@ -76,7 +77,7 @@ const CreateContest = () => {
     e.preventDefault(); // Prevent default form submission behavior
 
     try {
-      const currentContent = editor.getText();
+      const currentContent = divideNewlinesByTwo(editor.getText());
       if (!currentContent) {
         toast.warn("Please enter both  content before submitting.");
         return;
@@ -129,7 +130,7 @@ const CreateContest = () => {
       },
     },
     onUpdate: ({ editor }) => {
-      const text = editor.getText();
+      const text = divideNewlinesByTwo(editor.getText());
       const wordCount = text
         .split(/\s+/)
         .filter((word) => word.length > 0).length;
@@ -189,137 +190,132 @@ const CreateContest = () => {
                     }}
                   />
                 </div>
-                </div>
+              </div>
 
-                <div className="h-auto w-full rounded-full">
-                  <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
-                    <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
-                      <div className="flex gap-3 p-3 ps-6">
-                        {isLoading && <div className="loader mr-10 "></div>}
+              <div className="h-auto w-full rounded-full">
+                <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
+                  <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
+                    <div className="flex gap-3 p-3 ps-6">
+                      {isLoading && <div className="loader mr-10 "></div>}
 
-                        <button
-                          className="menu-button mr-2"
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            editor.chain().focus().undo().run();
-                          }}
-                          disabled={!editor.can().undo()}
-                        >
-                          <Icons.RotateLeft />
-                        </button>
-                        <button
-                          className="menu-button mr-2"
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            editor.chain().focus().redo().run();
-                          }}
-                          disabled={!editor.can().redo()}
-                        >
-                          <Icons.RotateRight />
-                        </button>
-                        <button
-                          className={classNames("menu-button mr-2", {
-                            "is-active": editor.isActive("bold"),
-                          })}
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            toggleBold();
-                          }}
-                        >
-                          <Icons.Bold />
-                        </button>
-                        <button
-                          className={classNames("menu-button mr-2", {
-                            "is-active": editor.isActive("underline"),
-                          })}
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            toggleUnderline();
-                          }}
-                        >
-                          <Icons.Underline />
-                        </button>
-                        <button
-                          className={classNames("menu-button mr-2", {
-                            "is-active": editor.isActive("italic"),
-                          })}
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            toggleItalic();
-                          }}
-                        >
-                          <Icons.Italic />
-                        </button>
-                        <button
-                          className={classNames("menu-button mr-2", {
-                            "is-active": editor.isActive("strike"),
-                          })}
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            toggleStrike();
-                          }}
-                        >
-                          <Icons.Strikethrough />
-                        </button>
-                        <button
-                          className={classNames("menu-button mr-2", {
-                            "is-active": editor.isActive("code"),
-                          })}
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            toggleCode();
-                          }}
-                        >
-                          <Icons.Code />
-                        </button>
-                        <div className="w-60 h-7 bg-white flex flex-col justify-center rounded-2xl shadow-sm ">
-                          <p className="text-center font-comic">
-                            Word count: {wordCount} / 1000
-                          </p>
-                        </div>
+                      {/* <button
+                        className="menu-button mr-2"
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          editor.chain().focus().undo().run();
+                        }}
+                        disabled={!editor.can().undo()}
+                      >
+                        <Icons.RotateLeft />
+                      </button>
+                      <button
+                        className="menu-button mr-2"
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          editor.chain().focus().redo().run();
+                        }}
+                        disabled={!editor.can().redo()}
+                      >
+                        <Icons.RotateRight />
+                      </button>
+                      <button
+                        className={classNames("menu-button mr-2", {
+                          "is-active": editor.isActive("bold"),
+                        })}
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          toggleBold();
+                        }}
+                      >
+                        <Icons.Bold />
+                      </button>
+                      <button
+                        className={classNames("menu-button mr-2", {
+                          "is-active": editor.isActive("underline"),
+                        })}
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          toggleUnderline();
+                        }}
+                      >
+                        <Icons.Underline />
+                      </button>
+                      <button
+                        className={classNames("menu-button mr-2", {
+                          "is-active": editor.isActive("italic"),
+                        })}
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          toggleItalic();
+                        }}
+                      >
+                        <Icons.Italic />
+                      </button>
+                      <button
+                        className={classNames("menu-button mr-2", {
+                          "is-active": editor.isActive("strike"),
+                        })}
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          toggleStrike();
+                        }}
+                      >
+                        <Icons.Strikethrough />
+                      </button>
+                      <button
+                        className={classNames("menu-button mr-2", {
+                          "is-active": editor.isActive("code"),
+                        })}
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          toggleCode();
+                        }}
+                      >
+                        <Icons.Code />
+                      </button> */}
+                      <div className="w-60 h-7 bg-white flex flex-col justify-center rounded-2xl shadow-sm ">
+                        <p className="text-center font-comic">
+                          Word count: {wordCount} / 1000
+                        </p>
                       </div>
                     </div>
-
-                    <EditorContent
-                      className={`scroll h-[600px] mt-10 overflow-y-auto hide-scrollbar ${
-                        isLoading ? "opacity-50 cursor-not-allowed" : ""
-                      }`}
-                      editor={editor}
-                    />
                   </div>
+
+                  <EditorContent
+                    className={`scroll h-[600px] mt-10 overflow-y-auto hide-scrollbar ${
+                      isLoading ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                    editor={editor}
+                  />
                 </div>
-                <div className="flex justify-center">
-                  <button
-                    onClick={handleSubmit}
-                    className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-[50vw] h-14"
-                  >
-                    Submit Story
-                  </button>
-                </div>
-            
+              </div>
+              <div className="flex justify-center">
+                <button
+                  onClick={handleSubmit}
+                  className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-[50vw] h-14"
+                >
+                  Submit Story
+                </button>
+              </div>
             </form>
             <style jsx>{`
-           .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-`}</style>
+              .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+              }
+            `}</style>
           </div>
         </div>
       </div>
       {!isSubcriptionActive && role != "admin" ? <Subscription /> : null}
-   
     </div>
-    
   );
-
 };
-
 
 export default CreateContest;
