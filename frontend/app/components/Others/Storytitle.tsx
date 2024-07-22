@@ -22,17 +22,19 @@ const Storytitle: React.FC<StoryProps> = ({ story }) => {
     return words.slice(0, wordLimit).join(" ") + "...";
   };
 
-  const previewContent = getPreviewContent(story.content, 50);
+  const wordLimit = 50;
+  const previewContent = getPreviewContent(story.content || "", wordLimit);
   const contributors = story
-    ? Array.from(new Array(...story?.contributors, story?.user))
+    ? Array.from(new Array(...(story?.contributors || []), story?.user))
     : [];
   const content = isExpanded
-    ? story.content.replace(/\n/g, "<br>")
+    ? (story.content || "").replace(/\n/g, "<br>")
     : previewContent.replace(/\n/g, "<br>");
 
+  const isContentLong = (story.content || "").split(" ").length > wordLimit;
+
   return (
-    <div className="w-full mx-auto border-2 border-gray-200 px-5 rounded-3xl overflow-hidden flex flex-col gap-y-2">
-      {/* Card title and image */}
+    <div className="w-full mx-auto border-2 bg-white border-gray-200 px-5 rounded-3xl overflow-hidden flex flex-col gap-y-2">
       <div className="flex items-center justify-between md:px-4 py-4">
         <div className="flex items-center">
           <h2 className="text-xl md:text-2xl lg:text-3xl font-bold">
@@ -68,19 +70,27 @@ const Storytitle: React.FC<StoryProps> = ({ story }) => {
         </div>
       </div>
       {/* Paragraph */}
-      <div
-        className="text-xs md:text-sm lg:text-base text-gray-900"
-        dangerouslySetInnerHTML={{ __html: content }}
-      />
+      {story.content ? (
+        <div
+          className="text-xs md:text-sm lg:text-base text-gray-900"
+          dangerouslySetInnerHTML={{ __html: content }}
+        />
+      ) : (
+        <div className="text-xs md:text-sm py-4 lg:text-base text-gray-900">
+          No Story available.
+        </div>
+      )}
       {/* Read more button */}
-      <div className="md:px-4 py-4 flex justify-end">
-        <button
-          onClick={toggleExpand}
-          className="bg-black text-white py-2 md:py-3 lg:py-4 w-20 md:w-28 lg:w-36 px-3 md:px-4 lg:px-5 rounded-3xl"
-        >
-          {isExpanded ? "Show less" : "Read more"}
-        </button>
-      </div>
+      {isContentLong && (
+        <div className="md:px-4 py-4 flex justify-end">
+          <button
+            onClick={toggleExpand}
+            className="bg-black text-white py-2 md:py-3 lg:py-4 w-20 md:w-28 lg:w-36 px-3 md:px-4 lg:px-5 rounded-3xl"
+          >
+            {isExpanded ? "Show less" : "Read more"}
+          </button>
+        </div>
+      )}
     </div>
   );
 };

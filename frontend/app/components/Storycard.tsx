@@ -33,6 +33,8 @@ const Storycard: React.FC<StorycardProps> = ({
   const contentDisplay = showFullContent
     ? content.replace(/\n/g, "<br>")
     : getShortContent(content, wordLimit).replace(/\n/g, "<br>");
+  
+  const isContentLong = content.split(" ").length > wordLimit;
 
   return (
     <div className="relative my-6">
@@ -60,7 +62,7 @@ const Storycard: React.FC<StorycardProps> = ({
             dangerouslySetInnerHTML={{ __html: contentDisplay }}
           ></p>
         </div>
-        {showFullContent ? (
+        {isContentLong && (
           <div className="px-4 sm:px-6 py-4 flex justify-end">
             <button
               onClick={() => setShowFullContent(!showFullContent)}
@@ -69,8 +71,6 @@ const Storycard: React.FC<StorycardProps> = ({
               {showFullContent ? "Show less" : "Read more"}
             </button>
           </div>
-        ) : (
-          <div className="py-4"></div>
         )}
       </div>
     </div>

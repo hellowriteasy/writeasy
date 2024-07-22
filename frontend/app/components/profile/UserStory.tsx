@@ -127,11 +127,8 @@ const Card: React.FC<CardProps> = ({
     );
   }
 
-  const shouldHideButtons =
-    pathname.endsWith("contest") || pathname.endsWith("game");
-  const content = showFullDescription
-    ? descriptionText.replace(/\n/g, "<br>")
-    : truncatedDescription.replace(/\n/g, "<br>");
+  const shouldHideButtons = pathname.endsWith("contest") || pathname.endsWith("game");
+
   return (
     <div className="bg-white flex sm:w-10/12 flex-col justify-between w-3/4 mt-3 min-h-72 border-2 border-slate-300 shadow-sm rounded-3xl p-6 transition-all duration-300">
       <div ref={targetRef} className="flex flex-col mb-4">
@@ -144,8 +141,9 @@ const Card: React.FC<CardProps> = ({
             className={`text-gray-700 sm:text-sm  font-comic transition-all duration-300 ${
               showFullDescription ? "max-h-full" : "max-h-20 overflow-hidden"
             }`}
-            dangerouslySetInnerHTML={{ __html: content }}
-          ></p>
+          >
+            {showFullDescription ? descriptionText : truncatedDescription}
+          </p>
           {showDiff && (
             <div className="mt-4">
               <h3 className="text-lg font-semibold font-comic">Corrections:</h3>
@@ -192,12 +190,14 @@ const Card: React.FC<CardProps> = ({
         >
           Delete
         </button>
-        <button
-          onClick={toggleDescription}
-          className="bg-black sm:p-1 font-comic sm:w-20 sm:h-8 sm:rounded sm:text-[10px] text-white px-4 py-2 rounded-2xl"
-        >
-          {showFullDescription ? "Show Less" : "Read More"}
-        </button>
+        {descriptionWords.length > previewWords && (
+          <button
+            onClick={toggleDescription}
+            className="bg-black sm:p-1 font-comic sm:w-20 sm:h-8 sm:rounded sm:text-[10px] text-white px-4 py-2 rounded-2xl"
+          >
+            {showFullDescription ? "Show Less" : "Read More"}
+          </button>
+        )}
       </div>
 
       <Transition appear show={isDeleteDialogOpen} as={Fragment}>
