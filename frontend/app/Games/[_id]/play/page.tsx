@@ -491,9 +491,9 @@ const Page = () => {
                             )}
                           </div>
                         </div>
-                        <div className={`w-[50vw] rounded-3xl   `}>
+                        <div className={` rounded-3xl   `}>
                           <EditorContent
-                            className={`scroll-m-2 w-[100%] min-h-96 mt-10  ${
+                            className={`scroll-m-2 w-full min-h-96 mt-10  ${
                               !currentStory || submittingStory
                                 ? "opacity-50 cursor-not-allowed"
                                 : ""
