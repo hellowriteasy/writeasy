@@ -57,10 +57,13 @@ const Storytitle: React.FC<StoryProps> = ({ story }) => {
                   src={contributor.profile_picture}
                   alt=""
                 />
+             
               ) : (
                 <Image src={Logo} alt="contributor's image" />
               )}
+              
             </div>
+            <h1 className="text-[12px] font-comic font-bold text-center">{contributor.username}</h1>
           </div>
         ))}
         <div>

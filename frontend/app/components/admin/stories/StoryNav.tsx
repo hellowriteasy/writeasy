@@ -17,6 +17,11 @@ const StoryNav = () => {
           Contests
         </span>
       </Link>
+      <Link href="/admin/stories/games">
+        <span className={`cursor-pointer ${pathname === '/admin/stories/games' ? 'border-b-4 border-gray-400' : ''}`}>
+          games
+        </span>
+      </Link>
     </nav>
   )
 }
