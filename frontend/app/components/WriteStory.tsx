@@ -260,7 +260,7 @@ export function SimpleEditor({
           <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
             <div className="flex h-16  gap-3 p-3 ps-6">
               {isLoading && <div className="loader mr-10 "></div>}
-              <button
+              {/* <button
                 className="menu-button mr-2"
                 type="button"
                 onClick={(e) => {
@@ -270,8 +270,8 @@ export function SimpleEditor({
                 disabled={!editor.can().undo()}
               >
                 <Icons.RotateLeft />
-              </button>
-              <button
+              </button> */}
+              {/* <button
                 className="menu-button mr-2"
                 type="button"
                 onClick={(e) => {
@@ -279,8 +279,8 @@ export function SimpleEditor({
                   editor.chain().focus().redo().run();
                 }}
                 disabled={!editor.can().redo()}
-              >
-                <Icons.RotateRight />
+              > */}
+                {/* <Icons.RotateRight />
               </button>
               <button
                 className={classNames("menu-button mr-2", {
@@ -341,7 +341,7 @@ export function SimpleEditor({
                 }}
               >
                 <Icons.Code />
-              </button>
+              </button> */}
               <button
                 className={classNames(
                   "menu-button bg-black text-sm font-comic text-white p-2 rounded-md ml-auto",
