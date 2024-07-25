@@ -1,7 +1,7 @@
 const userServiceClass = require("../services/userService");
 
 const sendEmailToAllUsers = async (req, res) => {
-  const { subject, content } = req.body;
+  let { subject, content } = req.body;
   const userService = new userServiceClass();
 
   try {
@@ -9,6 +9,11 @@ const sendEmailToAllUsers = async (req, res) => {
       throw new Error({ status: 400, message: "Please fill all the fields." });
     }
     res.status(200).json({ message: "Email sent successfully." });
+    content = content
+      .split("\n")
+      .map((line) => `<p>${line}</p>`)
+      .join("");
+    console.log(content);
     await userService.emailAllUsers(subject, content);
   } catch (error) {
     console.log(error);

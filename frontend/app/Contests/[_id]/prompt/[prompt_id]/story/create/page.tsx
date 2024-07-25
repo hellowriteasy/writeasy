@@ -21,7 +21,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { usePathname, useRouter } from "next/navigation";
 import { axiosInstance } from "@/app/utils/config/axios";
 import { TPrompt } from "@/app/utils/types";
-import { divideNewlinesByTwo } from "@/app/Games/[_id]/play/page";
+import { divideNewlinesByTwo } from "@/app/utils/methods";
 
 const CreateContest = () => {
   const [contestId, setContestId] = useState("");

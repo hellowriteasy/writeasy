@@ -29,6 +29,8 @@ const Email = () => {
     }
   };
 
+  console.log(content)
+  
   return (
     <ProtectedRoute>
       <div>
