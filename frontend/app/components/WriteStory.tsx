@@ -25,7 +25,7 @@ import HardBreak from "@tiptap/extension-hard-break";
 import InsertedText from "./tiptap/Inserted";
 import DeletedText from "./tiptap/Deleted";
 import PDF from "./PDF";
-import { divideNewlinesByTwo } from "../Games/[_id]/play/page";
+import { divideNewlinesByTwo } from "../utils/methods";
 
 interface SimpleEditorProps {
   triggerGrammarCheck: any;

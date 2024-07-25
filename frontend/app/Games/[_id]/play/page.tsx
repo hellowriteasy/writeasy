@@ -23,17 +23,12 @@ import { axiosInstance } from "@/app/utils/config/axios";
 import { TPrompt, TStory, TUser } from "@/app/utils/types";
 import Logo from "@/public/Landingpage-img/logo.svg";
 import { useRouter } from "next/navigation";
+import { divideNewlinesByTwo } from "@/app/utils/methods";
 interface SearchResult {
   username: string;
   email: string;
 }
-export function divideNewlinesByTwo(text: string): string {
-  return text.replace(/(\n+)/g, (match) => {
-    const newlineCount = match.length;
-    const newNewlineCount = Math.floor(newlineCount / 2); // Divide by 2
-    return "\n".repeat(newNewlineCount); // Repeat \n newNewlineCount times
-  });
-}
+
 
 interface Props {
   searchResults: SearchResult[];
