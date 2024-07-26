@@ -44,7 +44,7 @@ const Storytitle: React.FC<StoryProps> = ({ story }) => {
       </div>
       <div className="w-full relative flex flex-wrap gap-x-1">
         {contributors.map((contributor, index) => (
-          <div key={contributor._id} className="">
+          <div key={contributor._id} className="flex flex-col items-center">
             <div
               className={`w-10 h-10 left-${
                 index * 3 + 3
@@ -63,7 +63,7 @@ const Storytitle: React.FC<StoryProps> = ({ story }) => {
               )}
               
             </div>
-            <h1 className="text-[12px] font-comic font-bold text-center">{contributor.username}</h1>
+            <h1 className="text-[12px] font-comic  text-center">{contributor.username}</h1>
           </div>
         ))}
         <div>
