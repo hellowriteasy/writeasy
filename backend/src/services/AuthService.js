@@ -61,7 +61,6 @@ class AuthService {
     const payload = ticket.getPayload();
 
     let user = await User.findOne({ email: payload.email });
-    console.log("user", user);
     if (!user) {
       user = new User({
         username: payload.name || payload.email,
