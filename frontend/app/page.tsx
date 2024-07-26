@@ -9,8 +9,7 @@ export default function Home() {
   const toast = useCustomToast();
   const router = useRouter();
   useEffect(() => {
-    if (user.userId && !user.username) {
-
+    if (user.email && !user.username) {
       toast("Please set your username", "success");
       router.push("/setting");
       return;

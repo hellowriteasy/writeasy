@@ -28,15 +28,15 @@ const Hero = () => {
             <Image src={smCLoud} alt="small cloud" />
           </div>
         </div>
-        <div className="h-[75vh]   absolute w-[70vw] rounded-md overflow-hidden ">
+        <div className="h-[75vh]    absolute w-[70vw] rounded-md overflow-hidden ">
           <video
             autoPlay
             muted
             loop
             playsInline
-            className="w-[100%] object-cover h-[100%]"
+            className="w-[100%] h-[100%] sm:object-cover"
           >
-            <source src="/videos/writeasy_demo.mp4" type="video/mp4" />
+            <source src="/videos/writeasy_demo.mov" type="video/mp4" />
           </video>
 
           <div className="absolute vsm-hide w-[6vw] -top-[5%] -right-[8%]">
