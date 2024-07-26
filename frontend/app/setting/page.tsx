@@ -1,8 +1,15 @@
 "use client";
-import React, { useState, useRef, ChangeEvent, SyntheticEvent, useEffect } from "react";
+import React, {
+  useState,
+  useRef,
+  ChangeEvent,
+  SyntheticEvent,
+  useEffect,
+} from "react";
 import useAuthStore from "../store/useAuthStore";
 import { axiosInstance } from "../utils/config/axios";
 import useUploadFile from "../hooks/useFileUpload";
+import { useCustomToast } from "../utils/hooks/useToast";
 
 const Page = () => {
   const { userId, profile_picture, token } = useAuthStore();
@@ -14,28 +21,26 @@ const Page = () => {
   });
   const [profilePicture, setProfilePicture] = useState("");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const userProfile = useAuthStore()
+  const userProfile = useAuthStore();
   const [file, setFile] = useState<File | null>(null);
   const axiosIns = axiosInstance(token || "");
-
+  const toast = useCustomToast();
 
   useEffect(() => {
     setUserDetails({
-      username: userProfile.username||"",
-      email: userProfile.email||"",
+      username: userProfile.username || "",
+      email: userProfile.email || "",
       old_password: "",
-      password:""
-     
-    })
-  },[userProfile])
+      password: "",
+    });
+  }, [userProfile]);
 
   const { uploadFile } = useUploadFile();
   const upload = () => {
-    console.log(fileInputRef.current)
+    console.log(fileInputRef.current);
     if (!fileInputRef.current) return;
     fileInputRef.current.click();
   };
-  
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -69,6 +74,7 @@ const Page = () => {
         ...(email ? { email: email } : {}),
         ...(newPassword ? { password: newPassword } : {}),
       });
+      toast("Profile updated successfully", "success");
 
       console.log("Update successful", response.data);
     } catch (error) {
@@ -93,7 +99,12 @@ const Page = () => {
         className="w-40 h-40 sm:w-20 sm:h-20 bg-slate-700 my-4 rounded-full cursor-pointer"
         onClick={upload}
       >
-        <input type="file" hidden ref={fileInputRef} onChange={handleFileChange}/>
+        <input
+          type="file"
+          hidden
+          ref={fileInputRef}
+          onChange={handleFileChange}
+        />
         {profile_picture || file ? (
           <img
             className="w-full h-full rounded-full object-cover"

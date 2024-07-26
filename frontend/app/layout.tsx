@@ -27,7 +27,6 @@ export default function RootLayout({
     { label: "Pricing", path: "/Pricing" },
     { label: "FAQs", path: "/FAQ" },
   ];
-
   return (
     <html lang="en">
       <head>

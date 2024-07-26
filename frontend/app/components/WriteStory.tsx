@@ -147,17 +147,18 @@ export function SimpleEditor({
   ) => {
     event.preventDefault();
     try {
-      let currentContent = "";
-      if (!initialText) {
-        currentContent = divideNewlinesByTwo(editor.getText());
-        setInitialText(currentContent);
-        if (!currentContent) {
-          toast.warn("Please enter content before submitting.");
-          return;
-        }
-      } else {
-        currentContent = initialText;
-      }
+      let currentContent = divideNewlinesByTwo(editor.getText());
+      setInitialText(currentContent);
+      // if (!initialText) {
+      //   currentContent = divideNewlinesByTwo(editor.getText());
+      //   setInitialText(currentContent);
+      //   if (!currentContent) {
+      //     toast.warn("Please enter content before submitting.");
+      //     return;
+      //   }
+      // } else {
+      // currentContent = initialText;
+      // }
 
       if (wordLimitExceeded) {
         toast.error("Word limit exceeded. Please reduce the number of words.");
@@ -280,7 +281,7 @@ export function SimpleEditor({
                 }}
                 disabled={!editor.can().redo()}
               > */}
-                {/* <Icons.RotateRight />
+              {/* <Icons.RotateRight />
               </button>
               <button
                 className={classNames("menu-button mr-2", {

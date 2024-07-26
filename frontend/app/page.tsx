@@ -1,27 +1,25 @@
-"use client"
+"use client";
 import React, { useEffect } from "react";
 import Hero from "./pages/Home";
 import useAuthStore from "./store/useAuthStore";
-import useNotificationStore from './store/useNoticationStore'
+import { useCustomToast } from "./utils/hooks/useToast";
+import { useRouter } from "next/navigation";
 export default function Home() {
-    
-//  const {isSubscriptionActive}=useNotificationStore();
-  
-//     useEffect(() => {
-//       if (typeof window !== 'undefined' && "Notification" in window) {
-//         Notification.requestPermission().then(permission => {
-//           if (permission === "granted") {
-//             setSubscriptionActive(true);
-//           } else {
-//             setSubscriptionActive(false);
-//           }
-//         });
-//       }
-//     }, [setSubscriptionActive]);
+  const user = useAuthStore();
+  const toast = useCustomToast();
+  const router = useRouter();
+  useEffect(() => {
+    if (user.userId && !user.username) {
 
-    return (
-      <main className="font-school flex justify-center items-baseline flex-col two-line-bg ">
-        <Hero />
-      </main>
-    );
+      toast("Please set your username", "success");
+      router.push("/setting");
+      return;
+    }
+  }, [user]);
+
+  return (
+    <main className="font-school flex justify-center items-baseline flex-col two-line-bg ">
+      <Hero />
+    </main>
+  );
 }

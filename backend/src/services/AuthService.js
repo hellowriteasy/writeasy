@@ -63,7 +63,6 @@ class AuthService {
     let user = await User.findOne({ email: payload.email });
     if (!user) {
       user = new User({
-        username: payload.name || payload.email,
         email: payload.email,
         googleId: payload.sub,
       });
