@@ -8,6 +8,8 @@ import { axiosInstance } from "@/app/utils/config/axios";
 import { Dialog, Transition } from "@headlessui/react";
 import { useRouter, usePathname } from "next/navigation";
 import { diff_match_patch } from "diff-match-patch";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import PdfDocument from "../ReactPdf/ReactPdfDocument";
 
 interface CardProps {
   id: string;
@@ -127,7 +129,8 @@ const Card: React.FC<CardProps> = ({
     );
   }
 
-  const shouldHideButtons = pathname.endsWith("contest") || pathname.endsWith("game");
+  const shouldHideButtons =
+    pathname.endsWith("contest") || pathname.endsWith("game");
 
   return (
     <div className="bg-white flex sm:w-10/12 flex-col justify-between w-3/4 mt-3 min-h-72 border-2 border-slate-300 shadow-sm rounded-3xl p-6 transition-all duration-300">
@@ -159,13 +162,22 @@ const Card: React.FC<CardProps> = ({
       <div className="flex gap-4 mt-4">
         {!shouldHideButtons && (
           <button
-            onClick={() => {
-              setShowFullDescription(true);
-              toPDF();
-            }}
+            // onClick={() => {
+            //   setShowFullDescription(true);
+            //   toPDF();
+            // }}
             className="bg-white font-comic border-2 sm:p-0 sm:w-20 sm:h-8 sm:rounded sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
           >
-            PDF
+            <PDFDownloadLink
+              document={
+                <PdfDocument corrected={corrections} originals={description} />
+              }
+              fileName={`${promptTitle}${prompt_id.substring(0, 5)}.pdf`}
+            >
+              {({ blob, url, loading, error }) =>
+                loading ? "Downloading.." : "PDF"
+              }
+            </PDFDownloadLink>
           </button>
         )}
         {type === "game" && (

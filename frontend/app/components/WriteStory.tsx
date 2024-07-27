@@ -24,8 +24,9 @@ import { useRouter } from "next/navigation";
 import HardBreak from "@tiptap/extension-hard-break";
 import InsertedText from "./tiptap/Inserted";
 import DeletedText from "./tiptap/Deleted";
-import PDF from "./PDF";
 import { divideNewlinesByTwo } from "../utils/methods";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import PdfDocument from "./ReactPdf/ReactPdfDocument";
 
 interface SimpleEditorProps {
   triggerGrammarCheck: any;
@@ -351,12 +352,20 @@ export function SimpleEditor({
                   }
                 )}
                 type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleExport();
-                }}
               >
-                export to pdf
+                <PDFDownloadLink
+                  document={
+                    <PdfDocument
+                      corrected={correctedText}
+                      originals={initialText}
+                    />
+                  }
+                  fileName="example.pdf"
+                >
+                  {({ blob, url, loading, error }) =>
+                    loading ? "Loading document..." : "Download PDF"
+                  }
+                </PDFDownloadLink>
               </button>
             </div>
           </div>
@@ -390,9 +399,11 @@ export function SimpleEditor({
           {isSaving ? "Saving to profile..." : "Save to Profile"}
         </button>
       </div>
-      <div ref={targetRef} className="relative z-0 left-[1900px] top-50 ">
-        <PDF corrected={correctedText} originals={initialText} />
-      </div>
+
+      {/* <div ref={targetRef} className="relative  "> */}
+
+      {/* <PDF corrected={correctedText} originals={initialText} /> */}
+      {/* </div> */}
     </>
   );
 }

@@ -104,29 +104,30 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
                   />
                 </div>
                 <div className="flex w-full flex-col gap-8">
-                <div className="flex flex-wrap justify-center gap-4 sm:gap-1 font-comic">
-  {["grammar", "rewrite", "improve"].map((type) => (
-    <div key={type} className="flex">
-      <button
-        className={` sm:h-10 sm:w-20  md:h-[7vh] w-32 h-12 text-md bg-black text-white ${
-          taskType === type ? "bg-custom-yellow text-black" : ""
-        } hover:opacity-80 font-bold text-md sm:text-[2.5vw] rounded-3xl`}
-        value={type}
-        type="button"
-        onClick={
-          type !== "pdf"
-            ? (e) => {
-                handleTaskTypeClick(e);
-              }
-            : undefined
-        }
-      >
-        {type.charAt(0).toUpperCase() + type.slice(1)}
-      </button>
-    </div>
-  ))}
-</div>
-
+                  <div className="flex flex-wrap justify-center gap-4 sm:gap-1 font-comic">
+                    {["grammar", "rewrite", "improve"].map((type) => (
+                      <div key={type} className="flex">
+                        <button
+                          className={` sm:h-10 sm:w-20  md:h-[7vh] w-32 h-12 text-md bg-black text-white ${
+                            taskType === type
+                              ? "bg-custom-yellow text-black"
+                              : ""
+                          } hover:opacity-80 font-bold text-md sm:text-[2.5vw] rounded-3xl`}
+                          value={type}
+                          type="button"
+                          onClick={
+                            type !== "pdf"
+                              ? (e) => {
+                                  handleTaskTypeClick(e);
+                                }
+                              : undefined
+                          }
+                        >
+                          {type.charAt(0).toUpperCase() + type.slice(1)}
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </form>

@@ -31,7 +31,11 @@ const PDF: React.FC<Props> = ({ originals, corrected }) => {
       const color: string =
         part[0] === 1 ? "green" : part[0] === -1 ? "red" : "black";
       const backgroundColor =
-        part[0] === 1 ? "#51d80e6d" : part[0] === -1 ? "#f0232366" : "";
+        part[0] === 1
+          ? "rgba(8, 165, 8, 0.2)"
+          : part[0] === -1
+          ? "rgba(255, 0, 0, 0.202)"
+          : "";
       const textDecoration =
         part[0] === 1 ? "underline" : part[0] === -1 ? "" : "";
 
@@ -39,13 +43,12 @@ const PDF: React.FC<Props> = ({ originals, corrected }) => {
         color: color,
         backgroundColor,
         textDecoration,
-        height: "40px",
         display: "inline-block",
       };
       const span: React.ReactElement = (
-        <div key={index} style={style}>
+        <p key={index} style={style}>
           {part[1]}
-        </div>
+        </p>
       );
       result.push(span);
     });
@@ -58,7 +61,7 @@ const PDF: React.FC<Props> = ({ originals, corrected }) => {
   }, [corrected, originals]);
   console.log("improved", improved);
   return (
-    <div className="w-full   ">
+    <div className="w-full ">
       <div
         className="flex items-center  border  h-[100vh] flex-col w-full "
         ref={targetRef}
