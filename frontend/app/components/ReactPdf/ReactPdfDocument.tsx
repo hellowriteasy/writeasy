@@ -1,84 +1,74 @@
-import React from "react";
-import {
-  Page,
-  Text,
-  View,
-  Document,
-  StyleSheet,
-} from "@react-pdf/renderer";
+import React, { useEffect, useState } from "react";
+import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import { diff_match_patch } from "diff-match-patch";
 
+// Create styles
 const styles = StyleSheet.create({
-  page: {
-    padding: 10,
-  },
-  section: {
-    marginBottom: 10,
-    padding: 10,
-  },
-  deletedText: {
-    textDecoration: "line-through",
-    color: "red",
-  },
-  insertedText: {
-    textDecoration: "underline",
+  page: { fontSize: 12 },
+  section: { margin: 30, fontSize: 12 },
+  added: {
     color: "green",
+    textDecoration: "underline",
+    backgroundColor: "rgba(8, 165, 8, 0.2)",
+    marginBottom: 2,
   },
+  text: { textAlign: "left", color: "black", marginBottom: 2 },
+  removed: {
+    color: "red",
+    textDecoration: "line-through",
+    backgroundColor: "rgba(255, 0, 0, 0.202)",
+    marginBottom: 2,
+  },
+  line: { display: "flex", flexDirection: "row", flexWrap: "wrap" },
 });
 
-type MyDocumentProps = {
-  content: React.ReactNode;
+// Create Document Component
+const PdfDocument = (props: { originals: string; corrected: string }) => {
+  const [improved, setImproved] = useState<React.ReactElement[]>([]);
+  const compareSentences = (
+    original: string,
+    corrected: string
+  ): React.ReactElement[] => {
+    original;
+    corrected;
+
+    const dmp = new diff_match_patch();
+    const diff = dmp.diff_main(original, corrected);
+    dmp.diff_cleanupSemantic(diff);
+    const result: React.ReactElement[] = [];
+
+    diff.forEach((part: any, index: number) => {
+      // result.push(span);
+      if (part[0] === 1) {
+        result.push(<Text style={styles.added}>{part[1]}</Text>);
+      } else if (part[0] === -1) {
+        result.push(<Text style={styles.removed}>{part[1]}</Text>);
+      } else {
+        result.push(<Text style={styles.text}>{part[1]}</Text>);
+      }
+      console.log(part[0], part[1]);
+    });
+
+    return result;
+  };
+  useEffect(() => {
+    setImproved(compareSentences(props.originals, props.corrected));
+  }, [props.corrected, props.corrected]);
+  console.log(props.corrected, props.originals);
+  return (
+    <Document>
+      <Page size="A4" style={styles.page}>
+        <View style={[styles.section, { color: "white" }]}>
+          <Text style={styles.line}>
+            {improved.length > 0
+              ? improved.map((text, index) => <>{text}</>)
+              : null}
+          </Text>
+          <Text style={styles.line}></Text>
+        </View>
+      </Page>
+    </Document>
+  );
 };
 
-type ParseHTMLToPDF = (htmlContent: string) => React.ReactNode[];
-
- export const parseHTMLToPDF: ParseHTMLToPDF = (htmlContent) => {
-   const parser = new DOMParser();
-   const doc = parser.parseFromString(htmlContent, "text/html");
-   const elements: React.ReactNode[] = [];
-
-   let currentText = "";
-   let currentStyle: any = null;
-
-   const flushText = () => {
-     if (currentText) {
-       elements.push(<Text style={currentStyle}>{currentText}</Text>);
-       currentText = "";
-       currentStyle = null;
-     }
-   };
-
-   doc.body.childNodes.forEach((node) => {
-     if (node.nodeType === Node.TEXT_NODE) {
-       currentText += node.textContent;
-     } else if (node.nodeType === Node.ELEMENT_NODE) {
-       const style = (node as HTMLElement).getAttribute("style") || "";
-
-       if (style.includes("line-through") && style.includes("red")) {
-         flushText();
-         currentStyle = styles.deletedText;
-         currentText = node.textContent || "";
-       } else if (style.includes("underline") && style.includes("green")) {
-         flushText();
-         currentStyle = styles.insertedText;
-         currentText = node.textContent || "";
-       } else {
-         flushText();
-         elements.push(<Text>{node.textContent}</Text>);
-       }
-     }
-   });
-
-   flushText();
-   return elements;
- };
-
-
-const MyDocument: React.FC<MyDocumentProps> = ({ content }) => (
-  <Document>
-    <Page style={styles.page}>
-      <View style={styles.section}>{content}</View>
-    </Page>
-  </Document>
-);
-
-export default MyDocument;
+export default PdfDocument;
