@@ -56,7 +56,21 @@ async function confirmStripeCheckout(session_id) {
   }
 }
 
+async function createCustomer({ username, email }) {
+  try {
+    const customer = await stripe.customers.create({
+      name: `${customer}`,
+      email,
+    });
+    return customer.id;
+  } catch (error) {
+    console.log(error);
+    new Error("stripe customer creation error", error);
+  }
+}
+
 const StripeService = {
+  createCustomer,
   createStripeCheckout,
   confirmStripeCheckout,
 };

@@ -1,17 +1,17 @@
 import { useState, Fragment, useRef, useEffect } from "react";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { Dialog, Transition } from "@headlessui/react";
-import { toast } from "react-toastify";
 import { axiosInstance } from "@/app/utils/config/axios";
 import { TStory } from "@/app/utils/types";
 import DeleteModal from "../../../DeleteModal";
+import { useCustomToast } from "@/app/utils/hooks/useToast";
 
 interface CardProps {
   story: TStory;
   onsuccess: () => void;
 }
 
-const Card: React.FC<CardProps> = ({ story,onsuccess }) => {
+const Card: React.FC<CardProps> = ({ story, onsuccess }) => {
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState(true);
   const [feedback, setFeedback] = useState(story.correctionSummary);
@@ -20,6 +20,7 @@ const Card: React.FC<CardProps> = ({ story,onsuccess }) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const cancelButtonRef = useRef(null);
   const AxiosIns = axiosInstance("");
+  const toast = useCustomToast();
 
   useEffect(() => {
     setFeedback(story.correctionSummary);
@@ -29,33 +30,29 @@ const Card: React.FC<CardProps> = ({ story,onsuccess }) => {
 
   const handleUpdate = async () => {
     try {
-      const response = await AxiosIns.put(
-        `/stories/${story._id}`,
-        {
-          correctionSummary: feedback,
-          content: storyDetail,
-          score: grade,
-        }
-      );
-      toast.success("Story updated successfully");
+      await AxiosIns.put(`/stories/${story._id}`, {
+        correctionSummary: feedback,
+        content: storyDetail,
+        score: grade,
+      });
+      toast("Story updated successfully", "success");
       setOpen(false);
       onsuccess();
     } catch (error) {
       console.error("There was an error updating the story!", error);
-      toast.error("Failed to update story");
+      toast("Failed to update story", "error");
     }
   };
 
   const handleDelete = async () => {
     try {
-      const response = await AxiosIns.delete(`/stories/${story._id}`);
-      toast.success("Story deleted successfully");
+      await AxiosIns.delete(`/stories/${story._id}`);
       setDeleteModalOpen(false);
       onsuccess(); // This function should be defined in the parent component, where this card is used
       // You might want to trigger a state update to remove the deleted story from the UI
     } catch (error) {
       console.error("There was an error deleting the story!", error);
-      toast.error("Failed to delete story");
+      toast("Failed to delete story", "error");
     }
   };
 
@@ -68,7 +65,10 @@ const Card: React.FC<CardProps> = ({ story,onsuccess }) => {
             <button className="text-black" onClick={() => setOpen(true)}>
               <FaEdit size={30} />
             </button>
-            <button className="text-black" onClick={() => setDeleteModalOpen(true)}>
+            <button
+              className="text-black"
+              onClick={() => setDeleteModalOpen(true)}
+            >
               <FaTrashAlt size={30} />
             </button>
           </div>
@@ -77,8 +77,7 @@ const Card: React.FC<CardProps> = ({ story,onsuccess }) => {
         <div className="text-gray-700">User: {story.user.username}</div>
         <div className="text-gray-700">Score: {story.score}</div>
         <div className="text-gray-700">
-          Submission Date:{" "}
-          {new Date(story.submissionDateTime).toLocaleString()}
+          Submission Date: {new Date(story.submissionDateTime).toLocaleString()}
         </div>
       </div>
 
