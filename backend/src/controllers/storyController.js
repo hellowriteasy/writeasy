@@ -136,7 +136,7 @@ const updateStory = async (req, res) => {
 const deleteStory = async (req, res) => {
   try {
     await StoryService.deleteStory(req.params.id);
-    res.status(204).send();
+    res.status(200).send("Story deleted successfully");
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

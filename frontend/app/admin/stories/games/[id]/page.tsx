@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useState, useEffect } from "react";
 import Card from "../../../../components/admin/stories/games/StoryCard";
 import StoryNav from "@/app/components/admin/stories/StoryNav";
@@ -13,13 +13,13 @@ const Page = ({ params }: { params: { id: string } }) => {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const response = await AxiosIns.get('/stories/contest/prompt', {
-            params: {
-              prompt_id: '669a8dfeccf4a2838f55784e',
-              page: 1,
-              perPage: 10
-            }
-          });
+        const response = await AxiosIns.get("/stories/contest/prompt", {
+          params: {
+            prompt_id: params.id,
+            page: 1,
+            perPage: 10,
+          },
+        });
         setStories(response.data?.data);
       } catch (error) {
         console.error("Error fetching stories:", error);
@@ -28,19 +28,19 @@ const Page = ({ params }: { params: { id: string } }) => {
 
     fetchStories();
   }, [params.id]);
-  async function onSuccess(){
+  async function onSuccess() {
     try {
-        const response = await AxiosIns.get('/stories/contest/prompt', {
-            params: {
-              prompt_id: '669a8dfeccf4a2838f55784e',
-              page: 1,
-              perPage: 10
-            }
-          });
-        setStories(response.data?.data);
-      } catch (error) {
-        console.error("Error fetching stories:", error);
-      }
+      const response = await AxiosIns.get("/stories/contest/prompt", {
+        params: {
+          prompt_id: params.id,
+          page: 1,
+          perPage: 10,
+        },
+      });
+      setStories(response.data?.data);
+    } catch (error) {
+      console.error("Error fetching stories:", error);
+    }
   }
 
   return (
