@@ -75,7 +75,7 @@ const Storytitle: React.FC<StoryProps> = ({ story }) => {
       {/* Paragraph */}
       {story.content ? (
         <div
-          className="text-xs md:text-sm lg:text-base text-gray-900"
+          className="text-xs md:text-sm lg:text-base py-4 text-gray-900"
           dangerouslySetInnerHTML={{ __html: content }}
         />
       ) : (
@@ -88,7 +88,7 @@ const Storytitle: React.FC<StoryProps> = ({ story }) => {
         <div className="md:px-4 py-4 flex justify-end">
           <button
             onClick={toggleExpand}
-            className="bg-black text-white py-2 md:py-3 lg:py-4 w-20 md:w-28 lg:w-36 px-3 md:px-4 lg:px-5 rounded-3xl"
+            className="bg-black text-white py-2    sm:text-[10px] md:text-sm lg:py-4 w-20 md:w-[14vw]  lg:w-36 px-3 md:px-4 sm:rounded-xl lg:px-5 rounded-3xl"
           >
             {isExpanded ? "Show less" : "Read more"}
           </button>

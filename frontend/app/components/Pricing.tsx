@@ -94,9 +94,9 @@ const Pricing = () => {
                 </div>
               )}
             </div>
-            <div className="text-center flex flex-col gap-y-2 absolute top-[50%]    w-10/12 mx-auto">
+            <div className="text-center flex flex-col gap-y-2 absolute top-[35%]    w-10/12 mx-auto">
               <div>
-                <ul className="flex sm:text-[12px]  md:text-xl  flex-col px-4  items-start ">
+                <ul className="flex sm:text-[12px]   flex-col px-4  items-start ">
                   <li className=" text-start">
                     •⁠ ⁠Unlimited writing practices with immediate GPT markings
                   </li>
@@ -115,7 +115,7 @@ const Pricing = () => {
               ) : !isSubcriptionActive ? (
                 <button
                   onClick={handleSignUp}
-                  className="border text-2xl sm:text-3xl mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl text-white w-40  md:w-56 lg:w-60 h-12 sm:w-12 sm:h-6 flex items-center justify-center sm:text-[10px] sm:rounded-sm "
+                  className="border text-2xl sm:text-3xl py-2 mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl text-white w-40  md:w-56 lg:w-60 h-12 sm:w-12 sm:h-6 flex items-center justify-center sm:text-[10px] sm:rounded-sm "
                 >
                   Buy Now
                 </button>

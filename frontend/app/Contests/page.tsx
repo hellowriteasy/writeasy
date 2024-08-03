@@ -52,7 +52,7 @@ const Contest = () => {
       </div>
       <div className="w-10/12 h-screen ">
         <div className="w-full h-60 sm:h-40 relative pt-4">
-          <h1 className="text-3xl sm:text-xl md:text-5xl lg:text-6xl font-bold font-comic">
+          <h1 className="text-3xl sm:text-sm sm:text-black md:text-5xl lg:text-6xl font-bold font-comic">
           Weekly Writing Contests
           </h1>
           <div className="absolute top-6 md-hide right-20 ">
@@ -72,7 +72,7 @@ const Contest = () => {
               <Image className="w-[12vw]" src={Bee} alt="bee" />
             </div>
             <div className="gap-8 relative flex flex-col gap-y-20 sm:gap-9 w-full ">
-              <div className="flex flex-col gap-y-3">
+              <div className="flex  flex-col gap-y-3">
                 <Join />
               </div>
               <div className="flex flex-col  gap-y-3 sm:gap-y-0 w-full ">

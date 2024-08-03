@@ -116,6 +116,7 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
               >
                    <Link
                     href={link.path}
+                    onClick={toggleMenu}
                     className="pt-5 text-xl font-bold cursor-pointer"
                   >
                     {link.label}
