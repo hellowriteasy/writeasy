@@ -95,7 +95,7 @@ const Page: React.FC = () => {
         <div className="flex w-full gap-x-5 min-h-[1000px] relative  justify-around  sm:justify-start ">
           <div className="gap-8 mid-w-full   flex flex-col">
             <div className=" flex justify-between gap-7 items-center h-20">
-              <h1 className="text-2xl sm:text-sm   md:text-4xl lg:text-5xl xl:text-7xl font-comic font-bold">
+              <h1 className="text-2xl sm:text-xl   md:text-4xl lg:text-5xl xl:text-7xl font-comic font-bold">
                 All Prompts
               </h1>
               <SelectMenu

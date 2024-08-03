@@ -315,7 +315,7 @@ const Page = () => {
     searchResults,
     handleSelectedUser,
   }) => (
-    <div className="p-4 h-96 overflow-y-auto bg-white shadow-lg rounded-lg">
+    <div className="p-4 h-96 overflow-y-auto  bg-white shadow-lg rounded-lg">
       {searchResults.map((result, index) => (
         <div
           key={index}
@@ -329,7 +329,7 @@ const Page = () => {
             <div className="text-sm font-medium text-gray-900">
               {result.username}
             </div>
-            <div className="text-sm text-gray-500">{result.email}</div>
+            {/* <div className="text-sm text-gray-500">{result.email}</div> */}
           </div>
         </div>
       ))}
@@ -392,7 +392,7 @@ const Page = () => {
 
   return (
     <div className="w-full h-[1300px] mt-6 z-0 relative flex justify-center ">
-      <div className="w-10/12 h-screen ms-12 flex flex-col gap-y-4">
+      <div className="w-10/12 h-screen  flex flex-col gap-y-4">
         <div className="w-full  relative pt-4 flex flex-col gap-y-4">
           <div className="flex flex-col gap-y-4">
             <div className="flex flex-col gap-y-2">
@@ -405,7 +405,7 @@ const Page = () => {
             </div>
             {!currentStory && (
               <div className="flex flex-col sm:gap-y-0 gap-y-6">
-                <h1 className="font-comic text-2xl font-bold">
+                <h1 className="font-comic text-2xl  font-bold">
                   Invite friends to join Collaborative Writing
                 </h1>
                 {/*
@@ -449,7 +449,7 @@ const Page = () => {
           ) : null}
         </div>
         <div className="flex w-[100%] relative mt-0 ">
-          <div className="absolute -top-40 mt-3 -left-48">
+          <div className="absolute sm:hidden -top-40 mt-3 -left-48">
             <Image src={Bee} alt="bee" />
           </div>
           <div className="gap-8 relative  flex flex-col items-center  w-full">

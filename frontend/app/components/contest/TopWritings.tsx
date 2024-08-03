@@ -34,7 +34,7 @@ const TopWriting: React.FC<TopWritingProps> = ({
     : getShortContent(content, 75).replace(/\n/g, "<br>");
   return (
     <div className="relative my-6">
-      <div className="absolute -top-12 left-4"> <Image src={mainstar} alt="main star" /></div>
+      <div className="absolute sm:w-10 sm:-top-6 sm:left-2 -top-12 w-20 left-4"> <Image src={mainstar} alt="main star" /></div>
       <div className="w-11/12 mx-auto border-2 font-comic border-gray-300 bg-white rounded-2xl h-[fit-content] overflow-hidden">
         <div className="flex items-center my-8 justify-between px-4 sm:px-6 py-4">
           <div className="flex items-center">
@@ -52,13 +52,15 @@ const TopWriting: React.FC<TopWritingProps> = ({
           </div>
         </div>
 
-        <div className="px-4 sm:px-6 flex flex-col gap-y-2">
+        <div className="px-4 sm:px-6 py-4 flex flex-col gap-y-2">
           <h2 className="text-lg sm:text-xl md:text-2xl font-bold">{title}</h2>
           <p className="text-sm sm:text-md md:text-lg text-gray-900" dangerouslySetInnerHTML={{ __html: displayWriting }}>
        
           </p>
         </div>
+      {
 
+      showFullContent &&
         <div className="px-4 sm:px-6 py-4 flex justify-end">
           <button
             onClick={() => setShowFullContent(!showFullContent)}
@@ -67,6 +69,7 @@ const TopWriting: React.FC<TopWritingProps> = ({
             {showFullContent ? "Show less" : "Read more"}
           </button>
         </div>
+}
       </div>
     </div>
   );

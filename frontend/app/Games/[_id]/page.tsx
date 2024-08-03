@@ -110,20 +110,20 @@ const Page: React.FC<PageProps> = ({ params }) => {
 
   return (
     <div className="w-screen font-comic h-auto flex flex-col">
-      <div className="h-80  relative w-full flex items-center flex-col">
+      <div className="h-auto  relative w-full flex items-center flex-col">
         <div className="absolute left-0">
           <Image className="w-[9vw]" src={shootingstar} alt="shootingstar" />
         </div>
-        <div className="w-4/5 font-comic flex flex-col gap-10 sm:gap-5 sm:my-10 mt-20 mb-10">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl sm:text-xl font-bold font-comic">
+        <div className="w-4/5  font-comic flex flex-col gap-10 sm:gap-5 sm:my-10 mt-20 mb-10">
+          <h1 className="text-3xl  md:text-4xl lg:text-5xl xl:text-6xl sm:text-xl font-bold font-comic">
             {currentGame?.title}
           </h1>
-          <p className="sm:text-md text-xl font-semibold">
+          <p className="sm:text-sm text-xl  font-semibold">
             {currentGame?.description}
           </p>
           <button
             onClick={handleCreateStory}
-            className="w-fit px-10 sm:px-2 sm:text-sm sm:h-14 bg-black hover:opacity-80 text-center text-white rounded-3xl border h-20 text-xl md:text-2xl lg:text-3xl xl:text-4xl"
+            className=" sm:px-2 w-60    bg-black hover:opacity-80 text-center text-white rounded-3xl border h-16 text-xl md:text-2xl  lg:text-md xl:text-2xl"
           >
             {userGameStory ? "Continue your story" : "    Create your group"}
           </button>
@@ -132,10 +132,10 @@ const Page: React.FC<PageProps> = ({ params }) => {
           <Image className="w-[12vw]" src={cloud2} alt="cloud2" />
         </div>
       </div>
-      <div className="w-screen flex flex-col items-center">
+      <div className="w-screen flex sm:mt-[4vw]  flex-col items-center">
         {stories.length > 0 ? (
-          <div className="w-4/5 mt-10">
-            <h1 className="font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl pt-5 font-comic">
+          <div className="w-4/5 ">
+            <h1 className="font-bold text-3xl sm:text-xl md:text-6xl lg:text-7xl xl:text-8xl pt-5 font-comic">
               Groups
             </h1>
 

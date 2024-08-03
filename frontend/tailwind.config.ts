@@ -16,6 +16,7 @@ const config: Config = {
     extend: {
       screens: {
         custom: "1000px",
+        vsm: { max: "450px" },
         sm: { max: "600px" },
         mid: { max: "1200px" },
       },
