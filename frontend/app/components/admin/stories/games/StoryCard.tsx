@@ -1,4 +1,11 @@
-import { useState, Fragment, useRef, useEffect } from "react";
+import {
+  useState,
+  Fragment,
+  useRef,
+  useEffect,
+  ChangeEvent,
+  useTransition,
+} from "react";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { Dialog, Transition } from "@headlessui/react";
 import { axiosInstance } from "@/app/utils/config/axios";
@@ -21,6 +28,8 @@ const Card: React.FC<CardProps> = ({ story, onsuccess }) => {
   const cancelButtonRef = useRef(null);
   const AxiosIns = axiosInstance("");
   const toast = useCustomToast();
+
+ 
 
   useEffect(() => {
     setFeedback(story.correctionSummary);
@@ -119,26 +128,17 @@ const Card: React.FC<CardProps> = ({ story, onsuccess }) => {
                           as="h3"
                           className="text-base font-semibold leading-6 text-gray-900"
                         >
-                          {story.title}
+                          {/* {story.title} */}
                         </Dialog.Title>
                         <Dialog.Title
                           as="h3"
                           className="text-base font-semibold leading-6 text-gray-900"
                         >
-                          {story.user.username}
+                          {/* {story.user.username} */}
                         </Dialog.Title>
                         <div className="mt-2">
-                          <div className="mb-4 flex gap-4  items-center">
-                            <label className="block text-gray-700 text-sm font-bold mb-2">
-                              Grade:
-                            </label>
-                            <input
-                              className="mt-1 block w-20 h-10 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
-                              value={grade}
-                              onChange={(e) => setGrade(Number(e.target.value))}
-                            />
-                          </div>
-                          <div className="mb-4">
+                        
+                          {/* <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2">
                               Feedback
                             </label>
@@ -148,11 +148,8 @@ const Card: React.FC<CardProps> = ({ story, onsuccess }) => {
                               value={feedback}
                               onChange={(e) => setFeedback(e.target.value)}
                             />
-                          </div>
+                          </div> */}
                           <div className="mb-4">
-                            <label className="block text-gray-700 text-sm font-bold mb-2">
-                              Story Details
-                            </label>
                             <textarea
                               className="mt-1 block w-full h-96 p-8 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
                               placeholder="Story details"

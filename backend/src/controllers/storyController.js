@@ -257,13 +257,27 @@ const getStoriesByContentAndPrompt = async (req, res) => {
     const total = await Story.countDocuments({
       ...(contest_id ? { contest: contest_id } : null),
       ...(prompt_id ? { prompt: prompt_id } : null),
-      ...(exclude_top_writings ? { position: { $exists: false } } : null),
+      ...(exclude_top_writings
+        ? {
+            $or: [
+              { isTopWriting: false },
+              { isTopWriting: { $exists: false } },
+            ],
+          }
+        : {}),
     });
     const stories = await Story.find(
       {
         ...(contest_id ? { contest: contest_id } : null),
         ...(prompt_id ? { prompt: prompt_id } : null),
-        ...(exclude_top_writings ? { position: { $exists: false } } : null),
+        ...(exclude_top_writings
+          ? {
+              $or: [
+                { isTopWriting: false },
+                { isTopWriting: { $exists: false } },
+              ],
+            }
+          : {}),
       },
       {},
       {
@@ -385,12 +399,12 @@ const getTopStoriesForContest = async (req, res) => {
   try {
     const total = await Story.countDocuments({
       contest: id,
-      position: { $exists: true },
+      isTopWriting: true,
     });
 
     const stories = await Story.find({
       contest: id,
-      position: { $exists: true },
+      isTopWriting: true,
     })
       .sort({ score: -1 })
       .skip(skip) // Directly use skip
@@ -429,7 +443,7 @@ const getPreviousWeekTopStories = async (req, res) => {
 
     const lastWeekContestTopStories = await Story.find({
       contest: lastWeekContest[0]?._id,
-      position: { $exists: true },
+      isTopWriting: true,
     }).populate({
       path: "user",
       select: "-password",
@@ -445,7 +459,53 @@ const getPreviousWeekTopStories = async (req, res) => {
   }
 };
 
+const markTopStory = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const story = await Story.findById(id);
+    if (!story) {
+      return res.status(404).json({ message: "Story not found" });
+    }
+    if (story.isTopWriting) {
+      if (!story) {
+        return res
+          .status(409)
+          .json({ message: "Story is already marked as top writing" });
+      }
+    }
+    story.isTopWriting = true;
+    await story.save();
+    res.status(200).json({ message: "Story marked as top story" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: error?.message || "Internal server error" });
+  }
+};
+const removeTopStory = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const story = await Story.findById(id);
+    if (!story) {
+      return res.status(404).json({ message: "Story not found" });
+    }
+    if (!story.isTopWriting) {
+      if (!story) {
+        return res.status(409).json({ message: "Story is not a top story " });
+      }
+    }
+    story.isTopWriting = false;
+    await story.save();
+    res.status(200).json({ message: "Story removed from a top story" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: error?.message || "Internal server error" });
+  }
+};
 module.exports = {
+  removeTopStory,
+  markTopStory,
   createStory,
   getStories,
   updateStory,

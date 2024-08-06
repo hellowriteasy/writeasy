@@ -38,8 +38,9 @@ const SubscriptionUser = ({
         user_id: userId,
         end_date: endDate,
       });
-      await onUpdate();
       toast("Subscription updated successfully", "success");
+
+      await onUpdate();
     } catch (error) {
       toast("Failed to update subscription ", "error");
     }

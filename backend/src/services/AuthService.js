@@ -15,9 +15,9 @@ class AuthService {
   async registerUser(username, email, password) {
     let user = await User.findOne({ email });
     if (user) {
-      throw new Error("User already exists");
+      throw new Error("Email address already exists.");
     }
-
+    
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -39,8 +39,10 @@ class AuthService {
   async loginUser(email, password) {
     let user = await User.findOne({ email });
     if (!user) {
-      throw new Error("Email not found");
+      throw new Error("Email address not found.");
     }
+
+    console.log("the user", user);
 
     if (user.password && !(await bcrypt.compare(password, user.password))) {
       throw new Error("Invalid credentials");

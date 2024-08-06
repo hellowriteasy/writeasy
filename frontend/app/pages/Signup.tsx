@@ -49,6 +49,7 @@ const Signup = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [error, setError] = useState("");
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -69,7 +70,8 @@ const Signup = () => {
       });
 
       router.push("/login");
-    } catch (error) {
+    } catch (error: any) {
+      setError(error.response?.data?.msg || "Failed to register.");
       console.error("Error:", error);
     }
   };
@@ -196,17 +198,19 @@ const Signup = () => {
           <button className="text-center border rounded-3xl text-white hover:opacity-80 w-full sm:w-72 md:w-80 lg:w-96 mt-5 bg-black h-12 sm:h-14 text-xl sm:text-2xl">
             Sign Up
           </button>
-          <Button type="google" onClick={handleGoogleSignup} />
-          <h1 className="text-center font-comic pt-6">
-            Already have an account?{" "}
-            <Link href="/login" className="font-bold underline">
-              Login
-            </Link>
-          </h1>
+          {error && <p className="text-red-500 mx-auto">{error}</p>}
+
           <div className="absolute w-32 h-16 vvsm-hide -top-4 -right-28">
             <Image src={Rocket} alt="rocket" />
           </div>
         </form>
+        <Button type="google" />
+        <h1 className="text-center font-comic pt-6">
+          Already have an account?{" "}
+          <Link href="/login" className="font-bold underline">
+            Login
+          </Link>
+        </h1>
         <div className="absolute top-60 w-20 vsm-hide h-10 left-10">
           <Image src={Group2} alt="group" />
         </div>

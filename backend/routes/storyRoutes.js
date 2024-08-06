@@ -13,6 +13,8 @@ const {
   savePractiseStoryToProfile,
   getTopStoriesForContest,
   getPreviousWeekTopStories,
+  markTopStory,
+  removeTopStory,
 } = require("../src/controllers/storyController");
 const { practiseStory } = require("../src/controllers/StoryScoreController");
 /**
@@ -456,4 +458,8 @@ router.get("/contest/top-writings/:id", getTopStoriesForContest);
  */
 
 router.get("/contest/previous-week-top-stories", getPreviousWeekTopStories);
+
+router.post("/mark-top-story/:id", markTopStory);
+router.post("/remove-top-story/:id", removeTopStory);
+
 module.exports = router;

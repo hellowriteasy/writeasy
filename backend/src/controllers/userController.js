@@ -1,6 +1,7 @@
 const Subscription = require("../models/subscription");
 const User = require("../models/user");
 const AuthService = require("../services/AuthService");
+const StripeService = require("../services/stripeService");
 const { calculateSubscriptionRemainingDays } = require("../utils/methods");
 const authService = new AuthService();
 
@@ -85,6 +86,7 @@ const UserController = {
           ...others,
           isSubcriptionActive,
           subscriptionRemainingDays,
+          subscription_id: subscription.subscription_id
         },
       });
     } catch (error) {

@@ -8,27 +8,46 @@ import Link from "next/link";
 import useAuthStore from "../store/useAuthStore";
 import { axiosInstance } from "../utils/config/axios";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useCustomToast } from "../utils/hooks/useToast";
 
 const Pricing = () => {
   const { userId, isSubcriptionActive, subscriptionRemainingDays } =
     useAuthStore();
+  const [subscriptions, setSubscriptions] = useState([]);
   const AxiosIns = axiosInstance("");
   const router = useRouter();
+  const toast = useCustomToast();
 
-  const handleSignUp = async () => {
+  useEffect(() => {
+    fetchSubscriptions();
+  }, []);
+
+  const handleSignUp = async (priceId?: string, type?: string) => {
     try {
       if (!userId) {
         return router.push("/signup");
       }
       const response = await AxiosIns.post("/payments/checkout", {
         user_id: userId,
+        price_id: priceId,
+        type,
       });
 
       const { url } = response.data;
       window.location.href = url; // Redirect to Stripe Checkout
     } catch (error) {
       console.error("Error creating checkout session", error);
+      toast("Failed to initiate payment.Please try again.", "error");
     }
+  };
+
+  const fetchSubscriptions = async () => {
+    try {
+      const { data } = await AxiosIns.get(`/payments/subscriptions`);
+      setSubscriptions(data.data);
+      console.log(data);
+    } catch (error) {}
   };
 
   return (
@@ -66,64 +85,70 @@ const Pricing = () => {
         </div>
 
         <div className="flex flex-col w-[70vw] justify-center items-center relative lg:relative overflow-hidden  lg:w-1/2">
-          <div className="relative    lg:w-auto mt-10 lg:mt-0 flex flex-col gap-y-8 items-center">
-            <Image className="w-full" src={Group15} alt="" />
-            <div className="text-center absolute top-[20%] flex flex-col justify-center items-center w-10/12">
-              {!isSubcriptionActive ? (
-                <>
-                  <div className="flex top-[30%] justify-center items-center">
-                    <TbCurrencyPound className="text-[5vw]" />
-                    <h2 className="text-[4vw] font-comic text-center font-bold">
-                      20
-                    </h2>
-                    <span className="pt-4 text-[4vw]">/month</span>
+          {subscriptions.map((sub: any) => (
+            <div
+              key={sub?.id}
+              className="relative    lg:w-auto mt-10 lg:mt-0 flex flex-col gap-y-8 items-center"
+            >
+              <Image className="w-full" src={Group15} alt="" />
+              <div className="text-center absolute top-[20%] flex flex-col justify-center items-center w-10/12">
+                {!isSubcriptionActive ? (
+                  <>
+                    <div className="flex top-[30%] justify-center items-center">
+                      <TbCurrencyPound className="text-[5vw]" />
+                      <h2 className="text-[4vw] font-comic text-center font-bold">
+                        20
+                      </h2>
+                      <span className="pt-4 text-[4vw]">/month</span>
+                    </div>
+                  </>
+                ) : (
+                  <div className="absolute top-[5%]">
+                    <div className="flex items-center justify-center ">
+                      <TbCurrencyPound className="text-[5vw]" />
+                      <h2 className="text-[5vw] font-comic text-center font-bold">
+                        {sub?.unit_amount / 100}
+                      </h2>
+                      <span className="pt-4">/month</span>
+                    </div>
+                    <div className="text-center font-comic font-bold text-xl sm:text-sm">
+                      {subscriptionRemainingDays} days left
+                    </div>
                   </div>
-                </>
-              ) : (
-                <div className="absolute top-[5%]">
-                  <div className="flex items-center justify-center ">
-                    <TbCurrencyPound className="text-[5vw]" />
-                    <h2 className="text-[5vw] font-comic text-center font-bold">
-                      20
-                    </h2>
-                    <span className="pt-4">/month</span>
-                  </div>
-                  <div className="text-center font-comic font-bold text-xl sm:text-sm">
-                    {subscriptionRemainingDays} days left
-                  </div>
-                </div>
-              )}
-            </div>
-            <div className="text-center flex flex-col gap-y-2 absolute top-[50%]    w-10/12 mx-auto">
-              <div>
-                <ul className="flex sm:text-[12px]  md:text-xl  flex-col px-4  items-start ">
-                  <li className=" text-start">
-                    •⁠ ⁠Unlimited writing practices with immediate GPT markings
-                  </li>
-                  <li>•⁠ ⁠Weekly writing contests</li>
-                  <li>•⁠ ⁠Unlimited collaborative writing games</li>
-                </ul>
+                )}
               </div>
+              <div className="text-center flex flex-col gap-y-2 absolute top-[50%]    w-10/12 mx-auto">
+                <div>
+                  <ul className="flex sm:text-[12px]  md:text-xl  flex-col px-4  items-start ">
+                    <li className=" text-start">
+                      •⁠ ⁠Unlimited writing practices with immediate GPT
+                      markings
+                    </li>
+                    <li>•⁠ ⁠Weekly writing contests</li>
+                    <li>•⁠ ⁠Unlimited collaborative writing games</li>
+                  </ul>
+                </div>
 
-              {!userId ? (
-                <button
-                  onClick={handleSignUp}
-                  className="border text-2xl sm:w-12 sm:h-8 sm:text-[10px] sm:text-3xl mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl text-white w-40  md:w-56 lg:w-60 h-12 "
-                >
-                  Sign up
-                </button>
-              ) : !isSubcriptionActive ? (
-                <button
-                  onClick={handleSignUp}
-                  className="border text-2xl sm:text-3xl mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl text-white w-40  md:w-56 lg:w-60 h-12 sm:w-12 sm:h-6 flex items-center justify-center sm:text-[10px] sm:rounded-sm "
-                >
-                  Buy Now
-                </button>
-              ) : (
-                ""
-              )}
+                {!userId ? (
+                  <button
+                    onClick={() => handleSignUp()}
+                    className="border text-2xl sm:w-12 sm:h-8 sm:text-[10px] sm:text-3xl mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl text-white w-40  md:w-56 lg:w-60 h-12 "
+                  >
+                    Sign up
+                  </button>
+                ) : !isSubcriptionActive ? (
+                  <button
+                    onClick={() => handleSignUp(sub?.id, sub?.type)}
+                    className="border text-2xl sm:text-3xl mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl text-white w-40  md:w-56 lg:w-60 h-12 sm:w-12 sm:h-6 flex items-center justify-center sm:text-[10px] sm:rounded-sm "
+                  >
+                    Buy Now
+                  </button>
+                ) : (
+                  ""
+                )}
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>

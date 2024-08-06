@@ -27,11 +27,11 @@ import { divideNewlinesByTwo } from "@/app/utils/methods";
 interface SearchResult {
   username: string;
   email: string;
+  profile_picture: string;
 }
 
-
 interface Props {
-  searchResults: SearchResult[];
+  searchResults: TUser[];
   handleSelectedUser: (
     selectedEmail: string,
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -39,7 +39,7 @@ interface Props {
 }
 
 interface Props {
-  searchResults: SearchResult[];
+  searchResults: TUser[];
   handleSelectedUser: (
     selectedEmail: string,
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -322,14 +322,23 @@ const Page = () => {
           className="p-4 border-b border-gray-200 cursor-pointer flex items-center hover:bg-gray-100 transition-colors duration-200 ease-in-out"
           onClick={(e) => handleSelectedUser(result.email, e)} // Add user selection handler
         >
-          <div className="flex-shrink-0 h-10 w-10 rounded-full bg-custom-yellow text-white flex items-center justify-center">
-            {result.username.charAt(0).toUpperCase()}
+          <div className="w-12 h-12 rounded-full overflow-hidden">
+            {result.profile_picture &&
+            result.profile_picture.startsWith("https") ? (
+              <img
+                className="w-full h-full"
+                src={result.profile_picture}
+                alt=""
+              />
+            ) : (
+              <Image src={Logo} alt="Image" width={50} height={50} />
+            )}
           </div>
           <div className="ml-4">
             <div className="text-sm font-medium text-gray-900">
               {result.username}
             </div>
-            <div className="text-sm text-gray-500">{result.email}</div>
+            {/* <div className="text-sm text-gray-500">{result.email}</div> */}
           </div>
         </div>
       ))}
