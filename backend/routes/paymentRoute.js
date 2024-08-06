@@ -73,4 +73,5 @@ router.post(
   PaymentController.confirmStripeCheckoutSession
 );
 
+router.get("/subscriptions", PaymentController.getSubscriptions);
 module.exports = router;

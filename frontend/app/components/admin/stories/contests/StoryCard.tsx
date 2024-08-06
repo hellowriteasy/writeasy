@@ -2,9 +2,9 @@ import { useState, Fragment, useRef, useEffect } from "react";
 import { FaEdit } from "react-icons/fa";
 import { Dialog, Transition } from "@headlessui/react";
 import { diffChars } from "diff";
-import { toast } from "react-toastify";
 import { axiosInstance } from "@/app/utils/config/axios";
 import { TStory } from "@/app/utils/types";
+import { useCustomToast } from "@/app/utils/hooks/useToast";
 interface CardProps {
   contest: TStory;
 }
@@ -15,15 +15,18 @@ const Card: React.FC<CardProps> = ({ contest }) => {
   const [showDiff, setShowDiff] = useState(false);
   const [feedback, setFeedback] = useState(contest.correctionSummary);
   const [storyDetail, setStoryDetail] = useState(contest.content);
+  const [isTopStory, setIsTopStory] = useState(false);
   const [corrections, setCorrections] = useState(contest.corrections);
   const [grade, setGrade] = useState(contest.score); // Renamed to grade for clarity
   const cancelButtonRef = useRef(null);
+  const toast = useCustomToast();
   const AxiosIns = axiosInstance("");
   useEffect(() => {
     setFeedback(contest.correctionSummary);
     setStoryDetail(contest.content);
     setCorrections(contest.corrections);
     setGrade(contest.score);
+    setIsTopStory(!!contest.isTopWriting);
   }, [contest]);
 
   const handleUpdate = async () => {
@@ -36,11 +39,11 @@ const Card: React.FC<CardProps> = ({ contest }) => {
           score: grade,
         }
       );
-      toast.success("contest updated successfully");
+      toast("contest updated successfully", "success");
       setOpen(false);
     } catch (error) {
       console.error("There was an error updating the story!", error);
-      toast.error("failed to update contest");
+      toast("failed to update contest", "error");
     }
   };
 
@@ -80,6 +83,43 @@ const Card: React.FC<CardProps> = ({ contest }) => {
     });
   };
 
+  const handleChangeTopStoryCheckBox = async () => {
+    if (isTopStory) {
+      await handleUnMarkFromTopStory();
+    }
+
+    if (!isTopStory) {
+      await handleMarkAsTopStory();
+    }
+  };
+
+  const handleMarkAsTopStory = async () => {
+    try {
+      const res = await AxiosIns.post(`/stories/mark-top-story/${contest._id}`);
+      if (res.status === 200) {
+        setIsTopStory(true);
+        toast("Story marked as top story", "success");
+      }
+    } catch (error) {
+      console.log(error);
+      toast("Failed to mark as top story", "error");
+    }
+    //
+  };
+  const handleUnMarkFromTopStory = async () => {
+    try {
+      const res = await AxiosIns.post(
+        `/stories/remove-top-story/${contest._id}`
+      );
+      if (res.status === 200) {
+        setIsTopStory(false);
+        toast("Story removed from top story", "success");
+      }
+    } catch (error) {
+      console.log(error);
+      toast("Failed to mark as top story", "error");
+    }
+  };
   return (
     <>
       <div className="bg-white shadow-md rounded-lg w-5/6 border z-50 border-gray-300 p-4 mb-4">
@@ -148,18 +188,19 @@ const Card: React.FC<CardProps> = ({ contest }) => {
                           as="h3"
                           className="text-base font-semibold leading-6 text-gray-900"
                         >
-                          {contest.user.username}
+                          {/* {contest.user.username} */}
                         </Dialog.Title>
                         <div className="mt-2">
                           <div className="mb-4 flex gap-4  items-center">
-                            <label className="block text-gray-700 text-sm font-bold mb-2">
-                              Grade:
-                            </label>
-                            <input
-                              className="mt-1 block w-20 h-10 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
-                              value={grade}
-                              onChange={(e) => setGrade(Number(e.target.value))}
-                            />
+                            <div className="mb-4 flex gap-2 items-center">
+                              <input
+                                type="checkbox"
+                                name="top_writing"
+                                checked={isTopStory}
+                                onChange={handleChangeTopStoryCheckBox}
+                              />
+                              <p>Mark as top writing</p>
+                            </div>
                           </div>
                           <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -173,9 +214,6 @@ const Card: React.FC<CardProps> = ({ contest }) => {
                             />
                           </div>
                           <div className="mb-4">
-                            <label className="block text-gray-700 text-sm font-bold mb-2">
-                              Story Details
-                            </label>
                             <textarea
                               className="mt-1 block w-full h-96 p-8 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
                               placeholder="Story details"

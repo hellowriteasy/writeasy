@@ -140,9 +140,7 @@ const Card: React.FC<CardProps> = ({
                             />
                           </div>
                           <div className="mb-4">
-                            <label className="block text-gray-700 text-sm font-bold mb-2">
-                              Story Details
-                            </label>
+                            
                             <textarea
                               className="mt-1 block w-full h-96 p-4 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
                               placeholder="Story details"

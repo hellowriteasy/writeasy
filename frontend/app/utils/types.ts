@@ -26,6 +26,7 @@ export type TStory = {
   contributors: TUser[];
   hasEnded: boolean;
   position?: number;
+  isTopWriting?:boolean
 };
 
 export type TPrompt = {

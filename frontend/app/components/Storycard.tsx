@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import mainstar from "@/public/others/main_star.svg";
 import Logo from "@/public/Landingpage-img/logo.svg";
 
 interface StorycardProps {

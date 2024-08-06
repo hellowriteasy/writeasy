@@ -11,6 +11,12 @@ const subscriptionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    subscription_id: {
+      type: String,
+    },
+    stripe_customer_id: {
+      type: String,
+    },
     isActive: {
       type: Boolean,
       default: false,

@@ -31,6 +31,10 @@ const storySchema = new mongoose.Schema(
     position: {
       type: Number,
     },
+    isTopWriting: {
+      type: Boolean,
+      default: false,
+    },
     contest: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Contest",

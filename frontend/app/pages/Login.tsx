@@ -44,7 +44,8 @@ const Login: NextPage = () => {
       login(userId, token);
       router.push("/", { scroll: false });
     } catch (error: any) {
-      setError(error.response?.data?.message || "Login failed");
+      console.log(error)
+      setError(error.response?.data?.msg || "Login failed");
     }
   };
 
@@ -115,19 +116,20 @@ const Login: NextPage = () => {
           <button className="text-center border rounded-3xl my-4 text-white hover:opacity-80 min-w-full sm:min-w-60 sm:w-72 md:w-80 lg:w-96 mt-5 bg-black h-12 sm:h-14 text-xl sm:text-2xl">
             Login
           </button>
-          {error && <p className="text-red-500">{error}</p>}
+          {error && <p className="text-red-500 mx-auto">{error}</p>}
           <h1 className="text-center pt-2 font-bold">or</h1>
-          <Button type="google" onClick={handleGoogleLogin} />
-          <h1 className="text-center font-comic pt-4">
-            Don &lsquo;t have an account?{" "}
-            <Link href="/signup" className="font-bold cursor-pointer">
-              Signup
-            </Link>
-          </h1>
+
           <div className="absolute w-32 h-16 vvsm-hide -top-4 -right-28">
             <Image src={Rocket} alt="rocket" />
           </div>
         </form>
+        <Button type="google" />
+        <h1 className="text-center font-comic pt-4">
+          Don &lsquo;t have an account?{" "}
+          <Link href="/signup" className="font-bold cursor-pointer">
+            Signup
+          </Link>
+        </h1>
         <div className="absolute top-60 w-20 vsm-hide h-10 left-10">
           <Image src={Group2} alt="group2" />
         </div>

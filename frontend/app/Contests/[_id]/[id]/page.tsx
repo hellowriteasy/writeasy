@@ -10,7 +10,7 @@ import NotFound from "@/app/components/Others/NotFound";
 import { TPrompt, TStory } from "@/app/utils/types";
 import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
-import { useParams } from 'next/navigation';
+import { useParams } from "next/navigation";
 import Storycard from "@/app/components/Storycard";
 interface Prompt {
   _id: string;
@@ -27,13 +27,12 @@ interface Contest {
 
 interface ViewContestProps {
   params: {
-    _id:string;
+    _id: string;
     id: string;
   };
 }
 
 const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
-  
   const { _id, id } = useParams();
   const [stories, setStories] = useState<TStory[]>([]);
   const [prompt, setPrompt] = useState<TPrompt | null>(null);
@@ -49,24 +48,18 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
   useEffect(() => {
     const fetchTopStories = async () => {
       try {
-    
         const response = await AxiosIns.get(
           `/stories/contest/top-writings/${_id}`
         );
         setTopStories(response.data?.data);
         setPageDetails(response.data?.pageData);
-      
       } catch (err: any) {
         setError(err.message);
-      
-    };
-    
-      
+      }
     };
 
     fetchTopStories();
-  
-  }, [params.id]);
+  }, [params.id, _id]);
 
   useEffect(() => {
     const fetchStories = async () => {
@@ -98,7 +91,8 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
   };
 
   if (error) return <p>{error}</p>;
-  if (stories.length === 0) return <NotFound text="No Stories to show !!" />;
+  if (stories.length === 0 && topStories.length === 0)
+    return <NotFound text="No Stories to show !!" />;
 
   return (
     <div className="w-full min-h-screen mt-6 z-0 relative flex justify-center">
@@ -116,18 +110,13 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
               {/* <h1 className="text-6xl font-comic font-bold p-10">
                 {prompt_title}
               </h1> */}
-                {topStories.map((story) => {
-              let starType: "main" | "none" = "none";
-              if (story) {
-                starType = "main";
-              }
+            {topStories.map((story) => {
               return (
                 <TopWriting
                   key={story._id}
                   title={story.title}
                   content={story.content}
                   corrections={story.corrections}
-                  
                   username={story.user.username}
                   email={story.user.email}
                   profile_image={story.user.profile_picture}
@@ -145,7 +134,6 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
                   title={story.title}
                   content={story.content}
                   corrections={story.corrections}
-                
                   username={story.user.username}
                   email={story.user.email}
                   profile_image={story.user.profile_picture}

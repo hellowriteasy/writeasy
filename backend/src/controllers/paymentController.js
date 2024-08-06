@@ -1,9 +1,10 @@
+const stripe = require("../../config/stripe");
 const Subscription = require("../models/subscription");
 const User = require("../models/user");
 const StripeService = require("../services/stripeService");
 const createStripeCheckoutSession = async (req, res) => {
-  const { user_id } = req.body;
-
+  const { user_id, price_id, type } = req.body;
+  let stripe_customer_id = "";
   try {
     if (!user_id) {
       throw new Error("Please provide user id");
@@ -12,14 +13,29 @@ const createStripeCheckoutSession = async (req, res) => {
     if (!userExist) {
       throw new Error("User not found");
     }
-    const checkoutRes = await StripeService.createStripeCheckout(
-      userExist.email
-    );
     const subscriptionExist = await Subscription.findOne({ userId: user_id });
+    stripe_customer_id = subscriptionExist?.stripe_customer_id;
+
+    if (!stripe_customer_id) {
+      const customer = await StripeService.createCustomer({
+        email: userExist.email,
+        username: userExist.username,
+      });
+      stripe_customer_id = customer.id;
+    }
+
+    console.log("stripe custoerm", stripe_customer_id);
+    const checkoutRes = await StripeService.createStripeCheckout(
+      userExist.email,
+      price_id,
+      stripe_customer_id,
+      type
+    );
     if (!subscriptionExist) {
       const userSubscription = new Subscription({
         stripe_session_id: checkoutRes.id,
         userId: user_id,
+        stripe_customer_id,
       });
       await userSubscription.save();
     } else {
@@ -37,6 +53,7 @@ const createStripeCheckoutSession = async (req, res) => {
       failure_url: checkoutRes.cancel_url,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       message: error.message || "Internal Server Error",
       success: false,
@@ -58,11 +75,9 @@ const confirmStripeCheckoutSession = async (req, res) => {
     const subscriptionExist = await Subscription.findOne({
       stripe_session_id: stripe_session_id,
     });
-
     if (!subscriptionExist) {
       throw new Error("Subscription not found.");
     }
-
     const paidAt = new Date();
     const thirtyDaysLater = new Date(paidAt);
     thirtyDaysLater.setDate(thirtyDaysLater.getDate() + 30);
@@ -75,6 +90,7 @@ const confirmStripeCheckoutSession = async (req, res) => {
         $set: {
           paidAt,
           expiresAt: thirtyDaysLater,
+          subscription_id: session.data.subscription,
           isActive: true,
         },
       }
@@ -83,8 +99,10 @@ const confirmStripeCheckoutSession = async (req, res) => {
     await User.findByIdAndUpdate(subscriptionExist.userId, {
       subscriptionId: subscriptionExist._id,
     });
+
     return res.status(200).json({ message: "session confirmation success" });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       message: error.message || "Internal Server Error",
       success: false,
@@ -92,7 +110,17 @@ const confirmStripeCheckoutSession = async (req, res) => {
   }
 };
 
+const getSubscriptions = async (req, res) => {
+  try {
+    const prices = await StripeService.getPrices();
+    res.send(prices);
+  } catch (error) {
+    console.log("*error: ", error);
+    res.status(500).json({ message: error, success: false });
+  }
+};
 const PaymentController = {
+  getSubscriptions,
   createStripeCheckoutSession,
   confirmStripeCheckoutSession,
 };

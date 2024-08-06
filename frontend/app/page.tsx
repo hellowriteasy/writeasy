@@ -9,13 +9,14 @@ export default function Home() {
   const toast = useCustomToast();
   const router = useRouter();
   useEffect(() => {
-    if (user.email && !user.username) {
+    if (user.token && !user.email) {
+      console.log("logged in user ", user);
       toast("Please set your username", "success");
       router.push("/setting");
       return;
     }
-  }, [user]);
-
+    // eslint-disable-next-line
+  }, [user.email, user.token]);
   return (
     <main className="font-school flex justify-center items-baseline flex-col two-line-bg ">
       <Hero />

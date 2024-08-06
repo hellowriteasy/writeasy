@@ -15,9 +15,10 @@ const emailRoutes = require("./routes/emailRoute");
 const collaborativeStoryRoutes = require("./routes/collaborativeStoryRoutes");
 const faqRoutes = require("./routes/faq");
 const paymentRoutes = require("./routes/paymentRoute");
-const categoriesRoute=require("./routes/category")
+const categoriesRoute = require("./routes/category");
 const scheduleJob = require("./config/cron");
-const morgan = require("morgan")
+const morgan = require("morgan");
+const StripeService = require("./src/services/stripeService");
 dotenv.config();
 
 connectDB();
@@ -32,7 +33,7 @@ app.use(
 );
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(morgan("dev"))
+app.use(morgan("dev"));
 cron.schedule("*/3 * * * * *", () => scheduleJob());
 
 // Use routes
