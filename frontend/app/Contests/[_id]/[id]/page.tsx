@@ -96,8 +96,8 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
 
   return (
     <div className="w-full min-h-screen mt-6 z-0 relative flex justify-center">
-      <div className="w-10/12 h-auto ms-12">
-        <div className="w-full text-center text-5xl font-bold font-comic relative pt-4">
+      <div className="w-10/12 sm:w-full h-auto ">
+        <div className="w-full text-center sm:text-xl text-5xl font-bold font-comic relative pt-4">
           {prompt?.title}
         </div>
         <div className="flex justify-center mt-8"></div>

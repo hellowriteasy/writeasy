@@ -390,7 +390,7 @@ export function SimpleEditor({
         <button
           className={`text-white font-comic bg-black text-2xl  ${
             isSaving ? "text-black bg-custom-yellow" : ""
-          } w-96 h-16 rounded-full mx-auto mt-10 `}
+          } w-96 h-16 sm:w-full sm:h-12 sm:text-sm rounded-full mx-auto mt-10 `}
           onClick={(e) => {
             setIsSaving(true);
             handleClickFeature(taskType, e, true);

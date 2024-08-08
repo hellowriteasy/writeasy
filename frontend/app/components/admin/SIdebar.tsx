@@ -17,7 +17,7 @@ const Sidebar = () => {
     <>
      <div className="lg:hidden flex justify-between items-center p-4 bg-gray-900 text-white">
        
-        <button onClick={toggleSidebar}>
+        <button onClick={toggleSidebar} className=''>
           {isOpen ? <FaTimes className="h-6 w-6" /> : <FaBars className="h-6 w-6" />}
         </button>
        </div>

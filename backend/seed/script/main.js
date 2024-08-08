@@ -354,142 +354,94 @@ Overall, the film London Has Fallen is well worth watching, both for the story a
 
 const getApiKey = () => process.env.GPT_API_KEY;
 // Function to preprocess text into chunks
-const preprocessChunks = (content, chunkSize = 2000) => {
-  const chunks = [];
-  for (let i = 0; i < content.length; i += chunkSize) {
-    chunks.push(content.substring(i, i + chunkSize));
-  }
-  return chunks;
-};
 
-const getBatchSummaryFromOpenAI = async (batch) => {
-  const batchText = batch
-    .map((story) => `Story ID: ${story._id}\n${story.content}`)
-    .join("\n\n---\n\n");
-  try {
-    const response = await axios.post(
-      "https://api.openai.com/v1/chat/completions",
-      {
-        model: "gpt-3.5-turbo",
-        messages: [
+const apiKey = getApiKey();
+const apiUrl = "https://api.openai.com/v1/chat/completions";
+
+async function getComparativeScores(stories) {
+  let scores = {};
+
+  // Pairwise comparison of stories
+  for (let i = 0; i < stories.length; i++) {
+    for (let j = i + 1; j < stories.length; j++) {
+      const storyA = stories[i];
+      const storyB = stories[j];
+      const prompt = `
+        Evaluate the following two stories and determine which one is better.
+        ${storyA._id} : ${storyA.content}
+        ${storyB._id} : ${storyB.content}
+        Please respond only one word with the ID of the better story nothing else. The story should be the same given in the prompt.` ;
+
+      try {
+        const response = await axios.post(
+          apiUrl,
           {
-            role: "system",
-            content:
-              "You are an AI tasked with evaluating stories based on their strengths and weaknesses. Each evaluation should capture the key aspects of each story's content, coherence, creativity, character development, emotional impact, and language style. These evaluations will be used to rank the stories in subsequent steps.",
+            model: "gpt-3.5-turbo",
+            messages: [
+              {
+                role: "system",
+                content:
+                  "You are an AI tasked with evaluating stories based on their strengths and weaknesses. Each evaluation should capture the key aspects of each story's content, coherence, creativity, character development, emotional impact, and language style. These evaluations will be used to rank the stories in subsequent steps. Prompt is given in this format: `storyId` : `storyContent`.  Please respond only one word with the `storyId` of the better story nothing else not even a fullstop after a `storyId`. ",
+              },
+              {
+                role: "user",
+                content: prompt,
+              },
+            ],
+            max_tokens: prompt.split(" ").length + 50,
           },
           {
-            role: "user",
-            content: `Here is a batch of stories:\n\n${batchText}\n\nEvaluate each story individually and summarize its strengths and weaknesses. Make sure to include the story ID in each evaluation.`,
-          },
-        ],
-        max_tokens: 1500,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${getApiKey()}`,
-          "Content-Type": "application/json",
-        },
+            headers: {
+              Authorization: `Bearer ${apiKey}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const betterStoryId = response.data.choices[0].message.content.trim();
+        // console.log("res ", response.data.choices[0].message.content);
+        console.log("beeter story id", betterStoryId);
+        // Increment the score for the better story
+        if (scores[betterStoryId]) {
+          scores[betterStoryId]++;
+        } else {
+          scores[betterStoryId] = 1;
+        }
+      } catch (error) {
+        console.error(`Error comparing stories: ${error}`);
       }
-    );
-    return response.data.choices[0].message.content.trim();
-  } catch (error) {
-    console.error("Error getting batch summary from OpenAI:", error);
-    return null;
-  }
-};
-
-const getFinalSummary = async (summaries) => {
-  const allSummariesText = summaries.join("\n\n---\n\n");
-  try {
-    const response = await axios.post(
-      "https://api.openai.com/v1/chat/completions",
-      {
-        model: "gpt-3.5-turbo",
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are an AI tasked with combining the evaluations of multiple stories into a final assessment. This final evaluation should summarize the collective strengths and weaknesses of each story observed across all evaluations.",
-          },
-          {
-            role: "user",
-            content: `Here is the aggregated evaluation from all stories:\n\n${allSummariesText}\n\nBased on this final aggregated evaluation, summarize the overall strengths and weaknesses of each story. Make sure to include the story ID in each evaluation.`,
-          },
-        ],
-        max_tokens: 1500,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${getApiKey()}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    return response.data.choices[0].message.content.trim();
-  } catch (error) {
-    console.error("Error getting final summary from OpenAI:", error);
-    return null;
-  }
-};
-
-const getPositionsFromOpenAI = async (finalSummary) => {
-  try {
-    const response = await axios.post(
-      "https://api.openai.com/v1/chat/completions",
-      {
-        model: "gpt-3.5-turbo",
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are an AI tasked with ranking stories based on their overall evaluations. Each story should be assigned a unique position based on its performance relative to every other story. Ensure that positions are assigned from 1 to the number of stories, with 1 being the best.",
-          },
-          {
-            role: "user",
-            content: `Here are the final evaluations of all stories:\n\n${finalSummary}\n\nBased on these evaluations, assign a unique position to each story from 1 to the number of stories, where 1 is the best. Return the positions in an array of objects format: [{story_id: 'story_id', position: 'position'}]`,
-          },
-        ],
-        max_tokens: 1500,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${getApiKey()}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    return response.data.choices[0].message.content.trim();
-  } catch (error) {
-    console.error("Error getting positions from OpenAI:", error);
-    return null;
-  }
-};
-
-const processStoriesAndScore = async (stories, batchSize = 5) => {
-  const summaries = [];
-
-  // Process stories in batches and get summaries
-  for (let i = 0; i < stories.length; i += batchSize) {
-    const batch = stories.slice(i, i + batchSize);
-    const batchSummary = await getBatchSummaryFromOpenAI(batch);
-    if (batchSummary) {
-      summaries.push(batchSummary);
     }
   }
 
-  // Get final aggregated summary of all stories
-  const finalSummary = await getFinalSummary(summaries);
+  return scores;
+}
 
-  // Assign positions to each story based on the final summary
-  const positions = await getPositionsFromOpenAI(finalSummary);
+async function rankStories(stories) {
+  const scores = await getComparativeScores(stories);
 
-  return positions;
-};
+  // Convert scores object to array for sorting
+  const sortedStories = Object.keys(scores).map((storyId) => {
+    return {
+      story_id: storyId,
+      score: scores[storyId],
+    };
+  });
 
-processStoriesAndScore(stories)
-  .then((results) => {
-    console.log(results);
+  // Sort stories by score in descending order
+  sortedStories.sort((a, b) => b.score - a.score);
+
+  // Assign positions based on sorted order
+  sortedStories.forEach((story, index) => {
+    story.position = index + 1;
+  });
+
+  return sortedStories;
+}
+
+rankStories(stories)
+  .then((rankedStories) => {
+    console.log(rankedStories);
   })
   .catch((error) => {
-    console.error("Error processing and scoring stories:", error);
+    console.error("Error ranking stories:", error);
   });

@@ -88,7 +88,7 @@ const Pricing = () => {
           {subscriptions.map((sub: any) => (
             <div
               key={sub?.id}
-              className="relative    lg:w-auto mt-10 lg:mt-0 flex flex-col gap-y-8 items-center"
+              className="relative lg:w-auto mt-10 lg:mt-0 flex flex-col gap-y-8 items-center"
             >
               <Image className="w-full" src={Group15} alt="" />
               <div className="text-center absolute top-[20%] flex flex-col justify-center items-center w-10/12">
@@ -104,7 +104,7 @@ const Pricing = () => {
                   </>
                 ) : (
                   <div className="absolute top-[5%]">
-                    <div className="flex items-center justify-center ">
+                    <div className="flex items-center justify-center">
                       <TbCurrencyPound className="text-[5vw]" />
                       <h2 className="text-[5vw] font-comic text-center font-bold">
                         {sub?.unit_amount / 100}
@@ -117,29 +117,25 @@ const Pricing = () => {
                   </div>
                 )}
               </div>
-              <div className="text-center flex flex-col gap-y-2 absolute top-[50%]    w-10/12 mx-auto">
-                <div>
-                  <ul className="flex sm:text-[12px]  md:text-xl  flex-col px-4  items-start ">
-                    <li className=" text-start">
-                      •⁠ ⁠Unlimited writing practices with immediate GPT
-                      markings
-                    </li>
-                    <li>•⁠ ⁠Weekly writing contests</li>
-                    <li>•⁠ ⁠Unlimited collaborative writing games</li>
-                  </ul>
-                </div>
-
+              <div className="text-center flex flex-col gap-y-2 absolute top-[35%] w-10/12 mx-auto">
+                <ul className="flex sm:text-[12px] flex-col px-4 items-start">
+                  <li className="text-start">
+                    • Unlimited writing practices with immediate GPT markings
+                  </li>
+                  <li>• Weekly writing contests</li>
+                  <li>• Unlimited collaborative writing games</li>
+                </ul>
                 {!userId ? (
                   <button
                     onClick={() => handleSignUp()}
-                    className="border text-2xl sm:w-12 sm:h-8 sm:text-[10px] sm:text-3xl mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl text-white w-40  md:w-56 lg:w-60 h-12 "
+                    className="border text-2xl sm:w-12 sm:h-8 sm:text-[10px] sm:text-3xl mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl text-white w-40 md:w-56 lg:w-60 h-12"
                   >
                     Sign up
                   </button>
                 ) : !isSubcriptionActive ? (
                   <button
                     onClick={() => handleSignUp(sub?.id, sub?.type)}
-                    className="border text-2xl sm:text-3xl mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl text-white w-40  md:w-56 lg:w-60 h-12 sm:w-12 sm:h-6 flex items-center justify-center sm:text-[10px] sm:rounded-sm "
+                    className="border text-2xl sm:text-3xl py-2 mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl text-white w-40 md:w-56 lg:w-60 h-12 sm:w-12 sm:h-6 flex items-center justify-center sm:text-[10px] sm:rounded-sm"
                   >
                     Buy Now
                   </button>
