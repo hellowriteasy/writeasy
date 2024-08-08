@@ -80,9 +80,9 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
 
   return (
     <div className="w-full min-h-screen h-[1200px] mt-6 z-0 relative flex justify-center">
-      <div className="w-10/12 min-h-screen ms-12 flex flex-col items-center gap-y-4 ">
+      <div className="w-10/12 min-h-screen flex flex-col items-center gap-y-4 ">
         <div className="w-4/5 mx-auto  relative pt-2 ">
-          <h1 className="text-xl text-center font-bold font-comic">
+          <h1 className="text-xl sm:text-sm text-center font-bold font-comic">
             {prompt.title}
           </h1>
         </div>
@@ -98,7 +98,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
               <div className="flex flex-col w-full items-center gap-8 h-auto mx-auto">
                 <div>
                   <input
-                    className="border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[50vw] h-12 focus:outline-none focus:border-yellow-600"
+                    className="border border-gray-500 sm:w-[80vw] sm:h-10  sm:text-sm z-10 text-xl rounded-3xl indent-7 w-[50vw] h-12 focus:outline-none focus:border-yellow-600"
                     placeholder="Untitled Story"
                     onChange={handleTitleChange}
                   />

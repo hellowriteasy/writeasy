@@ -40,17 +40,17 @@ const Join = () => {
   return (
     <div className="flex">
       {contests.length > 0 ? (
-        <div className="flex flex-col justify-center items-center gap-7 w-full p-4">
+        <div className="flex flex-col justify-center items-center gap-7 w-full ">
           {contests.map((contest) => (
             <div
               key={contest._id}
-              className="flex flex-col font-comic rounded-3xl w-full max-w-4xl h-auto gap-4 bg-white border-2 border-gray-300 p-8"
+              className="flex flex-col flex-wrap font-comic rounded-3xl w-full max-w-4xl h-auto gap-4 bg-white border-2 border-gray-300 p-8"
             >
-              <div className="flex justify-center text-xl items-center gap-x-2 gap-y-2 text-center">
+              <div className="flex justify-center vsm:flex-col text-xl sm:text-sm items-center gap-x-2 gap-y-2 text-center">
                 
                  <div className="text-yellow-400 text-xl pr-3 font-bold">LIVE</div>
-                  <span className="">Until </span>
-                  {moment(contest.submissionDeadline).format("llll")}
+                  
+                Until {moment(contest.submissionDeadline).format("llll")}
                 
               </div>
               <div className="flex flex-col items-center gap-y-4">

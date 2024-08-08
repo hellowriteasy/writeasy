@@ -122,7 +122,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
 
   return (
     <div className="w-full min-h-screen  z-0 relative flex justify-center">
-      <div className="w-10/12 h-auto ms-12">
+      <div className="w-10/12 h-auto ">
         <div className="flex w-full ">
        
         </div>
@@ -137,7 +137,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
                
               </p>
               <div className="flex w-full ">
-                <p className="text-xl text-center font-comic">
+                <p className="text-xl sm:text-sm text-center font-comic">
                   <b className="font-bold"> Submission deadline </b> -
                   {moment(contest.submissionDeadline).format("llll")}
                 </p>

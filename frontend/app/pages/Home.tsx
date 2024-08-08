@@ -86,7 +86,7 @@ const Hero = () => {
           <div className="w-full flex justify-center mr-[5%]">
             <Link href={"/Contests"}>
               <Image
-                className="w-[22vw] tilt-left"
+                className="w-[22vw] sm:w-[30vw] tilt-left"
                 src={contest}
                 alt="Contests"
               />
@@ -96,21 +96,21 @@ const Hero = () => {
             <div>
               <Link href={"/Practices"}>
                 <Image
-                  className="w-[20vw] tilt-left"
+                  className="w-[20vw] sm:w-[30vw] tilt-left"
                   src={practice}
                   alt="Practices"
                 />
               </Link>
             </div>
           </div>
-          <div className="w-[24vw]">
+          <div className="w-[24vw] sm:w-[30vw]">
             <Image className="" src={bulbgrp} alt="Bulb" />
           </div>
           <div className="">
             <div>
               <Link href={"/Games"}>
                 <Image
-                  className="w-[20vw] tilt-right"
+                  className="w-[20vw] sm:w-[30vw] tilt-right"
                   src={games}
                   alt="Games"
                 />

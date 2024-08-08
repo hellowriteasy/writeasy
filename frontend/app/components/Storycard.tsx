@@ -54,7 +54,7 @@ const Storycard: React.FC<StorycardProps> = ({
           </div>
         </div>
 
-        <div className="px-4 sm:px-6 flex flex-col gap-y-2">
+        <div className="px-4 sm:px-6 py-4 flex flex-col gap-y-2">
           <h2 className="text-lg sm:text-xl md:text-2xl font-bold">{title}</h2>
           <p
             className="text-sm sm:text-md md:text-lg text-gray-900"
