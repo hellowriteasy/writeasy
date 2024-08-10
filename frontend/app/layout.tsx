@@ -5,16 +5,12 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Head from "next/head";
 import "./styles/globals.css";
-
 const inter = Inter({ subsets: ["latin"] });
-
 export const metadata: Metadata = {
   title: "Writeasy",
   description: "Writeasy helps kids write better",
 };
-
 export default function RootLayout({
   children,
 }: Readonly<{

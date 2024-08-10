@@ -117,8 +117,8 @@ const Pricing = () => {
                   </div>
                 )}
               </div>
-              <div className="text-center flex flex-col gap-y-2 absolute top-[35%] w-10/12 mx-auto">
-                <ul className="flex sm:text-[12px] flex-col px-4 items-start">
+              <div className="text-center flex flex-col gap-y-2 absolute top-[45%] w-10/12 mx-auto">
+                <ul className="flex sm:text-[14px] flex-col px-4 items-start">
                   <li className="text-start">
                     • Unlimited writing practices with immediate GPT markings
                   </li>

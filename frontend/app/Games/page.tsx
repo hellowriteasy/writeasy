@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import Image from "next/image";
 import Prompt from "../components/Others/Prompt";
 import TopWriting from "../components/Others/TopWriting";
@@ -57,7 +56,6 @@ const Games: React.FC = () => {
   const offset = currentPage * itemsPerPage;
 
   if (error) return <p>Error: {error}</p>;
-  function handlePromptClick() {}
 
   console.log("user", prompts);
 

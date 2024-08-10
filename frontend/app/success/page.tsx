@@ -3,13 +3,16 @@ import Link from "next/link";
 import { FaCheckCircle } from "react-icons/fa";
 import { useEffect } from "react";
 import { axiosInstance } from "../utils/config/axios";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import useAuthStore from "../store/useAuthStore";
+
 const Success = () => {
   // Get the current URL
   const searchParams = useSearchParams();
   const sessionId = new URLSearchParams(searchParams).get("session_id");
   const AxiosIns = axiosInstance("");
-
+  const router = useRouter();
+  const user = useAuthStore();
   useEffect(() => {
     if (sessionId) {
       AxiosIns.post("/payments/confirm-checkout-session", {
@@ -17,6 +20,8 @@ const Success = () => {
       })
         .then((response) => {
           console.log(response.data);
+          router.refresh();
+
           // Handle success response
         })
         .catch((error) => {

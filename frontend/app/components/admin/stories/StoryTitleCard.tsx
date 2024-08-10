@@ -73,7 +73,7 @@ const Card: React.FC<CardProps> = ({
 
   return (
     <>
-      <div className="bg-white shadow-md rounded-lg w-5/6 border z-50 border-gray-300 p-4 mb-4">
+      <div className="bg-white shadow-md rounded-lg w-full border z-50 border-gray-300 p-4 mb-4">
         <div className="flex justify-between items-center mb-2">
           <div className="text-xl font-semibold">{title}</div>
           <div className="flex space-x-2 gap-4">

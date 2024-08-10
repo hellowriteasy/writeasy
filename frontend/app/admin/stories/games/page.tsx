@@ -67,7 +67,7 @@ const Page = () => {
         <div className="flex h-screen">
           <div className="flex-1 flex flex-col p-6 space-y-6">
             <StoryNav />
-            <div className="bg-white shadow-sm p-4 rounded-lg border w-5/6 border-gray-200 space-y-4">
+            <div className="bg-white shadow-sm p-4 rounded-lg border w-full border-gray-200 space-y-4">
               {games.map((game) => (
                 <Card
                   key={game._id}
