@@ -202,7 +202,7 @@ const Card: React.FC<CardProps> = ({ contest }) => {
                               <p>Mark as top writing</p>
                             </div>
                           </div>
-                          <div className="mb-4">
+                          {/* <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2">
                               Feedback
                             </label>
@@ -212,7 +212,7 @@ const Card: React.FC<CardProps> = ({ contest }) => {
                               value={feedback}
                               onChange={(e) => setFeedback(e.target.value)}
                             />
-                          </div>
+                          </div> */}
                           <div className="mb-4">
                             <textarea
                               className="mt-1 block w-full h-96 p-8 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
@@ -230,29 +230,31 @@ const Card: React.FC<CardProps> = ({ contest }) => {
                           >
                             Edit
                           </button>
-                          <button
+                          {/* <button
                             onClick={() => setShowDiff(!showDiff)}
                             className="bg-white border-2 rounded-2xl border-slate-700 text-black px-4 py-2"
                           >
                             {showDiff ? "Original" : "Marked"}
-                          </button>
-                          {showDiff && (
+                          </button> */}
+                          {/* {showDiff && (
                             <div className="mt-4 p-8 bg-white rounded-xl border border-slate-300">
                               {compareSentences(storyDetail, corrections)}
                             </div>
-                          )}
+                          )} */}
                         </div>
                       </div>
                     </div>
                   </div>
                   <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                    <button
-                      type="button"
-                      className="inline-flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm  sm:ml-3 sm:w-auto"
-                      onClick={handleUpdate}
-                    >
-                      Update
-                    </button>
+                    {!Edit && (
+                      <button
+                        type="button"
+                        className="inline-flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm  sm:ml-3 sm:w-auto"
+                        onClick={handleUpdate}
+                      >
+                        Update
+                      </button>
+                    )}
                     <button
                       type="button"
                       className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"

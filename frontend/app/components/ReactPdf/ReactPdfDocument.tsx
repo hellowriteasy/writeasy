@@ -31,7 +31,7 @@ const PdfDocument = (props: { originals: string; corrected: string }) => {
   ): React.ReactElement[] => {
     original;
     corrected;
-
+    if (!original || !corrected) return [];
     const dmp = new diff_match_patch();
     const diff = dmp.diff_main(original, corrected);
     dmp.diff_cleanupSemantic(diff);
