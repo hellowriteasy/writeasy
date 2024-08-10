@@ -26,4 +26,5 @@ router.post(
     "/all",
     emailController.sendEmailToAllUsers
 );
+
 module.exports = router;

@@ -30,12 +30,12 @@ const createStory = async (req, res) => {
     });
 
     // Process the story for scoring in the background
-    processStoryForScoring(
-      story._id,
-      story.content,
-      wordCount,
-      promptExist.title
-    ); // Ensuring 'content' exists in your story model
+    // processStoryForScoring(
+    //   story._id,
+    //   story.content,
+    //   wordCount,
+    //   promptExist.title
+    // ); // Ensuring 'content' exists in your story model
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error.message });
@@ -503,6 +503,27 @@ const removeTopStory = async (req, res) => {
       .json({ message: error?.message || "Internal server error" });
   }
 };
+
+const calculateTopWritings = async (req, res) => {
+  console.log("req.body", req.body); // Log entire body
+  const { stories, title } = req.body;
+  console.log("stories", stories);
+
+  try {
+    if (!stories || !title) {
+      throw new Error("Stories and title are required");
+    }
+    if (stories.length < 2) {
+      throw new Error("Story must be at least 2 ");
+    }
+    const results = await gptService.rankStories(stories,title);
+    return res.status(200).json(results);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: error?.message || "Internal server error" });
+  }
+};
 module.exports = {
   removeTopStory,
   markTopStory,
@@ -520,4 +541,5 @@ module.exports = {
   savePractiseStoryToProfile,
   getTopStoriesForContest,
   getPreviousWeekTopStories,
+  calculateTopWritings,
 };

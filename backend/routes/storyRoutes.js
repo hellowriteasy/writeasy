@@ -15,6 +15,7 @@ const {
   getPreviousWeekTopStories,
   markTopStory,
   removeTopStory,
+  calculateTopWritings,
 } = require("../src/controllers/storyController");
 const { practiseStory } = require("../src/controllers/StoryScoreController");
 /**
@@ -461,5 +462,7 @@ router.get("/contest/previous-week-top-stories", getPreviousWeekTopStories);
 
 router.post("/mark-top-story/:id", markTopStory);
 router.post("/remove-top-story/:id", removeTopStory);
+router.post("/calculate-top-writings",calculateTopWritings);
+
 
 module.exports = router;
