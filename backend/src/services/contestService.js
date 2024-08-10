@@ -56,8 +56,9 @@ const getEndedContests = async (skip, limit) => {
     {
       ...(skip ? { skip } : null),
       ...(limit ? { limit } : null),
+
     }
-  );
+  ).sort({createdAt:"desc"})
   return {
     total,
     data,

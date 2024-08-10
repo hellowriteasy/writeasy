@@ -16,6 +16,10 @@ const contestSchema = new mongoose.Schema(
     },
     isActive: { type: Boolean, default: true },
     topWritingPublished: { type: Boolean, default: false },
+    startedScoringStories: {
+      type: Boolean,
+      default: false,
+    }
   },
   {
     timestamps: true,
