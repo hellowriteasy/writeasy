@@ -3,9 +3,10 @@ const Prompt = require("../src/models/prompt");
 const Story = require("../src/models/story");
 const Subscription = require("../src/models/subscription");
 const stripe = require("./stripe");
-
+const gptServiceClass = require("../src//services/gptService");
+const gptService = new gptServiceClass(process.env.GPT_API_KEY);
 async function scheduleJob() {
-  await closeContestAfterDeadline();
+  await closeContestAndChooseTopWritingAfterDeadline();
   await closeSubscriptionWhenDeadline();
   await publishWritingsAfterPromptPublishDate();
 }
@@ -20,12 +21,13 @@ const getTopPercentage = (array, percentage) => {
   return sortedArray.slice(0, topCount);
 };
 
-const closeContestAfterDeadline = async () => {
+const closeContestAndChooseTopWritingAfterDeadline = async () => {
   const todayTime = new Date().getTime();
 
   try {
     const endedContests = await Contest.find({
       isActive: true,
+      startedScoringStories: false,
       submissionDeadline: { $lt: todayTime },
     });
 
@@ -34,6 +36,8 @@ const closeContestAfterDeadline = async () => {
 
       await Promise.all(
         endedContests.map(async (contest) => {
+          contest.startedScoringStories = true;
+          await contest.save();
           try {
             await Promise.all(
               contest.prompts.map(async (prompt_id) => {
@@ -53,88 +57,23 @@ const closeContestAfterDeadline = async () => {
                       content: story.content,
                     }));
 
-                    // Create the prompt
-                    const prompt =
-                      stories
-                        .map((story) => `Story ${story._id}: ${story.content}`)
-                        .join("\n\n") +
-                      '\n\nEvaluate each story on a scale from 1 to 100 considering all the stories. Only return the scores in the format: [{_id: "story_id", score: score}].\n';
+                    const topStories = await gptService.rankStories(
+                      stories,
+                      promptExist.title
+                    );
+                    await Promise.all(
+                      topStories.map(async (topStory) => {
+                        const story = await Story.findById(topStory._id);
+                        if (story) {
+                          story.isTopWriting = true;
+                          await story.save();
+                        }
+                      })
+                    );
 
-                    // API request
-                    const response = await axios({
-                      method: "post",
-                      url: "https://api.openai.com/v1/chat/completions",
-                      headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${process.env.GPT_API_KEY}`,
-                      },
-                      data: {
-                        model: "gpt-4-turbo",
-                        messages: [
-                          {
-                            role: "system",
-                            content: `You are an assistant that evaluates ${promptExist.title} stories. For each story provided, rate its quality on a scale from 1 to 100 considering all the stories. Only return the scores in the format: [{_id: "story_id", score: score}].\n`,
-                          },
-                          {
-                            role: "user",
-                            content: `${prompt}`,
-                          },
-                        ],
-                        max_tokens: 1500, // Adjust based on prompt length and expected response
-                        temperature: 0.5,
-                      },
-                    });
-
-                    // Check and parse response
-                    if (
-                      response.data.choices &&
-                      response.data.choices.length > 0
-                    ) {
-                      let result;
-                      try {
-                        result = JSON.parse(
-                          response.data.choices[0].message.content.trim()
-                        );
-                      } catch (parseError) {
-                        console.error(
-                          "Error parsing API response:",
-                          parseError.message
-                        );
-                        return;
-                      }
-
-                      const topTwentyPercentWritings = getTopPercentage(
-                        result,
-                        20
-                      );
-
-                      await Promise.all(
-                        topTwentyPercentWritings.map(
-                          async (writing, position) => {
-                            try {
-                              await Story.findByIdAndUpdate(writing._id, {
-                                position: position + 1,
-                                score: writing.score,
-                                isTopWriting: true,
-                              });
-                            } catch (updateError) {
-                              console.error(
-                                `Error updating story ${writing._id}:`,
-                                updateError.message
-                              );
-                            }
-                          }
-                        )
-                      );
-
-                      console.log(
-                        `Updated positions for top stories for prompt ${prompt_id}`
-                      );
-                    } else {
-                      console.log(
-                        `No valid response from API for prompt ${prompt_id}`
-                      );
-                    }
+                    console.log(
+                      `Stories ranked for prompt ${prompt_id},${topStories.toString()}`
+                    );
                   } else {
                     console.log(`No stories found for prompt ${prompt_id}`);
                   }
@@ -159,7 +98,6 @@ const closeContestAfterDeadline = async () => {
         })
       );
     }
-
     console.log("Cron job finished");
   } catch (error) {
     console.error("Error while closing contests Cron Job:", error.message);
