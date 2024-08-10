@@ -7,8 +7,7 @@ import SelectMenu from "@/app/components/Others/SelectMenu"; // Ensure correct i
 import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import moon from "@/public/Game/moon.svg";
-import book from "@/public/Game/book.svg";
-import pencilman from "@/public/Game/pensilman.svg";
+
 import Bee from "@/public/Game/Bee.svg";
 import LoadingAnimation from "../loading";
 import { TPrompt } from "../utils/types";

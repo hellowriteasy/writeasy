@@ -1,6 +1,5 @@
 "use client";
 import React, { useCallback, useState, SyntheticEvent, useEffect } from "react";
-import classNames from "classnames";
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
@@ -11,7 +10,6 @@ import Italic from "@tiptap/extension-italic";
 import Strike from "@tiptap/extension-strike";
 import Code from "@tiptap/extension-code";
 import History from "@tiptap/extension-history";
-import * as Icons from "../../../components/Icons";
 import Bee from "@/public/Game/cloud3.svg";
 import Image from "next/image";
 import Subscription from "@/app/components/Subscription";

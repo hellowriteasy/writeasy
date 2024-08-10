@@ -4,6 +4,7 @@ import Hero from "./pages/Home";
 import useAuthStore from "./store/useAuthStore";
 import { useCustomToast } from "./utils/hooks/useToast";
 import { useRouter } from "next/navigation";
+
 export default function Home() {
   const user = useAuthStore();
   const toast = useCustomToast();

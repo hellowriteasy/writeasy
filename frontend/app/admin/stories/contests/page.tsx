@@ -50,7 +50,7 @@ const AxiosIns=axiosInstance("")
 
          
 
-          <div className="bg-white shadow-sm p-4 rounded-lg border w-5/6 border-gray-200 space-y-4">
+          <div className="bg-white shadow-sm p-4 rounded-lg border w-full border-gray-200 space-y-4">
             {contests.map((contest) => (
               <Card
                 key={contest._id}

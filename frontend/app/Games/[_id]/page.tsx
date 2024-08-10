@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import Image from "next/image";
 import cloud2 from "@/public/Game/cloud2.svg";
 import shootingstar from "@/public/Game/shotting_star.svg";
