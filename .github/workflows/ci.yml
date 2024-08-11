@@ -18,10 +18,12 @@ jobs:
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
       - name: Build docker image
-        run: docker build --build-arg NODE_IMAGE=node:18.17.0-alpine \
-          --build-arg NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyDejSPMMuMkgCoxetyFwgKenR0LgwB3uqA \
-          --build-arg NEXT_PUBLIC_BACKEND_ROOT_URL=https://writeasy.onrender.com \
-          -t writeasy-frontend:latest ./frontend
+        run: |
+          docker buildx build --build-arg NODE_IMAGE=node:18.17.0-alpine \
+                              --build-arg NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyDejSPMMuMkgCoxetyFwgKenR0LgwB3uqA \
+                              --build-arg NEXT_PUBLIC_BACKEND_ROOT_URL=https://writeasy.onrender.com \
+                              -t skilledsantoshh/test:writeasy_frontend ./frontend
+
 
       - name: Push docker image to docker hub
         run: docker push skilledsantoshh/test:writeasy_frontend
