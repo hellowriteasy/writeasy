@@ -12,14 +12,18 @@ jobs:
     - uses: actions/checkout@v4
     
     - name: Login to Docker Hub
-      env:
-        DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
-        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-      run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build docker image
-      run: docker build --build-arg NODE_IMAGE=node:18.17.0-alpine \\n  --build-arg NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyDejSPMMuMkgCoxetyFwgKenR0LgwB3uqA \\n  --build-arg NEXT_PUBLIC_BACKEND_ROOT_URL=https://writeasy.onrender.com \\n  -t writeasy-frontend:latest .\n
+      run: |
+        docker build \
+          --build-arg NODE_IMAGE=node:18.17.0-alpine \
+          --build-arg NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyDejSPMMuMkgCoxetyFwgKenR0LgwB3uqA \
+          --build-arg NEXT_PUBLIC_BACKEND_ROOT_URL=https://writeasy.onrender.com \
+          -t writeasy-frontend:latest .
 
-    - name: Push docker image to docker hub
+    - name: Push docker image to Docker Hub
       run: docker push skilledsantoshh/test:writeasy_frontend
-        
