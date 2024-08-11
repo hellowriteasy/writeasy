@@ -2,28 +2,26 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Login to Docker Hub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+      - uses: actions/checkout@v4
 
-    - name: Build docker image
-      run: |
-        docker build \
-          --build-arg NODE_IMAGE=node:18.17.0-alpine \
+      - name: Login to Docker Hub
+        env:
+          DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+
+      - name: Build docker image
+        run: docker build --build-arg NODE_IMAGE=node:18.17.0-alpine \
           --build-arg NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyDejSPMMuMkgCoxetyFwgKenR0LgwB3uqA \
           --build-arg NEXT_PUBLIC_BACKEND_ROOT_URL=https://writeasy.onrender.com \
-          -t writeasy-frontend:latest .
+          -t writeasy-frontend:latest ./frontend
 
-    - name: Push docker image to Docker Hub
-      run: docker push skilledsantoshh/test:writeasy_frontend
+      - name: Push docker image to docker hub
+        run: docker push skilledsantoshh/test:writeasy_frontend
