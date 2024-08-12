@@ -1,4 +1,4 @@
-ARG NODE_IMAGE=node:18.17.0-alpine
+ARG NODE_IMAGE=$NODE_IMAGE
 
 ###################
 # Set up stage
