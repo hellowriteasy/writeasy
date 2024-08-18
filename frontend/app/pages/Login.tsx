@@ -111,7 +111,7 @@ const Login: NextPage = () => {
           </div>
 
           <h1 className="text-end pt-4 font-comic text-sm underline font-bold">
-            <Link href="#">Forgot Password?</Link>
+            <Link href="/reset-password">Forgot Password?</Link>
           </h1>
           <button className="text-center border rounded-3xl my-4 text-white hover:opacity-80 min-w-full sm:min-w-60 sm:w-72 md:w-80 lg:w-96 mt-5 bg-black h-12 sm:h-14 text-xl sm:text-2xl">
             Login
