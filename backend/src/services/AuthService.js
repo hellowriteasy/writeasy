@@ -17,9 +17,8 @@ class AuthService {
     if (user) {
       throw new Error("Email address already exists.");
     }
-    
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const hashedPassword = await this.generateHash(password);
 
     user = new User({
       username,
@@ -42,9 +41,9 @@ class AuthService {
       throw new Error("Email address not found.");
     }
 
-    console.log("the user", user);
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    if (user.password && !(await bcrypt.compare(password, user.password))) {
+    if (!isPasswordValid) {
       throw new Error("Invalid credentials");
     }
 
@@ -55,6 +54,11 @@ class AuthService {
     return { token, _id: user.id }; // Return token and _id
   }
 
+  async generateHash(string) {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(string, salt);
+    return hashedPassword;
+  }
   async googleSignInOrRegister(token) {
     const ticket = await client.verifyIdToken({
       idToken: token,
@@ -76,6 +80,25 @@ class AuthService {
     });
 
     return { token: jwtToken, _id: user.id }; // Return token and _id
+  }
+  async generateToken(email) {
+    const token = jwt.sign({ email }, process.env.JWT_SECRET, {
+      expiresIn: 60 * 10,
+    });
+    return token;
+  }
+  async validateToken(token) {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      return { email: decoded?.email, exp: false, invalidLink: false };
+    } catch (error) {
+      console.log(error.message);
+      if (error?.message === "jwt expired") {
+        return { email: null, exp: true, invalidLink: false };
+      } else {
+        return { email: null, exp: false, invalidLink: true };
+      }
+    }
   }
 }
 

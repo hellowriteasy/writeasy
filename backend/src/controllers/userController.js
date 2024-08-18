@@ -4,7 +4,8 @@ const AuthService = require("../services/AuthService");
 const StripeService = require("../services/stripeService");
 const { calculateSubscriptionRemainingDays } = require("../utils/methods");
 const authService = new AuthService();
-
+const EmailServiceClass = require("../services/emailService");
+const EmailService = new EmailServiceClass();
 const UserController = {
   async register(req, res) {
     const { username, email, password } = req.body;
@@ -14,9 +15,7 @@ const UserController = {
         email,
         password
       );
-
       const user = await User.findById(_id);
-
       res.json({
         token,
         _id,
@@ -58,7 +57,8 @@ const UserController = {
         subscriptionRemainingDays,
       });
     } catch (error) {
-      res.status(400).json({ msg: error.message });
+      console.log(error);
+      res.status(500).json({ msg: error.message });
     }
   },
   async getUserById(req, res) {
@@ -86,7 +86,7 @@ const UserController = {
           ...others,
           isSubcriptionActive,
           subscriptionRemainingDays,
-          subscription_id: subscription.subscription_id
+          subscription_id: subscription.subscription_id,
         },
       });
     } catch (error) {
@@ -141,7 +141,6 @@ const UserController = {
           const subscription = await Subscription.findOne({
             userId: user._id,
           });
-          console.log("subscription", subscription);
           return {
             ...user._doc,
             isSubcriptionActive: !!subscription?.isActive,
@@ -280,6 +279,88 @@ const UserController = {
       res
         .status(500)
         .json({ message: error?.message || "Internal server error" });
+    }
+  },
+  async sentLinkToResetPassword(req, res) {
+    const { email } = req.body;
+
+    try {
+      const user = await User.findOne({ email });
+      if (!user) {
+        throw {
+          type: "custom",
+          message: "This email is not registered in Writeasy",
+        };
+      }
+      const emailHash = await authService.generateToken(email);
+
+      const messageId = await EmailService.sendEmail({
+        subject: "Reset writeasy password ",
+        email,
+        message: `<div >
+         <h1 style="color:#0e0b3d;text-align:center;" > Reset your password  </h1> </br>
+          </br> <h4 style="color:#0e0b3d;text-align:center;">Click the button below to reset  your password. </h4> <br/> <a style="background:#FCD800; display:block; width:fit-content; margin:auto;  text-decoration:none;  padding:8px ; cursor:pointer;letter-spacing:1px; border-radius:4px;text-align:center;color:black;" href="${process.env.FRONTEND_BASE_URL}/change-password?token=${emailHash}"> RESET PASSWORD </a> </br> <br> <br>  </div>`,
+      });
+
+      return res
+        .status(200)
+        .json({ message: "reset link sent", success: true });
+    } catch (error) {
+      let errorMessage = "Something went wrong";
+      if (error.type === "custom") {
+        errorMessage = error.message;
+      }
+
+      return res.status(500).json({ message: errorMessage, success: true });
+    }
+  },
+  async handleResetPassword(req, res) {
+    const { token } = req.params;
+    const { password } = req.body;
+    try {
+      const { email, exp, invalidLink } = await authService.validateToken(
+        token
+      );
+      if (email) {
+        const user = await User.findOne({ email });
+        if (!user) {
+          throw { type: "custom", message: "Authorization failed" };
+        }
+        const newPassword = await authService.generateHash(password);
+        user.password = newPassword;
+        await user.save();
+        return res
+          .status(200)
+          .json({ message: "password reset successfully", success: true });
+      } else if (invalidLink) {
+        throw {
+          type: "custom",
+          message: "Invalid link",
+        };
+      } else {
+        throw {
+          type: "custom",
+          message: "Link expired",
+        };
+      }
+    } catch (error) {
+      console.log(error);
+      let errorMessage = "something went wrong";
+      let expired = false;
+      let invalidLink = false;
+
+      if (error.type === "custom") {
+        errorMessage = error.message;
+        if (error.message === "Link expired") {
+          expired = true;
+          errorMessage = "Password reset link has been expired";
+        } else {
+          errorMessage = "Invalid password reset link";
+
+          invalidLink = true;
+        }
+      }
+      return res.status(500).json({ message: errorMessage, success: false });
     }
   },
 };

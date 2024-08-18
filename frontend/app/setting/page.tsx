@@ -139,22 +139,7 @@ const Page = () => {
             value={userDetails.username}
             onChange={handleInputChange}
           />
-          <input
-            className="border border-gray-500 w-full text-xl rounded-3xl indent-7 h-14 focus:outline-none focus:border-yellow-600"
-            type="password"
-            name="old_password"
-            placeholder="Old Password"
-            value={userDetails.old_password}
-            onChange={handleInputChange}
-          />
-          <input
-            className="border border-gray-500 w-full text-xl rounded-3xl indent-7 h-14 focus:outline-none focus:border-yellow-600"
-            type="password"
-            placeholder="New Password"
-            name="password"
-            value={userDetails.password}
-            onChange={handleInputChange}
-          />
+
           <div className="w-full flex justify-center md:col-span-2 mt-4">
             <button
               type="submit"

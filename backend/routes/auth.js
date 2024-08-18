@@ -335,5 +335,8 @@ router.get("/users/cash-payers", UserController.getCashPaymentUsers);
 
 router.post("/users/unsubscribe-email", UserController.unsubscribeEmail);
 router.post("/users/subscribe-email", UserController.subscribeEmail);
+router.post("/users/sentLinkToResetPassword", UserController.sentLinkToResetPassword);
+router.post("/users/resetpassword/:token", UserController.handleResetPassword);
+
 
 module.exports = router;

@@ -13,7 +13,6 @@ class EmailService {
     });
 
     // Create personalized HTML content for each recipient
-
     let mailOptions = {
       from: '"Writeasy" <' + process.env.APP_EMAIL + ">",
       to: process.env.APP_EMAIL,
@@ -69,7 +68,7 @@ class EmailService {
                 }
                 ${
                   message
-                    ? `<p style="color:#4F5D68;font-size:1.125rem;line-height: 1.75rem;">${message}</p>`
+                    ? `<p style="color:#4F5D68;font-size:1.125rem;line-height: 1.75rem;text-align:center;">${message}</p>`
                     : ""
                 }
                 <div style="text-align:center">
