@@ -285,6 +285,9 @@ const getStoriesByContentAndPrompt = async (req, res) => {
         ...(limit ? { limit } : null),
       }
     )
+      .sort({
+        updatedAt: "desc",
+      })
       .populate({
         select: {
           username: 1,
@@ -294,11 +297,8 @@ const getStoriesByContentAndPrompt = async (req, res) => {
         path: "user",
       })
       .populate("prompt")
-      .populate("contributors")
-      .sort(getSortInputForStoriesByContestAndPrompt(sortKey, "desc"))
-      .skip(skip)
-      .limit(perPage);
-
+      .populate("contributors");
+    console.log();
     return res.status(200).json({
       data: stories,
       pageData: {
@@ -516,7 +516,7 @@ const calculateTopWritings = async (req, res) => {
     if (stories.length < 2) {
       throw new Error("Story must be at least 2 ");
     }
-    const results = await gptService.rankStories(stories,title);
+    const results = await gptService.rankStories(stories, title);
     return res.status(200).json(results);
   } catch (error) {
     res

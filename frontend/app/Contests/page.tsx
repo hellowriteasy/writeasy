@@ -29,7 +29,7 @@ const Contest = () => {
   useEffect(() => {
     AxiosIns.get(`/contests/ended?page=${currentPage}`)
       .then((response) => {
-        setEndedContests(response.data?.data.reverse());
+        setEndedContests(response.data?.data);
         setPageDetails(response.data?.pageData);
       })
       .catch((error) => {

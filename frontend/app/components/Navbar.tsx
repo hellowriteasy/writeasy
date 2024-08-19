@@ -4,9 +4,7 @@ import Logo from "@/public/Landingpage-img/logo.svg";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
 import UserMenu from "./UserMenu";
-import useAuthStore from "../store/useAuthStore";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 interface NavbarProps {
@@ -15,8 +13,6 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ titles }) => {
   const path = usePathname();
-  const router = useRouter();
-  const loggedIn = useAuthStore((state) => state.loggedIn);
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);

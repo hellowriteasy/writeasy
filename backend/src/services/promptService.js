@@ -2,7 +2,6 @@ const Prompt = require("../models/prompt");
 const Contest = require("../models/contest"); // Import Contest model
 
 const createPrompt = async (data) => {
-  console.log(data);
   const { promptType } = data;
   if (!["practice", "contest", "game"].includes(promptType)) {
     throw new Error("Invalid prompt type");
@@ -88,7 +87,9 @@ const getPromptsOfContestId = async (contestId, skip, limit) => {
     {
       ...(limit ? { limit } : null),
       ...(skip ? { skip } : null),
-      skip,
+      sort: {
+        createdAt: "desc",
+      },
     }
   );
   const total = await Prompt.countDocuments({ contestId });

@@ -6,7 +6,7 @@ const createContest = async (data) => {
 };
 
 const getAllContests = async () => {
-  return await Contest.find().populate("prompts");
+  return await Contest.find().sort({ createdAt: "desc" }).populate("prompts");
 };
 
 const getContestById = async (contestId) => {
@@ -37,6 +37,9 @@ const getOngoingContests = async (skip, limit) => {
     {
       ...(skip ? { skip } : null),
       ...(limit ? { limit } : null),
+      sort: {
+        createdAt: "desc",
+      },
     }
   ).populate("prompts");
   return {
@@ -56,9 +59,8 @@ const getEndedContests = async (skip, limit) => {
     {
       ...(skip ? { skip } : null),
       ...(limit ? { limit } : null),
-
     }
-  ).sort({createdAt:"desc"})
+  ).sort({ createdAt: "desc" });
   return {
     total,
     data,

@@ -33,7 +33,7 @@ const Page: React.FC = () => {
           }
         });
         
-        setUserStories(response.data?.data?.reverse());
+        setUserStories(response.data?.data);
         setPageDetails(response.data.pageData);
       } catch (error:any) {
     
@@ -55,7 +55,7 @@ const Page: React.FC = () => {
           }
         });
         
-        setUserStories(response.data?.data?.reverse());
+        setUserStories(response.data?.data);
 
       } catch (error:any) {
     
