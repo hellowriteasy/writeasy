@@ -22,7 +22,7 @@ const AxiosIns=axiosInstance("");
     const fetchContests = async () => {
       try {
         const response = await AxiosIns.get<Contest[]>("/contests");
-        setContests(response.data.reverse());
+        setContests(response.data);
      
       } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -41,7 +41,7 @@ const AxiosIns=axiosInstance("");
     const fetchPrompts = async () => {
       try {
         const response = await AxiosIns.get('/contests');
-        setContests(response.data.reverse());
+        setContests(response.data);
       } catch (error) {
         console.error('Error fetching contest:', error);
       }

@@ -7,6 +7,7 @@ const createStory = async (data) => {
 };
 
 const getAllStories = async (type, skip, limit) => {
+  console.log("inside");
   return await Story.find(
     {
       ...(type ? { storyType: type } : null),
@@ -17,6 +18,7 @@ const getAllStories = async (type, skip, limit) => {
       ...(skip ? { skip } : null),
     }
   )
+    .sort({ createdAt: "desc" })
     .populate({
       select: {
         password: 0,
@@ -35,6 +37,7 @@ const getAllStories = async (type, skip, limit) => {
 const getStoriesByUserAndType = async (userId, storyType, limit, skip) => {
   const objectId = new mongoose.Types.ObjectId(userId);
   const isPractiseStory = storyType === "practice";
+  console.log("inside");
   if (storyType === "practice" || storyType === "contest") {
     const total = await Story.countDocuments({
       user: objectId,
@@ -51,6 +54,7 @@ const getStoriesByUserAndType = async (userId, storyType, limit, skip) => {
       {
         ...(limit ? { limit } : null),
         ...(skip ? { skip } : null),
+        sort: { createdAt: "desc" },
       }
     )
       .populate("user")
@@ -59,10 +63,8 @@ const getStoriesByUserAndType = async (userId, storyType, limit, skip) => {
       .populate({
         path: "contributors",
         select: { password: 0 },
-      })
-      .sort({
-        updatedAt: "desc",
       });
+
     return {
       data,
       total,
@@ -96,6 +98,7 @@ const getStoriesByUserAndType = async (userId, storyType, limit, skip) => {
       {
         ...(limit ? { limit } : null),
         ...(skip ? { skip } : null),
+        sort: { createdAt: "desc" },
       }
     )
       .populate("user")

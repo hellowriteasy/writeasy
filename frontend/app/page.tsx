@@ -18,6 +18,8 @@ export default function Home() {
     }
     // eslint-disable-next-line
   }, [user.email, user.token]);
+    console.log(user);
+
   return (
     <main className="font-school flex justify-center items-baseline flex-col two-line-bg ">
       <Hero />

@@ -34,7 +34,7 @@ const Games: React.FC = () => {
             page: currentPage,
           },
         });
-        setPrompts(response.data?.data.reverse());
+        setPrompts(response.data?.data);
         setPageDetails(response.data.pageData);
       } catch (error: any) {
         setError(error.message);

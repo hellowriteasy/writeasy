@@ -52,7 +52,7 @@ const Page = () => {
           page += 1;
         }
 
-        setGames(allGames.reverse()); // reverse to maintain the most recent first order
+        setGames(allGames); // reverse to maintain the most recent first order
       } catch (error) {
         console.error(error);
       }

@@ -34,7 +34,7 @@ const Page: React.FC = () => {
         },
       });
 
-      setUserStories(response.data?.data.reverse());
+      setUserStories(response.data?.data);
       setPageDetails(response.data.pageData);
     } catch (error: any) {
       setError("Error fetching user stories: " + error.message);
@@ -54,7 +54,7 @@ const Page: React.FC = () => {
           },
         });
 
-        setUserStories(response.data?.data.reverse());
+        setUserStories(response.data?.data);
       } catch (error: any) {
         setError("Error fetching user stories: " + error.message);
       }
