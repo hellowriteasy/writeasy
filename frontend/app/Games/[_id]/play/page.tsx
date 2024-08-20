@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useState, SyntheticEvent, useEffect } from "react";
+import React, { useState, SyntheticEvent, useEffect } from "react";
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
@@ -21,12 +21,8 @@ import { axiosInstance } from "@/app/utils/config/axios";
 import { TPrompt, TStory, TUser } from "@/app/utils/types";
 import Logo from "@/public/Landingpage-img/logo.svg";
 import { useRouter } from "next/navigation";
-import { divideNewlinesByTwo } from "@/app/utils/methods";
-interface SearchResult {
-  username: string;
-  email: string;
-  profile_picture: string;
-}
+import { convertToHtml, divideNewlinesByTwo } from "@/app/utils/methods";
+import HardBreak from "@tiptap/extension-hard-break";
 
 interface Props {
   searchResults: TUser[];
@@ -82,6 +78,7 @@ const Page = () => {
       Italic,
       Strike,
       Code,
+      HardBreak,
     ],
     editorProps: {
       attributes: {
@@ -92,6 +89,7 @@ const Page = () => {
     content: storyDetails.content,
     onUpdate: ({ editor }) => {
       const textContent = editor.getText();
+      console.log("getting text", textContent);
       const words = textContent.split(/\s+/).filter(Boolean).length;
       handleStoryDetailsInputChange("wordCount", words);
     },
@@ -181,10 +179,10 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    console.log("inside", currentStory);
     if (currentStory && editor) {
       editor?.commands?.clearContent();
-      editor.commands.insertContent(currentStory.content);
+      console.log("adding content", currentStory.content.includes("\n"));
+      editor.commands.insertContent(convertToHtml(currentStory.content));
       handleStoryDetailsInputChange("title", currentStory.title);
       handleStoryDetailsInputChange("content", currentStory.content);
     }
@@ -276,26 +274,6 @@ const Page = () => {
     }
   };
 
-  const toggleBold = useCallback(() => {
-    editor.chain().focus().toggleBold().run();
-  }, [editor]);
-
-  const toggleUnderline = useCallback(() => {
-    editor.chain().focus().toggleUnderline().run();
-  }, [editor]);
-
-  const toggleItalic = useCallback(() => {
-    editor.chain().focus().toggleItalic().run();
-  }, [editor]);
-
-  const toggleStrike = useCallback(() => {
-    editor.chain().focus().toggleStrike().run();
-  }, [editor]);
-
-  const toggleCode = useCallback(() => {
-    editor.chain().focus().toggleCode().run();
-  }, [editor]);
-
   if (!editor) {
     return null;
   }
@@ -326,7 +304,7 @@ const Page = () => {
               <img
                 className="w-full h-full"
                 src={result.profile_picture}
-                alt=""
+                alt="profile picture"
               />
             ) : (
               <Image src={Logo} alt="Image" width={50} height={50} />
