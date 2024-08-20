@@ -346,7 +346,7 @@ export function SimpleEditor({
               </button> */}
               <button
                 className={classNames(
-                  "menu-button bg-black text-sm font-comic text-white p-2 rounded-md ml-auto",
+                  "menu-button bg-black text-sm font-comic text-white p-1 rounded-md ml-auto",
                   {
                     "is-active": editor.isActive("code"),
                   }
