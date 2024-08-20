@@ -121,35 +121,33 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
   if (!contest) return <p></p>;
 
   return (
-    <div className="w-full min-h-screen  z-0 relative flex justify-center">
-      <div className="w-10/12 h-auto ">
-        <div className="flex w-full ">
-       
-        </div>
-        <div className="flex mt-8 sm:mt-0">
+    <div className="w-full min-h-[calc(100vh-4rem)] h-auto z-0 relative flex justify-center">
+      <div className="w-10/12 sm:w-full h-auto">
+        
+        <div className="flex mt-8 sm:justify-center sm:items-center sm:mt-0">
           <div className="p-6 mb-6 flex flex-col gap-y-4">
             <div className="flex gap-y-3 flex-col">
               <h2 className="text-4xl font-comic sm:text-xl font-bold">
                 {contest.contestTheme}
               </h2>
               <p className="text-xl py-4 sm:text-sm w-10/12">
-             {contest.description}
-               
+                {contest.description}
               </p>
-              <div className="flex w-full ">
+              <div className="flex w-full">
                 <p className="text-xl sm:text-sm text-center font-comic">
-                  <b className="font-bold"> Submission deadline </b> -
+                  <b className="font-bold">Submission deadline</b> -
                   {moment(contest.submissionDeadline).format("llll")}
                 </p>
               </div>
             </div>
           </div>
         </div>
-        <div className="flex w-full h-auto relative mt-0 justify-between ">
+        
+        <div className="flex w-full h-auto relative mt-0 justify-between">
           <div className="absolute sm-hide top-0 -left-40">
             <Image src={Cloud2} alt="cloud" />
           </div>
-          <div className="gap-8  flex flex-col w-full">
+          <div className="gap-8 flex flex-col sm:justify-center sm:items-center w-full">
             {hasPromptPublished ? (
               promptList.length > 0 ? (
                 promptList.map((prompt) => (
