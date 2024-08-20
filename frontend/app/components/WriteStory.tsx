@@ -124,15 +124,12 @@ export function SimpleEditor({
     },
     onUpdate: ({ editor }) => {
       const textContent = editor.getText();
-
       const words = textContent.split(/\s+/).filter(Boolean).length;
       setWordLimitExceeded(words > 1000);
     },
   }) as Editor;
 
-  const handleExport = () => {
-    toPDF();
-  };
+ 
 
   useEffect(() => {
     if (!triggerGrammarCheck) return;
@@ -227,29 +224,7 @@ export function SimpleEditor({
     }
   };
 
-  const toggleBold = useCallback(() => {
-    editor.chain().focus().toggleBold().run();
-  }, [editor]);
 
-  const toggleUnderline = useCallback(() => {
-    editor.chain().focus().toggleUnderline().run();
-  }, [editor]);
-
-  const toggleItalic = useCallback(() => {
-    editor.chain().focus().toggleItalic().run();
-  }, [editor]);
-
-  const toggleStrike = useCallback(() => {
-    editor.chain().focus().toggleStrike().run();
-  }, [editor]);
-
-  const toggleCode = useCallback(() => {
-    editor.chain().focus().toggleCode().run();
-  }, [editor]);
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(correctedText);
-  };
 
   if (!editor) {
     return null;
