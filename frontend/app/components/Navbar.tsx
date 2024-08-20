@@ -63,11 +63,11 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
             onClick={toggleMenu}
             className="text-black focus:outline-none"
           >
-            {isOpen ? (
+            {/* {isOpen ? (
               <XMarkIcon className="h-8 w-8" />
-            ) : (
+            ) : ( */}
               <Bars3Icon className="h-8 w-8" />
-            )}
+            {/* )} */}
           </button>
         </div>
       </div>
