@@ -6,7 +6,6 @@ import Image from "next/image";
 import cloud from "@/public/Game/sm-cloud.svg";
 import { Disclosure } from "@headlessui/react";
 import { Transition } from "@headlessui/react";
-import axios from "axios";
 import { axiosInstance } from "../utils/config/axios";
 import useAuthStore from "../store/useAuthStore";
 
@@ -22,6 +21,7 @@ const FrequentlyAsked = () => {
   const [showAll, setShowAll] = useState(false);
   const { token } = useAuthStore();
   const axiosIns = axiosInstance(token || "");
+
   useEffect(() => {
     const fetchFaqs = async () => {
       try {
@@ -43,7 +43,7 @@ const FrequentlyAsked = () => {
   };
 
   return (
-    <div className="relative w-full min-h-screen text-black flex flex-col items-center px-4 md:px-10">
+    <div className="relative w-full min-h-full flex flex-col items-center px-4 md:px-10 py-8 md:py-12">
       <div className="absolute left-4 md:left-10 vsm-hide top-20 md:top-32">
         <Image className="w-[13vw]" src={Group} alt="group" />
       </div>
@@ -51,11 +51,11 @@ const FrequentlyAsked = () => {
         <Image className="w-[5vw]" src={Path} alt="path" />
       </div>
       <div className="text-3xl flex flex-col items-center font-bold font-school gap-3">
-        <h1 className="text-center sm:text-xl  text-4xl  md:text-6xl lg:text-7xl font-bold pt-5 md:pt-10 font-school">
+        <h1 className="text-center sm:text-xl text-4xl md:text-6xl lg:text-7xl font-bold pt-5 md:pt-10 font-school">
           Frequently Asked Questions
         </h1>
 
-        <div className="w-full  sm:pt-8 pt-16 px-4">
+        <div className="w-full sm:pt-8 pt-16 px-4">
           <div className="mx-auto w-full max-w-lg">
             <div className="divide-y divide-gray-300 rounded-xl flex flex-col items-center">
               {displayedFaqs.map((question) => (
@@ -87,7 +87,7 @@ const FrequentlyAsked = () => {
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                       >
-                        <Disclosure.Panel className="mt-2 text-sm text-center md:text-base text-gray-800 bg-custom-yellow rounded-full p-4 mx-auto w-full">
+                        <Disclosure.Panel className="mt-2 text-sm text-center md:text-base text-gray-800 bg-custom-yellow rounded-md p-4 mx-auto w-full">
                           {question.answer}
                         </Disclosure.Panel>
                       </Transition>

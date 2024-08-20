@@ -10,8 +10,8 @@ type TNotFoundProps = {
 const NotFound: React.FC<TNotFoundProps> = ({ text }) => {
   return (
     <div className="flex flex-col my-10 gap-y-9 mx-auto  items-center ">
-      <Image className="w-[14vw]" src={notFound}  alt="not found image" />
-      <p className="text-2xl font-comic font-bold  ">{text}</p>
+      <Image className="w-[14vw] sm:w-40" src={notFound}  alt="not found image" />
+      <p className="text-2xl sm:text-sm font-comic font-bold  ">{text}</p>
     </div>
   );
 };
