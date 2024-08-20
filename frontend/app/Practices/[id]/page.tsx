@@ -79,7 +79,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
   if (!prompt) return <div>Loading...</div>;
 
   return (
-    <div className="w-full min-h-screen h-[1200px] mt-6 z-0 relative flex justify-center">
+    <div className="w-full min-h-screen  mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 min-h-screen flex flex-col items-center gap-y-4 ">
         <div className="w-4/5 mx-auto  relative pt-2 ">
           <h1 className="text-xl sm:text-sm text-center font-bold font-comic">
