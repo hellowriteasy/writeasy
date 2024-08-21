@@ -136,7 +136,12 @@ const Card: React.FC<CardProps> = ({ contest }) => {
         </div>
         <div className="text-gray-700">Prompt : {contest.prompt.title}</div>
         <div className="text-gray-700">User: {contest.user.username}</div>
-        <div className="text-gray-700">Score: {contest.score}</div>
+        {contest.isTopWriting ? (
+          <div className="text-gray-700">
+            Top story : {contest.isTopWriting}
+          </div>
+        ) : null}
+        {/* <div className="text-gray-700">Score: {contest.score}</div> */}
 
         <div className="text-gray-700">
           Submission Date:{" "}

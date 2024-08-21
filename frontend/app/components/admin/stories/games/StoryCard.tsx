@@ -84,7 +84,7 @@ const Card: React.FC<CardProps> = ({ story, onsuccess }) => {
         </div>
         <div className="text-gray-700">Prompt : {story.prompt.title}</div>
         <div className="text-gray-700">User: {story.user.username}</div>
-        <div className="text-gray-700">Score: {story.score}</div>
+        {/* <div className="text-gray-700">Score: {story.score}</div> */}
         <div className="text-gray-700">
           Submission Date: {new Date(story.submissionDateTime).toLocaleString()}
         </div>
