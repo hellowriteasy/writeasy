@@ -10,15 +10,15 @@ export default function Home() {
   const toast = useCustomToast();
   const router = useRouter();
   useEffect(() => {
-    if (user.token && !user.email) {
-      console.log("logged in user ", user);
+    if (user.email && !user.username) {
+      console.log("user ---> ", user.email, user.username);
       toast("Please set your username", "success");
       router.push("/setting");
       return;
     }
     // eslint-disable-next-line
   }, [user.email, user.token]);
-    console.log(user);
+  console.log(user);
 
   return (
     <main className="font-school flex justify-center items-baseline flex-col two-line-bg ">

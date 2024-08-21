@@ -63,6 +63,8 @@ export function SimpleEditor({
   const { token } = useAuthStore();
   const [isSaving, setIsSaving] = useState(false);
   const [initialText, setInitialText] = useState("");
+  const [writingMode, setWritingMode] = useState(true);
+
   const [isEditorDisabled, setIsEditorDisabled] = useState(false);
   useEffect(() => {
     setStoredFunction(toPDF);
@@ -129,12 +131,10 @@ export function SimpleEditor({
     },
   }) as Editor;
 
- 
-
   useEffect(() => {
     if (!triggerGrammarCheck) return;
     handleClickFeature(taskType, new MouseEvent("click"), false);
-  }, [triggerGrammarCheck]);
+  }, [triggerGrammarCheck,taskType]);
 
   const userId = useAuthStore((state) => state.userId);
 
@@ -146,17 +146,22 @@ export function SimpleEditor({
     event.preventDefault();
     try {
       let currentContent = divideNewlinesByTwo(editor.getText());
-      setInitialText(currentContent);
-      // if (!initialText) {
-      //   currentContent = divideNewlinesByTwo(editor.getText());
-      //   setInitialText(currentContent);
-      //   if (!currentContent) {
-      //     toast.warn("Please enter content before submitting.");
-      //     return;
-      //   }
-      // } else {
-      // currentContent = initialText;
-      // }
+      if (taskType === "refresh") {
+        setInitialText("");
+        setWritingMode(true);
+        editor.commands.setContent("");
+        return;
+      }
+      if (!initialText) {
+        currentContent = divideNewlinesByTwo(editor.getText());
+        setInitialText(currentContent);
+        if (!currentContent) {
+          toast.warn("Please enter content before submitting.");
+          return;
+        }
+      } else {
+        currentContent = initialText;
+      }
 
       if (wordLimitExceeded) {
         toast.error("Word limit exceeded. Please reduce the number of words.");
@@ -207,6 +212,7 @@ export function SimpleEditor({
           }
           setIsLoading(false);
           setTriggerGrammarCheck(false);
+          setWritingMode(false);
         }
       }
     } catch (error) {
@@ -224,8 +230,14 @@ export function SimpleEditor({
     }
   };
 
-
-
+  useEffect(() => {
+    if (!editor) return;
+    if (!writingMode) {
+      editor.setEditable(false);
+    } else {
+      editor.setEditable(true);
+    }
+  }, [writingMode, editor]);
   if (!editor) {
     return null;
   }
@@ -347,9 +359,13 @@ export function SimpleEditor({
           <div className="mt-10" ref={targetRef}>
             <EditorContent
               className={`scroll-m-2 w-[100%]  mt-10 ${
-                isLoading ? "opacity-50 cursor-not-allowed" : ""
-              }  h-[600px] overflow-y-auto scrollbar-hide`}
+                isLoading
+                  ? "opacity-50 cursor-not-allowed pointer-events-none"
+                  : ""
+              } ${ !writingMode ?"pointer-events-none":"" }  h-[600px] overflow-y-auto scrollbar-hide`}
               editor={editor}
+              disabled={true}
+              aria-disabled={true}
               style={{
                 overflowY: "auto",
                 scrollbarWidth: "none",

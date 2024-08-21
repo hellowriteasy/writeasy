@@ -7,7 +7,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <Navbar />
-      <div className="flex ">
+      <div className="flex">
         <Sidebar />
         <div className="w-full">{children}</div>
       </div>

@@ -46,7 +46,6 @@ const Pricing = () => {
     try {
       const { data } = await AxiosIns.get(`/payments/subscriptions`);
       setSubscriptions(data.data);
-      console.log(data);
     } catch (error) {}
   };
 
@@ -75,7 +74,7 @@ const Pricing = () => {
               </div>
               {!userId && (
                 <Link href="/signup" className="">
-                  <button className="border-2 mx-auto sm:w-12 sm:h-8 sm:text-[10px] font-comic text-3xl hover:bg-slate-200 border-slate-700 bg-white rounded-3xl text-black w-60 h-14">
+                  <button className="border-2 mx-auto sm:w-12 sm:h-9 sm:text-[10px] sm:rounded-xl font-comic text-3xl hover:bg-slate-200 border-slate-700 bg-white rounded-3xl text-black w-60 h-14">
                     Sign up
                   </button>
                 </Link>
@@ -128,7 +127,7 @@ const Pricing = () => {
                 {!userId ? (
                   <button
                     onClick={() => handleSignUp()}
-                    className="border text-2xl sm:w-12 sm:h-8 sm:text-[10px] sm:text-3xl mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl text-white w-40 md:w-56 lg:w-60 h-12"
+                    className="border text-2xl sm:w-12 sm:h-9 sm:text-[10px]  sm:text-3xl  mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl sm:rounded-xl text-white w-40 md:w-56 lg:w-60 h-12 "
                   >
                     Sign up
                   </button>

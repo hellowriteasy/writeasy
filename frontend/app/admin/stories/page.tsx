@@ -63,12 +63,12 @@ const Page: React.FC = () => {
         <div className="flex h-screen">
           <div className="flex-1 flex flex-col p-6 space-y-6">
             <StoryNav />
-            <div className="flex justify-between items-center w-5/6 bg-white shadow-sm p-4 rounded-lg border border-gray-200">
+            {/* <div className="flex justify-between items-center w-5/6 bg-white  p-4 rounded-lg  ">
               <div className="text-2xl font-semibold text-gray-700">
                 All Stories
               </div>
-            </div>
-            <div className="bg-white shadow-sm p-4 rounded-lg border border-gray-200 space-y-4">
+            </div> */}
+            <div className="bg-white shadow-sm p-4 rounded-lg border  space-y-4">
               {stories.map((story) => (
                 <Card
                   key={story._id}

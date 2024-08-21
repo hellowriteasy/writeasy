@@ -84,7 +84,7 @@ const Card: React.FC<CardProps> = ({ title, type, id, onSuccess }) => {
 
   return (
     <>
-      <div className="bg-white border font-poppins border-gray-300 w-5/6 shadow-md rounded-lg p-4 mb-4">
+      <div className="bg-white border font-poppins border-gray-300 w-full shadow-md rounded-lg p-4 mb-4">
         <div className="flex justify-between items-center mb-2">
           <div className="text-xl font-semibold">{title}</div>
           <div className="flex space-x-2 gap-4">
