@@ -1,30 +1,35 @@
-import { Fragment, useState,useEffect } from 'react';
-import { Dialog, Transition, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Card from '../../../components/admin/contests/CardAdd';
-import { axiosInstance } from '@/app/utils/config/axios';
+import { Fragment, useState, useEffect } from "react";
+import {
+  Dialog,
+  Transition,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+} from "@headlessui/react";
+import "react-toastify/dist/ReactToastify.css";
+import { axiosInstance } from "@/app/utils/config/axios";
 
 interface ModalProps {
   setIsModalOpen: (isOpen: boolean) => void;
-  onSuccess: () => void; 
+  onSuccess: () => void;
 }
 
 interface CardProps {
   title: string;
   type: string;
 }
-interface Category{
-  _id:string,
-  name:string
+interface Category {
+  _id: string;
+  name: string;
 }
 
-const Modal: React.FC<ModalProps> = ({ setIsModalOpen,onSuccess }) => {
-  const [promptTitle, setPromptTitle] = useState('');
+const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onSuccess }) => {
+  const [promptTitle, setPromptTitle] = useState("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]); // State for selected categories
   const [promptCards, setPromptCards] = useState<CardProps[]>([]);
-  const [category,setCategory]=useState<Category[]> ([]) // State to store added prompt cards
-  const AxiosIns = axiosInstance('');
+  const [category, setCategory] = useState<Category[]>([]); // State to store added prompt cards
+  const AxiosIns = axiosInstance("");
 
   const handleAdd = () => {
     const promptData = {
@@ -33,26 +38,28 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen,onSuccess }) => {
       promptType: "practice",
     };
 
-    AxiosIns.post('/prompts', promptData)
-      .then(response => {
+    AxiosIns.post("/prompts", promptData)
+      .then((response) => {
         const newPrompt: CardProps = {
           title: promptTitle,
-          type: selectedCategories.join(', ') // Concatenate selected categories for display
+          type: selectedCategories.join(", "), // Concatenate selected categories for display
         };
         setPromptCards([...promptCards, newPrompt]); // Add the new prompt card to the state
         setIsModalOpen(false);
         onSuccess();
         // toast.success('Prompt added successfully!');
       })
-      .catch(error => {
-        console.error('There was an error posting the data!', error);
+      .catch((error) => {
+        console.error("There was an error posting the data!", error);
         // toast.error('Failed to add prompt.');
       });
   };
 
   const toggleCategory = (category: string) => {
     if (selectedCategories.includes(category)) {
-      setSelectedCategories(selectedCategories.filter(cat => cat !== category));
+      setSelectedCategories(
+        selectedCategories.filter((cat) => cat !== category)
+      );
     } else {
       setSelectedCategories([...selectedCategories, category]);
     }
@@ -60,7 +67,9 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen,onSuccess }) => {
   useEffect(() => {
     const getCategory = async () => {
       try {
-        const { data } = await AxiosIns.get<{ categories: Category[] }>('/category');
+        const { data } = await AxiosIns.get<{ categories: Category[] }>(
+          "/category"
+        );
         setCategory(data.categories);
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -71,7 +80,11 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen,onSuccess }) => {
   }, []);
   return (
     <Transition.Root show={true} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={() => setIsModalOpen(false)}>
+      <Dialog
+        as="div"
+        className="relative z-10"
+        onClose={() => setIsModalOpen(false)}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -96,23 +109,27 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen,onSuccess }) => {
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <Dialog.Panel className="relative flex flex-col  items-center transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 w-1/2 h-full sm:w-full sm:max-w-lg">
-                <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                  <div className="sm:flex sm:items-start">
-                    <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                      <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
+                <div className="bg-white px-4 pb-2 pt-2 sm:p-6 sm:pb-4 w-full">
+                  <div className="sm:flex sm:items-start w-full">
+                    <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full ">
+                      <Dialog.Title
+                        as="h3"
+                        className="text-base font-semibold leading-6 text-gray-900"
+                      >
                         Add Prompt
                       </Dialog.Title>
-                      <div className="mt-2">
-                        <input
-                          type="text"
-                          className="mt-1 block w-96 h-12 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
+                      <div className="mt-2 w-full ">
+                        <textarea
+                          className="mt-1 block  h-12 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50 w-full"
                           placeholder="Prompt Title"
                           value={promptTitle}
                           onChange={(e) => setPromptTitle(e.target.value)}
-                        />
-                        <Menu as="div" className="relative h-40 mt-3">
-                          <MenuButton className="w-96 text-left rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                            {selectedCategories.length === 0 ? 'Select Category' : selectedCategories.join(', ')}
+                        ></textarea>
+                        <Menu as="div" className="relative  mt-3">
+                          <MenuButton className="w-full text-left rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            {selectedCategories.length === 0
+                              ? "Select Category"
+                              : selectedCategories.join(", ")}
                           </MenuButton>
                           <Transition
                             as={Fragment}
@@ -147,7 +164,7 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen,onSuccess }) => {
                     </div>
                   </div>
                 </div>
-                <div className="bg-gray-50 px-4 py-3  sm:flex sm:flex-row-reverse  sm:px-6">
+                <div className="bg-gray-50 px-4 py-3 flex items-center  gap-4 sm:flex sm:flex-row-reverse  sm:px-6">
                   <button
                     type="button"
                     className="inline-flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm  sm:ml-3 sm:w-auto"
@@ -157,7 +174,7 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen,onSuccess }) => {
                   </button>
                   <button
                     type="button"
-                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                    className="inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
                     onClick={() => setIsModalOpen(false)}
                   >
                     Cancel

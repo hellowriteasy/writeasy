@@ -24,7 +24,6 @@ const createStripeCheckoutSession = async (req, res) => {
       stripe_customer_id = customer.id;
     }
 
-    console.log("stripe custoerm", stripe_customer_id);
     const checkoutRes = await StripeService.createStripeCheckout(
       userExist.email,
       price_id,

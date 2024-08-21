@@ -61,7 +61,7 @@ const AxiosIns=axiosInstance("");
       <div className="flex h-screen">
        
         <div className="flex-1 flex flex-col p-6 space-y-6">
-          <div className="flex justify-between w-5/6 items-center bg-white shadow-sm p-4 rounded-lg border border-gray-300">
+          <div className="flex justify-between w-full items-center bg-white shadow-sm p-4 rounded-lg border border-gray-300">
             <div className="text-2xl font-semibold text-gray-700">Contests</div>
             <button
               className="bg-black text-white px-4 py-2 rounded-lg "
@@ -79,7 +79,7 @@ const AxiosIns=axiosInstance("");
                 <i className="fas fa-hashtag cursor-pointer"></i>
               </div>
             </div>
-            <div className="mt-4 space-y-4 w-5/6">
+            <div className="mt-4 space-y-4 w-full">
              {
                 contests.map((contest) => (
                   <Card

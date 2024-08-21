@@ -58,7 +58,7 @@ const CardAdd: React.FC<CardProps> = ({
 
   return (
     <>
-      <div className="bg-white shadow-md border border-gray-300 w-5/6 rounded-lg p-4 mb-4">
+      <div className="bg-white shadow-md border border-gray-300 w-full rounded-lg p-4 mb-4">
         <div className="flex justify-between items-center mb-2">
           <div className="text-xl font-semibold">{title}</div>
           <div className="flex space-x-2 gap-4">

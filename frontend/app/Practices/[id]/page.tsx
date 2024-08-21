@@ -9,6 +9,7 @@ import Subscription from "@/app/components/Subscription";
 import { axiosInstance } from "@/app/utils/config/axios";
 import { TTaskType } from "@/app/utils/types";
 import Loading from "@/app/loading";
+import ConfirmModal from "@/app/components/Modal/ConfirmModal";
 interface Prompt {
   _id: string;
   title: string;
@@ -59,11 +60,9 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
     }
   }, [params.id]);
 
-
-
   const handleTaskTypeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { value } = e.currentTarget;
-    console.log("clicking",value);
+    console.log("clicking", value);
 
     setTaskType(value as TTaskType);
     setTriggerGrammarCheck(true);
@@ -76,7 +75,8 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
 
   const handleRemoveActiveTaskType = () => setTaskType("");
 
-  if (!prompt)return <Loading></Loading>
+  if (!prompt) return <Loading></Loading>;
+
   return (
     <div className="w-full min-h-screen  mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 min-h-screen flex flex-col items-center gap-y-4 ">
@@ -90,10 +90,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
             <Image src={Bee} alt="bee" />
           </div>
           <div className="gap-8 relative w-full flex flex-col items-center ">
-            <form
-              action=""
-              className="flex flex-col items-center w-full mx-auto"
-            >
+            <div className="flex flex-col items-center w-full mx-auto">
               <div className="flex flex-col w-full items-center gap-8 h-auto mx-auto">
                 <div>
                   <input
@@ -126,20 +123,26 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
                         </button>
                       </div>
                     ))}
-                    <div  className="flex">
+                    <ConfirmModal
+                      onSuccess={() => {
+                        setTaskType("refresh");
+                        setTriggerGrammarCheck(true);
+                      }}
+                      title={"Are you sure you want to refresh?"}
+                      description={"Note: Your writing will not be saved."}
+                    >
                       <button
                         className={` sm:h-10 sm:w-20  md:h-[7vh] w-32 h-12 text-md bg-black text-white hover:opacity-80 font-bold text-md sm:text-[2.5vw] rounded-3xl`}
                         type="button"
-                        value={"refresh"}
-                        onClick={ (e)=>  handleTaskTypeClick(e)  }
                       >
                         Refresh
                       </button>
-                    </div>
+                    </ConfirmModal>
+                    <div className="flex"></div>
                   </div>
                 </div>
               </div>
-            </form>
+            </div>
           </div>
         </div>
         <div className="w-full flex-grow">

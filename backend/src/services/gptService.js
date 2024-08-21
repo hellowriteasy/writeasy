@@ -416,7 +416,6 @@ ${JSON.stringify(comparativeBatchStory)}
             }
           );
           let result = response.data.choices[0].message.content;
-          console.log("raw result", result);
 
           const regexMatch = result.match(/\[.*\]/s);
           if (regexMatch) {
