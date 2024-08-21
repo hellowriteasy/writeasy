@@ -25,6 +25,7 @@ const Page = () => {
   const [file, setFile] = useState<File | null>(null);
   const axiosIns = axiosInstance(token || "");
   const toast = useCustomToast();
+  const [updating, setUpdating] = useState(false);
 
   useEffect(() => {
     setUserDetails({
@@ -65,6 +66,7 @@ const Page = () => {
       old_password,
     } = userDetails;
     try {
+      setUpdating(true);
       if (file) {
         profile_image_url = await uploadFile(file);
       }
@@ -75,9 +77,11 @@ const Page = () => {
         ...(newPassword ? { password: newPassword } : {}),
       });
       toast("Profile updated successfully", "success");
+      setUpdating(false);
 
       console.log("Update successful", response.data);
     } catch (error) {
+      setUpdating(false);
       console.error("Error updating profile", error);
     }
   };
@@ -145,7 +149,7 @@ const Page = () => {
               type="submit"
               className="text-white bg-black text-2xl font-bold font-comic rounded-full w-full h-14"
             >
-              Update
+              {updating?"Updating...":"Update"}
             </button>
           </div>
         </form>

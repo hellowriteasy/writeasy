@@ -86,7 +86,7 @@ const UserController = {
           ...others,
           isSubcriptionActive,
           subscriptionRemainingDays,
-          subscription_id: subscription.subscription_id,
+          subscription_id: subscription?.subscription_id,
         },
       });
     } catch (error) {
