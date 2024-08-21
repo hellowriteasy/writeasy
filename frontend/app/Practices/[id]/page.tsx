@@ -8,7 +8,7 @@ import useAuthStore from "@/app/store/useAuthStore";
 import Subscription from "@/app/components/Subscription";
 import { axiosInstance } from "@/app/utils/config/axios";
 import { TTaskType } from "@/app/utils/types";
-
+import Loading from "@/app/loading";
 interface Prompt {
   _id: string;
   title: string;
@@ -76,8 +76,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
 
   const handleRemoveActiveTaskType = () => setTaskType("");
 
-  if (!prompt) return <div>Loading...</div>;
-
+  if (!prompt)return <Loading></Loading>
   return (
     <div className="w-full min-h-screen  mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 min-h-screen flex flex-col items-center gap-y-4 ">
