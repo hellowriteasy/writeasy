@@ -5,7 +5,7 @@ import { FaAngleDown } from "react-icons/fa6";
 import { IoPersonSharp } from "react-icons/io5";
 import useAuthStore from "../store/useAuthStore";
 import Link from "next/link";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { axiosInstance } from "../utils/config/axios";
 
 const UserMenu = () => {
@@ -103,8 +103,18 @@ const UserMenu = () => {
         </>
       ) : (
         <div className="flex gap-2 sm:gap-4">
-          <button onClick={() => router.push('/login')} className="text-lg sm:text-2xl font-bold text-center bg-custom-yellow border-2 w-16 sm:w-20 h-10 sm:h-12 hover:bg-white rounded-3xl border-black text-black font-comic">Login</button>
-          <button onClick={() => router.push('/signup')} className="text-lg sm:text-2xl font-bold text-center bg-black border-2 w-24 sm:w-32 h-10 sm:h-12 rounded-3xl hover:opacity-80 border-black text-white font-comic">Sign up</button>
+          <button
+            onClick={() => router.push("/login")}
+            className="text-lg sm:text-2xl font-bold text-center bg-custom-yellow border-2 w-16 sm:w-20 h-10 sm:h-12 hover:bg-white rounded-3xl border-black text-black font-comic"
+          >
+            Login
+          </button>
+          <button
+            onClick={() => router.push("/signup")}
+            className="text-lg sm:text-2xl font-bold text-center bg-black border-2 w-24 sm:w-32 h-10 sm:h-12 rounded-3xl hover:opacity-80 border-black text-white font-comic"
+          >
+            Sign up
+          </button>
         </div>
       )}
     </div>
