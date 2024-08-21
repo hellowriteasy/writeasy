@@ -49,22 +49,22 @@ const Sidebar = () => {
           {links.map((link) => {
             const isActive = path.startsWith(`/admin/${link}`);
             return (
-              <li
+              <Link
                 key={link}
-                className={`text-start h-16 px-3 flex items-center cursor-pointer  border-t border-white ${
-                  isActive
-                    ? "bg-custom-yellow text-black border-t border-white  "
-                    : "hover:bg-custom-yellow hover:text-black text-black"
-                }`}
+                className={`block text-lg  font-medium  rounded transition duration-300 `}
+                href={`/admin/${link}`}
+                onClick={toggleSidebar} // Close the sidebar when a link is clicked
               >
-                <Link
-                  className={`block text-lg  font-medium py-2 rounded transition duration-300 `}
-                  href={`/admin/${link}`}
-                  onClick={toggleSidebar} // Close the sidebar when a link is clicked
+                <li
+                  className={`text-start h-16 px-3 flex items-center cursor-pointer  border-t border-white ${
+                    isActive
+                      ? "bg-custom-yellow text-black border-t border-white  "
+                      : "hover:bg-custom-yellow hover:text-black text-black"
+                  }`}
                 >
                   {link.charAt(0).toUpperCase() + link.slice(1)}
-                </Link>
-              </li>
+                </li>
+              </Link>
             );
           })}
         </ul>

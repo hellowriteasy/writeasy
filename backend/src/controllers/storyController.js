@@ -297,8 +297,9 @@ const getStoriesByContentAndPrompt = async (req, res) => {
         path: "user",
       })
       .populate("prompt")
-      .populate("contributors");
-    console.log();
+      .populate("contributors")
+      .populate("contest");
+
     return res.status(200).json({
       data: stories,
       pageData: {

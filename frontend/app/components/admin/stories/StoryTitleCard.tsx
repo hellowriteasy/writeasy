@@ -5,7 +5,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { axiosInstance } from '@/app/utils/config/axios';
 import DeleteModal from '../../DeleteModal';
 import { toast } from 'react-toastify';
-import { TUser } from '@/app/utils/types';
+import { TPrompt, TUser } from '@/app/utils/types';
 
 interface CardProps {
   _id: string;
@@ -14,7 +14,7 @@ interface CardProps {
   content: string;
   wordCount: number;
   submissionDateTime: string;
-  prompt: string;
+  prompt: TPrompt;
   storyType: string;
   correctionSummary: string;
   corrections: string;
@@ -70,12 +70,11 @@ const Card: React.FC<CardProps> = ({
       toast.error('Failed to update the story.');
     }
   };
-
   return (
     <>
       <div className="bg-white shadow-md rounded-lg w-full border z-50 border-gray-300 p-4 mb-4">
         <div className="flex justify-between items-center mb-2">
-          <div className="text-xl font-semibold">{title}</div>
+          <div className="text-xl font-semibold">Prompt : {prompt?.title}</div>
           <div className="flex space-x-2 gap-4">
             <button className="text-black" onClick={() => setOpen(true)}>
               <FaEdit size={30} />
@@ -85,6 +84,7 @@ const Card: React.FC<CardProps> = ({
             </button>
           </div>
         </div>
+         {title ? <div className="text-gray-600">title: {title}</div>:null } 
         <div className="text-gray-600">User: {user.username}</div>
         <div className="text-gray-600">
           Submission Date: {new Date(submissionDateTime).toLocaleString()}

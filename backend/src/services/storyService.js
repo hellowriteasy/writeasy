@@ -7,30 +7,37 @@ const createStory = async (data) => {
 };
 
 const getAllStories = async (type, skip, limit) => {
-  return await Story.find(
-    {
-      ...(type ? { storyType: type } : null),
-    },
-    {},
-    {
-      ...(limit ? { limit } : null),
-      ...(skip ? { skip } : null),
-    }
-  )
-    .sort({ createdAt: "desc" })
-    .populate({
-      select: {
-        password: 0,
-      },
-      model: "User",
-      path: "user",
-    })
-    .populate({
-      select: {
-        password: 0,
-      },
-      path: "contributors",
-    });
+  console.log("Fetching stories");
+
+  // Construct query and options
+  const query = type ? { storyType: type } : {};
+  const options = {
+    limit: limit || 0, // Default to 0 (no limit) if not provided
+    skip: skip || 0, // Default to 0 (no skip) if not provided
+    sort: { createdAt: "desc" },
+  };
+
+  try {
+    const stories = await Story.find(query, {}, options)
+      .populate({
+        path: "user",
+        select: { password: 0 },
+      })
+      .populate({
+        path: "contributors",
+        select: { password: 0 },
+      })
+      .populate("prompt")
+      .populate({
+        path: "contest",
+      });
+
+    console.log("Fetched stories:", stories);
+    return stories;
+  } catch (error) {
+    console.error("Error fetching stories:", error);
+    throw error;
+  }
 };
 
 const getStoriesByUserAndType = async (userId, storyType, limit, skip) => {

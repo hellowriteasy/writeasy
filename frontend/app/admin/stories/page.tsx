@@ -5,7 +5,7 @@ import StoryNav from "@/app/components/admin/stories/StoryNav";
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
 import { axiosInstance } from "@/app/utils/config/axios";
 import { toast } from "react-toastify";
-import { TUser } from "@/app/utils/types";
+import { TPrompt, TUser } from "@/app/utils/types";
 
 // Define the Story interface
 interface Story {
@@ -15,7 +15,7 @@ interface Story {
   content: string;
   wordCount: number;
   submissionDateTime: string;
-  prompt: string;
+  prompt: TPrompt;
   storyType: string;
   correctionSummary: string;
   corrections: string;
