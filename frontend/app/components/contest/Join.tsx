@@ -35,7 +35,6 @@ const Join = () => {
     setCurrentPage(event.selected + 1);
   };
 
-  console.log("debug 1 ", pageDetails);
 
   return (
     <div className="flex">

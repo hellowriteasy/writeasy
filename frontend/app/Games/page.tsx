@@ -44,7 +44,6 @@ const Games: React.FC = () => {
   }, [currentPage]);
 
   const handleSelectOption = (selectedOption: string) => {
-    console.log(selectedOption);
     setSelectedOption(selectedOption);
     setCurrentPage(1); // Reset to the first page whenever a new option is selected
   };
@@ -57,7 +56,6 @@ const Games: React.FC = () => {
 
   if (error) return <p>Error: {error}</p>;
 
-  console.log("user", prompts);
 
   return (
     <div className="w-full min-h-screen mt-6 z-0 relative flex justify-center">

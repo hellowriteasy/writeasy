@@ -31,11 +31,8 @@ const Page = () => {
     const fetchCategory = async () => {
       try {
         const response = await AxiosIns.get<CategoryResponse>('/category');
-        console.log(response.data.categories);
         if (response.data.categories) {
-          console.log("debug2");
           setCategories(response.data.categories);
-          console.log("category ===", response.data.categories);
         } else {
           console.error('Expected an array, but got:', response.data);
           toast.error('Failed to load categories. Please try again later.');

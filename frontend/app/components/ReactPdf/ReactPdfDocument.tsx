@@ -46,7 +46,6 @@ const PdfDocument = (props: { originals: string; corrected: string }) => {
       } else {
         result.push(<Text style={styles.text}>{part[1]}</Text>);
       }
-      console.log(part[0], part[1]);
     });
 
     return result;
@@ -54,7 +53,6 @@ const PdfDocument = (props: { originals: string; corrected: string }) => {
   useEffect(() => {
     setImproved(compareSentences(props.originals, props.corrected));
   }, [props.corrected, props.corrected]);
-  console.log(props.corrected, props.originals);
   return (
     <Document>
       <Page size="A4" style={styles.page}>

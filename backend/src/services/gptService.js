@@ -343,7 +343,6 @@ class GptService {
           }));
 
           comparativeBatchStory = comparativeBatchStory.filter((story) => {
-            console.log("map", story_winner_map);
             const competitors_ids = story.competitors.join("_");
             const competitors_ids_reverse = story.competitors
               .reverse()

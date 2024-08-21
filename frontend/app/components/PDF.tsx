@@ -59,7 +59,6 @@ const PDF: React.FC<Props> = ({ originals, corrected }) => {
   useEffect(() => {
     setImproved(compareSentences(originals, corrected));
   }, [corrected, originals]);
-  console.log("improved", improved);
   return (
     <div className="w-full ">
       <div

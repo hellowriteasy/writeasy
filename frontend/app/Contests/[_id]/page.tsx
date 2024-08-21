@@ -108,7 +108,6 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
     setSelectedPrompt({ contestId, promptId, title });
   };
   const handleSelectOption = (selectedOption: string) => {
-    console.log(selectedOption);
     setSelectedOption(selectedOption);
     setCurrentPage(1); // Reset to the first page whenever a new option is selected
   };

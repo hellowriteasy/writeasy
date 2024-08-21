@@ -62,7 +62,6 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
 
   const handleTaskTypeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { value } = e.currentTarget;
-    console.log("clicking", value);
 
     setTaskType(value as TTaskType);
     setTriggerGrammarCheck(true);

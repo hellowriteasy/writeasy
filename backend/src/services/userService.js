@@ -13,7 +13,6 @@ class UserService {
     });
     // send email
     const emails = allUsers.map((user) => user.email);
-    console.log("sending emails to ", emails);
     await emailService.sendEmail({
       email: emails,
       subject,

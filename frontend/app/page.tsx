@@ -11,14 +11,12 @@ export default function Home() {
   const router = useRouter();
   useEffect(() => {
     if (user.email && !user.username) {
-      console.log("user ---> ", user.email, user.username);
       toast("Please set your username", "success");
       router.push("/setting");
       return;
     }
     // eslint-disable-next-line
   }, [user.email, user.token]);
-  console.log(user);
 
   return (
     <main className="font-school flex justify-center items-baseline flex-col two-line-bg ">

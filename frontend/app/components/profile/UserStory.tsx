@@ -58,7 +58,6 @@ const Card: React.FC<CardProps> = ({
   const deleteClick = () => {
     AxiosIns.delete(`/stories/${id}`)
       .then(() => {
-        console.log("Item deleted successfully!");
         onsuccess();
       })
       .catch((error) => {
@@ -131,6 +130,9 @@ const Card: React.FC<CardProps> = ({
 
   const shouldHideButtons =
     pathname.endsWith("contest") || pathname.endsWith("game");
+  const content = showFullDescription
+    ? (descriptionText || "").replace(/\n/g, "<br>")
+    : truncatedDescription.replace(/\n/g, "<br>");
 
   return (
     <div className="bg-white flex sm:w-10/12 flex-col justify-between w-3/4 mt-3 min-h-72 border-2 border-slate-300 shadow-sm rounded-3xl p-6 transition-all duration-300">
@@ -140,13 +142,10 @@ const Card: React.FC<CardProps> = ({
         </h1>
         <div>
           <h2 className="py-2 font-bold font-comic">{title}</h2>
-          <p
-            className={`text-gray-700 sm:text-sm  font-comic transition-all duration-300 ${
-              showFullDescription ? "max-h-full" : "max-h-20 overflow-hidden"
-            }`}
-          >
-            {showFullDescription ? descriptionText : truncatedDescription}
-          </p>
+          <div
+            dangerouslySetInnerHTML={{ __html: content }}
+            className={`text-gray-700 sm:text-sm  font-comic transition-all duration-300 `}
+          />
           {showDiff && (
             <div className="mt-4">
               <h3 className="text-lg font-semibold font-comic">Corrections:</h3>

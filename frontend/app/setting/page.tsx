@@ -38,7 +38,6 @@ const Page = () => {
 
   const { uploadFile } = useUploadFile();
   const upload = () => {
-    console.log(fileInputRef.current);
     if (!fileInputRef.current) return;
     fileInputRef.current.click();
   };
@@ -79,7 +78,6 @@ const Page = () => {
       toast("Profile updated successfully", "success");
       setUpdating(false);
 
-      console.log("Update successful", response.data);
     } catch (error) {
       setUpdating(false);
       console.error("Error updating profile", error);

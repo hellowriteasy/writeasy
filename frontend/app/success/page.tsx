@@ -19,7 +19,6 @@ const Success = () => {
         stripe_session_id: sessionId,
       })
         .then((response) => {
-          console.log(response.data);
 
           location.href = "/success?session_id=" + sessionId;
           // Handle success response

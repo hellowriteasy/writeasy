@@ -43,7 +43,6 @@ const Contest = () => {
   };
 
   const offset = currentPage * itemsPerPage;
-  console.log("page data", pageDetails);
 
   return (
     <div className="w-full min-h-screen mt-6 z-0 relative flex justify-center">

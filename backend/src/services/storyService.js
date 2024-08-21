@@ -7,7 +7,6 @@ const createStory = async (data) => {
 };
 
 const getAllStories = async (type, skip, limit) => {
-  console.log("inside");
   return await Story.find(
     {
       ...(type ? { storyType: type } : null),
@@ -37,7 +36,6 @@ const getAllStories = async (type, skip, limit) => {
 const getStoriesByUserAndType = async (userId, storyType, limit, skip) => {
   const objectId = new mongoose.Types.ObjectId(userId);
   const isPractiseStory = storyType === "practice";
-  console.log("inside");
   if (storyType === "practice" || storyType === "contest") {
     const total = await Story.countDocuments({
       user: objectId,

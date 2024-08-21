@@ -89,7 +89,6 @@ const Page = () => {
     content: storyDetails.content,
     onUpdate: ({ editor }) => {
       const textContent = editor.getText();
-      console.log("getting text", textContent);
       const words = textContent.split(/\s+/).filter(Boolean).length;
       handleStoryDetailsInputChange("wordCount", words);
     },
@@ -106,7 +105,6 @@ const Page = () => {
       );
       const filtered = data.filter((user: any) => user._id !== userId);
       setSearchResults(filtered);
-      console.log(data);
     } catch (error) {
       setShowCard(false);
       console.error("Error fetching users:", error);
@@ -181,8 +179,7 @@ const Page = () => {
   useEffect(() => {
     if (currentStory && editor) {
       editor?.commands?.clearContent();
-      console.log("adding content", currentStory.content.includes("\n"));
-      editor.commands.insertContent(convertToHtml(currentStory.content));
+      editor.commands.insertContent(convertToHtml(currentStory.content || ""));
       handleStoryDetailsInputChange("title", currentStory.title);
       handleStoryDetailsInputChange("content", currentStory.content);
     }

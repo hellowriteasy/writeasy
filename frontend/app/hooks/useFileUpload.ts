@@ -4,7 +4,6 @@ import { storage } from "../libs/firebase";
 const useUploadFile = () => {
   const uploadFile = async (file:File):Promise<string> => {
     const image_url = await uploadFileToFirebase(file) as string;
-    console.log(image_url);
     return image_url;
   };
   return { uploadFile };
@@ -25,7 +24,6 @@ const uploadFileToFirebase = (file:File) => {
         // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload is " + progress + "% done");
       },
       (error) => {
         return reject(error);
@@ -33,7 +31,6 @@ const uploadFileToFirebase = (file:File) => {
       () => {
         // Upload completed successfully, now we can get the download URL
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log("File available at", downloadURL);
           return resolve(downloadURL);
         });
       }

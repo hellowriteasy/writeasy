@@ -31,7 +31,6 @@ const TopWriting: React.FC = () => {
         setIsLoading(false);
       });
   }, []);
-  console.log("debug", topStories);
   return (
     <div className="w-96 mid:w-[200px]   h-auto flex justify-center relative yellow border-4 border-yellow-500 rounded-3xl p-4 md:p-0">
       <div className="absolute -top-6 sm-hide md:-top-9 right-4 md:right-[-12px]">

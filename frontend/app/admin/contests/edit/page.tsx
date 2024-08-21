@@ -93,7 +93,6 @@ const Page = () => {
     setPromptCards([...promptCards, prompt]);
   };
 
-  console.log(contestDetails);
 
   return (
     <ProtectedRoute>

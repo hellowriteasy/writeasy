@@ -23,7 +23,6 @@ const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen, onSuccess }) => {
         description: description,
         promptType: "game",
       });
-      console.log("Response:", response.data);
       setIsModalOpen(false);
       onSuccess();
       // toast.success("Prompt added successfully!");
