@@ -43,7 +43,7 @@ const Page = () => {
       <div className="bg-gray-50 font-poppins min-h-screen">
         <div className="flex h-screen">
           <div className="flex-1 flex flex-col p-6 space-y-6">
-            <div className="flex justify-between items-center w-5/6 bg-white shadow-sm p-4 rounded-lg border border-gray-200">
+            <div className="flex justify-between items-center w-full bg-white shadow-sm p-4 rounded-lg border border-gray-200">
               <div className="text-2xl font-semibold text-gray-700">
                 Practices
               </div>
@@ -65,7 +65,7 @@ const Page = () => {
                   <i className="fas fa-hashtag cursor-pointer"></i>
                 </div>
               </div>
-              <div className="mt-4 space-y-4">
+              <div className="mt-4 space-y-4 ">
                 {prompts.map((prompt, index) => (
                   <Card
                     key={index}

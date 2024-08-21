@@ -56,7 +56,6 @@ const inviteCollaborators = [
       if (storyID) {
         story = await Story.findById(storyID).populate("contributors");
         if (!story) {
-          console.log("Story not found with ID:", storyID);
           return res.status(404).json({ message: "Story not found." });
         }
       } else {
@@ -107,11 +106,9 @@ const inviteCollaborators = [
           message: "One of the user of these email is already a contributor.",
         });
       }
-      console.log("new contributors", newContributorUsers);
       story.contributors.push(
         ...newContributorUsers.map((user) => user._id.toString())
       );
-      console.log("story", story);
       await story.save();
 
       res

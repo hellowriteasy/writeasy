@@ -8,7 +8,6 @@ async function assignSubscriptionIdToUser() {
       return User.findById(subs.userId).then(async (user) => {
         user.subscriptionId = subs._id;
         await user.save();
-        console.log(user?.username, "updated");
       });
     })
   );
