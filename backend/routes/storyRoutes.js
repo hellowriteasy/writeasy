@@ -227,9 +227,9 @@ router.delete("/:id", deleteStory);
  *         description: Error occurred while processing the story.
  */
 
-router.post("/practise/save", savePractiseStoryToProfile);
-
 router.post("/score", practiseStory);
+
+router.post("/practise/save", savePractiseStoryToProfile);
 
 /**
  * @openapi

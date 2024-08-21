@@ -59,12 +59,12 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
     }
   }, [params.id]);
 
-  const handleGrammarClick = () => {
-    setTriggerGrammarCheck(true);
-  };
+
 
   const handleTaskTypeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { value } = e.currentTarget;
+    console.log("clicking",value);
+
     setTaskType(value as TTaskType);
     setTriggerGrammarCheck(true);
   };
@@ -127,6 +127,16 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
                         </button>
                       </div>
                     ))}
+                    <div  className="flex">
+                      <button
+                        className={` sm:h-10 sm:w-20  md:h-[7vh] w-32 h-12 text-md bg-black text-white hover:opacity-80 font-bold text-md sm:text-[2.5vw] rounded-3xl`}
+                        type="button"
+                        value={"refresh"}
+                        onClick={ (e)=>  handleTaskTypeClick(e)  }
+                      >
+                        Refresh
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
