@@ -24,10 +24,10 @@ const Subscription: React.FC<TsubscriptionProps> = ({ setIsModalOpen }) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-75 transition-opacity" />
+          <div className="fixed inset-0   transition-opacity" />
         </Transition.Child>
 
-        <div className="fixed inset-0 z-10 overflow-y-auto">
+        <div className="fixed inset-0 z-10 bg-black opacity-75 overflow-y-auto">
           <div className="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
             <Transition.Child
               as={Fragment}
@@ -38,7 +38,7 @@ const Subscription: React.FC<TsubscriptionProps> = ({ setIsModalOpen }) => {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-black text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+              <Dialog.Panel className="relative transform overflow-hidden rounded-lg text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                 <div className="flex items-center justify-center h-14">
                   <button
                     onClick={() => router.push(`/Pricing`)}

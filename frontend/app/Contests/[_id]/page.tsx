@@ -14,7 +14,7 @@ import PromptNotPublished from "@/app/components/Others/PromptNotPublished";
 import { axiosInstance } from "@/app/utils/config/axios";
 import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
-
+import LoadingAnimation from "../loading";
 interface ContestPageProps {
   params: {
     _id: string;
@@ -118,14 +118,14 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
   };
 
   const offset = currentPage * itemsPerPage;
-  if (!contest) return <p></p>;
+  if (!contest) return <LoadingAnimation></LoadingAnimation>;
 
   return (
     <div className="w-full min-h-[calc(100vh-4rem)] h-auto z-0 relative flex justify-center">
       <div className="w-10/12 sm:w-full h-auto">
         
         <div className="flex mt-8 sm:justify-center sm:items-center sm:mt-0">
-          <div className="p-6 mb-6 flex flex-col gap-y-4">
+          <div className="py-2 mb-6 flex flex-col gap-y-4">
             <div className="flex gap-y-3 flex-col">
               <h2 className="text-4xl font-comic sm:text-xl font-bold">
                 {contest.contestTheme}
