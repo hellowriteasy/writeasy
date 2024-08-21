@@ -77,6 +77,7 @@ const useAuthStore = create<AuthState>((set) => {
           username: null,
           role: null,
           isSubcriptionActive: false,
+          email: null,
           subscriptionType: null,
         });
         localStorage.removeItem("userId");

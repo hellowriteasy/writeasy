@@ -46,7 +46,6 @@ const Pricing = () => {
     try {
       const { data } = await AxiosIns.get(`/payments/subscriptions`);
       setSubscriptions(data.data);
-      console.log(data);
     } catch (error) {}
   };
 
