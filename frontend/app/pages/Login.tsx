@@ -41,6 +41,7 @@ const Login: NextPage = () => {
         role,
         subscriptionType,
       } = response.data;
+
       login(userId, token);
       router.push("/", { scroll: false });
     } catch (error: any) {
@@ -127,7 +128,7 @@ const Login: NextPage = () => {
         <h1 className="text-center font-comic pt-4">
           Don &lsquo;t have an account?{" "}
           <Link href="/signup" className="font-bold cursor-pointer">
-            Signup
+            Sign up
           </Link>
         </h1>
         <div className="absolute top-60 w-20 vsm-hide h-10 left-10">
