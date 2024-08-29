@@ -79,7 +79,8 @@ const Page: React.FC = () => {
               />
             </div>
             {isLoading ? (
-              <LoadingAnimation />
+            <></>
+              // <LoadingAnimation />
             ) : promptData.length > 0 ? (
               promptData.map((prompt) => (
                 <Prompt key={prompt._id} prompt={prompt} />

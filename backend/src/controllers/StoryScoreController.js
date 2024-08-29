@@ -18,7 +18,7 @@ async function practiseStory(req, res) {
           res.write(data);
         } else {
           console.log("ended", data);
-          res.end();
+          res.end(data);
         }
       }
     );

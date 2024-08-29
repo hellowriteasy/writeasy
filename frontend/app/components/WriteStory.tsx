@@ -1,7 +1,8 @@
 "use client";
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import classNames from "classnames";
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
+import { DOMParser as ProseMirrorDOMParser } from "prosemirror-model";
 import Document from "@tiptap/extension-document";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
@@ -11,7 +12,6 @@ import Italic from "@tiptap/extension-italic";
 import Strike from "@tiptap/extension-strike";
 import Code from "@tiptap/extension-code";
 import History from "@tiptap/extension-history";
-import * as Icons from "./Icons";
 import { diff_match_patch } from "diff-match-patch";
 import usePdfStore from "@/app/store/usePDFStore";
 import { usePDF } from "react-to-pdf";
@@ -83,7 +83,7 @@ export function SimpleEditor({
 
     diff.forEach((part) => {
       // Replace \n\n with <br> and single \n with a space (to handle single line breaks)
-      const partText = part[1].replace(/\n\n/g, "<br>").replace(/\n/g, " ");
+      const partText = part[1].replace(/\n/g, "<br>").replace(/\n/g, " ");
       store += partText;
       if (part[0] === -1) {
         text += `<del>${partText}</del>`;
@@ -119,11 +119,35 @@ export function SimpleEditor({
       HardBreak,
     ],
     editorProps: {
+      handlePaste(view, event) {
+        const clipboardData = event.clipboardData 
+        const text = clipboardData?.getData("text");
+
+        if (text) {
+          const paragraphs = text
+            .split(/\n{2,}/)
+            .map((paragraph) => `<p>${paragraph}</p>`)
+            .join("");
+
+          const { schema } = view.state;
+          const dom = document.createElement("div");
+          dom.innerHTML = paragraphs;
+
+          const node = ProseMirrorDOMParser.fromSchema(schema).parse(dom);
+
+          view.dispatch(view.state.tr.replaceSelectionWith(node));
+
+          return true;
+        }
+
+        return false;
+      },
       attributes: {
         class:
           "prose dark:prose-invert prose-sm  sm:prose-base px-4 w-full h-full inline-block lg:prose-lg xl:prose-2xl outline-none scroll",
       },
     },
+
     onUpdate: ({ editor }) => {
       const textContent = editor.getText();
       const words = textContent.split(/\s+/).filter(Boolean).length;
@@ -134,7 +158,7 @@ export function SimpleEditor({
   useEffect(() => {
     if (!triggerGrammarCheck) return;
     handleClickFeature(taskType, new MouseEvent("click"), false);
-  }, [triggerGrammarCheck,taskType]);
+  }, [triggerGrammarCheck, taskType]);
 
   const userId = useAuthStore((state) => state.userId);
 
@@ -167,7 +191,7 @@ export function SimpleEditor({
         toast.error("Word limit exceeded. Please reduce the number of words.");
         return;
       }
-
+      setIsLoading(true);
       const payload = {
         userId: userId,
         title: title,
@@ -249,94 +273,14 @@ export function SimpleEditor({
           <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
             <div className="flex h-16  gap-3 p-3 ps-6">
               {isLoading && <div className="loader mr-10 "></div>}
-              {/* <button
-                className="menu-button mr-2"
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  editor.chain().focus().undo().run();
-                }}
-                disabled={!editor.can().undo()}
-              >
-                <Icons.RotateLeft />
-              </button> */}
-              {/* <button
-                className="menu-button mr-2"
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  editor.chain().focus().redo().run();
-                }}
-                disabled={!editor.can().redo()}
-              > */}
-              {/* <Icons.RotateRight />
-              </button>
               <button
-                className={classNames("menu-button mr-2", {
-                  "is-active": editor.isActive("bold"),
-                })}
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  toggleBold();
-                }}
-              >
-                <Icons.Bold />
-              </button>
-              <button
-                className={classNames("menu-button mr-2", {
-                  "is-active": editor.isActive("underline"),
-                })}
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  toggleUnderline();
-                }}
-              >
-                <Icons.Underline />
-              </button>
-              <button
-                className={classNames("menu-button mr-2", {
-                  "is-active": editor.isActive("italic"),
-                })}
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  toggleItalic();
-                }}
-              >
-                <Icons.Italic />
-              </button>
-              <button
-                className={classNames("menu-button mr-2", {
-                  "is-active": editor.isActive("strike"),
-                })}
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  toggleStrike();
-                }}
-              >
-                <Icons.Strikethrough />
-              </button>
-              <button
-                className={classNames("menu-button mr-2", {
-                  "is-active": editor.isActive("code"),
-                })}
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  toggleCode();
-                }}
-              >
-                <Icons.Code />
-              </button> */}
-              <button
+                disabled={isLoading}
                 className={classNames(
                   "menu-button bg-black text-sm font-comic text-white p-1 rounded-md ml-auto",
                   {
                     "is-active": editor.isActive("code"),
-                  }
+                  },
+                  isLoading ? "pointer-events-none" : ""
                 )}
                 type="button"
               >
@@ -349,9 +293,7 @@ export function SimpleEditor({
                   }
                   fileName="example.pdf"
                 >
-                  {({ blob, url, loading, error }) =>
-                    loading ? "Loading document..." : "Download PDF"
-                  }
+                  {({ blob, url, loading, error }) => "Download PDF"}
                 </PDFDownloadLink>
               </button>
             </div>
@@ -362,7 +304,9 @@ export function SimpleEditor({
                 isLoading
                   ? "opacity-50 cursor-not-allowed pointer-events-none"
                   : ""
-              } ${ !writingMode ?"pointer-events-none":"" }  h-[600px] overflow-y-auto scrollbar-hide`}
+              } ${
+                !writingMode ? "pointer-events-none" : ""
+              }  h-[600px] overflow-y-auto scrollbar-hide`}
               editor={editor}
               disabled={true}
               aria-disabled={true}

@@ -92,7 +92,7 @@ class GptService {
     const systemMessage = {
       grammar: "Proofread this text but only fix grammar",
       rewrite:
-        "Rewrite this text improving clarity and flow. You may also add new lines to make the writing better.",
+        "Rewrite this text improving clarity and flow. You may also add new lines to make the writing better.Grammer and spelling mistakes should be corrected.",
       improve:
         "Proofread this text improving clarity and flow. Don't add new lines, just modify the text",
     };
