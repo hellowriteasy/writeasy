@@ -11,7 +11,7 @@ type Tstory = {
 
 const TopWritings = () => {
   const [stories, setStories] = useState<Tstory[]>([]);
-  const [topStories, setTopStories] = useState<{ _id: string }[]>([]);
+  const [topStories, setTopStories] = useState<Record<string,string>>({});
   const [storyTitle, setStoryTitle] = useState("");
 
   const axiosIns = axiosInstance("");
@@ -33,7 +33,7 @@ const TopWritings = () => {
 
   const handleClearAll = () => {
     setStories([]);
-    setTopStories([]);
+    setTopStories({});
     setStoryTitle("");
   };
 
@@ -80,11 +80,9 @@ const TopWritings = () => {
     }
   };
 
-  const filteredTopStories = stories.filter((story) =>
-    topStories.some(
-      (topStory) => topStory._id === story._id.split("-").join("")
-    )
-  );
+ const filteredTopStories = stories.filter((story) =>
+   topStories.hasOwnProperty(story._id.split("-").join(""))
+ );
 
   return (
     <div className="p-5 flex flex-col gap-y-3 items-start">

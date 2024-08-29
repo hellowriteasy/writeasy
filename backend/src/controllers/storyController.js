@@ -45,7 +45,6 @@ const createStory = async (req, res) => {
 // Function to handle scoring
 async function processStoryForScoring(storyId, content, wordCount, topic) {
   try {
-    console.log("processing scoring", storyId, content, wordCount);
 
     const score = await gptService.generateScore(content, "", wordCount, topic); // Get score from GPT API
     const correctionSummary = await gptService.generateCorrectionSummary(
@@ -53,7 +52,6 @@ async function processStoryForScoring(storyId, content, wordCount, topic) {
       score.corrections,
       wordCount
     );
-    console.log("correction summmary", correctionSummary);
     await StoryService.updateStory(storyId, {
       score: score.score,
       corrections: score.corrections,
@@ -146,7 +144,6 @@ async function submitStoryToContest(req, res) {
   const { contestId, promptId } = req.params;
   const { userId, title, content } = req.body;
   // Calculate word count
-  console.log(contestId);
   const wordCount = content.split(" ").length;
 
   try {
@@ -365,19 +362,16 @@ const processCorrectionAndSummary = async ({
   wordCount,
 }) => {
   try {
-    console.log("processing correction and summary 1", story_id);
     const correction = await gptService.generateCorrection(
       content,
       taskType,
       wordCount
     );
-    console.log("processing correction 2", correction);
 
     const summary = await gptService.generateCorrectionSummary(
       content,
       correction
     );
-    console.log("processing correction summary 3 ", summary);
     await Story.findByIdAndUpdate(story_id, {
       corrections: correction,
       correctionSummary: summary,
@@ -506,9 +500,7 @@ const removeTopStory = async (req, res) => {
 };
 
 const calculateTopWritings = async (req, res) => {
-  console.log("req.body", req.body); // Log entire body
   const { stories, title } = req.body;
-  console.log("stories", stories);
 
   try {
     if (!stories || !title) {

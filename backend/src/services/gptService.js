@@ -51,8 +51,6 @@ class GptService {
       const splitMessage = fullMessage.split("\n");
       const score = parseInt(splitMessage[0].trim(), 10); // Ensuring the score is an integer
       const corrections = splitMessage.slice(1).join("\n").trim();
-      console.log("score", score);
-      console.log("correction", corrections);
       return { score, corrections };
     } catch (error) {
       console.error("Error in generating score from GPT:", error);
@@ -101,7 +99,6 @@ class GptService {
 
     try {
       const totalTokens = Math.min(Math.ceil(wordCount * 1.5), 4096); // Ensure the token count doesn't exceed model limits
-      console.log("total tokens", totalTokens);
       const response = await axios({
         method: "post",
         url: "https://api.openai.com/v1/chat/completions",
@@ -251,7 +248,6 @@ class GptService {
   For each writing, generate a score based on the above criteria and return an array of objects in the following format:[{ userId:'2345', score: 55 }, { userId:'9876', score: 88 }]
   The response should consist only of the array of objects with userId and score, nothing else.`;
 
-    console.log("the prompt ", writings);
 
     const processWritingChunks = async (writingChunks) => {
       const totalTokens = writingChunks.length + 50;
@@ -325,132 +321,146 @@ class GptService {
     return allResults;
   }
   async getComparativeScores(stories, title) {
-    try {
-      let scores = {};
-      let story_winner_map = {};
-      for (let i = 0; i < stories.length; i++) {
-        let currentStory = stories[i];
-
-        for (let j = 0; j < Math.ceil(stories.length / 3); j += 5) {
-          let comparativeBatchStory = stories
-            .slice(j, j + 3)
-            .filter((story) => story._id !== currentStory._id);
-
-          comparativeBatchStory = comparativeBatchStory.map((story) => ({
-            [currentStory._id]: currentStory.content,
-            [story._id]: story.content,
-            competitors: [story._id, currentStory._id],
-          }));
-
-          comparativeBatchStory = comparativeBatchStory.filter((story) => {
-            const competitors_ids = story.competitors.join("_");
-            const competitors_ids_reverse = story.competitors
-              .reverse()
-              .join("_");
-            const exist =
-              story_winner_map[competitors_ids] ||
-              story_winner_map[competitors_ids_reverse];
-
-            return !exist;
-          });
-
-          const systemPrompt = `The title of the contest is ${title}. Evaluate the stories in each pair, and determine the better story based on content quality. Ensure that the decision is accurate, concise, and consistent across all comparisons. Only return the response in JSON format, nothing else."`;
-          const prompt = `
-The input is a list of objects where each object contains two stories to compare, identified by their unique IDs.
-Evaluate the stories in each pair, and determine the better story based on content quality. 
-Make sure that your decision is based on a thorough comparison, aiming for the highest accuracy and consistency. 
-Return only the result as an array of objects, where each object contains the ID of the winning story using the key 'winner'.
-
-Example Input:
-[
-  {
-    "123": "story content",
-    "124": "story content",
-    competitors: ["123", "124"]
-  },
-  {
-    "125": "story content",
-    "126": "story content",
-    competitors: ["125", "126"]
-  }
-]
-
-Example expected Output:
-[
-  {
-    competitors: ["123", "124"],
-    "winner": "123"
-  },
-  {
-    "winner": "126",
-    competitors: ["125", "126"]
-  }
-]
-
-Now, here is the input:
-${JSON.stringify(comparativeBatchStory)}
-`;
-
-          const response = await axios.post(
-            this.apiUrl,
-            {
-              model: "gpt-3.5-turbo",
-              messages: [
-                {
-                  role: "system",
-                  content: systemPrompt,
-                },
-                {
-                  role: "user",
-                  content: prompt,
-                },
-              ],
-              max_tokens: prompt.split(" ").length + 50,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${this.apiKey}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          let result = response.data.choices[0].message.content;
-
-          const regexMatch = result.match(/\[.*\]/s);
-          if (regexMatch) {
-            result = regexMatch[0];
-            const parsedResult = JSON.parse(result) || [];
-            parsedResult.forEach((result) => {
-              story_winner_map[result.competitors.join("_")] = result.winner;
-              const winnerId = result.winner;
-              if (scores[winnerId]) {
-                scores[winnerId]++;
-              } else {
-                scores[winnerId] = 1;
-              }
-            });
-          }
-        }
-      }
-      return scores;
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  async rankStories(stories, title) {
-    const scores = await this.getComparativeScores(stories);
-
-    let result = Object.keys(scores).map((storyId) => {
-      return {
-        _id: storyId,
-        score: scores[storyId],
-      };
+    let storyObj = {};
+    stories.forEach((story) => {
+      storyObj[story._id] = story.content;
     });
 
-    result = result.sort((a, b) => b.score - a.score);
-    const end = Math.ceil(0.2 * stories.length);
-    const topStories = result.slice(0, end);
-    return topStories;
+    try {
+      const systemPrompt = `The title of the contest is ${title}. Evaluate the stories with each other and score each of them out of 10. Ensure that the decision is accurate, concise, and consistent across all comparisons. Only return the response in JSON format, nothing else.`;
+
+      const prompt = `
+You are given a set of stories. Each story is identified by a unique ID and has content associated with it.
+Evaluate these stories against each other based on writing quality, grammar, and other relevant factors.
+Score each story out of 10, aiming for high accuracy and consistency in your evaluation.
+Return the results as a JSON object with story IDs as keys and scores as values.
+
+Example Input:
+{
+  "124": "story content",
+  "125": "story content",
+  "126": "story content"
+}
+
+Example Expected Output:
+{
+  "124": 9,
+  "125": 5,
+  "126": 8
+}
+
+Now, here is the input:
+${JSON.stringify(storyObj)}
+`;
+
+      const response = await axios.post(
+        this.apiUrl,
+        {
+          model: "gpt-3.5-turbo",
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: prompt },
+          ],
+          max_tokens: prompt.split(" ").length + 50,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${this.apiKey}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      let result = response.data.choices[0].message.content;
+      // Use regex to extract the JSON object from the result
+      const jsonRegex = /{[\s\S]*?}/;
+      const match = result.match(jsonRegex);
+
+      if (match) {
+        try {
+          const parsedResult = JSON.parse(match[0]);
+          return parsedResult;
+        } catch (error) {
+          console.error("API request error:", error);
+        }
+      }
+    } catch (err) {
+      console.log("error while comparing stories", err);
+    }
+  }
+
+  async rankStories(stories, title) {
+    let scores = [];
+
+    for (let i = 0; i < stories.length - 1; i++) {
+      let groupStories = this.groupStories(stories);
+      const groupStoriesScores = await Promise.all(
+        groupStories.map(async (group) => {
+          const score = await this.getComparativeScores(group, title);
+          return score;
+        })
+      );
+      scores.push(...groupStoriesScores);
+    }
+
+    // Object to store aggregated scores
+    let aggregatedScores = {};
+
+    scores.forEach((score) => {
+      Object.keys(score).forEach((storyId) => {
+        if (aggregatedScores[storyId]) {
+          aggregatedScores[storyId] += score[storyId];
+        } else {
+          aggregatedScores[storyId] = score[storyId];
+        }
+      });
+    });
+
+    aggregatedScores = this.getTop20Percent(aggregatedScores);
+
+    return aggregatedScores;
+  }
+
+  shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  groupStories(stories) {
+    const groupSize = 5;
+    const totalStories = stories.length;
+    const numGroups = Math.ceil(totalStories / groupSize);
+
+    const shuffledStories = this.shuffleArray(stories);
+
+    const groups = Array.from({ length: numGroups }, () => []);
+
+    shuffledStories.forEach((story, index) => {
+      groups[index % numGroups].push(story);
+    });
+
+    return groups;
+  }
+  getTop20Percent(stories) {
+    // Convert the object into an array of [key, value] pairs
+    const entries = Object.entries(stories);
+
+    // Sort the array in descending order based on the values
+    entries.sort((a, b) => b[1] - a[1]);
+
+    // Calculate the number of entries that constitute the top 20%
+    const top20Count = Math.ceil(entries.length * 0.2);
+
+    // Get the top 20% entries
+    const top20Entries = entries.slice(0, top20Count);
+
+    // Convert the top 20% entries back to an object
+    const top20PercentObject = Object.fromEntries(top20Entries);
+
+    return top20PercentObject;
   }
 }
 

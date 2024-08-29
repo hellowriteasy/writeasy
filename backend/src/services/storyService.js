@@ -7,7 +7,6 @@ const createStory = async (data) => {
 };
 
 const getAllStories = async (type, skip, limit) => {
-  console.log("Fetching stories");
 
   // Construct query and options
   const query = type ? { storyType: type } : {};
@@ -32,7 +31,6 @@ const getAllStories = async (type, skip, limit) => {
         path: "contest",
       });
 
-    console.log("Fetched stories:", stories);
     return stories;
   } catch (error) {
     console.error("Error fetching stories:", error);

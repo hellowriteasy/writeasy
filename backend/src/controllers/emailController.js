@@ -13,7 +13,6 @@ const sendEmailToAllUsers = async (req, res) => {
       .split("\n")
       .map((line) => `<p>${line}</p>`)
       .join("");
-    console.log(content);
     await userService.emailAllUsers(subject, content);
   } catch (error) {
     console.log(error);

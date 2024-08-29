@@ -61,10 +61,13 @@ const closeContestAndChooseTopWritingAfterDeadline = async () => {
                       stories,
                       promptExist.title
                     );
+                    console.log("top stories", topStories);
+
                     await Promise.all(
-                      topStories.map(async (topStory) => {
-                        const story = await Story.findById(topStory._id);
+                      Object.entries(topStories).map(async ([storyId]) => {
+                        const story = await Story.findById(storyId);
                         if (story) {
+                          console.log("updating story", storyId);
                           story.isTopWriting = true;
                           await story.save();
                         }
