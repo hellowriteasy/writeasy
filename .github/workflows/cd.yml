@@ -27,4 +27,4 @@ jobs:
       run: sudo docker rm -f writeasy_backend_container || true
 
     - name: Run the Docker Container - backend
-      run: sudo docker run --env-file .env -d -p 8000:8000 --name writeasy_backend_container skilledsantoshh/test:writeasy_backend
+      run: sudo docker run --env-file /home/ubuntu/.env -d -p 8000:8000 --name writeasy_backend_container skilledsantoshh/test:writeasy_backend
