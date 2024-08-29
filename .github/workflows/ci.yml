@@ -29,6 +29,8 @@ jobs:
           docker buildx build --build-arg NODE_IMAGE=node:18.17.0-alpine \
                               -t skilledsantoshh/test:writeasy_backend ./backend
 
+      - name: Push docker image to docker hub - frontend
+        run: docker push skilledsantoshh/test:writeasy_frontend         
 
-      - name: Push docker image to docker hub
+      - name: Push docker image to docker hub - backend
         run: docker push skilledsantoshh/test:writeasy_backend
