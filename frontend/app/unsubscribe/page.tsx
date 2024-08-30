@@ -41,7 +41,7 @@ const Unsubscribe = () => {
       </p>
       <form onSubmit={handleUnsubscribeEmail} className="flex flex-col gap-y-3">
         <input
-          className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-3xl indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"
+          className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-full indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"
           placeholder="Enter your email"
           value={email || ""}
           type="email"
@@ -52,7 +52,7 @@ const Unsubscribe = () => {
         />
         <button
           onClick={handleUnsubscribeEmail}
-          className="border text-2xl sm:text-3xl mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl text-white w-40 sm:w-48 md:w-56 lg:w-60 h-12 sm:h-14"
+          className="border text-2xl sm:text-3xl mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-full text-white w-40 sm:w-48 md:w-56 lg:w-60 h-12 sm:h-14"
         >
           Unsubscribe
         </button>

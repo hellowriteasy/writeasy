@@ -167,7 +167,7 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,contributo
               <div className="flex flex-col w-full items-center gap-4 h-96">
                 <div>
                   <input
-                    className="border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[50vw] h-12 focus:outline-none focus:border-yellow-600"
+                    className="border border-gray-500 z-10 text-xl rounded-full indent-7 w-[50vw] h-12 focus:outline-none focus:border-yellow-600"
                     placeholder="Untitled Story"
                     value={title}
                     onChange={(e) => {
@@ -176,7 +176,7 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,contributo
                   />
                 </div>
                 <div className="h-[800px] rounded-full">
-                  <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
+                  <div className="editor bg-white p-4 rounded-full relative shadow-md w-full">
                     <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
                       <div className="flex gap-3 p-3 ps-6">
                         <button
@@ -274,7 +274,7 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,contributo
                         </div>
                       </div>
                     </div>
-                    <div className="w-[50vw] rounded-3xl">
+                    <div className="w-[50vw] rounded-full">
                       <EditorContent
                         className="scroll-m-2 w-[100%] h-96 mt-10"
                         editor={editor}

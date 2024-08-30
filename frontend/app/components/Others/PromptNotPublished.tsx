@@ -9,7 +9,7 @@ const PromptNotPublished = ({ publishDate }: { publishDate: string }) => {
         Prompt will be published on {publishDate}Till then you can practise with
         us
       </p>
-      <button className="border text-xl mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl text-white w-60 h-14">
+      <button className="border text-xl mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-full text-white w-60 h-14">
         Practise Now
       </button>
       {/* <button>Practise Now</button> */}

@@ -31,7 +31,7 @@ const Card: React.FC<CardProps> = ({ title, deadline, id, onSuccess }) => {
   };
 
   return (
-    <div className="bg-white border w-full border-gray-300 shadow-md rounded-lg p-4 mb-4">
+    <div className="bg-white border w-full border-gray-300 shadow-sm rounded-lg p-4 mb-4">
       <div className="flex justify-between items-center mb-2">
         <div className="text-xl font-semibold">{title}</div>
         <div className="flex space-x-2 gap-4">
@@ -44,7 +44,7 @@ const Card: React.FC<CardProps> = ({ title, deadline, id, onSuccess }) => {
             className="text-black text-3xl"
             onClick={() => setOpenDeleteModal(true)}
           >
-            <FaTrash size={30} />
+            <FaTrash size={20}  color="red"/>
           </button>
         </div>
       </div>

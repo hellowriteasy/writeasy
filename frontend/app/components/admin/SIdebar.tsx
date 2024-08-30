@@ -1,21 +1,31 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaBars, FaTimes } from "react-icons/fa"; // Import icons from React Icons
+import { TbWriting } from "react-icons/tb";
+import { HiUserGroup } from "react-icons/hi";
+import { SiBookstack } from "react-icons/si";
+import { MdOutlineMail } from "react-icons/md";
+import { FaQuestion } from "react-icons/fa";
+import { BiSolidCategory } from "react-icons/bi";
+import { FaUsersCog } from "react-icons/fa";
+import { LuClipboardEdit } from "react-icons/lu";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const links = [
-    "practices",
-    "contests",
-    "games",
-    "stories",
-    "email",
-    "faq",
-    "category",
-    "user",
-  ];
+    {
+      practices: <TbWriting />,
+    },
+    { contests: <LuClipboardEdit /> },
+    { games: <HiUserGroup /> },
+    { stories: <SiBookstack /> },
+    { email: <MdOutlineMail /> },
+    { faq: <FaQuestion /> },
+    { category: <BiSolidCategory /> },
+    { user: <FaUsersCog /> },
+  ] as Record<string, React.ReactNode>[];
   const path = usePathname();
 
   const toggleSidebar = () => {
@@ -47,22 +57,24 @@ const Sidebar = () => {
       >
         <ul className="">
           {links.map((link) => {
+            const key = Object.keys(link)[0];
             const isActive = path.startsWith(`/admin/${link}`);
             return (
               <Link
-                key={link}
+                key={key}
                 className={`block text-lg  font-medium  rounded transition duration-300 `}
-                href={`/admin/${link}`}
+                href={`/admin/${key}`}
                 onClick={toggleSidebar} // Close the sidebar when a link is clicked
               >
                 <li
-                  className={`text-start h-16 px-3 flex items-center cursor-pointer  border-t border-white ${
+                  className={`text-start h-16 px-3 flex items-center gap-x-2 cursor-pointer  border-t border-white ${
                     isActive
                       ? "bg-custom-yellow text-black border-t border-white  "
                       : "hover:bg-custom-yellow hover:text-black text-black"
                   }`}
                 >
-                  {link.charAt(0).toUpperCase() + link.slice(1)}
+                  {link[key]}
+                  {key.charAt(0).toUpperCase() + key.slice(1)}
                 </li>
               </Link>
             );

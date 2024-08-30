@@ -118,12 +118,12 @@ const Page: React.FC<PageProps> = ({ params }) => {
           <h1 className="text-3xl  md:text-4xl lg:text-5xl xl:text-6xl sm:text-xl font-bold font-comic">
             {currentGame?.title}
           </h1>
-          <p className="sm:text-sm text-xl  font-semibold">
+          <p className="sm:text-sm text-xl  font-medium">
             {currentGame?.description}
           </p>
           <button
             onClick={handleCreateStory}
-            className=" sm:px-2 w-60    bg-black hover:opacity-80 text-center text-white rounded-3xl border h-16 text-xl md:text-2xl  lg:text-md xl:text-2xl"
+            className=" sm:px-2 w-60    bg-black hover:opacity-80 text-center text-white rounded-full border h-16 text-xl md:text-2xl  lg:text-md xl:text-2xl"
           >
             {userGameStory ? "Continue your story" : "    Create your group"}
           </button>
@@ -135,7 +135,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
       <div className="w-screen flex sm:mt-[4vw]  flex-col items-center">
         {stories.length > 0 ? (
           <div className="w-4/5 ">
-            <h1 className="font-bold text-3xl sm:text-xl md:text-6xl lg:text-7xl xl:text-8xl pt-5 font-comic">
+            <h1 className="font-bold text-3xl sm:text-xl md:text-4xl lg:text-6xl xl:text-5xl pt-5 font-comic">
               Groups
             </h1>
 

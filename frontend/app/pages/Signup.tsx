@@ -125,7 +125,7 @@ const Signup = () => {
         >
           <div className="relative w-full flex flex-col justify-center items-center mt-4">
             <input
-              className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-3xl indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"
+              className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-full indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"
               type="text"
               placeholder="Email"
               {...register("email")}
@@ -137,7 +137,7 @@ const Signup = () => {
 
           <div className="relative w-full flex flex-col justify-center items-center mt-4">
             <input
-              className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-3xl indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"
+              className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-full indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"
               type="text"
               placeholder="Username"
               {...register("username")}
@@ -149,7 +149,7 @@ const Signup = () => {
 
           <div className="relative w-full flex flex-col justify-center items-center mt-4">
             <input
-              className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-3xl indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"
+              className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-full indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"
               type={showPassword ? "text" : "password"}
               placeholder="Password"
               {...register("password")}
@@ -172,7 +172,7 @@ const Signup = () => {
 
           <div className="relative w-full flex flex-col justify-center items-center mt-4">
             <input
-              className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-3xl indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"
+              className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-full indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"
               type={showConfirmPassword ? "text" : "password"}
               placeholder="Confirm Password"
               {...register("confirmPassword")}
@@ -195,7 +195,7 @@ const Signup = () => {
             )}
           </div>
 
-          <button className="text-center border rounded-3xl text-white hover:opacity-80 w-full sm:w-72 md:w-80 lg:w-96 mt-5 bg-black h-12 sm:h-14 text-xl sm:text-2xl">
+          <button className="text-center border rounded-full text-white hover:opacity-80 w-full sm:w-72 md:w-80 lg:w-96 mt-5 bg-black h-12 sm:h-14 text-xl sm:text-2xl">
             Sign Up
           </button>
           {error && <p className="text-red-500 mx-auto">{error}</p>}

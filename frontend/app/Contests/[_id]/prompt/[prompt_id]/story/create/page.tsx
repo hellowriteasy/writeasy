@@ -183,7 +183,7 @@ const CreateContest = () => {
                 <h2 className="text-3xl uppercase"> {promptDetails?.title}</h2>
                 <div className="">
                   <input
-                    className="border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[70vw] h-12 focus:outline-none focus:border-yellow-600"
+                    className="border border-gray-500 z-10 text-xl rounded-full indent-7 w-[70vw] h-12 focus:outline-none focus:border-yellow-600"
                     placeholder="Untitled Story"
                     onChange={(e) => {
                       setTitle(e.target.value);
@@ -296,7 +296,7 @@ const CreateContest = () => {
                   />
                 </div>
               </div>
-              <div className="flex justify-center">
+              <div className="flex justify-center mt-5">
                 <button
                   onClick={handleSubmit}
                   className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-[50vw] h-14"

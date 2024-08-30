@@ -12,7 +12,7 @@ interface ButtonProps {
 
 const Button: React.FC<ButtonProps> = ({ children, type, onClick }) => {
   let buttonContent: React.ReactNode;
-  let buttonClass = "h-12 w-full sm:w-72 md:w-80 lg:w-96 rounded-3xl mt-4"; // Default class
+  let buttonClass = "h-12 w-full sm:w-72 md:w-80 lg:w-96 rounded-full mt-4"; // Default class
 
 
   const handleGoogleLogin = () => {

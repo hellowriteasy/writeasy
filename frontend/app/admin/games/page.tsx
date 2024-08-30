@@ -55,20 +55,21 @@ const Games: React.FC = () => {
     <ProtectedRoute>
       <div className="bg-white">
         <div className="flex h-screen">
-          <div className="flex-1 p-6">
-            <div className="flex flex-col space-y-8">
-              <div className="flex justify-between items-center border-e-2 border-slate-300 bg-white shadow p-4 rounded-lg">
+          <div className="flex-1 p-6  ">
+            <div className="flex flex-col space-y-8 mb-3">
+              {/* <div className="flex justify-between items-center border-e-2 border-slate-300 bg-white shadow p-4 rounded-lg">
                 <div className="text-xl font-semibold">Games</div>
+            
+              </div> */}
+
+              <div className="flex justify-between   rounded-lg items-center">
+                <div className="text-xl font-semibold">All Games</div>
                 <button
-                  className="bg-black text-white px-4 py-2 rounded-lg"
+                  className="bg-custom-yellow text-black border border-black px-4 py-2 rounded-lg font-comic"
                   onClick={handleAddClick}
                 >
                   Add
                 </button>
-              </div>
-
-              <div className="flex justify-between space-y-4 h-12 rounded-lg">
-                <div className="text-xl font-semibold">All Games</div>
               </div>
             </div>
             {gamePrompts &&

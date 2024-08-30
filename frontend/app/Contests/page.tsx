@@ -50,7 +50,7 @@ const Contest = () => {
         <Image className="w-[9vw]" src={earth} alt="earth" />
       </div>
       <div className="w-10/12 min-h-full">
-        <div className="w-full h-auto relative pt-4">
+        <div className="w-full h-auto relative pt-4 mb-5">
           <h1 className="text-3xl sm:text-xl sm:text-black md:text-5xl lg:text-6xl font-bold font-comic">
             Weekly Writing Contests
           </h1>

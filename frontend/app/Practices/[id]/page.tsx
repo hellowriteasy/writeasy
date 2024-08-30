@@ -93,7 +93,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
               <div className="flex flex-col w-full items-center gap-8 h-auto mx-auto">
                 <div>
                   <input
-                    className="border border-gray-500 sm:w-[80vw] sm:h-10  sm:text-sm z-10 text-xl rounded-3xl indent-7 w-[50vw] h-12 focus:outline-none focus:border-yellow-600"
+                    className="border border-gray-500 sm:w-[80vw] sm:h-10  sm:text-sm z-10 text-xl rounded-full indent-7 w-[50vw] h-12 focus:outline-none focus:border-yellow-600"
                     placeholder="Untitled Story"
                     onChange={handleTitleChange}
                   />
@@ -107,7 +107,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
                             taskType === type
                               ? "bg-custom-yellow text-black"
                               : ""
-                          } hover:opacity-80 font-bold text-md sm:text-[2.5vw] rounded-3xl`}
+                          } hover:opacity-80 font-medium text-md sm:text-[2.5vw] rounded-full`}
                           value={type}
                           type="button"
                           onClick={
@@ -131,7 +131,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
                       description={"Note: Your writing will not be saved."}
                     >
                       <button
-                        className={` sm:h-10 sm:w-20  md:h-[7vh] w-32 h-12 text-md bg-black text-white hover:opacity-80 font-bold text-md sm:text-[2.5vw] rounded-3xl`}
+                        className={` sm:h-10 sm:w-20  md:h-[7vh] w-32 h-12 text-md bg-black text-white hover:opacity-80 font-medium text-md sm:text-[2.5vw] rounded-full`}
                         type="button"
                       >
                         Refresh

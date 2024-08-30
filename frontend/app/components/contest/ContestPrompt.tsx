@@ -80,9 +80,12 @@ const ContestPrompt: React.FC<PromptProps> = ({
         <div className="px-4 py-4 md:px-6 md:py-4 w-full md:w-5/6">
           <div className="font-bold font-comic text-wrap text-base w-5/6 md:text-xl mb-2 overflow-hidden overflow-ellipsis whitespace-nowrap">
             {getPromptText()}
-            {promptText.split(' ').length > 15 && (
-              <button onClick={toggleShowFullPrompt} className="ml-2 text-yellow-500 underline">
-                {showFullPrompt ? 'Read Less' : 'Read More'}
+            {promptText.split(" ").length > 15 && (
+              <button
+                onClick={toggleShowFullPrompt}
+                className="ml-2 text-yellow-500 underline"
+              >
+                {showFullPrompt ? "Read Less" : "Read More"}
               </button>
             )}
           </div>
@@ -101,8 +104,11 @@ const ContestPrompt: React.FC<PromptProps> = ({
               />
             </div>
           ) : (
-            <div className="flex cursor-pointer" onClick={handleRedirectToStory}>
-              <button className="border text-2xl mid:text-[8px] mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-3xl text-white mid:w-20 mid:h-8 w-60 h-14">
+            <div
+              className="absolute right-4 top-4 flex cursor-pointer"
+              onClick={handleRedirectToStory}
+            >
+              <button className="border text-xl mid:text-[8px] mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-full text-white mid:w-20 mid:h-8  px-4 h-12">
                 View your story
               </button>
             </div>

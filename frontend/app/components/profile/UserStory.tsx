@@ -150,9 +150,16 @@ const Card: React.FC<CardProps> = ({
             <div className="mt-4">
               <h3 className="text-lg font-semibold font-comic">Corrections:</h3>
               <p className="py-4 font-comic">
-                {corrections
-                  ? getDiff(description, corrections)
-                  : "Correction is being done in background hold on please!"}
+                {corrections ? (
+                  getDiff(description, corrections)
+                ) : (
+                  <div className="flex gap-x-1">
+                    <span>
+                      Correction is being done in background hold on please! 
+                    </span>
+                    <span className="underline cursor-pointer" onClick={onsuccess}>Refresh</span>
+                  </div>
+                )}
               </p>
             </div>
           )}

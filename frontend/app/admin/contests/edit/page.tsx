@@ -120,7 +120,7 @@ const Page = () => {
               </div>
               <div className="mb-4">
                 <label
-                  className="block text-gray-700 text-sm font-bold mb-2"
+                  className="block text-gray-700 text-sm font-medium mb-2"
                   htmlFor="deadline"
                 >
                   Submission Deadline
@@ -196,7 +196,7 @@ const Page = () => {
 
               <button
                 onClick={handleAddClick}
-                className="bg-black text-white px-4 py-2 rounded-lg"
+                className="bg-custom-yellow text-black border border-black px-4 py-2 rounded-lg font-comic"
               >
                 Add Prompt
               </button>

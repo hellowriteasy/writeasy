@@ -75,12 +75,12 @@ const Card: React.FC<CardProps> = ({
       <div className="bg-white shadow-md rounded-lg w-full border z-50 border-gray-300 p-4 mb-4">
         <div className="flex justify-between items-center mb-2">
           <div className="text-xl font-semibold">Prompt : {prompt?.title}</div>
-          <div className="flex space-x-2 gap-4">
+          <div className="flex space-x-1 gap-2">
             <button className="text-black" onClick={() => setOpen(true)}>
-              <FaEdit size={30} />
+              <FaEdit size={20} />
             </button>
             <button className="text-black text-3xl" onClick={() => setOpenDeleteModal(true)}>
-              <FaTrash size={30} />
+              <FaTrash size={20} color='red' />
             </button>
           </div>
         </div>

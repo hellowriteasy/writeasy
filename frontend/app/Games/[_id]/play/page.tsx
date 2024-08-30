@@ -442,7 +442,7 @@ const Page = () => {
                   <>
                     <div>
                       <input
-                        className={`border border-gray-500 z-10 text-xl rounded-3xl indent-7 w-[50vw] h-12 focus:outline-none focus:border-yellow-600 ${
+                        className={`border border-gray-500 z-10 text-xl rounded-full indent-7 w-[50vw] h-12 focus:outline-none focus:border-yellow-600 ${
                           !currentStory || submittingStory
                             ? "opacity-50 cursor-not-allowed"
                             : ""
@@ -459,7 +459,7 @@ const Page = () => {
                       />
                     </div>
                     {/* should make it shared component in future  */}
-                    <div className=" bg-black rounded-full w-full ">
+                    <div className=" bg-black rounded-3xl w-full ">
                       <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
                         <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
                           <div className="flex gap-3 p-3 ps-6 w-full">

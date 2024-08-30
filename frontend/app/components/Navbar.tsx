@@ -40,8 +40,8 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
                   key={`${link.label}-${link.path}`}
                   className={
                     isActive
-                      ? "active px-6 py-2 rounded-full text-center"
-                      : "py-2 px-6 rounded-full text-center"
+                      ? "cursor-pointer active px-6 py-2 rounded-full text-center"
+                      : "cursor-pointer py-2 px-6 rounded-full text-center"
                   }
                 >
                   <Link
@@ -66,7 +66,7 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
             {/* {isOpen ? (
               <XMarkIcon className="h-8 w-8" />
             ) : ( */}
-              <Bars3Icon className="h-8 w-8" />
+            <Bars3Icon className="h-8 w-8" />
             {/* )} */}
           </button>
         </div>
@@ -106,17 +106,17 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
                 key={`${link.label}-${link.path}`}
                 className={
                   isActive
-                       ? "active px-6 py-2 rounded-full text-center"
-                      : "py-2 px-6 rounded-full text-center"
+                    ? " cursor-pointer active px-6 py-2 rounded-full text-center"
+                    : "cursor-pointer py-2 px-6 rounded-full text-center"
                 }
               >
-                   <Link
-                    href={link.path}
-                    onClick={toggleMenu}
-                    className="pt-5 text-xl font-bold cursor-pointer"
-                  >
-                    {link.label}
-                  </Link>
+                <Link
+                  href={link.path}
+                  onClick={toggleMenu}
+                  className="pt-5 text-xl font-bold cursor-pointer"
+                >
+                  {link.label}
+                </Link>
               </li>
             );
           })}

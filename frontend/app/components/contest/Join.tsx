@@ -8,8 +8,6 @@ import { axiosInstance } from "@/app/utils/config/axios";
 import useAuthStore from "@/app/store/useAuthStore";
 import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
-import live from "@/public/others/live.svg"
-import Image from "next/image";
 const Join = () => {
   const router = useRouter();
   const [contests, setContests] = useState<TContest[]>([]);
@@ -60,7 +58,7 @@ const Join = () => {
               <div className="flex justify-center mt-4 sm:mt-6">
                 <button
                   onClick={() => router.push(`/Contests/${contest._id}`)}
-                  className="bg-black font-comic rounded-3xl text-white h-10 sm:h-10 sm:text-sm w-32 sm:w-28 text-center text-lg  md:text-3xl"
+                  className="bg-black font-comic rounded-full text-white h-10 sm:h-10 sm:text-sm w-32 sm:w-28 text-center text-lg  md:text-3xl"
                 >
                   Join
                 </button>

@@ -127,7 +127,7 @@ const Card: React.FC<CardProps> = ({ contest }) => {
           <div className="text-xl font-semibold">{contest.contest?.contestTheme}/{ contest.prompt.title}</div>
           <div className="flex space-x-2 gap-4">
             <button className="text-black" onClick={() => setOpen(true)}>
-              <FaEdit size={30} />
+              <FaEdit size={20} />
             </button>
           </div>
         </div>

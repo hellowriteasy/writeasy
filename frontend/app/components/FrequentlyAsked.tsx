@@ -101,7 +101,7 @@ const FrequentlyAsked = () => {
         {faqs.length > 5 && !showAll && (
           <div className="mt-4">
             <button
-              className="mx-auto hover:bg-gray-200 bg-white text-black w-24 md:w-32 text-lg md:text-xl font-bold h-10 md:h-12 border-2 border-black rounded-3xl"
+              className="mx-auto  hover:bg-yellow-300 bg-custom-yellow text-black w-24 md:w-32 text-lg md:text-xl font-bold h-10 md:h-12 border-2  border-black rounded-full"
               onClick={handleShowMore}
             >
               More
@@ -109,7 +109,7 @@ const FrequentlyAsked = () => {
           </div>
         )}
       </div>
-      <div className="absolute right-4 md:right-0 bottom-0 md:-bottom-10">
+      <div className="absolute right-4 md:right-0 bottom-10  md:bottom-10">
         <Image src={cloud} alt="cloud" />
       </div>
     </div>

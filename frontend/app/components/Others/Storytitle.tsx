@@ -88,7 +88,7 @@ const Storytitle: React.FC<StoryProps> = ({ story }) => {
         <div className="md:px-4 py-4 flex justify-end">
           <button
             onClick={toggleExpand}
-            className="bg-black text-white py-2    sm:text-[10px] md:text-sm lg:py-4 w-20 md:w-[14vw]  lg:w-36 px-3 md:px-4 sm:rounded-xl lg:px-5 rounded-3xl"
+            className="bg-black text-white py-2    sm:text-[10px] md:text-sm lg:py-4 w-20 md:w-[14vw]  lg:w-36 px-3 md:px-4 sm:rounded-xl lg:px-5 rounded-full"
           >
             {isExpanded ? "Show less" : "Read more"}
           </button>

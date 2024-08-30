@@ -49,15 +49,15 @@ const Card: React.FC<CardProps> = ({ name, id, onSuccess }) => {
 
   return (
     <>
-      <div className="bg-white border font-poppins border-gray-300 w-5/6 shadow-md rounded-lg p-4 mb-4">
+      <div className="bg-white border font-poppins border-gray-200 w-full shadow-sm rounded-lg p-4 mb-4">
         <div className="flex justify-between items-center mb-2">
-          <div className="text-xl font-semibold">{categoryName}</div>
+          <div className="text-xl font-semibold font-comic">{categoryName}</div>
           <div className="flex space-x-2 gap-4">
             <button className="text-black " onClick={() => setOpen(true)}>
-              <FaEdit size={30} />
+              <FaEdit size={20} />
             </button>
             <button className="text-black text-3xl" onClick={() => setOpenDeleteModal(true)}>
-              <FaTrash size={30} />
+              <FaTrash size={20} color='red' />
             </button>
           </div>
         </div>

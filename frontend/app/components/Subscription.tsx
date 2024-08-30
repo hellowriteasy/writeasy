@@ -42,7 +42,7 @@ const Subscription: React.FC<TsubscriptionProps> = ({ setIsModalOpen }) => {
                 <div className="flex items-center justify-center h-14">
                   <button
                     onClick={() => router.push(`/Pricing`)}
-                    className="h-14 w-full px-5 bg-custom-yellow text-slate-950 text-3xl font-bold font-comic rounded-3xl"
+                    className="h-14 w-full px-5 bg-custom-yellow text-slate-950 text-3xl font-bold font-comic rounded-full"
                   >
                     Upgrade to premium
                   </button>

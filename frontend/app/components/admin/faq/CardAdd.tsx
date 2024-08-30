@@ -56,20 +56,20 @@ const Card: React.FC<CardProps> = ({ question, answer, position, id, onSuccess }
 
   return (
     <>
-      <div className="bg-white border font-poppins border-gray-300 w-5/6 shadow-md rounded-lg p-4 mb-4">
+      <div className="bg-white border font-poppins border-gray-300 w-full shadow-md rounded-lg p-4 mb-4">
         <div className="flex justify-between items-center mb-2">
-          <div className="text-xl font-semibold">{question}</div>
+          <div className="text-xl font-semibold font-comic">{question}</div>
           <div className="flex space-x-2 gap-4">
             <button className="text-black " onClick={() => setOpen(true)}>
-              <FaEdit size={30} />
+              <FaEdit size={20} />
             </button>
             <button className="text-black text-3xl" onClick={() => setOpenDeleteModal(true)}>
-              <FaTrash size={30} />
+              <FaTrash size={20}  color='red'/>
             </button>
           </div>
         </div>
-        <div className="text-gray-600">{answer}</div>
-        <div className="text-gray-600">Position: {position}</div>
+        <div className="text-gray-600 font-comic">{answer}</div>
+        <div className="text-gray-600 font-comic">Position: {position}</div>
       </div>
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={() => setOpen(false)}>

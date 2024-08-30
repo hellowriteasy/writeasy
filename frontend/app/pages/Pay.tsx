@@ -16,7 +16,7 @@ const Pay = () => {
       <div className="flex  flex-col items-center justify-center">
         <h1 className="text-7xl font-crayon font-bold mb-8">Checkout</h1>
         <div className="mt-4">
-        <button className="mx-auto w-72 h-20 font-crayon hover:bg-slate-800 bg-black text-white w-28 text-4xl font-bold h-10 border-2 border-black rounded-3xl  ">Pay</button>
+        <button className="mx-auto w-72 h-20 font-crayon hover:bg-slate-800 bg-black text-white w-28 text-4xl font-bold h-10 border-2 border-black rounded-full  ">Pay</button>
         </div>
       </div>
     </div>

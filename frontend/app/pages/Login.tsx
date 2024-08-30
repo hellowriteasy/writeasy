@@ -78,7 +78,7 @@ const Login: NextPage = () => {
         >
           <div className="relative w-full flex flex-col justify-center items-center mt-4">
             <input
-              className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-3xl indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"
+              className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-full indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"
               type="email"
               placeholder="Email"
               value={email}
@@ -90,7 +90,7 @@ const Login: NextPage = () => {
 
           <div className="relative w-full flex flex-col justify-center items-center mt-4">
             <input
-              className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-3xl indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"
+              className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-full indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"
               type={showPassword ? "text" : "password"}
               placeholder="Password"
               value={password}
@@ -114,7 +114,7 @@ const Login: NextPage = () => {
           <h1 className="text-end pt-4 font-comic text-sm underline font-bold">
             <Link href="/reset-password">Forgot Password?</Link>
           </h1>
-          <button className="text-center border rounded-3xl my-4 text-white hover:opacity-80 min-w-full sm:min-w-60 sm:w-72 md:w-80 lg:w-96 mt-5 bg-black h-12 sm:h-14 text-xl sm:text-2xl">
+          <button className="text-center border rounded-full my-4 text-white hover:opacity-80 min-w-full sm:min-w-60 sm:w-72 md:w-80 lg:w-96 mt-5 bg-black h-12 sm:h-14 text-xl sm:text-2xl">
             Login
           </button>
           {error && <p className="text-red-500 mx-auto">{error}</p>}

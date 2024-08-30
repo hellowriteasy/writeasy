@@ -10,7 +10,8 @@ import useAuthStore from "../store/useAuthStore";
 import { axiosInstance } from "../utils/config/axios";
 import useUploadFile from "../hooks/useFileUpload";
 import { useCustomToast } from "../utils/hooks/useToast";
-
+import Pencil from "@/public/Game/Pencil.svg";
+import Image from "next/image";
 const Page = () => {
   const { userId, profile_picture, token } = useAuthStore();
   const [userDetails, setUserDetails] = useState({
@@ -26,6 +27,7 @@ const Page = () => {
   const axiosIns = axiosInstance(token || "");
   const toast = useCustomToast();
   const [updating, setUpdating] = useState(false);
+  const [isEditable, setIsEditable] = useState(false);
 
   useEffect(() => {
     setUserDetails({
@@ -57,6 +59,10 @@ const Page = () => {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
+    if (!isEditable) {
+      setIsEditable(true);
+      return;
+    }
     let profile_image_url = "";
     const {
       username,
@@ -77,9 +83,11 @@ const Page = () => {
       });
       toast("Profile updated successfully", "success");
       setUpdating(false);
-
+      setIsEditable(false)
     } catch (error) {
       setUpdating(false);
+      setIsEditable(false);
+
       console.error("Error updating profile", error);
     }
   };
@@ -93,12 +101,12 @@ const Page = () => {
 
   return (
     <div className="w-screen h-full flex flex-col justify-center font-comic items-center">
-      <div className="h-28">
-        <h1 className="text-5xl font-comic font-bold pt-5">Account Settings</h1>
-      </div>
+      {/* <div className="h-28">
+        <h1 className="text-5xl font-comic font-bold pt-5">My Account</h1>
+      </div> */}
 
       <div
-        className="w-40 h-40 sm:w-20 sm:h-20 bg-slate-700 my-4 rounded-full cursor-pointer"
+        className="w-40 h-40 sm:w-20 sm:h-20  my-4 rounded-full cursor-pointer border-yellow-400 border-8 p-1"
         onClick={upload}
       >
         <input
@@ -123,31 +131,46 @@ const Page = () => {
       <div className="flex justify-center gap-4 w-full px-4 sm:px-8 md:px-16 lg:px-24">
         <form
           onSubmit={handleSubmit}
-          className="w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 gap-4"
+          className="w-full max-w-2xl flex flex-col md:grid-cols-2 gap-4"
         >
           <input
-            className="border border-gray-500 sm:text-sm w-full text-xl rounded-3xl indent-7 h-14 focus:outline-none focus:border-yellow-600"
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={userDetails.email}
-            onChange={handleInputChange}
-          />
-          <input
-            className="border sm:text-sm border-gray-500 w-full text-xl rounded-3xl indent-7 h-14 focus:outline-none focus:border-yellow-600"
+            className={`border sm:text-sm ${
+              !isEditable ? "bg-gray-200" : ""
+            }  border-gray-500 w-full text-xl rounded-full indent-7 h-14 focus:outline-none focus:border-yellow-600`}
             type="text"
             placeholder="Username"
             name="username"
             value={userDetails.username}
             onChange={handleInputChange}
+            disabled={!isEditable}
+          />
+          <input
+            className={`border sm:text-sm ${
+              !isEditable ? "bg-gray-200" : ""
+            }  border-gray-500 w-full text-xl rounded-full indent-7 h-14 focus:outline-none focus:border-yellow-600`}
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={userDetails.email}
+            onChange={handleInputChange}
+            disabled={!isEditable}
           />
 
           <div className="w-full flex justify-center md:col-span-2 mt-4">
             <button
               type="submit"
-              className="text-white bg-black text-2xl font-bold font-comic rounded-full w-full h-14"
+              className="text-black bg-custom-yellow  items-center content-center justify-center text-2xl font-bold font-comic rounded-full w-full h-14 flex"
             >
-              {updating?"Updating...":"Update"}
+              <Image
+                className="transform"
+                src={Pencil}
+                width={25}
+                height={25}
+                alt="edit pencil"
+                style={{ transform: "rotate(-50deg)" }}
+              />{" "}
+              {/* {isEditable ? "Updating..." : "Edit profile"} */}
+              {isEditable  ? "Update Profile":"Edit Profile"}
             </button>
           </div>
         </form>
