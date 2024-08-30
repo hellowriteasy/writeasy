@@ -11,11 +11,24 @@ jobs:
     runs-on: self-hosted
 
     steps:
+    - name: Stop and Remove Old Docker Containers - frontend
+      run: |
+        sudo docker stop writeasy_frontend_container || true
+        sudo docker rm writeasy_frontend_container || true
+
+    - name: Stop and Remove Old Docker Containers - backend
+      run: |
+        sudo docker stop writeasy_backend_container || true
+        sudo docker rm writeasy_backend_container || true
+
+    - name: Remove Old Docker Images - frontend
+      run: sudo docker image rm -f skilledsantoshh/test:writeasy_frontend || true
+
+    - name: Remove Old Docker Images - backend
+      run: sudo docker image rm -f skilledsantoshh/test:writeasy_backend || true
+
     - name: Pull the Docker Image - frontend
       run: sudo docker pull skilledsantoshh/test:writeasy_frontend
-
-    - name: Delete the old Docker Container - frontend
-      run: sudo docker rm -f writeasy_frontend_container || true
 
     - name: Run the Docker Container - frontend
       run: sudo docker run -d -p 3000:3000 --name writeasy_frontend_container skilledsantoshh/test:writeasy_frontend
@@ -23,8 +36,5 @@ jobs:
     - name: Pull the Docker Image - backend
       run: sudo docker pull skilledsantoshh/test:writeasy_backend
     
-    - name: Delete the old Docker Container - backend
-      run: sudo docker rm -f writeasy_backend_container || true
-
     - name: Run the Docker Container - backend
       run: sudo docker run --env-file /home/ubuntu/.env -d -p 8000:8000 --name writeasy_backend_container skilledsantoshh/test:writeasy_backend
