@@ -54,6 +54,7 @@ const Page = () => {
         setProfilePicture(reader.result as string);
       };
       reader.readAsDataURL(file);
+      setIsEditable(true);
     }
   };
 
@@ -83,7 +84,7 @@ const Page = () => {
       });
       toast("Profile updated successfully", "success");
       setUpdating(false);
-      setIsEditable(false)
+      setIsEditable(false);
     } catch (error) {
       setUpdating(false);
       setIsEditable(false);
@@ -170,7 +171,11 @@ const Page = () => {
                 style={{ transform: "rotate(-50deg)" }}
               />{" "}
               {/* {isEditable ? "Updating..." : "Edit profile"} */}
-              {isEditable  ? "Update Profile":"Edit Profile"}
+              {updating
+                ? "Updating profile..."
+                : isEditable
+                ? "Update Profile"
+                : "Edit Profile"}
             </button>
           </div>
         </form>

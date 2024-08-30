@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { axiosInstance } from "../utils/config/axios";
 import Image from "next/image";
 import Logo from "@/public/Landingpage-img/logo.svg";
-
+import { IoPersonSharp } from "react-icons/io5";
 const UserMenu = () => {
   const [selectedOption, setSelectedOption] = useState("");
   const [showOptions, setShowOptions] = useState(false);
@@ -42,17 +42,23 @@ const UserMenu = () => {
       {loggedIn ? (
         <>
           <div className="relative flex font-comic justify-between items-center  bg-black border border-black rounded-full h-14  focus:outline-none focus:border-black">
-            <div className="pointer-events-none  w-14 h-14 rounded-full    overflow-hidden">
+            <div className="pointer-events-none  w-14 h-14 rounded-full  overflow-hidden  border-custom-yellow  border-4">
               {profile_picture && profile_picture.startsWith("https") ? (
                 <img
-                  className="w-full h-full object-cover "
+                  className="w-full h-full object-cover  "
                   src={profile_picture}
                   alt="profile picture"
                 />
               ) : (
-                <Image src={Logo} alt="contributor's profile picture" />
+                //
+                <img
+                  className="w-full h-full object-cover  "
+                  src={
+                    "https://firebasestorage.googleapis.com/v0/b/debai-d0809.appspot.com/o/images%2Ficon.ico?alt=media&token=efc7ea40-4104-49b7-b61b-42e4ba4a9da1"
+                  }
+                  alt="profile picture"
+                />
               )}
-              {/* <IoPersonSharp className=" text-3xl  text-center text-black " /> */}
             </div>
             <div className=" text-md text-white font-bold text-center">
               {selectedOption || `${username}`}
@@ -72,7 +78,7 @@ const UserMenu = () => {
                     setShowOptions(false);
                   }}
                 >
-                  My Profile
+                  My Writings
                 </div>
               </Link>
               <Link href="/setting">
@@ -83,7 +89,7 @@ const UserMenu = () => {
                     setShowOptions(false);
                   }}
                 >
-                  Settings
+                  My Profile
                 </div>
               </Link>
               {role === "admin" && (
