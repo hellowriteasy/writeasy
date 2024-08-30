@@ -348,12 +348,13 @@ const Page = () => {
       {selectedUsers.length > 0 && showCard && (
         <div className="mt-2">{renderSelectedUsers()}</div>
       )}
-      <div className="flex">
+      <div className="flex gap-x-2">
         <input
           type="email"
           className="w-full p-2 border outline-yellow-100 border-gray-300 rounded"
           value={searchQuery}
           onChange={handleSearchChange}
+          placeholder="Search users by email"
         />
         <button
           className="px-4  bg-black text-white rounded"
@@ -373,7 +374,7 @@ const Page = () => {
   );
 
   return (
-    <div className="w-full h-[1300px] mt-6 z-0 relative flex justify-center ">
+    <div className="w-full h-[1000px] mt-6 z-0 relative flex justify-center ">
       <div className="w-10/12 h-screen  flex flex-col gap-y-4">
         <div className="w-full  relative pt-4 flex flex-col gap-y-4">
           <div className="flex flex-col gap-y-4">
@@ -442,7 +443,7 @@ const Page = () => {
                   <>
                     <div>
                       <input
-                        className={`border border-gray-500 z-10 text-xl rounded-full indent-7 w-[50vw] h-12 focus:outline-none focus:border-yellow-600 ${
+                        className={`border border-gray-500 z-10 text-xl rounded-full indent-7 sm:w-full w-[50vw] h-12 focus:outline-none focus:border-yellow-600 ${
                           !currentStory || submittingStory
                             ? "opacity-50 cursor-not-allowed"
                             : ""

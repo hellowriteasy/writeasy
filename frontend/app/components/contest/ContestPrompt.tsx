@@ -73,7 +73,7 @@ const ContestPrompt: React.FC<PromptProps> = ({
 
   return (
     <div
-      className="flex justify-center px-4 md:px-0 w-5/6 bg-white border-2 border-gray-300 rounded-3xl"
+      className="flex justify-center px-4 md:px-0 w-full bg-white border-2 border-gray-300 rounded-3xl cursor-pointer"
       onClick={handleRedirectToPromptWritings}
     >
       <div className="w-full h-auto md:h-40 relative overflow-hidden mb-4">

@@ -172,7 +172,7 @@ const Card: React.FC<CardProps> = ({
             //   setShowFullDescription(true);
             //   toPDF();
             // }}
-            className="bg-white font-comic border-2 sm:p-0 sm:w-20 sm:h-8 sm:rounded sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
+            className="bg-white font-comic border-2 sm:p-0 sm:w-20 sm:h-8 sm:rounded-full sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
           >
             <PDFDownloadLink
               document={
@@ -189,7 +189,7 @@ const Card: React.FC<CardProps> = ({
         {type === "game" && (
           <button
             onClick={() => router.push(`/Games/${prompt_id}/play`)}
-            className="bg-white font-comic border-2 sm:px-1 sm:w-20 sm:h-8 sm:rounded sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
+            className="bg-white font-comic border-2 sm:px-1 sm:w-20 sm:h-8 sm:rounded-full sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
           >
             Contribute
           </button>
@@ -197,21 +197,21 @@ const Card: React.FC<CardProps> = ({
         {!shouldHideButtons && (
           <button
             onClick={() => setShowDiff(!showDiff)}
-            className="bg-white font-comic border-2 sm:p-1 sm:w-20 sm:h-8 sm:rounded sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
+            className="bg-white font-comic border-2 sm:p-1 sm:w-20 sm:h-8 sm:rounded-full sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
           >
             {showDiff ? "Original" : "Marked"}
           </button>
         )}
         <button
           onClick={() => setIsDeleteDialogOpen(true)}
-          className="bg-white border-2 font-comic sm:p-1 sm:w-20 sm:h-8 sm:rounded sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
+          className="bg-white border-2 font-comic sm:p-1 sm:w-20 sm:h-8 sm:rounded-full sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
         >
           Delete
         </button>
         {descriptionWords.length > previewWords && (
           <button
             onClick={toggleDescription}
-            className="bg-black sm:p-1 font-comic sm:w-20 sm:h-8 sm:rounded sm:text-[10px] text-white px-4 py-2 rounded-2xl"
+            className="bg-black sm:p-1 font-comic sm:w-20 sm:h-8 sm:rounded-full sm:text-[10px] text-white px-4 py-2 rounded-2xl"
           >
             {showFullDescription ? "Show Less" : "Read More"}
           </button>

@@ -98,7 +98,7 @@ const Page: React.FC = () => {
         )) :<NotFound text='No Games To Show !!'/>}
       </div>
       {pageDetails && pageDetails.total > 5 && (
-              <div className="w-full ms-28">
+              <div className="w-full ">
                 <ReactPaginate
                   previousLabel={
                     <FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />

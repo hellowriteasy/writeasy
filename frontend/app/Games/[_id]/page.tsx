@@ -123,7 +123,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
           </p>
           <button
             onClick={handleCreateStory}
-            className=" sm:px-2 w-60    bg-black hover:opacity-80 text-center text-white rounded-full border h-16 text-xl md:text-2xl  lg:text-md xl:text-2xl"
+            className=" sm:px-2 w-60  sm:text-md  sm:w-40 sm:h-12  bg-black hover:opacity-80 text-center text-white rounded-full border h-16  md:text-2xl  lg:text-md xl:text-2xl"
           >
             {userGameStory ? "Continue your story" : "    Create your group"}
           </button>
@@ -132,11 +132,11 @@ const Page: React.FC<PageProps> = ({ params }) => {
           <Image className="w-[12vw]" src={cloud2} alt="cloud2" />
         </div>
       </div>
-      <div className="w-screen flex sm:mt-[4vw]  flex-col items-center">
+      <div className="w-screen flex sm:mt-[2vw]  flex-col items-center">
         {stories.length > 0 ? (
           <div className="w-4/5 ">
             <h1 className="font-bold text-3xl sm:text-xl md:text-4xl lg:text-6xl xl:text-5xl pt-5 font-comic">
-              Groups
+             All Groups
             </h1>
 
             <div className="mt-4 flex flex-col gap-8">
