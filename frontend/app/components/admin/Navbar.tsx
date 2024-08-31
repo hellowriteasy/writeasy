@@ -13,7 +13,7 @@ const Navbar = () => {
   const router = useRouter();
   const { adminSidebarOpen, toggleSidebar } = useAdminSidebarStore();
   return (
-    <nav className="flex  space-x-4 sm:justify-between items-center p-4  bg-custom-yellow text-black font-poppins text-3xl shadow-lg">
+    <nav className="flex  space-x-4 justify-between items-center p-4  bg-custom-yellow text-black font-poppins text-3xl shadow-lg">
       <Link href={"/"}>
         <Image src={Logo} layout="responsive" alt="logo"></Image>
       </Link>
@@ -25,7 +25,7 @@ const Navbar = () => {
           <IoMdArrowRoundBack className="active w-20  h-10" />
         </Link>
       </div> */}
-      <button onClick={toggleSidebar} className="ml-auto">
+      <button onClick={toggleSidebar} className="ml-auto lg:hidden">
         {adminSidebarOpen ? (
           <FaTimes className="h-6 w-6" />
         ) : (
