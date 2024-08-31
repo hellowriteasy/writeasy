@@ -11,9 +11,11 @@ import { FaQuestion } from "react-icons/fa";
 import { BiSolidCategory } from "react-icons/bi";
 import { FaUsersCog } from "react-icons/fa";
 import { LuClipboardEdit } from "react-icons/lu";
+import useAdminSidebarStore from "@/app/store/useSidebarStore";
 
 const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const { adminSidebarOpen, toggleSidebar } = useAdminSidebarStore();
+
   const links = [
     {
       practices: <TbWriting />,
@@ -26,34 +28,30 @@ const Sidebar = () => {
     { category: <BiSolidCategory /> },
     { user: <FaUsersCog /> },
   ] as Record<string, React.ReactNode>[];
-  const path = usePathname();
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
+  const path = usePathname();
 
   return (
     <>
-      <div className="lg:hidden flex justify-between items-center p-2  text-white">
-        <button onClick={toggleSidebar} className="">
-          {isOpen ? (
+      <div className="lg:hidden  flex justify-between items-start p-2    ">
+        {/* <button onClick={toggleSidebar} className="">
+          {adminSidebarOpen ? (
             <FaTimes className="h-6 w-6" />
           ) : (
             <FaBars className="h-6 w-6" />
           )}
-        </button>
+        </button> */}
       </div>
-
       <div
         className={`fixed inset-0  z-10 ${
-          isOpen ? "block" : "hidden"
+          adminSidebarOpen ? "block" : "hidden"
         } lg:hidden`}
         onClick={toggleSidebar}
       />
       <div
         className={`fixed inset-y-0 left-0 transform ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 transition duration-300 ease-in-out z-20 w-64  rounded-sm lg:sticky lg:top-0 text-white font-poppins font-bold `}
+          adminSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0 transition duration-300 ease-in-out z-20 w-64  rounded-sm lg:sticky lg:top-0 text-white font-poppins font-bold bg-white `}
       >
         <ul className="">
           {links.map((link) => {
