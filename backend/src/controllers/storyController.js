@@ -45,7 +45,6 @@ const createStory = async (req, res) => {
 // Function to handle scoring
 async function processStoryForScoring(storyId, content, wordCount, topic) {
   try {
-
     const score = await gptService.generateScore(content, "", wordCount, topic); // Get score from GPT API
     const correctionSummary = await gptService.generateCorrectionSummary(
       content,
@@ -383,39 +382,55 @@ const processCorrectionAndSummary = async ({
 
 const getTopStoriesForContest = async (req, res) => {
   const { id } = req.params;
-  let { page, perPage } = req.query;
+  let { page, perPage, exclude_pagination } = req.query;
 
   // Ensure page has a default value if not provided
   page = +page || 1;
   perPage = +perPage || 5;
 
   const skip = (page - 1) * perPage;
-
+  let stories = [];
   try {
     const total = await Story.countDocuments({
       contest: id,
       isTopWriting: true,
     });
 
-    const stories = await Story.find({
-      contest: id,
-      isTopWriting: true,
-    })
-      .sort({ score: -1 })
-      .skip(skip) // Directly use skip
-      .limit(perPage) // Directly use limit
-      .populate({
-        path: "user",
-        select: "-password", // Using a string for field exclusion
-      });
+    if (exclude_pagination === "true") {
+      stories = await Story.find({
+        contest: id,
+        isTopWriting: true,
+      })
+        .sort({ score: -1 })
+        .populate({
+          path: "user",
+          select: "-password", // Using a string for field exclusion
+        });
+    } else {
+      stories = await Story.find({
+        contest: id,
+        isTopWriting: true,
+      })
+        .sort({ score: -1 })
+        .skip(skip) // Directly use skip
+        .limit(perPage) // Directly use limit
+        .populate({
+          path: "user",
+          select: "-password", // Using a string for field exclusion
+        });
+    }
 
     return res.status(200).json({
       data: stories,
-      pageData: {
-        page,
-        perPage,
-        total,
-      },
+      ...(exclude_pagination !== "true"
+        ? {
+            pageData: {
+              page,
+              perPage,
+              total,
+            },
+          }
+        : {}),
     });
   } catch (error) {
     console.error(error);

@@ -55,7 +55,7 @@ const TopWriting: React.FC = () => {
           <ul className="p-4 w-full flex flex-col gap-y-1">
             {topStories.map((story, index) => (
               <Link
-                href={`/Contests/${story.contest}/${story.prompt}`}
+                href={`/Contests/${story.contest}/${story.prompt}?top-writing=${story._id}`}
                 key={story._id}
                 className="my-2 flex flex-col  items-start"
               >

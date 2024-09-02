@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Cloud from "@/public/Game/cloud.svg";
 import Cloud2 from "@/public/Game/cloud3.svg";
@@ -10,7 +10,7 @@ import NotFound from "@/app/components/Others/NotFound";
 import { TContest, TPrompt, TStory } from "@/app/utils/types";
 import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import Storycard from "@/app/components/Storycard";
 interface Prompt {
   _id: string;
@@ -34,6 +34,8 @@ interface ViewContestProps {
 
 const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
   const { _id, id } = useParams();
+  const searchParams = useSearchParams();
+  const selectedStory = new URLSearchParams(searchParams).get("top-writing");
   const [stories, setStories] = useState<TStory[]>([]);
   const [prompt, setPrompt] = useState<TPrompt | null>(null);
   const AxiosIns = axiosInstance("");
@@ -41,6 +43,8 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [contestDetails, setContestDetails] = useState<TContest | null>(null);
+  const topStoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+
   const [pageDetails, setPageDetails] = useState({
     page: 1,
     perPage: 10,
@@ -50,7 +54,7 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
     const fetchTopStories = async () => {
       try {
         const response = await AxiosIns.get(
-          `/stories/contest/top-writings/${_id}`
+          `/stories/contest/top-writings/${_id}?exclude_pagination=true`
         );
         setTopStories(response.data?.data);
         setPageDetails(response.data?.pageData);
@@ -97,7 +101,26 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
     fetchStories();
     fetchPromptDetails();
   }, [params.id, currentPage]);
+  useEffect(() => {
+    if (selectedStory && topStoryRefs.current[selectedStory]) {
+      const element = topStoryRefs.current[selectedStory];
+      if (element) {
+        // Scroll the element into view
+        element.scrollIntoView({ behavior: "smooth" });
 
+        // Calculate the position of the element relative to the viewport
+        // const elementTop = element.getBoundingClientRect().top;
+
+        // Only scroll up if the element's top is too close to the top of the viewport
+        // if (elementTop < 200) {
+        //   // Adjust 100 based on the height of your navbar
+        //   setTimeout(() => {
+        //     window.scrollBy(0, elementTop - 900); // Scroll up only by the necessary amount
+        //   }, 200); // Adjust the delay as needed
+        // }
+      }
+    }
+  }, [selectedStory, topStories]);
   const handlePageClick = (event: { selected: number }) => {
     setCurrentPage(event.selected + 1);
   };
@@ -122,15 +145,22 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
               currentPage === 1 &&
               topStories.map((story) => {
                 return (
-                  <TopWriting
+                  <div
+                    className=""
                     key={story._id}
-                    title={story.title}
-                    content={story.content}
-                    corrections={story.corrections}
-                    username={story.user.username}
-                    email={story.user.email}
-                    profile_image={story.user.profile_picture}
-                  />
+                    ref={(el: HTMLDivElement | null) => {
+                      topStoryRefs.current[story._id] = el;
+                    }}
+                  >
+                    <TopWriting
+                      title={story.title}
+                      content={story.content}
+                      corrections={story.corrections}
+                      username={story.user.username}
+                      email={story.user.email}
+                      profile_image={story.user.profile_picture}
+                    />
+                  </div>
                 );
               })}
             {stories.map((story) => {

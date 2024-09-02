@@ -3,7 +3,7 @@ import Link from "next/link";
 import { FaCheckCircle } from "react-icons/fa";
 import { useEffect } from "react";
 import { axiosInstance } from "../utils/config/axios";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import useAuthStore from "../store/useAuthStore";
 
 const Success = () => {
