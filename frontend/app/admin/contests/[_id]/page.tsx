@@ -154,7 +154,6 @@ const Page = ({ params }: PageProps) => {
                 >
                   Top writing publish date
                 </label>
-              
 
                 <DatePicker
                   dateFormat="MM/dd/yyyy h:mm aa"
@@ -184,16 +183,16 @@ const Page = ({ params }: PageProps) => {
                   }
                 />
               </div>
-
+              {promptCards.map((prompt, index) => (
+                <Card key={index} title={prompt.title} id={prompt._id} />
+              ))}
               <button
                 onClick={handleAddClick}
                 className="bg-black text-white px-4 py-2 rounded-lg"
               >
                 Add Prompt
               </button>
-              {promptCards.map((prompt, index) => (
-                <Card key={index} title={prompt.title} id={prompt._id} />
-              ))}
+
               <button
                 onClick={handleSubmitContest}
                 className="bg-black text-white px-4 py-2 rounded-lg  mt-4 w-full"

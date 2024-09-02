@@ -2,6 +2,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const gptService = require("../../src/services/gptService");
 const openai = new gptService(process.env.GPT_API_KEY);
+const bcrypt = require("bcryptjs");
 let stories = [
   {
     _id: "lilylc009@gmail.com",
@@ -258,12 +259,70 @@ Overall, the film London Has Fallen is well worth watching, both for the story a
   },
 ];
 
-
-
+const { connectDB } = require("../../config/db");
+const UserModel = require("../../src/models/user");
+const Subscription = require("../../src/models/subscription");
 const main = async () => {
-  console.log("started...");
-  const res = await openai.rankStories(stories, "Movie Review");
-  console.log("ended...");
+  try {
+    await connectDB();
+
+    console.log("started...");
+    // const res = await openai.rankStories(stories, "Movie Review");
+
+    const end_date = new Date();
+    end_date.setDate(end_date.getDate() + 30);
+    const hashedPassword = bcrypt.hashSync("test", 10);
+
+    // Collect promises
+    const userPromises = [];
+
+    for (let i = 1; i <= 40; i++) {
+      const email = `test${i}@gmail.com`;
+
+      userPromises.push(async () => {
+        const userExist = await UserModel.findOne({ email });
+
+        if (userExist) {
+          const newSubscription = new Subscription({
+            paidAt: Date.now(),
+            expiresAt: end_date,
+            isActive: true,
+            stripe_session_id: "test",
+            userId: userExist._id,
+            payment_type: "cash_payment",
+          });
+          userExist.password = hashedPassword;
+          userExist.subscriptionId = newSubscription._id;
+          await userExist.save();
+        } else {
+          const user = new UserModel({
+            username: `test-user-${i}`,
+            email,
+            password: hashedPassword,
+            subscriptionId: newSubscription._id,
+          });
+          const newSubscription = new Subscription({
+            paidAt: Date.now(),
+            expiresAt: end_date,
+            isActive: true,
+            stripe_session_id: "test",
+            userId: user._id,
+            payment_type: "cash_payment",
+          });
+          await newSubscription.save();
+          user.subscriptionId = newSubscription._id;
+          await user.save();
+        }
+      });
+    }
+
+    // Execute all promises
+    await Promise.all(userPromises.map((p) => p()));
+
+    console.log("ended...");
+  } catch (error) {
+    console.error("An error occurred:", error);
+  }
 };
 
 main();

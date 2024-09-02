@@ -49,6 +49,7 @@ export type TContest = {
   promptPublishDate: string; // Assuming ISO 8601 format
   submissionDeadline: string; // Assuming ISO 8601 format
   topWritingPublishDate: string; // Assuming ISO 8601 format
+  topWritingPublished:boolean
   __v: number;
 };
 

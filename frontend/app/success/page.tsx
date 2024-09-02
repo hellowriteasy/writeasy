@@ -12,16 +12,17 @@ const Success = () => {
   const sessionId = new URLSearchParams(searchParams).get("session_id");
   const AxiosIns = axiosInstance("");
   const user = useAuthStore();
-  
+
   useEffect(() => {
     if (sessionId && !user.isSubcriptionActive) {
       AxiosIns.post("/payments/confirm-checkout-session", {
         stripe_session_id: sessionId,
       })
         .then((response) => {
-
-          location.href = "/success?session_id=" + sessionId;
-          // Handle success response
+          //
+          // location.href = "/success?session_id=" + sessionId;
+          location.href = "/";
+          
         })
         .catch((error) => {
           console.error("Error confirming checkout session", error);

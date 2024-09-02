@@ -127,18 +127,6 @@ const Signup = () => {
             <input
               className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-full indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"
               type="text"
-              placeholder="Email"
-              {...register("email")}
-            />
-            {errors.email && (
-              <div className="text-red-500">{errors.email.message}</div>
-            )}
-          </div>
-
-          <div className="relative w-full flex flex-col justify-center items-center mt-4">
-            <input
-              className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-full indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"
-              type="text"
               placeholder="Username"
               {...register("username")}
             />
@@ -146,7 +134,17 @@ const Signup = () => {
               <div className="text-red-500">{errors.username.message}</div>
             )}
           </div>
-
+          <div className="relative w-full flex flex-col justify-center items-center mt-4">
+            <input
+              className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-full indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"
+              type="text"
+              placeholder="Email"
+              {...register("email")}
+            />
+            {errors.email && (
+              <div className="text-red-500">{errors.email.message}</div>
+            )}
+          </div>
           <div className="relative w-full flex flex-col justify-center items-center mt-4">
             <input
               className="border border-gray-500 w-72 sm:w-72 md:w-80 lg:w-96 z-10 rounded-full indent-7 h-10 sm:h-12 focus:outline-none focus:border-yellow-600"

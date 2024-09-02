@@ -34,6 +34,7 @@ const Storycard: React.FC<StorycardProps> = ({
     : getShortContent(content, wordLimit).replace(/\n/g, "<br>");
   
   const isContentLong = content.split(" ").length > wordLimit;
+  console.log("show ", showFullContent);
 
   return (
     <div className="relative my-6">

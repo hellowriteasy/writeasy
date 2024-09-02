@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { axiosInstance } from "@/app/utils/config/axios";
 import DeleteModal from "../../DeleteModal";
 import Link from "next/link";
+import moment from "moment";
 interface CardProps {
   title: string;
   deadline: string;
@@ -48,7 +49,7 @@ const Card: React.FC<CardProps> = ({ title, deadline, id, onSuccess }) => {
           </button>
         </div>
       </div>
-      <div className="text-gray-600">Deadline: {deadline}</div>
+      <div className="text-gray-600">Deadline: {moment(deadline).format("llll")}</div>
       <DeleteModal
         isOpen={openDeleteModal}
         setIsOpen={setOpenDeleteModal}

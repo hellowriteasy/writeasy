@@ -7,7 +7,7 @@ import Cloud2 from "@/public/Game/cloud3.svg";
 import TopWriting from "@/app/components/contest/TopWritings";
 import { axiosInstance } from "@/app/utils/config/axios";
 import NotFound from "@/app/components/Others/NotFound";
-import { TPrompt, TStory } from "@/app/utils/types";
+import { TContest, TPrompt, TStory } from "@/app/utils/types";
 import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { useParams } from "next/navigation";
@@ -40,6 +40,7 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
   const [topStories, setTopStories] = useState<TStory[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [contestDetails, setContestDetails] = useState<TContest | null>(null);
   const [pageDetails, setPageDetails] = useState({
     page: 1,
     perPage: 10,
@@ -61,6 +62,17 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
     fetchTopStories();
   }, [params.id, _id]);
 
+  useEffect(() => {
+    const fetchContestDetails = async () => {
+      try {
+        const { data } = await AxiosIns.get(`/contests/${_id}`);
+        setContestDetails(data);
+      } catch (error) {
+        //
+      }
+    };
+    fetchContestDetails();
+  }, [params.id]);
   useEffect(() => {
     const fetchStories = async () => {
       try {
@@ -106,23 +118,21 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
             <Image src={Cloud2} alt="cloud" />
           </div>
           <div className="gap-8 relative w-full flex flex-col">
-            {/* <div className="w-[53vw]">
-              {/* <h1 className="text-6xl font-comic font-bold p-10">
-                {prompt_title}
-              </h1> */}
-            {topStories.map((story) => {
-              return (
-                <TopWriting
-                  key={story._id}
-                  title={story.title}
-                  content={story.content}
-                  corrections={story.corrections}
-                  username={story.user.username}
-                  email={story.user.email}
-                  profile_image={story.user.profile_picture}
-                />
-              );
-            })}
+            {contestDetails?.topWritingPublished &&
+              currentPage === 1 &&
+              topStories.map((story) => {
+                return (
+                  <TopWriting
+                    key={story._id}
+                    title={story.title}
+                    content={story.content}
+                    corrections={story.corrections}
+                    username={story.user.username}
+                    email={story.user.email}
+                    profile_image={story.user.profile_picture}
+                  />
+                );
+              })}
             {stories.map((story) => {
               let starType: "main" | "none" = "none";
               if (story) {
