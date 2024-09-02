@@ -33,7 +33,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="lg:hidden  flex justify-between items-start p-2    ">
+      <div className="lg:hidden  flex justify-between items-start     ">
         {/* <button onClick={toggleSidebar} className="">
           {adminSidebarOpen ? (
             <FaTimes className="h-6 w-6" />

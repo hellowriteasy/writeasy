@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/stripe": "^8.0.416",
     "axios": "^1.6.8",
     "bcryptjs": "^2.4.3",
     "bull": "^4.12.2",
@@ -29,7 +30,7 @@
     "nodemailer": "^6.9.13",
     "openai-gpt-token-counter": "^1.1.1",
     "redis": "^4.6.13",
-    "stripe": "^15.10.0",
+    "stripe": "^16.9.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0"
   },

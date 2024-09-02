@@ -61,7 +61,7 @@ const Page: React.FC = () => {
     <ProtectedRoute>
       <div className="bg-gray-50 min-h-screen">
         <div className="flex h-screen">
-          <div className="flex-1 flex flex-col p-6 space-y-6">
+          <div className="flex-1 flex flex-col p-6 sm:p-0 space-y-6">
             <StoryNav />
             {/* <div className="flex justify-between items-center w-5/6 bg-white  p-4 rounded-lg  ">
               <div className="text-2xl font-semibold text-gray-700">

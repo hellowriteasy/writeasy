@@ -144,7 +144,8 @@ const closeSubscriptionWhenDeadline = async () => {
     for (let subscription of subscriptionsToUpdate) {
       // Delete the subscription from Stripe
       if (subscription.subscription_id) {
-        await stripe.subscriptions.del(subscription.subscription_id);
+        console.log("subscriptionId",subscription.subscription_id)
+        await stripe.subscriptions.cancel(subscription.subscription_id);
       }
       // Update the subscription in your database
       subscription.isActive = false;

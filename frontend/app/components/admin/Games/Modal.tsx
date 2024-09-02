@@ -62,27 +62,27 @@ const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen, onSuccess }) => {
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                  <div className="sm:flex sm:items-start items-center">
-                    <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+              <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8  sm:max-w-lg sm:w-[95%]">
+                <div className="bg-white px-4 sm:px-2 pb-4 pt-5 sm:p-6 sm:pb-4">
+                  <div className="sm:flex sm:items-start items-center w-full ">
+                    <div className="mt-3 text-center sm:mt-0 sm:text-left w-full ">
                       <Dialog.Title
                         as="h3"
                         className="text-base font-semibold leading-6 text-gray-900"
                       >
                         Add New Game Prompt
                       </Dialog.Title>
-                      <div className="mt-2">
+                      <div className="mt-2 w-full">
                         <input
                           type="text"
-                          className="mt-1 block w-96 h-12 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
+                          className="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
                           placeholder="Prompt Title"
                           value={promptTitle}
                           onChange={(e) => setPromptTitle(e.target.value)}
                         />
                       </div>
 
-                      <div className="mb-4">
+                      <div className="mb-4 mt-2 w-full">
                         <label
                           className="block text-gray-700 text-sm font-bold mb-2"
                           htmlFor="description"

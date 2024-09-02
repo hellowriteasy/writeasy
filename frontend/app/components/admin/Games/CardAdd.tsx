@@ -59,9 +59,12 @@ const CardAdd: React.FC<CardProps> = ({
   return (
     <>
       <div className="bg-white shadow-sm border border-gray-300 w-full rounded-lg p-4 mb-4">
-        <div className="flex justify-between items-center mb-2">
-          <div className="text-xl font-semibold">{title}</div>
-          <div className="flex space-x-2 gap-4">
+        <div className="flex justify-between items-center mb-2 sm:items-start sm:flex  sm:flex-col sm:gap-y-2">
+          <div className="text-xl font-semibold flex flex-col gap-y-2">
+            <p className="sm:text-sm">{title}</p>
+            <div className="text-gray-800  sm:text-sm">{description}</div>
+          </div>
+          <div className="flex space-x-2 ">
             <button className="text-black" onClick={() => setOpen(true)}>
               <FaEdit size={20} color="black" />
             </button>
@@ -73,9 +76,7 @@ const CardAdd: React.FC<CardProps> = ({
             </button>
           </div>
         </div>
-        <div className="text-gray-800 w-5/6">{description}</div>
       </div>
-
       <Transition.Root show={open} as={Fragment}>
         <Dialog
           as="div"
@@ -106,17 +107,17 @@ const CardAdd: React.FC<CardProps> = ({
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all w-1/2 sm:my-8 sm:w-full sm:max-w-lg">
-                  <div className="bg-white h-auto px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                <Dialog.Panel className="relative transform overflow-hidden rounded-lg sm:w-[95%] bg-green-400 text-left shadow-xl transition-all w-1/2 sm:my-8 sm:w-full sm:max-w-lg">
+                  <div className="bg-white h-auto px-4  pb-4 pt-5 sm:p-6 sm:pb-4 sm:px-2 ">
                     <div className="sm:flex sm:items-start">
-                      <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                      <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full ">
                         <Dialog.Title
                           as="h3"
                           className="text-base font-semibold leading-6 text-gray-900"
                         >
-                          Edit Prompt
+                          Edit Promptsss
                         </Dialog.Title>
-                        <div className="mt-2">
+                        <div className="mt-2 w-full">
                           <input
                             type="text"
                             className="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50"
