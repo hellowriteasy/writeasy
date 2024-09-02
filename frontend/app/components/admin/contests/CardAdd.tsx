@@ -36,11 +36,11 @@ const Card: React.FC<CardProps> = ({ title, deadline, id, onSuccess }) => {
       <div className="flex justify-between items-center mb-2">
         <div className="text-xl font-semibold">{title}</div>
         <div className="flex space-x-2 gap-4">
-          <Link href={`/admin/contests/${id}`}>
+          {/* <Link href={`/admin/contests/${id}`}>
             <button className="text-black">
               <FaEdit size={20} />
             </button>
-          </Link>
+          </Link> */}
           <button
             className="text-black text-3xl"
             onClick={() => setOpenDeleteModal(true)}
