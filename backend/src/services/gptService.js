@@ -248,7 +248,6 @@ class GptService {
   For each writing, generate a score based on the above criteria and return an array of objects in the following format:[{ userId:'2345', score: 55 }, { userId:'9876', score: 88 }]
   The response should consist only of the array of objects with userId and score, nothing else.`;
 
-
     const processWritingChunks = async (writingChunks) => {
       const totalTokens = writingChunks.length + 50;
       try {
@@ -402,6 +401,7 @@ ${JSON.stringify(storyObj)}
       );
       scores.push(...groupStoriesScores);
     }
+    console.log("scores", JSON.stringify(scores));
 
     // Object to store aggregated scores
     let aggregatedScores = {};
@@ -418,7 +418,7 @@ ${JSON.stringify(storyObj)}
 
     aggregatedScores = this.getTop20Percent(aggregatedScores);
 
-    return aggregatedScores;
+    return {aggregatedScores,scores};
   }
 
   shuffleArray(array) {

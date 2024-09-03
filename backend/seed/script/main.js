@@ -262,67 +262,41 @@ Overall, the film London Has Fallen is well worth watching, both for the story a
 const { connectDB } = require("../../config/db");
 const UserModel = require("../../src/models/user");
 const Subscription = require("../../src/models/subscription");
-const main = async () => {
-  try {
-    await connectDB();
+const Contest = require("../../src/models/contest");
+const Prompt = require("../../src/models/prompt");
+const Story = require("../../src/models/story");
+async function main() {
+  await connectDB();
+  const storyIds = [
+    "66d5e88bf17b649f278e7726",
+    "66d5e5b6f17b649f278e7202",
+    "66d5e799f17b649f278e7547",
+    "66d5e64df17b649f278e72c6",
+    "66d5e6f8f17b649f278e7422",
+    "66d5e7aef17b649f278e7564",
+  ];
 
-    console.log("started...");
-    // const res = await openai.rankStories(stories, "Movie Review");
+  const scores = {
+    "66d5e88bf17b649f278e7726": 225,
+    "66d5e5b6f17b649f278e7202": 221,
+    "66d5e799f17b649f278e7547": 215,
+    "66d5e64df17b649f278e72c6": 211,
+    "66d5e6f8f17b649f278e7422": 201,
+    "66d5e7aef17b649f278e7564": 201,
+  };
 
-    const end_date = new Date();
-    end_date.setDate(end_date.getDate() + 30);
-    const hashedPassword = bcrypt.hashSync("test", 10);
+  const results = await Promise.all(
+    storyIds.map(async (id) => {
+      const story = await Story.findById(id).populate("user");
+      return {
+        username: story.user.username,
+        score: scores[id],
+      };
+    })
+  );
 
-    // Collect promises
-    const userPromises = [];
+  console.log(results);
+}
 
-    for (let i = 1; i <= 40; i++) {
-      const email = `test${i}@gmail.com`;
-
-      userPromises.push(async () => {
-        const userExist = await UserModel.findOne({ email });
-
-        if (userExist) {
-          const newSubscription = new Subscription({
-            paidAt: Date.now(),
-            expiresAt: end_date,
-            isActive: true,
-            stripe_session_id: "test",
-            userId: userExist._id,
-            payment_type: "cash_payment",
-          });
-          userExist.password = hashedPassword;
-          userExist.subscriptionId = newSubscription._id;
-          await userExist.save();
-        } else {
-          const user = new UserModel({
-            username: `test-user-${i}`,
-            email,
-            password: hashedPassword,
-            subscriptionId: newSubscription._id,
-          });
-          const newSubscription = new Subscription({
-            paidAt: Date.now(),
-            expiresAt: end_date,
-            isActive: true,
-            stripe_session_id: "test",
-            userId: user._id,
-            payment_type: "cash_payment",
-          });
-          await newSubscription.save();
-          user.subscriptionId = newSubscription._id;
-          await user.save();
-        }
-      });
-    }
-
-    // Execute all promises
-    await Promise.all(userPromises.map((p) => p()));
-
-    console.log("ended...");
-  } catch (error) {
-    console.error("An error occurred:", error);
-  }
-};
-
+main().catch(console.error);
 main();

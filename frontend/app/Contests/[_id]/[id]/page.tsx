@@ -57,7 +57,7 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
           `/stories/contest/top-writings/${_id}?exclude_pagination=true`
         );
         setTopStories(response.data?.data);
-        setPageDetails(response.data?.pageData);
+        // setPageDetails(response.data?.pageData);
       } catch (err: any) {
         setError(err.message);
       }
