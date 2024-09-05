@@ -331,7 +331,7 @@ class GptService {
       const prompt = `
 You are given a set of stories. Each story is identified by a unique ID and has content associated with it.
 Evaluate these stories against each other based on writing quality, grammar, and other relevant factors.
-Score each story out of 10, aiming for high accuracy and consistency in your evaluation.
+Score each story out of 100, aiming for high accuracy and consistency in your evaluation.
 Return the results as a JSON object with story IDs as keys and scores as values.
 
 Example Input:
@@ -343,9 +343,9 @@ Example Input:
 
 Example Expected Output:
 {
-  "124": 9,
-  "125": 5,
-  "126": 8
+  "124": 66,
+  "125": 80,
+  "126": 91
 }
 
 Now, here is the input:

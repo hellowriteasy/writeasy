@@ -262,40 +262,23 @@ Overall, the film London Has Fallen is well worth watching, both for the story a
 const { connectDB } = require("../../config/db");
 const UserModel = require("../../src/models/user");
 const Subscription = require("../../src/models/subscription");
-const Contest = require("../../src/models/contest");
 const Prompt = require("../../src/models/prompt");
 const Story = require("../../src/models/story");
+const Contest = require("../../src/models/contest");
 async function main() {
   await connectDB();
-  const storyIds = [
-    "66d5e88bf17b649f278e7726",
-    "66d5e5b6f17b649f278e7202",
-    "66d5e799f17b649f278e7547",
-    "66d5e64df17b649f278e72c6",
-    "66d5e6f8f17b649f278e7422",
-    "66d5e7aef17b649f278e7564",
-  ];
 
-  const scores = {
-    "66d5e88bf17b649f278e7726": 225,
-    "66d5e5b6f17b649f278e7202": 221,
-    "66d5e799f17b649f278e7547": 215,
-    "66d5e64df17b649f278e72c6": 211,
-    "66d5e6f8f17b649f278e7422": 201,
-    "66d5e7aef17b649f278e7564": 201,
-  };
+  // const contest = await Contest.find().sort({createdAt:"desc"}).limit(1)
+  // console.log(contest);
+  let allStories = await Story.find({
+    prompt: "66d5db62f17b649f278e54ec",
+  }).populate("user");
 
-  const results = await Promise.all(
-    storyIds.map(async (id) => {
-      const story = await Story.findById(id).populate("user");
-      return {
-        username: story.user.username,
-        score: scores[id],
-      };
-    })
-  );
-
-  console.log(results);
+  allStories.map((story) => ({
+    _id: story._id,
+    content: story.content,
+    user: story.user,
+  }));
 }
 
 main().catch(console.error);

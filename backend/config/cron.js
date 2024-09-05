@@ -37,6 +37,7 @@ const closeContestAndChooseTopWritingAfterDeadline = async () => {
       await Promise.all(
         endedContests.map(async (contest) => {
           contest.startedScoringStories = true;
+          contest.isActive = false;
           await contest.save();
           try {
             await Promise.all(
