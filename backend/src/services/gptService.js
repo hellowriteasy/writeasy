@@ -326,12 +326,13 @@ class GptService {
     });
 
     try {
-      const systemPrompt = `The title of the contest is ${title}. Evaluate the stories with each other and score each of them out of 10. Ensure that the decision is accurate, concise, and consistent across all comparisons. Only return the response in JSON format, nothing else.`;
-
+      const systemPrompt = `The title of the contest is ${title}. Evaluate the stories with each other and score each of them out of 100. Ensure that the decision is accurate, concise, and consistent across all comparisons. Only return the response in JSON format, nothing else.`;
       const prompt = `
 You are given a set of stories. Each story is identified by a unique ID and has content associated with it.
 Evaluate these stories against each other based on writing quality, grammar, and other relevant factors.
 Score each story out of 100, aiming for high accuracy and consistency in your evaluation.
+Note that score should be according to the comparision between other stories in a group. These is a writing competition between multiple writers.
+Inorder to give position to the writers these story should be compared to each others and then scored.
 Return the results as a JSON object with story IDs as keys and scores as values.
 
 Example Input:
@@ -371,6 +372,7 @@ ${JSON.stringify(storyObj)}
       );
 
       let result = response.data.choices[0].message.content;
+      console.log("result", result);
       // Use regex to extract the JSON object from the result
       const jsonRegex = /{[\s\S]*?}/;
       const match = result.match(jsonRegex);
@@ -390,7 +392,6 @@ ${JSON.stringify(storyObj)}
 
   async rankStories(stories, title) {
     let scores = [];
-
     for (let i = 0; i < stories.length - 1; i++) {
       let groupStories = this.groupStories(stories);
       const groupStoriesScores = await Promise.all(
@@ -402,7 +403,6 @@ ${JSON.stringify(storyObj)}
       scores.push(...groupStoriesScores);
     }
     console.log("scores", JSON.stringify(scores));
-
     // Object to store aggregated scores
     let aggregatedScores = {};
 
@@ -418,7 +418,7 @@ ${JSON.stringify(storyObj)}
 
     aggregatedScores = this.getTop20Percent(aggregatedScores);
 
-    return {aggregatedScores,scores};
+    return { aggregatedScores, scores };
   }
 
   shuffleArray(array) {

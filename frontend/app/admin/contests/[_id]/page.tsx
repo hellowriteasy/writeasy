@@ -8,6 +8,7 @@ import ProtectedRoute from "@/app/utils/ProtectedRoute";
 import { TPromptAdd } from "../edit/page";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useCustomToast } from "@/app/utils/hooks/useToast";
 
 interface PageProps {
   params: Params;
@@ -25,6 +26,7 @@ const Page = ({ params }: PageProps) => {
     contestTheme: "",
   });
   const AxiosIns = axiosInstance("");
+  const toast = useCustomToast();
 
   useEffect(() => {
     const fetchContest = async () => {
@@ -68,8 +70,10 @@ const Page = ({ params }: PageProps) => {
         prompts: promptCards.map((prompt) => prompt._id),
         contestTheme: contestDetails.contestTheme,
         submissionDeadline: contestDetails.submissionDeadline,
+        promptPublishDate: contestDetails.promptPublishDate,
+        topWritingPublishDate: contestDetails.topWritingPublishDate,
       });
-
+      toast("Contest updated successfully", "success");
       // Handle success state if necessary
     } catch (error) {
       console.error("Error updating contest:", error);
@@ -119,6 +123,9 @@ const Page = ({ params }: PageProps) => {
                   dateFormat="MM/dd/yyyy h:mm aa"
                   showTimeInput
                   selected={contestDetails.promptPublishDate}
+                  disabled={
+                    new Date(contestDetails.promptPublishDate) < new Date()
+                  }
                   onChange={(date) => {
                     if (!date) return;
                     handleInputChange("promptPublishDate", date);
@@ -138,6 +145,9 @@ const Page = ({ params }: PageProps) => {
                   dateFormat="MM/dd/yyyy h:mm aa"
                   showTimeInput
                   selected={contestDetails.submissionDeadline}
+                  disabled={
+                    new Date(contestDetails.submissionDeadline) < new Date()
+                  }
                   onChange={(date) => {
                     if (!date) return;
                     handleInputChange("submissionDeadline", date);
@@ -159,6 +169,9 @@ const Page = ({ params }: PageProps) => {
                   dateFormat="MM/dd/yyyy h:mm aa"
                   showTimeInput
                   selected={contestDetails.topWritingPublishDate}
+                  disabled={
+                    new Date(contestDetails.promptPublishDate) < new Date()
+                  }
                   onChange={(date) => {
                     if (!date) return;
                     handleInputChange("topWritingPublishDate", date);
