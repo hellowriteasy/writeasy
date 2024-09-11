@@ -22,11 +22,13 @@ const Sidebar = () => {
     },
     { contests: <LuClipboardEdit /> },
     { games: <HiUserGroup /> },
+
     { stories: <SiBookstack /> },
     { email: <MdOutlineMail /> },
     { faq: <FaQuestion /> },
     { category: <BiSolidCategory /> },
     { user: <FaUsersCog /> },
+    { "top-writings": <HiUserGroup /> },
   ] as Record<string, React.ReactNode>[];
 
   const path = usePathname();

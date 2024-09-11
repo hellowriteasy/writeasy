@@ -1,5 +1,6 @@
 "use client";
 import { axiosInstance } from "@/app/utils/config/axios";
+import { useCustomToast } from "@/app/utils/hooks/useToast";
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid"; // Import UUID library
 
@@ -11,10 +12,12 @@ type Tstory = {
 
 const TopWritings = () => {
   const [stories, setStories] = useState<Tstory[]>([]);
-  const [topStories, setTopStories] = useState<Record<string,string>>({});
+  const [topStories, setTopStories] = useState<Record<string, string>>({});
   const [storyTitle, setStoryTitle] = useState("");
+  const [scoreCount, setScoreCount] = useState(10);
 
   const axiosIns = axiosInstance("");
+  const toast = useCustomToast();
 
   const handleAddStory = () => {
     setStories((prev) => [
@@ -65,24 +68,35 @@ const TopWritings = () => {
       return;
     }
 
-    const cleanStories = stories.filter((story) => story.content);
+    let cleanStories = stories.filter((story) => story.content);
 
+    cleanStories = cleanStories.map((story) => ({
+      _id: `${story.title}-${story._id}`,
+      content: story.content,
+      title: story.title,
+    }));
     try {
+      toast(
+        "scores and top writings will be sent to hellowriteasy@gmail.com gmail",
+        "success"
+      );
+
       const { data } = await axiosIns.post("/stories/calculate-top-writings", {
         title: storyTitle,
         stories: cleanStories,
+        iteration: scoreCount,
       });
-      if (data) {
-        setTopStories(data);
-      }
+      // if (data) {
+      //   setTopStories(data);
+      // }
     } catch (error) {
       console.log(error);
     }
   };
 
- const filteredTopStories = stories.filter((story) =>
-   topStories.hasOwnProperty(story._id.split("-").join(""))
- );
+  const filteredTopStories = stories.filter((story) =>
+    topStories.hasOwnProperty(story._id.split("-").join(""))
+  );
 
   return (
     <div className="p-5 flex flex-col gap-y-3 items-start">
@@ -108,6 +122,14 @@ const TopWritings = () => {
 
       <div className="w-full">
         <input
+          className="w-full h-10"
+          type="number"
+          placeholder="Title of story"
+          value={scoreCount}
+          onChange={(e) => setScoreCount(+e.target.value)}
+        />
+        <input
+          className="w-full h-10"
           type="text"
           placeholder="Title of story"
           value={storyTitle}

@@ -269,21 +269,51 @@ const Contest = require("../../src/models/contest");
 const path = require("path");
 const fs = require("fs");
 const csv = require("csv-parser");
+const emailServiceClass = require("../../src/services/emailService")
+  // const filePath = path.join(process.cwd(), "/data/writings.json");
+  // const data = fs.readFileSync(filePath, "utf-8");
+  // let writings = JSON.parse(data);
+  // await connectDB();
+  // writings = writings.map((writing) => ({
+  //   _id: `${writing.id}-${cuid()}`,
+  //   content: writing.content,
+  // }));
+  // console.time("Execution Time");
 
+  // const res = await openai.rankStories(writings, "Story");
+  // console.timeEnd("Execution Time");
+
+  // fs.writeFileSync(
+  //   path.join(process.cwd(), `/data/test-${Date.now()}.json`),
+  //   JSON.stringify({ ...res.scores, ...res.aggregatedScores })
+  // );
 async function main() {
-  const filePath = path.join(process.cwd(), "/data/writings.json");
-  const data = fs.readFileSync(filePath, "utf-8");
-  let writings = JSON.parse(data);
-  await connectDB();
-  writings = writings.map((writing) => ({
-    _id: `${writing.id}-${cuid()}`,
-    content: writing.content,
-  }));
-  const res = await openai.rankStories(writings, "Story");
-  fs.writeFileSync(
-    path.join(process.cwd(), `/data/test-${Date.now()}.json`),
-    JSON.stringify({ ...res.aggregatedScores, ...res.scores })
+
+
+
+
+  const outputFilePath = path.join(
+    process.cwd(),
+    `/data/test-1726073284166.json`
   );
+
+
+  const attachment = [
+    {
+      filename: path.basename(outputFilePath),
+      path: outputFilePath,
+    },
+  ];
+
+  const emailServiceIns = new emailServiceClass();
+  console.log("sending email");
+  // Send email with attachment
+  await emailServiceIns.sendEmail({
+    subject: "Top Writings",
+    attachment,
+    email: ["exxxternal69@gmail.com"],
+    message: "how are you",
+  });
 }
 
 main();

@@ -2,6 +2,7 @@ const nodemailer = require("nodemailer");
 
 class EmailService {
   async sendEmail({ subject, message, email, attachment }) {
+    console.log("send email 2");
     let transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
@@ -11,7 +12,7 @@ class EmailService {
         user: process.env.APP_EMAIL,
       },
     });
-
+    console.log(subject, message, email, attachment);
     // Create personalized HTML content for each recipient
     let mailOptions = {
       from: '"Writeasy" <' + process.env.APP_EMAIL + ">",
@@ -24,12 +25,15 @@ class EmailService {
         message: message,
       }),
     };
+    console.log("send email 3");
 
     if (attachment) {
       mailOptions.attachments = attachment;
     }
 
     try {
+      console.log("send email 4",attachment);
+
       let info = await transporter.sendMail(mailOptions);
       console.log(`Email sent : ${info.messageId}`);
     } catch (error) {

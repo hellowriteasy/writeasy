@@ -326,14 +326,16 @@ class GptService {
     });
 
     try {
-      const systemPrompt = `The title of the contest is ${title}. Evaluate the stories with each other and score each of them out of 100. Ensure that the decision is accurate, concise, and consistent across all comparisons. Only return the response in JSON format, nothing else.`;
-      const prompt = `
-You are given a set of stories. Each story is identified by a unique ID and has content associated with it.
-Evaluate these stories against each other based on writing quality, grammar, and other relevant factors.
-Score each story out of 100, aiming for high accuracy and consistency in your evaluation.
-Note that score should be according to the comparision between other stories in a group. These is a writing competition between multiple writers.
-Inorder to give position to the writers these story should be compared to each others and then scored.
-Return the results as a JSON object with story IDs as keys and scores as values.
+      const systemPrompt = ` You are tasked with evaluating stories submitted for the contest titled "${title}". Score each story out of 100 based on key writing criteria. Your decisions must be thorough, accurate, concise, and consistent across all stories. Provide the final output strictly in JSON format.`;
+
+      const prompt = `You have been given a set of stories, each identified by a unique ID and associated with its content. Your goal is to evaluate these stories and provide a score for each based on the following criteria and also comparing each story with the other stories in the set.:
+1. **Writing Quality**: How engaging, creative, and clear is the writing? Does it capture the reader’s attention and maintain interest throughout?
+2. **Grammar and Syntax**: Evaluate the correctness of grammar, punctuation, and sentence structure. Are there any major errors that detract from the reading experience?
+3. **Story Structure**: How well-organized is the story? Does it have a coherent flow with a clear beginning, middle, and end?
+4. **Conciseness**: Is the story concise and to the point without unnecessary details? Does it use appropriate summarization techniques where relevant?
+5. **Overall Impact**: How effective is the story in delivering its intended message or theme? Does it leave a lasting impression on the reader? \n
+Note: Story should be scored comparing to each other in a set. Dont give a good score if the story is less than 250 words.
+Return the scores as a JSON object with the story IDs as keys and the respective scores (out of 100) as values.
 
 Example Input:
 {
@@ -342,16 +344,15 @@ Example Input:
   "126": "story content"
 }
 
-Example Expected Output:
+Example Output:
 {
-  "124": 66,
-  "125": 80,
-  "126": 91
+  "124": 85,
+  "125": 72,
+  "126": 90
 }
 
-Now, here is the input:
-${JSON.stringify(storyObj)}
-`;
+Now, evaluate and score the following stories:
+${JSON.stringify(storyObj)}`;
 
       const response = await axios.post(
         this.apiUrl,
@@ -372,7 +373,6 @@ ${JSON.stringify(storyObj)}
       );
 
       let result = response.data.choices[0].message.content;
-      console.log("result", result);
       // Use regex to extract the JSON object from the result
       const jsonRegex = /{[\s\S]*?}/;
       const match = result.match(jsonRegex);
@@ -389,10 +389,11 @@ ${JSON.stringify(storyObj)}
       console.log("error while comparing stories", err);
     }
   }
-
-  async rankStories(stories, title) {
+  async rankStories(stories, title, iteration) {
     let scores = [];
-    for (let i = 0; i < stories.length - 1; i++) {
+    iteration = iteration || Math.ceil(stories.length / 2);
+    console.log("iterations", iteration);
+    for (let i = 0; i < iteration; i++) {
       let groupStories = this.groupStories(stories);
       const groupStoriesScores = await Promise.all(
         groupStories.map(async (group) => {
@@ -402,7 +403,7 @@ ${JSON.stringify(storyObj)}
       );
       scores.push(...groupStoriesScores);
     }
-    console.log("scores", JSON.stringify(scores));
+
     // Object to store aggregated scores
     let aggregatedScores = {};
 
@@ -420,7 +421,6 @@ ${JSON.stringify(storyObj)}
 
     return { aggregatedScores, scores };
   }
-
   shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -445,22 +445,11 @@ ${JSON.stringify(storyObj)}
     return groups;
   }
   getTop20Percent(stories) {
-    // Convert the object into an array of [key, value] pairs
     const entries = Object.entries(stories);
-
-    // Sort the array in descending order based on the values
     entries.sort((a, b) => b[1] - a[1]);
-
-    // Calculate the number of entries that constitute the top 20%
     const top20Count = Math.ceil(entries.length * 0.2);
-
-    // Get the top 20% entries
     const top20Entries = entries.slice(0, top20Count);
-
-    // Convert the top 20% entries back to an object
-    const top20PercentObject = Object.fromEntries(top20Entries);
-
-    return top20PercentObject;
+    return Object.fromEntries(top20Entries);
   }
 }
 

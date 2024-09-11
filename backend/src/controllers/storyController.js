@@ -4,6 +4,10 @@ const Contest = require("../models/contest");
 const Prompt = require("../models/prompt");
 const Story = require("../models/story");
 const gptService = new GptService(process.env.GPT_API_KEY); // Initialize GPT service
+const fs = require("fs");
+const emailServiceClass = require("../services/emailService");
+const path = require("path");
+const nodemailer = require("nodemailer");
 
 const createStory = async (req, res) => {
   try {
@@ -515,23 +519,92 @@ const removeTopStory = async (req, res) => {
 };
 
 const calculateTopWritings = async (req, res) => {
-  const { stories, title } = req.body;
+  const { stories, title, iteration } = req.body;
 
   try {
     if (!stories || !title) {
       throw new Error("Stories and title are required");
     }
     if (stories.length < 2) {
-      throw new Error("Story must be at least 2 ");
+      throw new Error("There must be at least 2 stories");
     }
-    const results = await gptService.rankStories(stories, title);
-    return res.status(200).json(results);
+
+    // Assuming emailServiceClass and gptService are correctly imported and instantiated
+    const emailServiceIns = new emailServiceClass();
+    const response = await gptService.rankStories(stories, title, iteration);
+
+    // Create data directory if it doesn't exist
+    const dataDir = path.join(process.cwd(), "data");
+    if (!fs.existsSync(dataDir)) {
+      fs.mkdirSync(dataDir, { recursive: true });
+    }
+
+    // Create a unique output file for storing the scores
+    const outputFilePath = path.join(dataDir, `test-${Date.now()}.json`);
+
+    // Write the response scores and aggregatedScores to the file
+    fs.writeFileSync(
+      outputFilePath,
+      JSON.stringify(
+        {
+          scores: response.scores,
+          aggregatedScores: response.aggregatedScores,
+        },
+        null,
+        4
+      )
+    );
+
+    console.log("File written to:", outputFilePath);
+
+    // Check if the file exists before attaching it
+    if (!fs.existsSync(outputFilePath)) {
+      throw new Error(`File does not exist: ${outputFilePath}`);
+    }
+
+    // Create email attachment
+    const attachment = [
+      {
+        filename: path.basename(outputFilePath),
+        path: outputFilePath, // Ensure the path is valid
+      },
+    ];
+
+    // Configure the nodemailer transporter
+    let transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true, // true for port 465
+      auth: {
+        user: process.env.APP_EMAIL, // Sender's email address
+        pass: process.env.SMTP_PW, // App-specific password
+      },
+    });
+
+    console.log("Transporter created");
+
+    // Mail options
+    let mailOptions = {
+      from: `"Writeasy" <${process.env.APP_EMAIL}>`,
+      to: process.env.APP_EMAIL, // Sender's email for confirmation
+      subject: "Story Ranking Results",
+      text: "Please find the story ranking results attached.",
+      html: "<h1>Story Ranking Results</h1><p>Find the results attached.</p>",
+      attachments: attachment, // Attach the output file
+    };
+
+    // Send the email
+    let info = await transporter.sendMail(mailOptions);
+    console.log(`Email sent: ${info.messageId}`);
+
+    // Respond with success message
+    // res.status(200).json({ message: "Email sent successfully" });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: error?.message || "Internal server error" });
+    console.error("Error in calculateTopWritings:", error);
+    res.status(500).json({ message: error.message || "Internal server error" });
   }
 };
+
 module.exports = {
   removeTopStory,
   markTopStory,
