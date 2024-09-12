@@ -1,4 +1,7 @@
 const axios = require("axios");
+const fs = require("fs");
+const path = require("path");
+const emailServiceClass = require("../services/emailService");
 
 class GptService {
   constructor(apiKey) {
@@ -280,7 +283,6 @@ class GptService {
         return new Promise((resolve, reject) => {
           let data = "";
           response.data.on("data", (chunk) => {
-            console.log("incomingg data", chunk.toString());
             data += chunk.toString("utf8");
           });
 
@@ -391,7 +393,6 @@ ${JSON.stringify(storyObj)}`;
   }
   async rankStories(stories, title, iteration) {
     let scores = [];
-    iteration = iteration || Math.ceil(stories.length / 2);
     console.log("iterations", iteration);
     for (let i = 0; i < iteration; i++) {
       let groupStories = this.groupStories(stories);
@@ -418,6 +419,8 @@ ${JSON.stringify(storyObj)}`;
     });
 
     aggregatedScores = this.getTop20Percent(aggregatedScores);
+
+    this.sendWritingLogsToAdmin(scores, aggregatedScores, title);
 
     return { aggregatedScores, scores };
   }
@@ -450,6 +453,63 @@ ${JSON.stringify(storyObj)}`;
     const top20Count = Math.ceil(entries.length * 0.2);
     const top20Entries = entries.slice(0, top20Count);
     return Object.fromEntries(top20Entries);
+  }
+
+  async sendWritingLogsToAdmin(scores, aggregatedScores, contestTitle) {
+    try {
+      // Create data directory if it doesn't exist
+      const dataDir = path.join(process.cwd(), "data");
+      if (!fs.existsSync(dataDir)) {
+        fs.mkdirSync(dataDir, { recursive: true });
+      }
+
+      // Create a unique output file for storing the scores
+      const outputFilePath = path.join(dataDir, `test-${Date.now()}.json`);
+
+      // Write the response scores and aggregatedScores to the file
+      fs.writeFileSync(
+        outputFilePath,
+        JSON.stringify(
+          {
+            scores,
+            aggregatedScores,
+          },
+          null,
+          4
+        )
+      );
+
+      console.log("File written to:", outputFilePath);
+
+      // Check if the file exists before attaching it
+      if (!fs.existsSync(outputFilePath)) {
+        throw new Error(`File does not exist: ${outputFilePath}`);
+      }
+
+      // Create email attachment
+      const attachment = [
+        {
+          filename: path.basename(outputFilePath),
+          path: outputFilePath, // Ensure the path is valid
+        },
+      ];
+
+      const emailServiceIns = new emailServiceClass();
+
+      await emailServiceIns.sendEmail({
+        subject: `Top Writings Logs for ${contestTitle}`,
+        attachment,
+        email: [process.env.APP_EMAIL],
+        message: `Top Writings Logs for ${contestTitle}. Please find the attachment.`,
+      });
+      try {
+        fs.unlinkSync(outputFilePath);
+      } catch (error) {
+        console.log("failed to delete json log file ....");
+      }
+    } catch (error) {
+      console.log("error while sending writing logs to admin", error);
+    }
   }
 }
 

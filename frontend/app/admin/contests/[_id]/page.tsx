@@ -24,7 +24,9 @@ const Page = ({ params }: PageProps) => {
     topWritingPublishDate: new Date(),
     description: "",
     contestTheme: "",
+    comparisionCount: 0,
   });
+
   const AxiosIns = axiosInstance("");
   const toast = useCustomToast();
 
@@ -48,6 +50,7 @@ const Page = ({ params }: PageProps) => {
           submissionDeadline: new Date(contest.submissionDeadline),
           topWritingPublishDate: new Date(contest.topWritingPublishDate),
           description: contest.description,
+          comparisionCount: contest.comparisionCount || 0,
           contestTheme: contest.contestTheme,
         });
       } catch (error) {
@@ -72,6 +75,7 @@ const Page = ({ params }: PageProps) => {
         submissionDeadline: contestDetails.submissionDeadline,
         promptPublishDate: contestDetails.promptPublishDate,
         topWritingPublishDate: contestDetails.topWritingPublishDate,
+        comparisionCount: contestDetails.comparisionCount || undefined,
       });
       toast("Contest updated successfully", "success");
       // Handle success state if necessary
@@ -178,6 +182,25 @@ const Page = ({ params }: PageProps) => {
                   }}
                 />
                 <i>Date to publish the top writings of a contest</i>
+              </div>
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="deadline"
+                >
+                  Writing Comparision Count
+                </label>
+                <input
+                  placeholder="Stories/2 by default"
+                  type="number"
+                  value={contestDetails.comparisionCount}
+                  onChange={(e) =>
+                    setContestDetails((prev) => ({
+                      ...prev,
+                      comparisionCount: Number(e.target.value),
+                    }))
+                  }
+                />
               </div>
               <div className="mb-4">
                 <label

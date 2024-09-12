@@ -6,6 +6,7 @@ const contestSchema = new mongoose.Schema(
     contestTheme: { type: String, required: true },
     description: { type: String, required: true },
     submissionDeadline: { type: Date, required: true },
+    comparisionCount: { type: Number, required: false },
     promptPublishDate: {
       type: Date,
       required: true,
@@ -19,7 +20,7 @@ const contestSchema = new mongoose.Schema(
     startedScoringStories: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   {
     timestamps: true,

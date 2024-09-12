@@ -46,10 +46,11 @@ export type TContest = {
   description: string;
   isActive: boolean;
   prompts: TPrompt[];
+  comparisionCount: number | undefined;
   promptPublishDate: string; // Assuming ISO 8601 format
   submissionDeadline: string; // Assuming ISO 8601 format
   topWritingPublishDate: string; // Assuming ISO 8601 format
-  topWritingPublished:boolean
+  topWritingPublished: boolean;
   __v: number;
 };
 

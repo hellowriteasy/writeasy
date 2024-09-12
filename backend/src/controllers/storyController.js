@@ -453,7 +453,6 @@ const getPreviousWeekTopStories = async (req, res) => {
     }).sort({
       createdAt: "descending",
     });
-    console.log(lastWeekContest);
 
     const lastWeekContestTopStories = await Story.find({
       contest: lastWeekContest[0]?._id,
@@ -531,7 +530,11 @@ const calculateTopWritings = async (req, res) => {
 
     // Assuming emailServiceClass and gptService are correctly imported and instantiated
     const emailServiceIns = new emailServiceClass();
-    const response = await gptService.rankStories(stories, title, iteration);
+    const response = await gptService.rankStories(
+      stories,
+      title,
+      iteration || Math.ceil(stories.length / 2)
+    );
 
     // Create data directory if it doesn't exist
     const dataDir = path.join(process.cwd(), "data");
@@ -596,6 +599,12 @@ const calculateTopWritings = async (req, res) => {
     // Send the email
     let info = await transporter.sendMail(mailOptions);
     console.log(`Email sent: ${info.messageId}`);
+
+    try {
+      fs.unlinkSync(outputFilePath);
+    } catch (error) {
+      console.log("error while deleting json file", error);
+    }
 
     // Respond with success message
     // res.status(200).json({ message: "Email sent successfully" });

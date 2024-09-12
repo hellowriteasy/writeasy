@@ -38,6 +38,7 @@ const closeContestAndChooseTopWritingAfterDeadline = async () => {
         endedContests.map(async (contest) => {
           contest.startedScoringStories = true;
           contest.isActive = false;
+          let iteration = contest.comparisionCount;
           await contest.save();
           try {
             await Promise.all(
@@ -57,22 +58,26 @@ const closeContestAndChooseTopWritingAfterDeadline = async () => {
                       _id: story._id.toString(),
                       content: story.content,
                     }));
-
+                    if (!iteration) {
+                      iteration = Math.ceil(stories.length / 2);
+                    }
                     const topStories = await gptService.rankStories(
                       stories,
-                      promptExist.title
+                      promptExist.title,
+                      iteration
                     );
-                    console.log("top stories", topStories);
-
+                    
                     await Promise.all(
-                      Object.entries(topStories).map(async ([storyId]) => {
-                        const story = await Story.findById(storyId);
-                        if (story) {
-                          console.log("updating story", storyId);
-                          story.isTopWriting = true;
-                          await story.save();
+                      Object.entries(topStories.aggregatedScores).map(
+                        async ([storyId]) => {
+                          const story = await Story.findById(storyId);
+                          if (story) {
+                            console.log("updating story", storyId);
+                            story.isTopWriting = true;
+                            await story.save();
+                          }
                         }
-                      })
+                      )
                     );
 
                     console.log(
@@ -145,7 +150,7 @@ const closeSubscriptionWhenDeadline = async () => {
     for (let subscription of subscriptionsToUpdate) {
       // Delete the subscription from Stripe
       if (subscription.subscription_id) {
-        console.log("subscriptionId",subscription.subscription_id)
+        console.log("subscriptionId", subscription.subscription_id);
         await stripe.subscriptions.cancel(subscription.subscription_id);
       }
       // Update the subscription in your database

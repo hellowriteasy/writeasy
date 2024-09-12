@@ -12,7 +12,6 @@ class EmailService {
         user: process.env.APP_EMAIL,
       },
     });
-    console.log(subject, message, email, attachment);
     // Create personalized HTML content for each recipient
     let mailOptions = {
       from: '"Writeasy" <' + process.env.APP_EMAIL + ">",
@@ -32,7 +31,6 @@ class EmailService {
     }
 
     try {
-      console.log("send email 4",attachment);
 
       let info = await transporter.sendMail(mailOptions);
       console.log(`Email sent : ${info.messageId}`);
