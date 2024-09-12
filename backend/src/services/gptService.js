@@ -326,7 +326,7 @@ class GptService {
     });
 
     try {
-      const systemPrompt = ` You are tasked with evaluating stories submitted for the contest titled "${title}". Score each story out of 100 based on key writing criteria. Your decisions must be thorough, accurate, concise, and consistent across all stories. Provide the final output strictly in JSON format.`;
+      const systemPrompt = ` You are tasked with evaluating stories submitted for the contest titled "${title}". Score each story out of 100 based on key writing criteria. Your decisions must be thorough, accurate, concise, and consistent across all stories. Provide the final output strictly in JSON format. \n Note: Dont score good if a story has less than less 250 words/content. `;
 
       const prompt = `You have been given a set of stories, each identified by a unique ID and associated with its content. Your goal is to evaluate these stories and provide a score for each based on the following criteria and also comparing each story with the other stories in the set.:
 1. **Writing Quality**: How engaging, creative, and clear is the writing? Does it capture the reader’s attention and maintain interest throughout?
@@ -334,7 +334,7 @@ class GptService {
 3. **Story Structure**: How well-organized is the story? Does it have a coherent flow with a clear beginning, middle, and end?
 4. **Conciseness**: Is the story concise and to the point without unnecessary details? Does it use appropriate summarization techniques where relevant?
 5. **Overall Impact**: How effective is the story in delivering its intended message or theme? Does it leave a lasting impression on the reader? \n
-Note: Story should be scored comparing to each other in a set. Dont give a good score if the story is less than 250 words.
+Note: Story should be scored comparing to each other in a set. \n Note: Dont score good if a story has less than less 250 words/content.
 Return the scores as a JSON object with the story IDs as keys and the respective scores (out of 100) as values.
 
 Example Input:
