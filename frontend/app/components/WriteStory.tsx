@@ -149,9 +149,9 @@ export function SimpleEditor({
     },
 
     onUpdate: ({ editor }) => {
-      const textContent = editor.getText();
-      const words = textContent.split(/\s+/).filter(Boolean).length;
-      setWordLimitExceeded(words > 1000);
+      // const textContent = editor.getText();
+      // const words = textContent.split(/\s+/).filter(Boolean).length;
+      // setWordLimitExceeded(words > 1000);
     },
   }) as Editor;
 

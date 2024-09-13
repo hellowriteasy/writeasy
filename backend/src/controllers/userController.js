@@ -61,6 +61,25 @@ const UserController = {
       res.status(500).json({ msg: error.message });
     }
   },
+  async deleteUserById(req, res) {
+    const { id: user_id } = req.params;
+    try {
+      if (!user_id) {
+        throw new Error("Please provide user id");
+      }
+      await User.findByIdAndDelete(user_id);
+      await Subscription.deleteOne({
+        userId: user_id,
+      });
+      return res.status(200).json({ message: "User deleted successfully" });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        message: error.message || "Internal server error",
+        success: false,
+      });
+    }
+  },
   async getUserById(req, res) {
     const { id: user_id } = req.params;
     try {
@@ -224,9 +243,14 @@ const UserController = {
           updatedAt: "desc",
         });
 
+      users = users.filter((user) => user?.userId);
+
       users = users.map((user) => {
+        if (!user?.userId) {
+          console.log(user);
+        }
         return {
-          ...user.userId._doc,
+          ...user.userId?._doc,
           isSubcriptionActive: !!user.isActive,
           expiresAt: user.expiresAt,
           payment_type: user.payment_type,
@@ -234,6 +258,7 @@ const UserController = {
       });
       res.status(200).json({ data: users, success: true });
     } catch (error) {
+      console.log(error);
       res
         .status(500)
         .json({ message: error?.message || "Internal server error" });

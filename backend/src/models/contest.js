@@ -4,9 +4,10 @@ const contestSchema = new mongoose.Schema(
   {
     prompts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Prompt" }],
     contestTheme: { type: String, required: true },
-    description: { type: String, required: true },
+    description: { type: String, required: false },
     submissionDeadline: { type: Date, required: true },
     comparisionCount: { type: Number, required: false },
+    topWritingPercent: { type: Number, default: 50, required: false },
     promptPublishDate: {
       type: Date,
       required: true,

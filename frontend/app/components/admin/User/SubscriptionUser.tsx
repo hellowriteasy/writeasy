@@ -49,6 +49,15 @@ const SubscriptionUser = ({
     setEndDate(e.target.value);
   };
 
+  const handleDeleteUser = async (userId: string) => {
+    try {
+      await AxiosIns.delete(`/auth/users/${userId}`);
+      await onUpdate();
+      toast("User deleted successfully", "success");
+    } catch (error) {
+      toast("Failed to delete user", "error");
+    }
+  };
   return (
     <div
       key={user._id}
@@ -95,6 +104,12 @@ const SubscriptionUser = ({
           onClick={() => handleUpdateSubscription(user._id)}
         >
           Update Subscription
+        </button>
+        <button
+          className="ml-2 px-4 py-2 bg-red-500 text-white rounded-md"
+          onClick={() => handleDeleteUser(user._id)}
+        >
+          Delete User
         </button>
       </div>
     </div>

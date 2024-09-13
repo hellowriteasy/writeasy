@@ -25,6 +25,7 @@ const Page = ({ params }: PageProps) => {
     description: "",
     contestTheme: "",
     comparisionCount: 0,
+    topWritingPercent: 50,
   });
 
   const AxiosIns = axiosInstance("");
@@ -52,6 +53,7 @@ const Page = ({ params }: PageProps) => {
           description: contest.description,
           comparisionCount: contest.comparisionCount || 0,
           contestTheme: contest.contestTheme,
+          topWritingPercent: contest.topWritingPercent || 50,
         });
       } catch (error) {
         console.error("Error fetching contest:", error);
@@ -69,13 +71,14 @@ const Page = ({ params }: PageProps) => {
 
   const handleSubmitContest = async () => {
     try {
-      const response = await AxiosIns.put(`/contests/${_id}`, {
+      await AxiosIns.put(`/contests/${_id}`, {
         prompts: promptCards.map((prompt) => prompt._id),
         contestTheme: contestDetails.contestTheme,
         submissionDeadline: contestDetails.submissionDeadline,
         promptPublishDate: contestDetails.promptPublishDate,
         topWritingPublishDate: contestDetails.topWritingPublishDate,
         comparisionCount: contestDetails.comparisionCount || undefined,
+        topWritingPercent: contestDetails.topWritingPercent,
       });
       toast("Contest updated successfully", "success");
       // Handle success state if necessary
@@ -198,6 +201,25 @@ const Page = ({ params }: PageProps) => {
                     setContestDetails((prev) => ({
                       ...prev,
                       comparisionCount: Number(e.target.value),
+                    }))
+                  }
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="deadline"
+                >
+                  Top writing stories percent
+                </label>
+                <input
+                  placeholder="Stories/2 by default"
+                  type="number"
+                  value={contestDetails.topWritingPercent}
+                  onChange={(e) =>
+                    setContestDetails((prev) => ({
+                      ...prev,
+                      topWritingPercent: Number(e.target.value),
                     }))
                   }
                 />

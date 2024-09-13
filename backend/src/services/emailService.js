@@ -1,8 +1,13 @@
 const nodemailer = require("nodemailer");
 
 class EmailService {
-  async sendEmail({ subject, message, email, attachment }) {
-    console.log("send email 2");
+  async sendEmail({
+    subject,
+    message,
+    email,
+    attachment,
+    shouldSentToAllUsers,
+  }) {
     let transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,
@@ -15,8 +20,8 @@ class EmailService {
     // Create personalized HTML content for each recipient
     let mailOptions = {
       from: '"Writeasy" <' + process.env.APP_EMAIL + ">",
-      to: process.env.APP_EMAIL,
-      bcc: email,
+      to: shouldSentToAllUsers ? process.env.APP_EMAIL : email,
+      ...(shouldSentToAllUsers && { bcc: email }),
       subject: subject,
       text: subject,
       html: this.EmailTemplate({
@@ -24,14 +29,13 @@ class EmailService {
         message: message,
       }),
     };
-    console.log("send email 3");
+    console.log("sending email to ", email);
 
     if (attachment) {
       mailOptions.attachments = attachment;
     }
 
     try {
-
       let info = await transporter.sendMail(mailOptions);
       console.log(`Email sent : ${info.messageId}`);
     } catch (error) {

@@ -391,7 +391,7 @@ ${JSON.stringify(storyObj)}`;
       console.log("error while comparing stories", err);
     }
   }
-  async rankStories(stories, title, iteration) {
+  async rankStories(stories, title, iteration, topWritingPercentage) {
     let scores = [];
     console.log("iterations", iteration);
     for (let i = 0; i < iteration; i++) {
@@ -418,9 +418,12 @@ ${JSON.stringify(storyObj)}`;
       });
     });
 
-    aggregatedScores = this.getTop20Percent(aggregatedScores);
+    aggregatedScores = this.getTopPercentage(
+      aggregatedScores,
+      topWritingPercentage
+    );
 
-    this.sendWritingLogsToAdmin(scores, aggregatedScores, title);
+    this.sendWritingLogsToAdmin(scores, aggregatedScores, title, stories);
 
     return { aggregatedScores, scores };
   }
@@ -447,18 +450,32 @@ ${JSON.stringify(storyObj)}`;
 
     return groups;
   }
-  getTop20Percent(stories) {
+  getTopPercentage(stories, percentage) {
+    // Validate the percentage input
+    if (percentage < 0 || percentage > 100 || !percentage) {
+      percentage = 50;
+    }
+
     const entries = Object.entries(stories);
     entries.sort((a, b) => b[1] - a[1]);
-    const top20Count = Math.ceil(entries.length * 0.2);
-    const top20Entries = entries.slice(0, top20Count);
-    return Object.fromEntries(top20Entries);
+
+    // Calculate the number of top entries to return based on the percentage
+    const topCount = Math.ceil(entries.length * (percentage / 100));
+    const topEntries = entries.slice(0, topCount);
+
+    return Object.fromEntries(topEntries);
   }
 
-  async sendWritingLogsToAdmin(scores, aggregatedScores, contestTitle) {
+  async sendWritingLogsToAdmin(
+    scores,
+    aggregatedScores,
+    contestTitle,
+    stories
+  ) {
     try {
       // Create data directory if it doesn't exist
       const dataDir = path.join(process.cwd(), "data");
+
       if (!fs.existsSync(dataDir)) {
         fs.mkdirSync(dataDir, { recursive: true });
       }
@@ -466,13 +483,32 @@ ${JSON.stringify(storyObj)}`;
       // Create a unique output file for storing the scores
       const outputFilePath = path.join(dataDir, `test-${Date.now()}.json`);
 
+      scores = scores.map((score) => {
+        const scoreObj = Object.entries(score).map(([key, value]) => {
+          const userId = stories.find((s) => s._id.toString() === key)?.email;
+          return {
+            [userId]: value,
+          };
+        });
+        return scoreObj;
+      });
+
+      aggregatedScores = Object.entries(aggregatedScores).map(
+        ([key, value]) => {
+          const userId = stories.find((s) => s._id.toString() === key)?.email;
+          return {
+            [userId]: value,
+          };
+        }
+      );
+
       // Write the response scores and aggregatedScores to the file
       fs.writeFileSync(
         outputFilePath,
         JSON.stringify(
           {
             scores,
-            aggregatedScores,
+            topWritings: aggregatedScores,
           },
           null,
           4

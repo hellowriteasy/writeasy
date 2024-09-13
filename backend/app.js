@@ -34,7 +34,7 @@ app.use(
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("dev"));
-cron.schedule("*/3 * * * * *", () => scheduleJob());
+cron.schedule("*/10 * * * * *", () => scheduleJob());
 
 // Use routes
 app.use("/api/auth", authRoutes);

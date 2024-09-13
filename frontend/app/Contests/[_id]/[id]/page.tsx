@@ -12,6 +12,8 @@ import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { useParams, useSearchParams } from "next/navigation";
 import Storycard from "@/app/components/Storycard";
+import mainstar from "@/public/others/main_star.svg";
+
 interface Prompt {
   _id: string;
   promptText: string;
@@ -141,7 +143,7 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
             <Image src={Cloud2} alt="cloud" />
           </div>
           <div className="gap-8 relative w-full flex flex-col">
-            {contestDetails?.topWritingPublished &&
+            {contestDetails?.topWritingPublished ? (
               currentPage === 1 &&
               topStories.map((story) => {
                 return (
@@ -162,7 +164,14 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
                     />
                   </div>
                 );
-              })}
+              })
+            ) : (
+              <div className="flex flex-col items-center mx-auto text-2xl font-bold">
+                <Image src={mainstar} alt="cloud" width={60} height={60} />{" "}
+                <p>We are still working on top writings , please wait ...</p>
+              </div>
+            )}
+
             {stories.map((story) => {
               let starType: "main" | "none" = "none";
               if (story) {

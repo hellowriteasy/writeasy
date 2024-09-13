@@ -51,12 +51,15 @@ const closeContestAndChooseTopWritingAfterDeadline = async () => {
                     return;
                   }
 
-                  let stories = await Story.find({ prompt: prompt_id });
+                  let stories = await Story.find({
+                    prompt: prompt_id,
+                  }).populate("user");
 
                   if (stories.length > 0) {
                     stories = stories.map((story) => ({
                       _id: story._id.toString(),
                       content: story.content,
+                      email: story.user?.email || "",
                     }));
                     if (!iteration) {
                       iteration = Math.ceil(stories.length / 2);
@@ -64,9 +67,10 @@ const closeContestAndChooseTopWritingAfterDeadline = async () => {
                     const topStories = await gptService.rankStories(
                       stories,
                       promptExist.title,
-                      iteration
+                      iteration,
+                      contest.topWritingPercent || 50
                     );
-                    
+
                     await Promise.all(
                       Object.entries(topStories.aggregatedScores).map(
                         async ([storyId]) => {

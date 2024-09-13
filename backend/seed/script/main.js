@@ -269,51 +269,64 @@ const Contest = require("../../src/models/contest");
 const path = require("path");
 const fs = require("fs");
 const csv = require("csv-parser");
-const emailServiceClass = require("../../src/services/emailService")
-  // const filePath = path.join(process.cwd(), "/data/writings.json");
-  // const data = fs.readFileSync(filePath, "utf-8");
-  // let writings = JSON.parse(data);
-  // await connectDB();
-  // writings = writings.map((writing) => ({
-  //   _id: `${writing.id}-${cuid()}`,
-  //   content: writing.content,
-  // }));
-  // console.time("Execution Time");
+const emailServiceClass = require("../../src/services/emailService");
+// const filePath = path.join(process.cwd(), "/data/writings.json");
+// const data = fs.readFileSync(filePath, "utf-8");
+// let writings = JSON.parse(data);
+// await connectDB();
+// writings = writings.map((writing) => ({
+//   _id: `${writing.id}-${cuid()}`,
+//   content: writing.content,
+// }));
+// console.time("Execution Time");
 
-  // const res = await openai.rankStories(writings, "Story");
-  // console.timeEnd("Execution Time");
+// const res = await openai.rankStories(writings, "Story");
+// console.timeEnd("Execution Time");
 
-  // fs.writeFileSync(
-  //   path.join(process.cwd(), `/data/test-${Date.now()}.json`),
-  //   JSON.stringify({ ...res.scores, ...res.aggregatedScores })
-  // );
+// fs.writeFileSync(
+//   path.join(process.cwd(), `/data/test-${Date.now()}.json`),
+//   JSON.stringify({ ...res.scores, ...res.aggregatedScores })
+// );
 async function main() {
+  // const stories = [
+  //   {
+  //     _id: "121212",
+  //     email: "santosh@gmail.com",
+  //     content:
+  //       "The concept of God varies widely across different cultures and religions, but many traditions agree on the idea of a supreme being who embodies the ultimate source of existence, morality, and purpose. In monotheistic religions like Christianity, Islam, and Judaism, God is often described as an all-powerful, all-knowing, and benevolent entity who created and governs the universe. This deity is not only the origin of all life but also serves as the moral compass for humanity, providing ethical guidelines and a sense of divine justice. For believers, God's presence is both a source of comfort and a call to live in accordance with higher principles.",
+  //   },
+  //   {
+  //     _id: "141414",
+  //     email: "ramit@gmail.com",
+  //     content:
+  //       "In contrast, polytheistic religions such as Hinduism and ancient Greek mythology present a pantheon of gods, each with distinct personalities, roles, and domains. These deities often interact with the world in complex ways, influencing everything from nature to human affairs. While these gods may have specific functions and limitations, they are still revered as powerful and essential forces that shape the universe and human experience. This multiplicity of gods reflects a more intricate and nuanced view of divine influence, where the sacred is experienced through a diverse range of divine figures and stories.",
+  //   },
+  //   {
+  //     _id: "19191919",
+  //     email: "rahul@gmail.com",
+  //     content: "Philosophical and spiritual perspectives offer yet another dimension to the understanding of God. In some Eastern philosophies and mystic traditions, God or the divine may be conceptualized more abstractly as an impersonal force or universal consciousness rather than a personal being. In these views, God is often seen as the underlying reality of all existence, a boundless and formless presence that transcends individual attributes and human concepts. This perspective emphasizes a direct, experiential relationship with the divine, where the focus is on inner enlightenment and unity with the greater whole of existence.",
+  //   },
+  // ];
 
-
-
-
-  const outputFilePath = path.join(
-    process.cwd(),
-    `/data/test-1726073284166.json`
-  );
-
-
-  const attachment = [
-    {
-      filename: path.basename(outputFilePath),
-      path: outputFilePath,
-    },
-  ];
-
-  const emailServiceIns = new emailServiceClass();
-  console.log("sending email");
-  // Send email with attachment
-  await emailServiceIns.sendEmail({
-    subject: "Top Writings",
-    attachment,
-    email: ["exxxternal69@gmail.com"],
-    message: "how are you",
-  });
+  // const res = openai.rankStories(stories, "testing logs with email", 5);
+  // console.log(res);
+  try {
+    await connectDB();
+    const subsId = [
+      "6698ad4c53944187fda906db",
+      "6698ad4c53944187fda906db",
+      "6698ad4c53944187fda906db",
+      "6698ad4c53944187fda906db",
+    ];
+    await Promise.all(
+      subsId.map(async (sub_id) => {
+        Subscription.findByIdAndDelete(sub_id);
+      })
+    );
+    console.log("completed");
+  } catch (error) {
+    console.log("error", error);
+  }
 }
 
 main();

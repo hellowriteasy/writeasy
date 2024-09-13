@@ -21,8 +21,6 @@ const TopWriting: React.FC<TopWritingProps> = ({
 }) => {
   const [showFullContent, setShowFullContent] = useState(false);
 
-  console.log("show top", showFullContent);
-
   const getShortContent = (text: string, wordLimit: number) => {
     const words = text.split(" ");
     return words.length > wordLimit

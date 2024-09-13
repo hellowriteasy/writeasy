@@ -15,6 +15,7 @@ const Join = () => {
   const axiosIns = axiosInstance(token || "");
   const [pageDetails, setPageDetails] = useState<TPageDetails | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const { email } = useAuthStore();
   useEffect(() => {
     const fetchContests = async () => {
       try {
@@ -23,8 +24,7 @@ const Join = () => {
         );
         setContests(data.data);
         setPageDetails(data?.pageData);
-      } catch (err: any) {
-      }
+      } catch (err: any) {}
     };
     fetchContests();
   }, [currentPage]);
@@ -33,7 +33,13 @@ const Join = () => {
     setCurrentPage(event.selected + 1);
   };
 
-
+  const handleJoinClick = (contestId: string) => {
+    if (!email) {
+      router.push(`/login`);
+      return;
+    }
+    router.push(`/Contests/${contestId}`);
+  };
   return (
     <div className="flex">
       {contests.length > 0 ? (
@@ -44,11 +50,10 @@ const Join = () => {
               className="flex flex-col flex-wrap font-comic rounded-3xl w-full max-w-4xl h-auto gap-4 bg-white border-2 border-gray-300 p-8"
             >
               <div className="flex justify-center vsm:flex-col text-xl sm:text-sm items-center gap-x-2 gap-y-2 text-center">
-                
-                 <div className="text-yellow-400 text-xl pr-3 font-bold">LIVE</div>
-                  
+                <div className="text-yellow-400 text-xl pr-3 font-bold">
+                  LIVE
+                </div>
                 Until {moment(contest.submissionDeadline).format("llll")}
-                
               </div>
               <div className="flex flex-col items-center gap-y-4">
                 <div className="text-xl sm:text-sm md:text-3xl lg:text-4xl text-center">
@@ -57,7 +62,7 @@ const Join = () => {
               </div>
               <div className="flex justify-center mt-4 sm:mt-6">
                 <button
-                  onClick={() => router.push(`/Contests/${contest._id}`)}
+                  onClick={() => handleJoinClick(contest._id)}
                   className="bg-black font-comic rounded-full text-white h-10 sm:h-10 sm:text-sm w-32 sm:w-28 text-center text-lg  md:text-3xl"
                 >
                   Join

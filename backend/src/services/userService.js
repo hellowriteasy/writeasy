@@ -17,6 +17,7 @@ class UserService {
       email: emails,
       subject,
       message: content,
+      shouldSentToAllUsers: true,
     });
   }
 }

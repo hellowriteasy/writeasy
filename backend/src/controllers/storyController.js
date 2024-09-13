@@ -7,6 +7,7 @@ const gptService = new GptService(process.env.GPT_API_KEY); // Initialize GPT se
 const fs = require("fs");
 const emailServiceClass = require("../services/emailService");
 const path = require("path");
+const moment = require("moment");
 const nodemailer = require("nodemailer");
 
 const createStory = async (req, res) => {
@@ -449,20 +450,31 @@ const getPreviousWeekTopStories = async (req, res) => {
   try {
     const lastWeekContest = await Contest.find({
       isActive: false,
-      topWritingPublished: true,
+      // topWritingPublished: true,
     }).sort({
       createdAt: "descending",
     });
 
-    const lastWeekContestTopStories = await Story.find({
-      contest: lastWeekContest[0]?._id,
-      isTopWriting: true,
-    }).populate({
-      path: "user",
-      select: "-password",
-    });
+    const latestContest = lastWeekContest[0];
 
-    res.status(200).json({ data: lastWeekContestTopStories || [] });
+    if (latestContest.topWritingPublished) {
+      const lastWeekContestTopStories = await Story.find({
+        contest: latestContest._id,
+        isTopWriting: true,
+      }).populate({
+        path: "user",
+        select: "-password",
+      });
+
+      res.status(200).json({ data: lastWeekContestTopStories || [] });
+    } else {
+      res.status(200).json({
+        hasTopWritingPublished: false,
+        message: `Top writing will be published on ${moment(
+          latestContest.topWritingPublishDate
+        ).format("lll")}`,
+      });
+    }
   } catch (error) {
     console.error(error);
     return res.status(500).json({

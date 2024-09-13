@@ -46,6 +46,7 @@ export type TContest = {
   description: string;
   isActive: boolean;
   prompts: TPrompt[];
+  topWritingPercent: number;
   comparisionCount: number | undefined;
   promptPublishDate: string; // Assuming ISO 8601 format
   submissionDeadline: string; // Assuming ISO 8601 format
