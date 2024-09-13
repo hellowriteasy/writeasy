@@ -20,11 +20,17 @@ const TopWriting: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const AxiosIns = axiosInstance("");
+  const [upcomingWritingsData, setUpcomingWritingsData] = useState<string>("");
   useEffect(() => {
     AxiosIns.get("/stories/contest/previous-week-top-stories")
       .then((response) => {
-        setTopStories(response.data.data);
         setIsLoading(false);
+
+        if (!response.data?.hasTopWritingPublished) {
+          setUpcomingWritingsData(response.data.message);
+          return;
+        }
+        setTopStories(response.data.data);
       })
       .catch((error) => {
         setError("There was an error fetching the top stories.");
@@ -43,10 +49,13 @@ const TopWriting: React.FC = () => {
         />
       </div>
 
-      <div className="text-center w-full md:w-11/12 pt-4 text-xl md:text-3xl font-bold">
+      <div className="text-center w-full md:w-11/12 pt-4 text-xl md:text-3xl">
         <h2 className="font-comic text-[2vw] py-4 font-bold leading-normal">
-          Top writings of previous week
+          Top writings
         </h2>
+        {upcomingWritingsData ? (
+          <p className="font-comic text-sm">{upcomingWritingsData}</p>
+        ) : null}
         {isLoading ? (
           <p className="font-comic">Loading...</p>
         ) : error ? (

@@ -255,10 +255,13 @@ const getStoriesByContentAndPrompt = async (req, res) => {
   const limit = +perPage || 5;
   const sortKey = req.query.sortKey || "createdAt";
   try {
+    const contestExist = await Contest.findById(contest_id);
+
+    const hasTopWritingPublished = contestExist?.topWritingPublished;
     const total = await Story.countDocuments({
       ...(contest_id ? { contest: contest_id } : null),
       ...(prompt_id ? { prompt: prompt_id } : null),
-      ...(exclude_top_writings
+      ...(exclude_top_writings && hasTopWritingPublished
         ? {
             $or: [
               { isTopWriting: false },
@@ -271,7 +274,7 @@ const getStoriesByContentAndPrompt = async (req, res) => {
       {
         ...(contest_id ? { contest: contest_id } : null),
         ...(prompt_id ? { prompt: prompt_id } : null),
-        ...(exclude_top_writings
+        ...(exclude_top_writings && hasTopWritingPublished
           ? {
               $or: [
                 { isTopWriting: false },
@@ -470,7 +473,7 @@ const getPreviousWeekTopStories = async (req, res) => {
     } else {
       res.status(200).json({
         hasTopWritingPublished: false,
-        message: `Top writing will be published on ${moment(
+        message: `Top writings will be published on ${moment(
           latestContest.topWritingPublishDate
         ).format("lll")}`,
       });

@@ -83,7 +83,7 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
     const fetchStories = async () => {
       try {
         const response = await AxiosIns.get(
-          `/stories/contest/prompt?prompt_id=${id}&sortKey=score&page=${currentPage}&exclude_top_writings=true`
+          `/stories/contest/prompt?prompt_id=${id}&contest_id=${_id}&sortKey=score&page=${currentPage}&exclude_top_writings=true`
         );
         setStories(response.data?.data);
         setPageDetails(response.data?.pageData);
@@ -167,7 +167,6 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
               })
             ) : (
               <div className="flex flex-col items-center mx-auto text-2xl font-bold">
-                <Image src={mainstar} alt="cloud" width={60} height={60} />{" "}
                 <p>We are still working on top writings , please wait ...</p>
               </div>
             )}

@@ -18,6 +18,7 @@ const Page = ({ params }: PageProps) => {
   const { _id } = params;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [promptCards, setPromptCards] = useState<TPromptAdd[]>([]);
+  const [contest, setContest] = useState<TContest | null>(null);
   const [contestDetails, setContestDetails] = useState({
     promptPublishDate: new Date(),
     submissionDeadline: new Date(),
@@ -36,7 +37,7 @@ const Page = ({ params }: PageProps) => {
       try {
         const response = await AxiosIns.get(`/contests/${_id}`);
         const contest: TContest = response.data;
-
+        setContest(contest);
         setPromptCards(
           contest.prompts.map((prompt) => ({
             _id: prompt._id,
@@ -131,7 +132,9 @@ const Page = ({ params }: PageProps) => {
                   showTimeInput
                   selected={contestDetails.promptPublishDate}
                   disabled={
-                    new Date(contestDetails.promptPublishDate) < new Date()
+                    contest
+                      ? new Date(contest?.promptPublishDate) < new Date()
+                      : false
                   }
                   onChange={(date) => {
                     if (!date) return;
@@ -153,7 +156,9 @@ const Page = ({ params }: PageProps) => {
                   showTimeInput
                   selected={contestDetails.submissionDeadline}
                   disabled={
-                    new Date(contestDetails.submissionDeadline) < new Date()
+                    contest
+                      ? new Date(contest?.submissionDeadline) < new Date()
+                      : false
                   }
                   onChange={(date) => {
                     if (!date) return;
@@ -177,7 +182,9 @@ const Page = ({ params }: PageProps) => {
                   showTimeInput
                   selected={contestDetails.topWritingPublishDate}
                   disabled={
-                    new Date(contestDetails.promptPublishDate) < new Date()
+                    contest
+                      ? new Date(contest?.topWritingPublishDate) < new Date()
+                      : false
                   }
                   onChange={(date) => {
                     if (!date) return;
