@@ -3,9 +3,11 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import CornorTechLogo from "@/public/logo/cornor-tech-text.png";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./styles/globals.css";
+import Image from "next/image";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -41,13 +43,43 @@ export default function RootLayout({
           href="https://fonts.cdnfonts.com/css/sans-comic-sans"
           rel="stylesheet"
         ></link>
-        <link href="https://fonts.googleapis.com/css2?family=Unkempt:wght@400;700&display=swap" rel="stylesheet"></link>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Unkempt:wght@400;700&display=swap"
+          rel="stylesheet"
+        ></link>
       </head>
       <body className="two-line-bg font-comic">
         <Navbar titles={navTitles}></Navbar>
         <ToastContainer />
         {children}
         <Footer></Footer>
+        <div className="container flex flex-col  justify-center mx-auto items-center gap-4 border-t border-gray-300 ">
+          <p className=" text font-school ">
+            &copy; 2024 Writeasy. All rights reserved.
+          </p>
+          <div className="flex items-center ">
+            <div className=" text  flex gap-x-1 items-center font-school">
+              Created by{" "}
+              <a
+                target="_blank"
+                href="https://www.linkedin.com/company/cornortech"
+              >
+                <b>Cornor Tech</b>{" "}
+              </a>
+            </div>
+          </div>
+          <a
+            target="_blank"
+            href="https://www.linkedin.com/company/cornortech"
+            className="-mt-5"
+          >
+            <Image
+              src={CornorTechLogo}
+              alt="Conortech Logo"
+              className="w-44 h-auto"
+            ></Image>
+          </a>
+        </div>
       </body>
     </html>
   );
