@@ -6,7 +6,9 @@ import Footer from "./components/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./styles/globals.css";
+
 const inter = Inter({ subsets: ["latin"] });
+
 export const metadata: Metadata = {
   title: "Writeasy",
   description: "Writeasy helps kids write better",
@@ -39,6 +41,7 @@ export default function RootLayout({
           href="https://fonts.cdnfonts.com/css/sans-comic-sans"
           rel="stylesheet"
         ></link>
+        <link href="https://fonts.googleapis.com/css2?family=Unkempt:wght@400;700&display=swap" rel="stylesheet"></link>
       </head>
       <body className="two-line-bg font-comic">
         <Navbar titles={navTitles}></Navbar>

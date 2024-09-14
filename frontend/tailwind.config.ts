@@ -11,7 +11,7 @@ const config: Config = {
       poppins: ["Poppins", "sans-serif"],
       crayon: ['"DK Crayon Crumble"', "cursive"],
       comic: ["Comic Neue", "cursive"],
-      school: ["Schoolbell", "cursive"],
+      school: ["Unkempt", "cursive"],
     },
     extend: {
       screens: {
@@ -30,8 +30,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/line-clamp'),
-  ],
+  plugins: [require("@tailwindcss/line-clamp")],
 };
 export default config;

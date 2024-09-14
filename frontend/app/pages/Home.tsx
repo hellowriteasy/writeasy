@@ -36,9 +36,8 @@ const Hero = () => {
             playsInline
             className="w-[100%] h-[100%] sm:object-cover sm:hidden"
           >
-            <source src="/videos/writeasy_demo.mov"  type="video/mp4" />
-
-          </video> 
+            <source src="/videos/writeasy_demo.mov" type="video/mp4" />
+          </video>
           <video
             autoPlay
             muted
@@ -46,9 +45,8 @@ const Hero = () => {
             playsInline
             className="w-[100%] h-[100%] sm:object-cover sm:block hidden"
           >
-            <source src="/videos/writeasy_mobile.mp4"  type="video/mp4" />
-
-          </video> 
+            <source src="/videos/writeasy_mobile.mp4" type="video/mp4" />
+          </video>
 
           <div className="absolute vsm-hide w-[6vw] -top-[5%] -right-[8%]">
             <Image className="" src={heroLine} alt="heroline" />

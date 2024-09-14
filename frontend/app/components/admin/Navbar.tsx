@@ -2,8 +2,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation"; // Import 'usePathname' from 'next/navigation'
 import { useRouter } from "next/navigation";
-import { IoMdArrowRoundBack } from "react-icons/io";
 import Logo from "@/public/Landingpage-img/logo.svg";
+import PenLogo from "@/public/logo/pen-logo.png";
 import Image from "next/image";
 import useAdminSidebarStore from "@/app/store/useSidebarStore";
 import { FaTimes } from "react-icons/fa";
@@ -15,7 +15,8 @@ const Navbar = () => {
   return (
     <nav className="flex  space-x-4 justify-between items-center p-4  bg-custom-yellow text-black font-poppins text-3xl shadow-lg">
       <Link href={"/"}>
-        <Image src={Logo} layout="responsive" alt="logo"></Image>
+        <Image src={Logo} className="sm:hidden w-64" layout="responsive" alt="logo" width={200} height={100}></Image>
+        <Image className="sm:block hidden w-20 " src={PenLogo} layout="responsive" alt="logo" width={30} ></Image>
       </Link>
       {/* <div className="text-2xl font-bold ">
         <Link

@@ -101,7 +101,7 @@ class GptService {
     };
 
     try {
-      const totalTokens = Math.min(Math.ceil(wordCount * 1.5), 4096); // Ensure the token count doesn't exceed model limits
+      const totalTokens = Math.min(Math.ceil(wordCount * 2), 4096); // Ensure the token count doesn't exceed model limits
       const response = await axios({
         method: "post",
         url: "https://api.openai.com/v1/chat/completions",
@@ -115,7 +115,7 @@ class GptService {
             {
               role: "system",
               content:
-                "You are a master proofreader. The instructions are often in English, but keep the proofread text in the same language as the language being asked to proofread.",
+                "You are a master proofreader. The instructions are often in English, but keep the proofread text in the same language as the language being asked to proofread. \n  No matter how small the input is you should do the work as ordered.",
             },
             {
               role: "user",
@@ -134,7 +134,7 @@ class GptService {
       response.data.on("data", (chunk) => {
         const chunkString = chunk.toString();
         buffer += chunkString;
-
+        console.log("Received chunk:", chunkString);
         // Split the buffer into potential complete JSON strings
         const parts = buffer.split("\n\n");
 
