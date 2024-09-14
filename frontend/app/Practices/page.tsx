@@ -8,7 +8,6 @@ import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import moon from "@/public/Game/moon.svg";
 import Bee from "@/public/Game/Bee.svg";
-import LoadingAnimation from "../loading";
 import { TPrompt } from "../utils/types";
 import NotFound from "../components/Others/NotFound";
 import { axiosInstance } from "../utils/config/axios";
@@ -18,6 +17,7 @@ const Page: React.FC = () => {
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
   const [promptData, setPromptData] = useState<TPrompt[]>([]);
+  const [hasPromptFetched, setHasPromptFetched] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [pageDetails, setPageDetails] = useState({
@@ -38,6 +38,7 @@ const Page: React.FC = () => {
       });
       setPromptData(response.data.data);
       setPageDetails(response.data.pageData);
+      setHasPromptFetched(true);
       setIsLoading(false);
     } catch (error) {
       console.error("There was an error fetching the data!", error);
@@ -79,14 +80,14 @@ const Page: React.FC = () => {
               />
             </div>
             {isLoading ? (
-            <></>
-              // <LoadingAnimation />
-            ) : promptData.length > 0 ? (
+              <></>
+            ) : // <LoadingAnimation />
+            hasPromptFetched && promptData.length === 0 ? (
+              <NotFound text="No practice prompt available..." />
+            ) : (
               promptData.map((prompt) => (
                 <Prompt key={prompt._id} prompt={prompt} />
               ))
-            ) : (
-              <NotFound text="No practice prompt available..." />
             )}
 
             {pageDetails.total > itemsPerPage && (

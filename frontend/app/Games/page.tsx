@@ -19,6 +19,7 @@ const Games: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [prompts, setPrompts] = useState<TPrompt[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [hasGamePromptFetched, setHasGamePromptFetched] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [pageDetails, setPageDetails] = useState({
     page: 1,
@@ -36,6 +37,7 @@ const Games: React.FC = () => {
         });
         setPrompts(response.data?.data);
         setPageDetails(response.data.pageData);
+        setHasGamePromptFetched(true);
       } catch (error: any) {
         setError(error.message);
       }
@@ -55,7 +57,6 @@ const Games: React.FC = () => {
   const offset = currentPage * itemsPerPage;
 
   if (error) return <p>Error: {error}</p>;
-
 
   return (
     <div className="w-full min-h-screen mt-6 z-0 relative flex justify-center">
@@ -80,14 +81,13 @@ const Games: React.FC = () => {
             <Image className="w-[12vw]" src={Bee} alt="bee" />
           </div>
           <div className="gap-8 w-full relative flex flex-col ">
-            {prompts.length > 0 ? (
+            {hasGamePromptFetched && prompts.length === 0 ? (
+              <NotFound text="No games right now !!" />
+            ) : (
               prompts.map((prompt) => (
                 <Prompt key={prompt._id} prompt={prompt} />
               ))
-            ) : (
-              <NotFound text="No games right now !!" />
             )}
-
             <div className="absolute bottom-1/3 md-hide -left-32">
               <Image src={Cloud} alt="Cloud" />
             </div>

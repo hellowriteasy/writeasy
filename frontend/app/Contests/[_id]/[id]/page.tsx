@@ -12,7 +12,6 @@ import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { useParams, useSearchParams } from "next/navigation";
 import Storycard from "@/app/components/Storycard";
-import mainstar from "@/public/others/main_star.svg";
 
 interface Prompt {
   _id: string;
@@ -46,7 +45,8 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [contestDetails, setContestDetails] = useState<TContest | null>(null);
   const topStoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
-
+  const [hasContestDetailsFetched, sethasContestDetailsFetched] =
+    useState(false);
   const [pageDetails, setPageDetails] = useState({
     page: 1,
     perPage: 10,
@@ -59,6 +59,7 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
           `/stories/contest/top-writings/${_id}?exclude_pagination=true`
         );
         setTopStories(response.data?.data);
+
         // setPageDetails(response.data?.pageData);
       } catch (err: any) {
         setError(err.message);
@@ -73,6 +74,7 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
       try {
         const { data } = await AxiosIns.get(`/contests/${_id}`);
         setContestDetails(data);
+        sethasContestDetailsFetched(true);
       } catch (error) {
         //
       }
@@ -128,8 +130,6 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
   };
 
   if (error) return <p>{error}</p>;
-  if (stories.length === 0 && topStories.length === 0)
-    return <NotFound text="No Stories to show !!" />;
 
   return (
     <div className="w-full min-h-screen mt-6 z-0 relative flex justify-center">
@@ -143,32 +143,36 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
             <Image src={Cloud2} alt="cloud" />
           </div>
           <div className="gap-8 relative w-full flex flex-col">
-            {contestDetails?.topWritingPublished ? (
-              currentPage === 1 &&
-              topStories.map((story) => {
-                return (
-                  <div
-                    className=""
-                    key={story._id}
-                    ref={(el: HTMLDivElement | null) => {
-                      topStoryRefs.current[story._id] = el;
-                    }}
-                  >
-                    <TopWriting
-                      title={story.title}
-                      content={story.content}
-                      corrections={story.corrections}
-                      username={story.user.username}
-                      email={story.user.email}
-                      profile_image={story.user.profile_picture}
-                    />
-                  </div>
-                );
-              })
+            {hasContestDetailsFetched ? (
+              contestDetails?.topWritingPublished ? (
+                currentPage === 1 &&
+                topStories.map((story) => {
+                  return (
+                    <div
+                      className=""
+                      key={story._id}
+                      ref={(el: HTMLDivElement | null) => {
+                        topStoryRefs.current[story._id] = el;
+                      }}
+                    >
+                      <TopWriting
+                        title={story.title}
+                        content={story.content}
+                        corrections={story.corrections}
+                        username={story.user.username}
+                        email={story.user.email}
+                        profile_image={story.user.profile_picture}
+                      />
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="flex flex-col items-center mx-auto text-2xl font-bold">
+                  <p>We are still working on top writings , please wait ...</p>
+                </div>
+              )
             ) : (
-              <div className="flex flex-col items-center mx-auto text-2xl font-bold">
-                <p>We are still working on top writings , please wait ...</p>
-              </div>
+              ""
             )}
 
             {stories.map((story) => {

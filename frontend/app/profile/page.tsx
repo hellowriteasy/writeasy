@@ -15,6 +15,7 @@ const Page: React.FC = () => {
   const [userStories, setUserStories] = useState<TStory[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [selectedOption, setSelectedOption] = useState<string>("");
+  const [hasStoryFetched, setHasStoryFetched] = useState(false);
   const [pageDetails, setPageDetails] = useState({
     page: 1,
     perPage: 10,
@@ -36,6 +37,7 @@ const Page: React.FC = () => {
 
       setUserStories(response.data?.data);
       setPageDetails(response.data.pageData);
+      setHasStoryFetched(true);
     } catch (error: any) {
       setError("Error fetching user stories: " + error.message);
     }
@@ -55,6 +57,7 @@ const Page: React.FC = () => {
         });
 
         setUserStories(response.data?.data);
+        setHasStoryFetched(true);
       } catch (error: any) {
         setError("Error fetching user stories: " + error.message);
       }
@@ -75,7 +78,9 @@ const Page: React.FC = () => {
     <div className="font-poppins">
       <ProfileTabs />
       <div className="flex flex-col items-center gap-10 min-h-[500px]">
-        {userStories.length > 0 ? (
+        {hasStoryFetched && userStories.length === 0 ? (
+          <NotFound text="No Practices To Show !!" />
+        ) : (
           userStories.map((story) => (
             <UserStory
               key={story._id}
@@ -91,8 +96,6 @@ const Page: React.FC = () => {
               onsuccess={onSuccess}
             />
           ))
-        ) : (
-          <NotFound text="No Practices To Show !!" />
         )}
       </div>
       {pageDetails && pageDetails.total > 5 && (

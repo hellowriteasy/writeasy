@@ -20,6 +20,7 @@ interface PageProps {
 
 const Page: React.FC<PageProps> = ({ params }) => {
   const [stories, setStories] = useState<TStory[]>([]);
+  const [hasStoriesFetched, setHasStoriesFetched] = useState(false);
   const [currentGame, setCurrentGame] = useState<TPrompt | null>(null);
   const [userGameStory, setUserGameStory] = useState<TStory | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -44,8 +45,9 @@ const Page: React.FC<PageProps> = ({ params }) => {
         }
       );
       const fetchedStories: TStory[] = response.data?.data;
-      setPageDetails(response.data?.pageData);
       setStories(fetchedStories);
+      setPageDetails(response.data?.pageData);
+      setHasStoriesFetched(true);
     } catch (error) {
       console.error("Error fetching stories:", error);
     }
@@ -133,10 +135,12 @@ const Page: React.FC<PageProps> = ({ params }) => {
         </div>
       </div>
       <div className="w-screen flex sm:mt-[2vw]  flex-col items-center">
-        {stories.length > 0 ? (
+        {hasStoriesFetched && stories.length === 0 ? (
+          <NotFound text="No stories to show!!" />
+        ) : (
           <div className="w-4/5 ">
             <h1 className="font-bold text-3xl sm:text-xl md:text-4xl lg:text-6xl xl:text-5xl pt-5 font-comic">
-             All Groups
+              All Groups
             </h1>
 
             <div className="mt-4 flex flex-col gap-8">
@@ -175,8 +179,6 @@ const Page: React.FC<PageProps> = ({ params }) => {
               </div>
             )}
           </div>
-        ) : (
-          <NotFound text="No stories to show!!" />
         )}
       </div>
     </div>

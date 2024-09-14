@@ -11,6 +11,7 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 const Join = () => {
   const router = useRouter();
   const [contests, setContests] = useState<TContest[]>([]);
+  const [hasContestFetched, setHasContestFetched] = useState(false);
   const { token } = useAuthStore();
   const axiosIns = axiosInstance(token || "");
   const [pageDetails, setPageDetails] = useState<TPageDetails | null>(null);
@@ -22,6 +23,7 @@ const Join = () => {
         const { data } = await axiosIns.get(
           `/contests/ongoing?page=${currentPage}`
         );
+        setHasContestFetched(true);
         setContests(data.data);
         setPageDetails(data?.pageData);
       } catch (err: any) {}
@@ -42,7 +44,9 @@ const Join = () => {
   };
   return (
     <div className="flex">
-      {contests.length > 0 ? (
+      {hasContestFetched && contests.length === 0 ? (
+        <NotFound text="No contest available at the moment." />
+      ) : (
         <div className="flex flex-col justify-center items-center gap-7 w-full ">
           {contests.map((contest) => (
             <div
@@ -97,8 +101,6 @@ const Join = () => {
             </div>
           )}
         </div>
-      ) : (
-        <NotFound text="No contest available at the moment." />
       )}
     </div>
   );

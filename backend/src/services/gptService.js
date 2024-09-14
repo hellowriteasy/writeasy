@@ -328,7 +328,7 @@ class GptService {
     });
 
     try {
-      const systemPrompt = ` You are tasked with evaluating stories submitted for the contest titled "${title}". Score each story out of 100 based on key writing criteria. Your decisions must be thorough, accurate, concise, and consistent across all stories. Provide the final output strictly in JSON format. \n Note: Dont score good if a story has less than less 250 words/content. `;
+      const systemPrompt = `You are tasked with evaluating stories submitted for the contest titled "${title}". Score each story out of 100 based on key writing criteria. Your decisions must be thorough, accurate, concise, and consistent across all stories.  Provide the final output strictly in JSON format and no story must be missing (no_of_input_story===no_of_output_story). \n Note: Dont score good if a story has less than less 250 words/content. `;
 
       const prompt = `You have been given a set of stories, each identified by a unique ID and associated with its content. Your goal is to evaluate these stories and provide a score for each based on the following criteria and also comparing each story with the other stories in the set.:
 1. **Writing Quality**: How engaging, creative, and clear is the writing? Does it capture the reader’s attention and maintain interest throughout?
@@ -337,7 +337,7 @@ class GptService {
 4. **Conciseness**: Is the story concise and to the point without unnecessary details? Does it use appropriate summarization techniques where relevant?
 5. **Overall Impact**: How effective is the story in delivering its intended message or theme? Does it leave a lasting impression on the reader? \n
 Note: Story should be scored comparing to each other in a set. \n Note: Dont score good if a story has less than less 250 words/content.
-Return the scores as a JSON object with the story IDs as keys and the respective scores (out of 100) as values.
+Return the scores as a JSON object with the story IDs as keys and the respective scores (out of 100) as values. In the example below there are 3 stories provided but it may depend so you need to make sure (no_of_input_story===no_of_output_story) to ensure no story is missing in output.
 
 Example Input:
 {
@@ -393,15 +393,34 @@ ${JSON.stringify(storyObj)}`;
   }
   async rankStories(stories, title, iteration, topWritingPercentage) {
     let scores = [];
-    console.log("iterations", iteration);
+
     for (let i = 0; i < iteration; i++) {
       let groupStories = this.groupStories(stories);
+      groupStories.forEach((r) => {
+        console.log(r.length);
+      });
       const groupStoriesScores = await Promise.all(
         groupStories.map(async (group) => {
           const score = await this.getComparativeScores(group, title);
           return score;
         })
       );
+      const dataDir = path.join(process.cwd(), "data");
+
+      const outputFilePath = path.join(dataDir, `log-${Date.now()}.json`);
+
+      fs.appendFileSync(
+        outputFilePath,
+        JSON.stringify(
+          {
+            [`iteration-${i}`]: groupStoriesScores,
+          },
+          null,
+          4
+        )
+      );
+
+      // Add the group scores to the scores array
       scores.push(...groupStoriesScores);
     }
 
@@ -423,7 +442,7 @@ ${JSON.stringify(storyObj)}`;
       topWritingPercentage
     );
 
-    this.sendWritingLogsToAdmin(scores, aggregatedScores, title, stories);
+    // this.sendWritingLogsToAdmin(scores, aggregatedScores, title, stories);
 
     return { aggregatedScores, scores };
   }

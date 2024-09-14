@@ -12,6 +12,7 @@ import { axiosInstance } from "@/app/utils/config/axios";
 const ContestPage: React.FC = () => {
   const itemsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
+  const [hasStoryFetched, setHasStoryFetched] = useState(false);
   const [userStories, setUserStories] = useState<TStory[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [selectedOption, setSelectedOption] = useState<string>("");
@@ -35,6 +36,7 @@ const ContestPage: React.FC = () => {
       });
       setUserStories(response.data?.data);
       setPageDetails(response.data.pageData);
+      setHasStoryFetched(true);
     } catch (error) {}
   };
   useEffect(() => {
@@ -49,6 +51,7 @@ const ContestPage: React.FC = () => {
         },
       });
       setUserStories(response.data?.data);
+      setHasStoryFetched(true);
     } catch (error) {}
   }
 
@@ -64,7 +67,9 @@ const ContestPage: React.FC = () => {
       <div className="flex flex-col items-center gap-10 min-h-[500px]">
         {
           <>
-            {userStories.length > 0 ? (
+            {hasStoryFetched && userStories.length === 0 ? (
+              <NotFound text="No Contest To Show !!" />
+            ) : (
               userStories.map((story, index) => (
                 <UserStory
                   key={index}
@@ -80,8 +85,6 @@ const ContestPage: React.FC = () => {
                   onsuccess={onsuccess}
                 />
               ))
-            ) : (
-              <NotFound text="No Contest To Show !!" />
             )}
           </>
         }

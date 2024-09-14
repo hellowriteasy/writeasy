@@ -307,26 +307,38 @@ async function main() {
   //     content: "Philosophical and spiritual perspectives offer yet another dimension to the understanding of God. In some Eastern philosophies and mystic traditions, God or the divine may be conceptualized more abstractly as an impersonal force or universal consciousness rather than a personal being. In these views, God is often seen as the underlying reality of all existence, a boundless and formless presence that transcends individual attributes and human concepts. This perspective emphasizes a direct, experiential relationship with the divine, where the focus is on inner enlightenment and unity with the greater whole of existence.",
   //   },
   // ];
-
   // const res = openai.rankStories(stories, "testing logs with email", 5);
   // console.log(res);
-  try {
-    await connectDB();
-    const subsId = [
-      "6698ad4c53944187fda906db",
-      "6698ad4c53944187fda906db",
-      "6698ad4c53944187fda906db",
-      "6698ad4c53944187fda906db",
-    ];
-    await Promise.all(
-      subsId.map(async (sub_id) => {
-        Subscription.findByIdAndDelete(sub_id);
-      })
-    );
-    console.log("completed");
-  } catch (error) {
-    console.log("error", error);
-  }
+  // try {
+  //   await connectDB();
+  //   const subsId = [
+  //     "6698ad4c53944187fda906db",
+  //     "6698ad4c53944187fda906db",
+  //     "6698ad4c53944187fda906db",
+  //     "6698ad4c53944187fda906db",
+  //   ];
+  //   await Promise.all(
+  //     subsId.map(async (sub_id) => {
+  //       Subscription.findByIdAndDelete(sub_id);
+  //     })
+  //   );
+  //   console.log("completed");
+  // } catch (error) {
+  //   console.log("error", error);
+  // }
+  // await connectDB();
+  // let stories = await Story.find({
+  //   prompt: "66e40a03da2b001ba7079f61",
+  // }).populate("user");
+
+  // stories = stories.map((story) => ({
+  //   _id: story._id,
+  //   content: story.content,
+  //   email: story.user?.email,
+  // }));
+
+  // openai.rankStories(stories, "testing logs with email", 10);
+  process.exit(1);
 }
 
 main();

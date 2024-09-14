@@ -13,12 +13,15 @@ import Contestitle from "../components/contest/Contestitle";
 import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { axiosInstance } from "../utils/config/axios";
+import { TContest } from "../utils/types";
+import NotFound from "../components/Others/NotFound";
 
 const Contest = () => {
   const itemsPerPage = 5;
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [endedContests, setEndedContests] = useState([]);
+  const [endedContests, setEndedContests] = useState<TContest[]>([]);
+  const [hasEndedContestFetched, setHasEndedContestFetched] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const AxiosIns = axiosInstance("");
   const [pageDetails, setPageDetails] = useState({
@@ -32,6 +35,7 @@ const Contest = () => {
       .then((response) => {
         setEndedContests(response.data?.data);
         setPageDetails(response.data?.pageData);
+        setHasEndedContestFetched(true);
       })
       .catch((error) => {
         setError("Error fetching contest data: " + error.message);
@@ -75,9 +79,13 @@ const Contest = () => {
                 <Join />
               </div>
               <div className="flex flex-col gap-y-3 sm:gap-y-0 w-full">
-                {endedContests.map((contest, index) => (
-                  <Contestitle key={index} contest={contest} />
-                ))}
+                {hasEndedContestFetched && endedContests.length === 0 ? (
+                  <NotFound text="No contest available at the moment." />
+                ) : (
+                  endedContests.map((contest, index) => (
+                    <Contestitle key={index} contest={contest} />
+                  ))
+                )}
               </div>
               <div className="absolute bottom-32 -left-40">
                 <Image className="w-[7vw]" src={Cloud} alt="Cloud" />
@@ -94,9 +102,7 @@ const Contest = () => {
                   }
                   breakLabel="..."
                   breakClassName="break-me"
-                  pageCount={Math.ceil(
-                    pageDetails.total / pageDetails.perPage
-                  )}
+                  pageCount={Math.ceil(pageDetails.total / pageDetails.perPage)}
                   marginPagesDisplayed={2}
                   pageRangeDisplayed={5}
                   onPageChange={handlePageClick}
@@ -112,7 +118,6 @@ const Contest = () => {
               </div>
             )}
           </div>
-
           <div className="flex flex-col vsm-hide gap-8">
             <WeeklyTest />
             <TopWriting />
