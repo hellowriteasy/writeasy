@@ -47,13 +47,13 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Unkempt:wght@400;700&display=swap"
           rel="stylesheet"
         ></link>
-      </head>
+      </head> 
       <body className="two-line-bg font-comic">
         <Navbar titles={navTitles}></Navbar>
         <ToastContainer />
         {children}
         <Footer></Footer>
-        <div className="container flex flex-col  justify-center mx-auto items-center gap-4 border-t border-gray-300 ">
+        <div className="container flex flex-col h-[300px]  justify-center mx-auto items-center gap-4 border-t border-gray-300 ">
           <p className=" text font-school ">
             &copy; 2024 Writeasy. All rights reserved.
           </p>
