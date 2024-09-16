@@ -36,7 +36,7 @@ const Hero = () => {
             playsInline
             className="w-[100%] h-[100%] sm:object-cover sm:hidden"
           >
-            <source src="/videos/writeasy_demo.mov" type="video/mp4" />
+            <source src="/videos/writeasy_demo_new.mov" type="video/mp4" />
           </video>
           <video
             autoPlay
