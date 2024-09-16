@@ -74,7 +74,7 @@ const FrequentlyAsked = () => {
                           )
                         }
                       >
-                        <span className="text-lg md:text-xl font-medium text-black">
+                        <span className="text-lg md:text-xl  font-bold text-black">
                           {question.question}
                         </span>
                       </Disclosure.Button>
@@ -87,7 +87,7 @@ const FrequentlyAsked = () => {
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                       >
-                        <Disclosure.Panel className="mt-2 text-sm text-center md:text-base text-gray-800 bg-custom-yellow rounded-md p-4 mx-auto w-full">
+                        <Disclosure.Panel className="mt-2 text-sm font-thin text-center md:text-base text-gray-800 bg-custom-yellow rounded-md p-4 mx-auto w-full">
                           {question.answer}
                         </Disclosure.Panel>
                       </Transition>

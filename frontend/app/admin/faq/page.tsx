@@ -1,11 +1,11 @@
-'use client'
+"use client";
 import { useState, useEffect } from "react";
 import Card from "../../components/admin/faq/CardAdd";
-import Modal from "../../components/admin/faq/Modal"
+import Modal from "../../components/admin/faq/Modal";
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
 import { TFAQ } from "@/app/utils/types";
 import { axiosInstance } from "@/app/utils/config/axios";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,10 +19,10 @@ const Page = () => {
   useEffect(() => {
     const fetchFAQs = async () => {
       try {
-        const response = await AxiosIns.get('/faq');
+        const response = await AxiosIns.get("/faq");
         setFAQs(response.data); // Assuming response data is an array of FAQs
       } catch (error) {
-        console.error('Error fetching FAQs:', error);
+        console.error("Error fetching FAQs:", error);
       }
     };
 
@@ -31,11 +31,11 @@ const Page = () => {
 
   const onSuccess = async () => {
     try {
-      const response = await AxiosIns.get('/faq');
+      const response = await AxiosIns.get("/faq");
       setFAQs(response.data);
     } catch (error) {
-      console.error('Error fetching FAQs after deletion:', error);
-      toast.error('Failed to refresh FAQs after deletion.');
+      console.error("Error fetching FAQs after deletion:", error);
+      toast.error("Failed to refresh FAQs after deletion.");
     }
   };
 
@@ -68,7 +68,7 @@ const Page = () => {
               <div className="mt-4 space-y-4">
                 {faqs.map((faq, index) => (
                   <Card
-                    key={index}
+                    key={faq._id + faq.place}
                     id={faq._id}
                     question={faq.question}
                     answer={faq.answer}
