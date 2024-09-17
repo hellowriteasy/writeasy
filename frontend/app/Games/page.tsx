@@ -64,21 +64,21 @@ const Games: React.FC = () => {
         <Image className="w-[5vw]" src={halfmoon} alt="halfmoon" />
       </div>
       <div className="w-10/12 min-h-screen ">
-        <div className="w-full h-60 sm:h-40 relative pt-4">
-          <h1 className="text-3xl sm:text-xl md:text-4xl lg:text-5xl xl:text-6xl font-bold font-comic">
-            Embark on a Collaborative Adventure
+        <div className="w-full h-36 sm:h-40 relative pt-4">
+          <h1 className="text-3xl sm:text-xl md:text-4xl lg:text-5xl xl:text-5xl font-bold font-comic">
+            Create the best original stories with your friends!
           </h1>
           <div className="absolute md-hide top-2 -right-14">
             <Image className="w-[14vw] " src={group} alt="group" />
           </div>
-          <p className="text-lg sm:text-sm md:text-xl lg:text-2xl font-comic pt-4">
+          {/* <p className="text-lg sm:text-sm md:text-xl lg:text-2xl font-comic pt-4">
             Team up with friends to create captivating stories together.
-          </p>
+          </p> */}
         </div>
 
         <div className="flex w-full h-auto relative mt-0  justify-around">
           <div className="absolute -top-40 mt-3 -left-32">
-            <Image className="w-[12vw]" src={Bee} alt="bee" />
+            <Image className="w-[12vw] relative z-[-1]" src={Bee} alt="bee" />
           </div>
           <div className="gap-8 w-full relative flex flex-col ">
             {hasGamePromptFetched && prompts.length === 0 ? (

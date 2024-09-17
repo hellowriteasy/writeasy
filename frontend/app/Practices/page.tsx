@@ -69,10 +69,10 @@ const Page: React.FC = () => {
           <Image className="w-[10vw]" src={Bee} alt="bee" />
         </div>
         <div className="flex w-full gap-x-5 min-h-screen justify-around sm:justify-start relative">
-          <div className="flex flex-col gap-8 w-full mid-w-full">
-            <div className="flex justify-between items-center h-20 gap-7">
-              <h1 className="text-2xl sm:text-xl md:text-4xl lg:text-5xl xl:text-7xl font-comic font-bold">
-                All Prompts
+          <div className="flex flex-col gap-4 w-full mid-w-full">
+            <div className="flex justify-between ">
+              <h1 className="text-2xl sm:text-xl md:text-xl lg:text-xl xl:text-3xl font-comic font-extrabold">
+                Choose a prompt and start your writing journey!
               </h1>
               <SelectMenu
                 selectedOption={selectedOption}
@@ -113,7 +113,7 @@ const Page: React.FC = () => {
               </div>
             )}
           </div>
-          <div className="vvsm-hide flex mt-3 flex-col gap-y-4">
+          <div className="sm-hide flex mt-14 flex-col gap-y-4">
             <WeeklyTest />
             <TopWriting />
           </div>

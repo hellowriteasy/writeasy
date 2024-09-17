@@ -50,7 +50,7 @@ const TopWriting: React.FC = () => {
       </div>
 
       <div className="text-center w-full md:w-11/12 pt-4 text-xl md:text-3xl">
-        <h2 className="font-comic text-[2vw] py-4 font-bold leading-normal">
+        <h2 className="font-comic text-xl py-4 font-bold leading-normal">
           Top writings
         </h2>
         {upcomingWritingsData ? (

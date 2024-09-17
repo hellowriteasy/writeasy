@@ -45,7 +45,7 @@ const Join = () => {
   return (
     <div className="flex">
       {hasContestFetched && contests.length === 0 ? (
-        <NotFound text="No contest available at the moment." />
+        <NotFound text="" />
       ) : (
         <div className="flex flex-col justify-center items-center gap-7 w-full ">
           {contests.map((contest) => (

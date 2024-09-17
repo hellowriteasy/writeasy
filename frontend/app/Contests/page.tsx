@@ -54,19 +54,18 @@ const Contest = () => {
         <Image className="w-[9vw]" src={earth} alt="earth" />
       </div>
       <div className="w-10/12 min-h-full">
-        <div className="w-full h-auto relative pt-4 mb-5">
-          <h1 className="text-3xl sm:text-xl sm:text-black md:text-5xl lg:text-6xl font-bold font-comic">
-            Weekly Writing Contests
-          </h1>
+        <div className="w-full h-auto relative pt-4 mb-5  ">
+          <div className="w-10/12">
+            <h1 className="text-3xl sm:text-xl sm:text-black md:text-5xl lg:text-5xl font-bold font-comic">
+              Compete with top writers worldwide!
+            </h1>
+          </div>
           <div className="absolute top-6 md-hide right-20">
             <Image className="w-[7vw]" src={A} alt="group" />
           </div>
           <div className="absolute top-10 md-hide right-48">
             <Image className="w-[12vw]" src={Dumbelman} alt="group" />
           </div>
-          <p className="text-lg sm:text-sm md:text-2xl font-comic pt-4">
-            Compete with young writers worldwide and unleash your creativity.
-          </p>
         </div>
 
         <div className="flex w-full h-auto relative mt-0 justify-around gap-x-5 sm:gap-x-0">

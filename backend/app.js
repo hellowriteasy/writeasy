@@ -12,6 +12,7 @@ const storyRoutes = require("./routes/storyRoutes");
 const promptRoutes = require("./routes/promptRoutes");
 const contestRoutes = require("./routes/contestRoutes");
 const emailRoutes = require("./routes/emailRoute");
+const { createWriteStream } = require("fs");
 const collaborativeStoryRoutes = require("./routes/collaborativeStoryRoutes");
 const faqRoutes = require("./routes/faq");
 const paymentRoutes = require("./routes/paymentRoute");
@@ -19,6 +20,10 @@ const categoriesRoute = require("./routes/category");
 const scheduleJob = require("./config/cron");
 const morgan = require("morgan");
 const StripeService = require("./src/services/stripeService");
+const pino = require("pino");
+const logfilePath = "/var/log/writeasy-log.log";
+const logStream = createWriteStream(logfilePath, { flags: "a" });
+const logger = pino({}, logStream);
 dotenv.config();
 
 connectDB();
@@ -35,6 +40,12 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 cron.schedule("*/10 * * * * *", () => scheduleJob());
+
+app.get("/log", (req, res) => {
+  logger.info("Received request");
+  
+  res.json({ message: "Server is up and running" });
+});
 
 // Use routes
 app.use("/api/auth", authRoutes);

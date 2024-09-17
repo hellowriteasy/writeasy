@@ -40,13 +40,13 @@ const SelectMenu: React.FC<SelectMenuProps> = ({
   };
 
   return (
-    <div className="relative ms-2 z-10 w-48 sm:w-28 cursor-pointer">
+    <div className="relative ms-2 z-10 w-20 sm:w-28 cursor-pointer">
       <div className="relative" onClick={toggleOptions}>
-        <div className="w-full h-14 sm:h-8 text-center font-bold text-2xl sm:text-sm flex  items-center font-comic bg-white border border-black rounded-3xl px-4 py-2 pr-10 focus:outline-none focus:border-black">
+        <div className="w-full h-12 sm:h-8 text-center font-bold text-xl sm:text-sm flex  items-center font-comic bg-white border border-black rounded-full px-4 py-2 pr-10 focus:outline-none focus:border-black">
           {selectedOption || "All"}
         </div>
         <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center px-2 text-black">
-          <FaAngleDown className="text-[2vw]" />
+          <FaAngleDown className="text-xl" />
         </div>
       </div>
       {showOptions && (

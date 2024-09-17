@@ -37,7 +37,7 @@ const WeeklyTest = () => {
   }, []);
 
   return (
-    <div className="w-[360px] mid:w-[200px] h-auto flex flex-col justify-center items-center relative yellow border-4 border-yellow-500 rounded-3xl py-5">
+    <div className="w-96 mid:w-[200px] h-auto flex flex-col justify-center items-center relative yellow border-4 border-yellow-500 rounded-3xl py-5">
       <div className="absolute -top-12  sm-hide -right-12">
         <Image src={mic} alt="mic" />
       </div>
@@ -64,7 +64,9 @@ const WeeklyTest = () => {
         </div>
       ) : (
         <div className="flex flex-col items-center gap-y-3">
-          <p className="font-comic  ">Coming soon ,get your pen ready!</p>
+          <p className="font-comic leading-normal font-bold text-xl">
+            Coming soon ,get your pen ready!
+          </p>
           {/* <h1 className="font-comic text-[1vw] py-1 font-bold ">
             Contest will be started soon ...
           </h1> */}
