@@ -21,7 +21,7 @@ const scheduleJob = require("./config/cron");
 const morgan = require("morgan");
 const StripeService = require("./src/services/stripeService");
 const pino = require("pino");
-const logfilePath = "/var/log/writeasy-log.log";
+const logfilePath = "/var/log/writeasy-logs.log";
 const logStream = createWriteStream(logfilePath, { flags: "a" });
 const logger = pino({}, logStream);
 dotenv.config();
