@@ -76,7 +76,7 @@ export default function RootLayout({
             <Image
               src={CornorTechLogo}
               alt="Conortech Logo"
-              className="w-44 h-auto"
+              className="w-20 h-auto"
             ></Image>
           </a>
         </div>

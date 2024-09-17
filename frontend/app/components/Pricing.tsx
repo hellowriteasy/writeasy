@@ -66,7 +66,7 @@ const Pricing = () => {
               <h2 className="text-[4vw] font-bold">Free</h2>
             </div>
 
-            <div className="text-center flex flex-col gap-y-10 absolute top-[50%]">
+            <div className="text-center flex flex-col gap-y-32 absolute top-[50%]">
               <div>
                 <ul>
                   <li className="text-[18px]">•⁠ View all writings</li>
@@ -116,7 +116,7 @@ const Pricing = () => {
                   </div>
                 )}
               </div>
-              <div className="text-center flex flex-col gap-y-2 absolute top-[45%] w-10/12 mx-auto">
+              <div className="text-center flex flex-col gap-y-24 absolute top-[45%] w-10/12 mx-auto">
                 <ul className="flex sm:text-[14px] flex-col px-4 items-start">
                   <li className="text-start">
                     • Unlimited writing practices with immediate GPT markings
@@ -127,7 +127,7 @@ const Pricing = () => {
                 {!userId ? (
                   <button
                     onClick={() => handleSignUp()}
-                    className="border text-2xl sm:w-12 sm:h-9 sm:text-[10px]  sm:text-3xl  mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-full sm:rounded-xl text-white w-40 md:w-56 lg:w-60 h-12 "
+                    className="border-2 mx-auto sm:w-12 sm:h-9 sm:text-[10px] sm:rounded-xl font-comic text-3xl hover:bg-white border-slate-700 hover:text-black rounded-full w-60 h-14 bg-black text-white"
                   >
                     Sign up
                   </button>

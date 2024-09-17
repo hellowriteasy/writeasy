@@ -61,7 +61,7 @@ const FrequentlyAsked = () => {
               {displayedFaqs.map((question) => (
                 <Disclosure
                   as="div"
-                  className="p-4 md:p-6 w-full"
+                  className="p-4 md:p-6 w-full border-none"
                   key={question._id}
                 >
                   {({ open }) => (
