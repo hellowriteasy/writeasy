@@ -66,15 +66,18 @@ const Pricing = () => {
               <h2 className="text-[4vw] font-bold">Free</h2>
             </div>
 
-            <div className="text-center flex flex-col gap-y-32 absolute top-[50%]">
-              <div>
+            <div className="text-center flex flex-col gap-y-24  absolute top-[50%]">
+              <div className="px-4 w-10/12 mx-auto">
                 <ul>
-                  <li className="text-[18px]">•⁠ View all writings</li>
+                  <li className="text-[18px]">
+                    •⁠ View all writing in contests and collaborative writing
+                    games
+                  </li>
                 </ul>
               </div>
               {!userId && (
                 <Link href="/signup" className="">
-                  <button className="border-2 mx-auto sm:w-12 sm:h-9 sm:text-[10px] sm:rounded-xl font-comic text-3xl hover:bg-slate-200 border-slate-700 bg-white rounded-full text-black w-60 h-14">
+                  <button className="border-2 mx-auto   sm:text-3xl sm:rounded-full font-comic text-5xl hover:bg-slate-200 border-slate-700 bg-white rounded-full text-black w-60 h-16">
                     Sign up
                   </button>
                 </Link>
@@ -127,14 +130,14 @@ const Pricing = () => {
                 {!userId ? (
                   <button
                     onClick={() => handleSignUp()}
-                    className="border-2 mx-auto sm:w-12 sm:h-9 sm:text-[10px] sm:rounded-xl font-comic text-3xl hover:bg-white border-slate-700 hover:text-black rounded-full w-60 h-14 bg-black text-white"
+                    className="border-2 mx-auto  sm:text-3xl sm:rounded-full font-comic text-5xl hover:bg-white border-slate-700 hover:text-black rounded-full w-60 h-16 bg-black text-white"
                   >
                     Sign up
                   </button>
                 ) : !isSubcriptionActive ? (
                   <button
                     onClick={() => handleSignUp(sub?.id, sub?.type)}
-                    className="border text-2xl sm:text-3xl py-2 mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-full text-white w-40 md:w-56 lg:w-60 h-12 sm:w-12 sm:h-6 flex items-center justify-center sm:text-[10px] sm:rounded-sm"
+                    className="border text-5xl sm:text-3xl py-2 mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-full text-white w-40 md:w-56 lg:w-60 h-16  sm:h-6 flex items-center justify-center  sm:rounded-full"
                   >
                     Buy Now
                   </button>

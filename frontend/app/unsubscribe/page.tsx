@@ -32,11 +32,11 @@ const Unsubscribe = () => {
 
   return (
     <div className="flex flex-col justify-center w-full items-center h-[400px] gap-y-5">
-      <p className="text-2xl w-8/12 text-center">
+      <p className="text-2xl sm:text-xl w-8/12 text-center">
         <p>Dear Subscriber,</p>
         <p>
-          Note that by unsubscribing, you will no longer receive updates and
-          exclusive content from us.
+          We're sorry to see you go ,but if you ever miss us ,you're always
+          welcome back!
         </p>
       </p>
       <form onSubmit={handleUnsubscribeEmail} className="flex flex-col gap-y-3">
@@ -52,7 +52,7 @@ const Unsubscribe = () => {
         />
         <button
           onClick={handleUnsubscribeEmail}
-          className="border text-2xl sm:text-3xl mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-full text-white w-40 sm:w-48 md:w-56 lg:w-60 h-12 sm:h-14"
+          className="border text-2xl sm:text-xl mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-full text-white w-40 sm:w-48 md:w-56 lg:w-60 h-12 sm:h-14"
         >
           Unsubscribe
         </button>

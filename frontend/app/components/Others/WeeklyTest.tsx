@@ -64,7 +64,7 @@ const WeeklyTest = () => {
         </div>
       ) : (
         <div className="flex flex-col items-center gap-y-3">
-          <p className="font-comic  ">No Ongoing Contest !</p>
+          <p className="font-comic  ">Coming soon ,get your pen ready!</p>
           {/* <h1 className="font-comic text-[1vw] py-1 font-bold ">
             Contest will be started soon ...
           </h1> */}
