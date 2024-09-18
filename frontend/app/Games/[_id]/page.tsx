@@ -111,13 +111,13 @@ const Page: React.FC<PageProps> = ({ params }) => {
   // }
 
   return (
-    <div className="w-screen font-comic h-auto flex flex-col">
+    <div className="w-screen font-unkempt h-auto flex flex-col">
       <div className="h-auto  relative w-full flex items-center flex-col">
         <div className="absolute left-0">
           <Image className="w-[9vw]" src={shootingstar} alt="shootingstar" />
         </div>
-        <div className="w-4/5  font-comic flex flex-col gap-10 sm:gap-5 sm:my-10 mt-20 mb-10">
-          <h1 className="text-3xl  md:text-4xl lg:text-5xl xl:text-6xl sm:text-xl font-bold font-comic">
+        <div className="w-4/5  font-unkempt flex flex-col gap-10 sm:gap-5 sm:my-10 mt-20 mb-10">
+          <h1 className="text-3xl  md:text-4xl lg:text-5xl xl:text-6xl sm:text-xl font-bold font-unkempt">
             {currentGame?.title}
           </h1>
           <p className="sm:text-sm text-xl  font-medium">
@@ -139,7 +139,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
           <NotFound text="No stories to show!!" />
         ) : (
           <div className="w-4/5 ">
-            <h1 className="font-bold text-3xl sm:text-xl md:text-4xl lg:text-6xl xl:text-5xl pt-5 font-comic">
+            <h1 className="font-bold text-3xl sm:text-xl md:text-4xl lg:text-6xl xl:text-5xl pt-5 font-unkempt">
               All Groups
             </h1>
 
@@ -153,7 +153,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
               ))}
             </div>
             {pageDetails.total > 5 && (
-              <div className="w-full mt-10 text-lg md:text-xl font-comic">
+              <div className="w-full mt-10 text-lg md:text-xl font-unkempt">
                 <ReactPaginate
                   previousLabel={
                     <FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />

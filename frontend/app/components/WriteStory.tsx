@@ -276,7 +276,7 @@ export function SimpleEditor({
               <button
                 disabled={isLoading}
                 className={classNames(
-                  "menu-button bg-black text-sm font-comic text-white p-1 rounded-md ml-auto",
+                  "menu-button bg-black text-sm font-unkempt text-white p-1 rounded-md ml-auto",
                   {
                     "is-active": editor.isActive("code"),
                   },
@@ -300,7 +300,7 @@ export function SimpleEditor({
           </div>
           <div className="mt-10" ref={targetRef}>
             <EditorContent
-              className={`scroll-m-2 w-[100%]  mt-10 ${
+              className={`scroll-m-2 w-[100%]  mt-10 font-comic ${
                 isLoading
                   ? "opacity-50 cursor-not-allowed pointer-events-none"
                   : ""
@@ -323,7 +323,7 @@ export function SimpleEditor({
           </div>
         </div>
         <button
-          className={`text-white font-comic bg-black text-2xl  ${
+          className={`text-white font-unkempt bg-black text-2xl  ${
             isSaving ? "text-black bg-custom-yellow" : ""
           } w-96 h-16 sm:w-full sm:h-12 sm:text-sm rounded-full mx-auto mt-10 `}
           onClick={(e) => {

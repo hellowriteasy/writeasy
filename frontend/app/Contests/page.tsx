@@ -55,8 +55,8 @@ const Contest = () => {
       </div>
       <div className="w-10/12 min-h-full">
         <div className="w-full h-auto relative pt-4 mb-5  ">
-          <div className="w-10/12">
-            <h1 className="text-3xl sm:text-xl sm:text-black md:text-5xl lg:text-5xl font-bold font-comic">
+          <div className="w-10/12 sm:w-full">
+            <h1 className="text-xl sm:text-2xl sm:text-black md:text-5xl lg:text-4xl font-bold font-unkempt">
               Compete with top writers worldwide!
             </h1>
           </div>

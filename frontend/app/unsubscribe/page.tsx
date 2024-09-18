@@ -52,7 +52,7 @@ const Unsubscribe = () => {
         />
         <button
           onClick={handleUnsubscribeEmail}
-          className="border text-2xl sm:text-xl mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-full text-white w-40 sm:w-48 md:w-56 lg:w-60 h-12 sm:h-14"
+          className="border text-2xl sm:text-xl mx-auto font-unkempt hover:bg-slate-800 border-slate-400 bg-black rounded-full text-white w-40 sm:w-48 md:w-56 lg:w-60 h-12 sm:h-14"
         >
           Unsubscribe
         </button>

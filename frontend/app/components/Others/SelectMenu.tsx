@@ -40,41 +40,45 @@ const SelectMenu: React.FC<SelectMenuProps> = ({
   };
 
   return (
-    <div className="relative ms-2 z-10 w-20 sm:w-28 cursor-pointer">
-      <div className="relative" onClick={toggleOptions}>
-        <div className="w-full h-12 sm:h-8 text-center font-bold text-xl sm:text-sm flex  items-center font-comic bg-white border border-black rounded-full px-4 py-2 pr-10 focus:outline-none focus:border-black">
-          {selectedOption || "All"}
-        </div>
-        <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center px-2 text-black">
-          <FaAngleDown className="text-xl" />
+    <div className="relative">
+      <div className="relative ms-2 z-10 w-20 sm:w-28 cursor-pointer">
+        <div className="relative" onClick={toggleOptions}>
+          <div className="w-full h-12 sm:h-8 sm:text-md text-center font-bold text-xl sm:text-sm flex  items-center font-comic bg-white border border-black rounded-full px-4 py-2 pr-10 focus:outline-none focus:border-black">
+            {selectedOption || "All"}
+          </div>
+          <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center px-2 text-black">
+            <FaAngleDown className="text-xl sm:text-md" />
+          </div>
         </div>
       </div>
-      {showOptions && (
-        <div className="absolute w-full mt-2 bg-white border border-black rounded-lg shadow-lg">
-          <div
-            className="px-4 py-2 h-9  cursor-pointer hover:font-bold"
-            onClick={() => {
-              onSelectOption("");
-              setShowOptions(false);
-            }}
-          >
-            All 
+      <div >
+        {showOptions && (
+          <div className="absolute  z-[2] mt-2 w-36 bg-white border border-black rounded-lg shadow-lg">
+            <div
+              className="px-4 py-2 h-9  cursor-pointer hover:font-bold"
+              onClick={() => {
+                onSelectOption("");
+                setShowOptions(false);
+              }}
+            >
+              All
+            </div>
+            {options &&
+              options.map((option) => (
+                <div
+                  key={option._id}
+                  className="px-4 py-2 h-9  cursor-pointer hover:font-bold"
+                  onClick={() => {
+                    onSelectOption(option.name);
+                    setShowOptions(false);
+                  }}
+                >
+                  {option.name}
+                </div>
+              ))}
           </div>
-          {options &&
-            options.map((option) => (
-              <div
-                key={option._id}
-                className="px-4 py-2 h-9  cursor-pointer hover:font-bold"
-                onClick={() => {
-                  onSelectOption(option.name);
-                  setShowOptions(false);
-                }}
-              >
-                {option.name}
-              </div>
-            ))}
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

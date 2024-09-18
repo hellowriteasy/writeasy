@@ -24,9 +24,9 @@ const Prompt: React.FC<PromptProps> = ({ prompt }) => {
   };
 
   return (
-    <div className="w-11/12 h-40 sm:h-28 flex relative bg-white border-2 border-gray-300 rounded-3xl overflow-hidden">
+    <div className="w-full h-40 sm:h-28 flex relative bg-white border-2 border-gray-300 rounded-3xl overflow-hidden">
       <div className="px-6 py-4 w-5/6">
-        <div className="font-bold font-comic text-lg mid:text-sm md:text-2xl lg:text-3xl mb-2">
+        <div className="font-bold font-unkempt text-lg mid:text-sm md:text-2xl lg:text-3xl mb-2">
           {getTitle()}
           {prompt.title.split(' ').length > 15 && (
             <button onClick={toggleShowFullTitle} className="ml-2 text-blue-500 underline">

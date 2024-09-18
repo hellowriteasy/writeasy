@@ -137,11 +137,11 @@ const Card: React.FC<CardProps> = ({
   return (
     <div className="bg-white flex sm:w-10/12 flex-col justify-between w-3/4 mt-3 min-h-72 border-2 border-slate-300 shadow-sm rounded-3xl p-6 transition-all duration-300">
       <div ref={targetRef} className="flex flex-col mb-4">
-        <h1 className="text-2xl sm:text-sm font-bold mb-4 font-comic">
+        <h1 className="text-2xl sm:text-sm font-bold mb-4 font-unkempt">
           {contestTitle ? `${contestTitle} > ` : ""} {promptTitle}
         </h1>
         <div>
-          <h2 className="py-2 font-bold font-comic">{title}</h2>
+          <h2 className="py-2 font-bold font-unkempt">{title}</h2>
           <div
             dangerouslySetInnerHTML={{ __html: content }}
             className={`text-gray-700 sm:text-sm  font-comic transition-all duration-300 `}
@@ -172,7 +172,7 @@ const Card: React.FC<CardProps> = ({
             //   setShowFullDescription(true);
             //   toPDF();
             // }}
-            className="bg-white font-comic border-2 sm:p-0 sm:w-20 sm:h-8 sm:rounded-full sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
+            className="bg-white font-unkempt border-2 sm:p-0 sm:w-20 sm:h-8 sm:rounded-full sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
           >
             <PDFDownloadLink
               document={
@@ -189,7 +189,7 @@ const Card: React.FC<CardProps> = ({
         {type === "game" && (
           <button
             onClick={() => router.push(`/Games/${prompt_id}/play`)}
-            className="bg-white font-comic border-2 sm:px-1 sm:w-20 sm:h-8 sm:rounded-full sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
+            className="bg-white font-unkempt border-2 sm:px-1 sm:w-20 sm:h-8 sm:rounded-full sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
           >
             Contribute
           </button>
@@ -197,21 +197,21 @@ const Card: React.FC<CardProps> = ({
         {!shouldHideButtons && (
           <button
             onClick={() => setShowDiff(!showDiff)}
-            className="bg-white font-comic border-2 sm:p-1 sm:w-20 sm:h-8 sm:rounded-full sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
+            className="bg-white font-unkempt border-2 sm:p-1 sm:w-20 sm:h-8 sm:rounded-full sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
           >
             {showDiff ? "Original" : "Marked"}
           </button>
         )}
         <button
           onClick={() => setIsDeleteDialogOpen(true)}
-          className="bg-white border-2 font-comic sm:p-1 sm:w-20 sm:h-8 sm:rounded-full sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
+          className="bg-white border-2 font-unkempt sm:p-1 sm:w-20 sm:h-8 sm:rounded-full sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
         >
           Delete
         </button>
         {descriptionWords.length > previewWords && (
           <button
             onClick={toggleDescription}
-            className="bg-black sm:p-1 font-comic sm:w-20 sm:h-8 sm:rounded-full sm:text-[10px] text-white px-4 py-2 rounded-2xl"
+            className="bg-black sm:p-1 font-unkempt sm:w-20 sm:h-8 sm:rounded-full sm:text-[10px] text-white px-4 py-2 rounded-2xl"
           >
             {showFullDescription ? "Show Less" : "Read More"}
           </button>
@@ -250,12 +250,12 @@ const Card: React.FC<CardProps> = ({
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-medium font-comic leading-6 text-gray-900"
+                    className="text-lg font-medium font-unkempt leading-6 text-gray-900"
                   >
                     Are you sure you want to delete this item?
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p className="text-sm text-gray-500 font-comic">
+                    <p className="text-sm text-gray-500 font-unkempt">
                       This action cannot be undone. Are you sure you want to
                       proceed?
                     </p>
@@ -264,7 +264,7 @@ const Card: React.FC<CardProps> = ({
                   <div className="mt-4 flex space-x-4">
                     <button
                       type="button"
-                      className="inline-flex font-comic justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500"
+                      className="inline-flex font-unkempt justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500"
                       onClick={() => {
                         deleteClick();
                         setIsDeleteDialogOpen(false);
@@ -274,7 +274,7 @@ const Card: React.FC<CardProps> = ({
                     </button>
                     <button
                       type="button"
-                      className="inline-flex font-comic justify-center rounded-md border border-transparent bg-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-500"
+                      className="inline-flex font-unkempt justify-center rounded-md border border-transparent bg-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-500"
                       onClick={() => setIsDeleteDialogOpen(false)}
                     >
                       Cancel

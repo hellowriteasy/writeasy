@@ -31,7 +31,7 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
           </div>
         </Link>
         <div className="mid:hidden md:flex md:flex-grow justify-center">
-          <ul className="flex justify-center w-full items-center font-school text-xl space-x-4">
+          <ul className="flex justify-center w-full items-center font-unkempt text-xl space-x-4">
             {titles.map((link) => {
               const isActive =
                 path.startsWith(link.path) || path.includes(link.path);
@@ -84,7 +84,7 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
   }
 
   return (
-    <nav className="navbar flex w-full sticky top-0 h-28 justify-between items-center bg-custom-yellow p-6 z-50 font-Schoolbell">
+    <nav className="navbar flex w-full sticky top-0 h-28 justify-between items-center bg-custom-yellow p-6 z-50 font-unkemptbell">
       {navContent}
       <div
         className={`fixed top-0 left-0 h-full w-72 bg-custom-yellow p-6 flex flex-col items-center space-y-6 z-50 transform ${
@@ -97,7 +97,7 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
         >
           <XMarkIcon className="h-8 w-8" />
         </button>
-        <ul className="flex flex-col items-center gap-6 font-comic text-md">
+        <ul className="flex flex-col items-center gap-6 font-unkempt text-md">
           {titles.map((link) => {
             const isActive =
               path.startsWith(link.path) || path.includes(link.path);

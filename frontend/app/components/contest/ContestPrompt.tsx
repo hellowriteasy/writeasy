@@ -78,7 +78,7 @@ const ContestPrompt: React.FC<PromptProps> = ({
     >
       <div className="w-full h-auto md:h-40 relative overflow-hidden mb-4">
         <div className="px-4 py-4 md:px-6 md:py-4 w-full md:w-5/6">
-          <div className="font-bold font-comic text-wrap text-base w-5/6 md:text-xl mb-2 overflow-hidden overflow-ellipsis whitespace-nowrap">
+          <div className="font-bold font-unkempt text-wrap text-base w-5/6 md:text-xl mb-2 overflow-hidden overflow-ellipsis whitespace-nowrap">
             {getPromptText()}
             {promptText.split(" ").length > 15 && (
               <button
@@ -108,7 +108,7 @@ const ContestPrompt: React.FC<PromptProps> = ({
               className="absolute right-4 top-4 flex cursor-pointer"
               onClick={handleRedirectToStory}
             >
-              <button className="border text-xl mid:text-[8px] mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-full text-white mid:w-20 mid:h-8  px-4 h-12">
+              <button className="border text-xl mid:text-[8px] mx-auto font-unkempt hover:bg-slate-800 border-slate-400 bg-black rounded-full text-white mid:w-20 mid:h-8  px-4 h-12">
                 View your story
               </button>
             </div>

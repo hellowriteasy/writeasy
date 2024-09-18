@@ -115,13 +115,13 @@ const Signup = () => {
         </div>
       </Link>
       <div className="flex flex-col w-screen items-center overflow-hidden">
-        <h1 className="text-center text-2xl sm:text-4xl pt-6 font-comic">
+        <h1 className="text-center text-2xl sm:text-4xl pt-6 font-unkempt">
           <span className="font-bold">Hello!</span> Welcome to Writeasy
         </h1>
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="relative flex flex-col items-center gap-2 font-comic mt-10 z-10"
+          className="relative flex flex-col items-center gap-2 font-unkempt mt-10 z-10"
         >
           <div className="relative w-full flex flex-col justify-center items-center mt-4">
             <input
@@ -203,7 +203,7 @@ const Signup = () => {
           </div>
         </form>
         <Button type="google" />
-        <h1 className="text-center font-comic pt-6">
+        <h1 className="text-center font-unkempt pt-6">
           Already have an account?{" "}
           <Link href="/login" className="font-bold underline">
             Login

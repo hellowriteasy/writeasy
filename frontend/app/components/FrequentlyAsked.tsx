@@ -50,8 +50,8 @@ const FrequentlyAsked = () => {
       <div className="absolute right-4 md:right-10 top-40 md:top-60">
         <Image className="w-[5vw]" src={Path} alt="path" />
       </div>
-      <div className="text-3xl flex flex-col items-center font-bold font-school gap-3">
-        <h1 className="text-center sm:text-xl text-4xl md:text-6xl lg:text-7xl font-bold pt-5 md:pt-10 font-school">
+      <div className="text-3xl flex flex-col items-center font-bold font-unkempt gap-3">
+        <h1 className="text-center sm:text-xl text-4xl md:text-6xl lg:text-7xl font-bold pt-5 md:pt-10 font-unkempt">
           Frequently Asked Questions
         </h1>
 

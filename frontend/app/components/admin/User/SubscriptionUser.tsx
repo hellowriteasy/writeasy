@@ -61,7 +61,7 @@ const SubscriptionUser = ({
   return (
     <div
       key={user._id}
-      className="bg-white shadow-sm rounded-md p-4 px-14 mb-4 font-comic"
+      className="bg-white shadow-sm rounded-md p-4 px-14 mb-4 font-unkempt"
     >
       <p className="text-lg font-bold">{user.username}</p>
       <p className="text-gray-600">{user.email}</p>

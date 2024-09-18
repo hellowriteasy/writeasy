@@ -379,25 +379,25 @@ const Page = () => {
         <div className="w-full  relative pt-4 flex flex-col gap-y-4">
           <div className="flex flex-col gap-y-4">
             <div className="flex flex-col gap-y-2">
-              {/* <h1 className="text-6xl sm:text-2xl pt-4 py-2 font-bold font-comic">
+              {/* <h1 className="text-6xl sm:text-2xl pt-4 py-2 font-bold font-unkempt">
                 {prompt?.title || ""}
               </h1>
-              <p className="font-comic sm:text-sm text-xl">
+              <p className="font-unkempt sm:text-sm text-xl">
                 {prompt?.description}
               </p> */}
             </div>
             {!currentStory && (
               <div className="flex flex-col sm:gap-y-0 gap-y-6">
-                <h1 className="font-comic text-2xl  font-bold">
+                <h1 className="font-unkempt text-2xl  font-bold">
                   Invite friends to join Collaborative Writing
                 </h1>
                 {/*
-                <p className="text-xl font-comic">
+                <p className="text-xl font-unkempt">
                   Calling all friends! , Let team up and create stories
                   together.
                 </p>
 
-                <p className="text-xl font-comic">
+                <p className="text-xl font-unkempt">
                   Let the storytelling begin!
                 </p> */}
               </div>
@@ -405,7 +405,7 @@ const Page = () => {
           </div>
           {currentStory ? (
             <div className="w-full pt-2 flex flex-col gap-y-2">
-              <h2 className="font-comic">Writers</h2>
+              <h2 className="font-unkempt">Writers</h2>
               <div className="flex gap-x-2">
                 {contributors.map((contributor, index) => (
                   <div key={contributor._id}>
@@ -469,7 +469,7 @@ const Page = () => {
                             )}
                           </div>
                         </div>
-                        <div className={` rounded-3xl   `}>
+                        <div className={` rounded-3xl font-comic  `}>
                           <EditorContent
                             className={`scroll-m-2 w-full min-h-96 mt-10  ${
                               !currentStory || submittingStory
@@ -483,7 +483,7 @@ const Page = () => {
                     </div>
                     <button
                       onClick={handleSubmit}
-                      className="text-white bg-black border text-2xl font-bold font-comic rounded-full  px-3 h-[60px]"
+                      className="text-white bg-black border text-2xl font-bold font-unkempt rounded-full  px-3 h-[60px]"
                     >
                       {submittingStory ? "Submitting..." : "Submit"}
                     </button>

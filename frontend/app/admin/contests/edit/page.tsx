@@ -196,7 +196,7 @@ const Page = () => {
 
               <button
                 onClick={handleAddClick}
-                className="bg-custom-yellow text-black border border-black px-4 py-2 rounded-lg font-comic"
+                className="bg-custom-yellow text-black border border-black px-4 py-2 rounded-lg font-unkempt"
               >
                 Add Prompt
               </button>

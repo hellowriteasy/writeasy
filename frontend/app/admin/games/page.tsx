@@ -65,7 +65,7 @@ const Games: React.FC = () => {
               <div className="flex justify-between   rounded-lg items-center">
                 <div className="text-xl font-semibold">All Games</div>
                 <button
-                  className="bg-custom-yellow text-black border border-black px-4 py-2 rounded-lg font-comic"
+                  className="bg-custom-yellow text-black border border-black px-4 py-2 rounded-lg font-unkempt"
                   onClick={handleAddClick}
                 >
                   Add

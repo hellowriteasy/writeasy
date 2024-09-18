@@ -63,7 +63,7 @@ const Storytitle: React.FC<StoryProps> = ({ story }) => {
               )}
               
             </div>
-            <h1 className="text-[12px] font-comic  text-center">{contributor.username}</h1>
+            <h1 className="text-[12px] font-unkempt  text-center">{contributor.username}</h1>
           </div>
         ))}
         <div>
@@ -75,7 +75,7 @@ const Storytitle: React.FC<StoryProps> = ({ story }) => {
       {/* Paragraph */}
       {story.content ? (
         <div
-          className="text-xs md:text-sm lg:text-base py-4 text-gray-900"
+          className="text-xs md:text-sm lg:text-base py-4 text-gray-900 font-comic"
           dangerouslySetInnerHTML={{ __html: content }}
         />
       ) : (

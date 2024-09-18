@@ -171,7 +171,7 @@ const CreateContest = () => {
     <div className="w-full h-auto z-0 relative flex justify-center">
       <div className="w-10/12 ms-12">
         <div className="w-full h-14 relative pt-4">
-          <h1 className="text-6xl font-comic font-bold py-4"></h1>
+          <h1 className="text-6xl font-unkempt font-bold py-4"></h1>
         </div>
         <div className="flex w-[100%] relative mt-0">
           <div className="absolute -top-20 mt-3 -left-60">
@@ -281,7 +281,7 @@ const CreateContest = () => {
                         <Icons.Code />
                       </button> */}
                       <div className="w-60 h-7 bg-white flex flex-col justify-center rounded-2xl shadow-sm ">
-                        <p className="text-center font-comic">
+                        <p className="text-center font-unkempt">
                           Word count: {wordCount} / 1000
                         </p>
                       </div>
@@ -289,7 +289,7 @@ const CreateContest = () => {
                   </div>
 
                   <EditorContent
-                    className={`scroll h-[600px] mt-10 overflow-y-auto hide-scrollbar ${
+                    className={`scroll font-comic h-[600px] mt-10 overflow-y-auto hide-scrollbar ${
                       isLoading ? "opacity-50 cursor-not-allowed" : ""
                     }`}
                     editor={editor}
@@ -299,7 +299,7 @@ const CreateContest = () => {
               <div className="flex justify-center mt-5">
                 <button
                   onClick={handleSubmit}
-                  className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-[50vw] h-14"
+                  className="text-white bg-black border text-2xl font-bold font-unkempt rounded-full w-[50vw] h-14"
                 >
                   Submit Story
                 </button>

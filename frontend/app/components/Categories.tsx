@@ -20,7 +20,7 @@ const Categories = () => {
   return (
     <div className="relative w-[50vw] cursor-pointer ">
       <div className="relative " onClick={toggleOptions}>
-        <div className=" w-full h-14     text-xl font-comic bg-white border border-black rounded-full px-4 py-3 ps-10  focus:outline-none focus:border-black">
+        <div className=" w-full h-14     text-xl font-unkempt bg-white border border-black rounded-full px-4 py-3 ps-10  focus:outline-none focus:border-black">
           {selectedOption || "Choose Categories (3)"}
         </div>
         <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center px-2 text-black">

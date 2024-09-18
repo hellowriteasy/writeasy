@@ -48,17 +48,17 @@ export default function RootLayout({
           rel="stylesheet"
         ></link>
       </head> 
-      <body className="two-line-bg font-comic">
+      <body className="two-line-bg font-unkempt">
         <Navbar titles={navTitles}></Navbar>
         <ToastContainer />
         {children}
         <Footer></Footer>
         <div className="container flex flex-col h-[300px]  justify-center mx-auto items-center gap-4 border-t border-gray-300 ">
-          <p className=" text font-school ">
+          <p className=" text font-unkempt ">
             &copy; 2024 Writeasy. All rights reserved.
           </p>
           <div className="flex items-center ">
-            <div className=" text  flex gap-x-1 items-center font-school">
+            <div className=" text  flex gap-x-1 items-center font-unkempt">
               Created by{" "}
               <a
                 target="_blank"

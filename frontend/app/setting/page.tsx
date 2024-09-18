@@ -101,7 +101,7 @@ const Page = () => {
   };
 
   return (
-    <div className="w-screen h-full flex flex-col justify-center font-comic items-center">
+    <div className="w-screen h-full flex flex-col justify-center font-unkempt items-center">
       <div
         className="w-40 h-40 sm:w-28 sm:h-28  my-4 rounded-full cursor-pointer border-yellow-400 border-8 sm:border-6 p-1"
         onClick={upload}
@@ -155,7 +155,7 @@ const Page = () => {
           <div className="w-full flex justify-center md:col-span-2 mt-4">
             <button
               type="submit"
-              className="text-black bg-custom-yellow  items-center content-center justify-center text-2xl sm:text-xl font-medium font-comic rounded-full w-full h-14 flex"
+              className="text-black bg-custom-yellow  items-center content-center justify-center text-2xl sm:text-xl font-medium font-unkempt rounded-full w-full h-14 flex"
             >
               <Image
                 className="transform"

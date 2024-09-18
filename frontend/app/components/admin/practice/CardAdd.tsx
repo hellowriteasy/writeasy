@@ -88,7 +88,7 @@ const Card: React.FC<CardProps> = ({ title, type, id, onSuccess }) => {
     <>
       <div className="bg-white border font-poppins border-gray-300 w-full shadow-sm rounded-lg p-4 mb-4">
         <div className="flex justify-between items-center mb-2 sm:flex-col sm:items-start sm:gap-y-3">
-          <div className="text-xl font-semibold font-comic sm:text-sm">
+          <div className="text-xl font-semibold font-unkempt sm:text-sm">
             <p>{title}</p>
             <div className="text-gray-600 sm:text-sm">{type}</div>
           </div>

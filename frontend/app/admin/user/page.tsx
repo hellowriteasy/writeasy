@@ -59,7 +59,7 @@ const UserManagement: React.FC = () => {
 
   return (
     <div className="container font-poppins mx-auto py-4">
-      <h1 className="text-2xl  font-bold font-comic mb-4">
+      <h1 className="text-2xl  font-bold font-unkempt mb-4">
         User Management
       </h1>
       <div className="mb-4  w-full">

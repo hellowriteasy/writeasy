@@ -126,14 +126,14 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
         <div className="flex mt-8  sm:items-center sm:mt-0  ">
           <div className="py-2 mb-6 flex flex-col gap-y-2">
             <div className="flex gap-y-1 flex-col">
-              <h2 className="text-4xl font-comic sm:text-xl font-bold">
+              <h2 className="text-4xl font-unkempt sm:text-xl font-bold">
                 {contest.contestTheme}
               </h2>
               <p className="text-xl py-4 sm:text-sm ">
                 {contest.description}
               </p>
               <div className="flex w-full">
-                <p className="text-xl sm:text-sm text-center font-comic">
+                <p className="text-xl sm:text-sm text-center font-unkempt">
                   <b className="font-medium">Submission deadline</b> -
                   {moment(contest.submissionDeadline).format("llll")}
                 </p>

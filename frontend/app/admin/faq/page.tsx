@@ -51,7 +51,7 @@ const Page = () => {
 
             <div className="bg-white shadow-sm p-4 rounded-lg border border-gray-200">
               <div className="flex justify-between items-center">
-                <div className="text-xl font-semibold text-gray-700 font-comic">
+                <div className="text-xl font-semibold text-gray-700 font-unkempt">
                   All FAQs
                 </div>
                 <div className="text-lg flex gap-4 text-gray-500">
@@ -59,7 +59,7 @@ const Page = () => {
                   <i className="fas fa-hashtag cursor-pointer"></i>
                 </div>
                 <button
-                  className="bg-custom-yellow text-black border border-black px-4 py-2 rounded-lg font-comic"
+                  className="bg-custom-yellow text-black border border-black px-4 py-2 rounded-lg font-unkempt"
                   onClick={handleAddClick}
                 >
                   Add

@@ -51,7 +51,7 @@ const Join = () => {
           {contests.map((contest) => (
             <div
               key={contest._id}
-              className="flex flex-col flex-wrap font-comic rounded-3xl w-full max-w-4xl h-auto gap-4 bg-white border-2 border-gray-300 p-8"
+              className="flex flex-col flex-wrap font-unkempt rounded-3xl w-full max-w-4xl h-auto gap-4 bg-white border-2 border-gray-300 p-8"
             >
               <div className="flex justify-center vsm:flex-col text-xl sm:text-sm items-center gap-x-2 gap-y-2 text-center">
                 <div className="text-yellow-400 text-xl pr-3 font-bold">
@@ -67,7 +67,7 @@ const Join = () => {
               <div className="flex justify-center mt-4 sm:mt-6">
                 <button
                   onClick={() => handleJoinClick(contest._id)}
-                  className="bg-black font-comic rounded-full text-white h-10 sm:h-10 sm:text-sm w-32 sm:w-28 text-center text-lg  md:text-3xl"
+                  className="bg-black font-unkempt rounded-full text-white h-10 sm:h-10 sm:text-sm w-32 sm:w-28 text-center text-lg  md:text-3xl"
                 >
                   Join
                 </button>

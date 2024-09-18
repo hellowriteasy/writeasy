@@ -140,7 +140,7 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,contributo
     <div className="w-full h-[1300px] mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 h-screen ms-12">
         <div className="w-full h-60 relative pt-4">
-          <h1 className="text-6xl pt-4 font-bold font-comic">{Title}</h1>
+          <h1 className="text-6xl pt-4 font-bold font-unkempt">{Title}</h1>
           <div className="w-full relative pt-6 flex h-20">
             <div className="w-10 absolute h-10 left-3 bg-slate-500 rounded-full border">
               <Image src="" alt="" />
@@ -262,7 +262,7 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,contributo
                           <Icons.Code />
                         </button>
                         <div className="w-60 h-7 bg-white flex flex-col justify-center rounded-2xl shadow-sm ">
-                          <p className="text-center font-comic">
+                          <p className="text-center font-unkempt">
                             Word count: {wordCount} / 1000
                           </p>
                           {wordLimitExceeded && (
@@ -285,7 +285,7 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,contributo
                 <div className="">
                   <button
                     onClick={handleSubmit}
-                    className="text-white bg-black border text-2xl font-bold font-comic rounded-full w-[50vw] h-14"
+                    className="text-white bg-black border text-2xl font-bold font-unkempt rounded-full w-[50vw] h-14"
                   >
                     Submit Story
                   </button>

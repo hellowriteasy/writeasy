@@ -43,7 +43,7 @@ cron.schedule("*/10 * * * * *", () => scheduleJob());
 
 app.get("/log", (req, res) => {
   logger.info("Received request");
-  
+
   res.json({ message: "Server is up and running" });
 });
 

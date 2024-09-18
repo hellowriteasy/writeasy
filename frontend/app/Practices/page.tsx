@@ -64,14 +64,14 @@ const Page: React.FC = () => {
       <div className="absolute -top-10 right-0">
         <Image className="w-[10vw]" src={moon} alt="moon" />
       </div>
-      <div className="w-10/12 min-h-screen">
+      <div className="w-10/12  min-h-screen ">
         <div className="absolute top-24 left-2">
           <Image className="w-[10vw]" src={Bee} alt="bee" />
         </div>
         <div className="flex w-full gap-x-5 min-h-screen justify-around sm:justify-start relative">
           <div className="flex flex-col gap-4 w-full mid-w-full">
             <div className="flex justify-between ">
-              <h1 className="text-2xl sm:text-xl md:text-xl lg:text-xl xl:text-3xl font-comic font-extrabold">
+              <h1 className="text-2xl sm:text-xl md:text-xl lg:text-xl xl:text-3xl font-unkempt font-extrabold">
                 Choose a prompt and start your writing journey!
               </h1>
               <SelectMenu
@@ -97,7 +97,7 @@ const Page: React.FC = () => {
                     <FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
                   }
                   nextLabel={
-                    <FaAngleRight className="w-6 h-6 font-comic text-xl md:w-8 md:h-8 lg:w-10 lg:h-10" />
+                    <FaAngleRight className="w-6 h-6 font-unkempt text-xl md:w-8 md:h-8 lg:w-10 lg:h-10" />
                   }
                   breakLabel="..."
                   pageCount={Math.ceil(pageDetails.total / pageDetails.perPage)}
@@ -107,7 +107,7 @@ const Page: React.FC = () => {
                   containerClassName="flex justify-center gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
                   pageLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
                   previousLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
-                  nextLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 text-black text-xl font-comic flex items-center justify-center border border-gray-300 rounded-full"
+                  nextLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 text-black text-xl font-unkempt flex items-center justify-center border border-gray-300 rounded-full"
                   activeClassName="bg-black text-white rounded-full"
                 />
               </div>

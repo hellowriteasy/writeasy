@@ -25,10 +25,10 @@ const Prompt: React.FC<PromptProps> = ({ prompt }) => {
   };
 
   return (
-    <div className="flex justify-center  md:px-0 sm:px-0 ">
+    <div className="flex justify-center md:px-0 sm:px-0 ">
       <div className="w-full  h-auto flex relative bg-white border-2 border-gray-300 rounded-3xl overflow-hidden mb-4">
-        <div className="py-4 md:px-6 md:py-4 w-full md:w-10/12">
-          <div className="font-bold w-5/6 font-comic text-wrap text-base md:text-xl mb-2 overflow-hidden overflow-ellipsis whitespace-nowrap">
+        <div className="py-4 px-6 md:py-4 w-full md:w-10/12">
+          <div className="font-bold w-5/6 font-unkempt text-wrap text-base md:text-xl mb-2 overflow-hidden overflow-ellipsis whitespace-nowrap">
             {getTitle()}
             {prompt.title.split(' ').length > 15 && (
               <button onClick={toggleShowFullTitle} className="ml-2 text-yellow-500 underline">
@@ -36,7 +36,7 @@ const Prompt: React.FC<PromptProps> = ({ prompt }) => {
               </button>
             )}
           </div>
-          <p className="text-gray-900 font-bold text-wrap font-comic pt-4 md:pt-8 text-sm md:text-base">
+          <p className="text-gray-900 font-bold text-wrap font-unkempt pt-4 md:pt-8 text-sm md:text-base">
             Category: {prompt.promptCategory.join(",")}
           </p>
         </div>

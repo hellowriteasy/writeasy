@@ -69,12 +69,12 @@ const Login: NextPage = () => {
         </div>
       </Link>
       <div className="flex flex-col w-full h-full items-center">
-        <h1 className="text-center font-comic sm:text-2xl lg:text-4xl md:text-5xl pt-6">
+        <h1 className="text-center font-unkempt sm:text-2xl lg:text-4xl md:text-5xl pt-6">
           <span className="font-bold">Hello!</span> Welcome to Writeasy
         </h1>
         <form
           onSubmit={handleSubmit}
-          className="relative flex flex-col font-comic mt-14 z-10"
+          className="relative flex flex-col font-unkempt mt-14 z-10"
         >
           <div className="relative w-full flex flex-col justify-center items-center mt-4">
             <input
@@ -111,7 +111,7 @@ const Login: NextPage = () => {
             </button>
           </div>
 
-          <h1 className="text-end pt-4 font-comic text-sm underline font-bold">
+          <h1 className="text-end pt-4 font-unkempt text-sm underline font-bold">
             <Link href="/reset-password">Forgot Password?</Link>
           </h1>
           <button className="text-center border rounded-full my-4 text-white hover:opacity-80 min-w-full sm:min-w-60 sm:w-72 md:w-80 lg:w-96 mt-5 bg-black h-12 sm:h-14 text-xl sm:text-2xl">
@@ -125,7 +125,7 @@ const Login: NextPage = () => {
           </div>
         </form>
         <Button type="google" />
-        <h1 className="text-center font-comic pt-4">
+        <h1 className="text-center font-unkempt pt-4">
           Don &lsquo;t have an account?{" "}
           <Link href="/signup" className="font-bold cursor-pointer">
             Sign up

@@ -6,7 +6,7 @@ import cloud from "@/public/Game/sm-cloud.svg"
 const Pagination = () => {
   return (
     <div className=' w-[53vw]  relative h-20 flex ' >
-      <div className='flex space-x-4 font-comic items-center text-white'>
+      <div className='flex space-x-4 font-unkempt items-center text-white'>
         <button className='rounded-full relative w-20 h-20  border border-slate-200 bg-white text-black p-2'>
           <FaAngleLeft className='w-10 h-10 absolute left-5 top-5' />
         </button>

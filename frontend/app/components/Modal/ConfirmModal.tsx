@@ -52,13 +52,13 @@ const ConfirmModal: React.FC<ModalProps> = ({
                 <Dialog.Panel className="relative flex flex-col  items-center transform overflow-hidden rounded-lg text-left shadow-xl transition-all sm:my-8 w-1/2 h-full sm:w-full sm:max-w-lg bg-white ">
                   <div className="flex flex-col gap-4 p-5">
                     <div className="flex flex-col items-center">
-                      <h1 className="text-2xl font-school">{title}</h1>
-                      <p className="font-school">{description}</p>
+                      <h1 className="text-2xl font-unkempt">{title}</h1>
+                      <p className="font-unkempt">{description}</p>
                     </div>
                     <div className="flex justify-center content-center  gap-3">
                       <button
                         onClick={() => setIsOpen(false)}
-                        className=" font-school border text-xl sm:text-3xl py-2    bg-gray-300 rounded-full text-black w-40 md:w-36 lg:w-40 h-12 sm:w-12 sm:h-6 flex items-center justify-center sm:text-[10px] sm:rounded-sm"
+                        className=" font-unkempt border text-xl sm:text-3xl py-2    bg-gray-300 rounded-full text-black w-40 md:w-36 lg:w-40 h-12 sm:w-12 sm:h-6 flex items-center justify-center sm:text-[10px] sm:rounded-sm"
                       >
                         Cancel
                       </button>
@@ -67,7 +67,7 @@ const ConfirmModal: React.FC<ModalProps> = ({
                           onSuccess();
                           setIsOpen(false);
                         }}
-                        className=" font-school border text-xl sm:text-3xl py-2   hover:bg-slate-800  bg-red-600 rounded-full text-white w-40 md:w-36 lg:w-40 h-12 sm:w-12 sm:h-6 flex items-center justify-center sm:text-[10px] sm:rounded-sm"
+                        className=" font-unkempt border text-xl sm:text-3xl py-2   hover:bg-slate-800  bg-red-600 rounded-full text-white w-40 md:w-36 lg:w-40 h-12 sm:w-12 sm:h-6 flex items-center justify-center sm:text-[10px] sm:rounded-sm"
                       >
                         Confirm
                       </button>

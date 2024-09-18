@@ -54,7 +54,7 @@ const ChangePassword = () => {
   return (
     <div className="overflow-hidden two-line-bg  h-[50vh] mt-10">
       <div className="flex flex-col w-full h-full items-center">
-        <div className="text-center font-comic   pt-6">
+        <div className="text-center font-unkempt   pt-6">
           <span className="font-bold lg:text-4xl md:text-5xl">
             Change your password
           </span>
@@ -62,7 +62,7 @@ const ChangePassword = () => {
         </div>
         <form
           onSubmit={handleSubmit}
-          className="relative flex flex-col font-comic  z-10"
+          className="relative flex flex-col font-unkempt  z-10"
         >
           <div className="relative w-full flex flex-col justify-center items-center mt-8">
             <input

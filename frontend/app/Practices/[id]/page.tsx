@@ -80,7 +80,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
     <div className="w-full min-h-screen  mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 min-h-screen flex flex-col items-center gap-y-4 ">
         <div className="w-4/5 mx-auto  relative pt-2 ">
-          <h1 className="text-3xl sm:text-sm text-center font-bold font-comic">
+          <h1 className="text-3xl sm:text-sm text-center font-bold font-unkempt">
             {prompt.title}
           </h1>
         </div>
@@ -99,7 +99,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
                   />
                 </div>
                 <div className="flex w-full flex-col gap-8">
-                  <div className="flex flex-wrap justify-center gap-4 sm:gap-1 font-comic">
+                  <div className="flex flex-wrap justify-center gap-4 sm:gap-1 font-unkempt">
                     {["grammar", "rewrite", "improve"].map((type) => (
                       <div key={type} className="flex">
                         <button

@@ -74,7 +74,7 @@ const AxiosIns=axiosInstance("");
                   <i className="fas fa-hashtag cursor-pointer"></i>
                 </div>
                 <button
-                  className="bg-custom-yellow text-black border border-black px-4 py-2 rounded-lg font-comic"
+                  className="bg-custom-yellow text-black border border-black px-4 py-2 rounded-lg font-unkempt"
                   onClick={handleAddClick}
                 >
                   Add

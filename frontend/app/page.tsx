@@ -19,7 +19,7 @@ export default function Home() {
   }, [user.email, user.token]);
 
   return (
-    <main className="font-school flex justify-center items-baseline flex-col two-line-bg ">
+    <main className="font-unkempt flex justify-center items-baseline flex-col two-line-bg ">
       <Hero />
     </main>
   );

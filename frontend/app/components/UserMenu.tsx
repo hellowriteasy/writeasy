@@ -35,13 +35,13 @@ const UserMenu = () => {
 
   return (
     <div
-      className="relative min-w-60 max-w-90 w-full font-comic cursor-pointer"
+      className="relative min-w-60 max-w-90 w-full font-unkempt cursor-pointer"
       onMouseEnter={() => setShowOptions(true)}
       onMouseLeave={() => setShowOptions(false)}
     >
       {loggedIn ? (
         <>
-          <div className="relative flex font-comic justify-between items-center  bg-black border border-black rounded-full h-14  focus:outline-none focus:border-black">
+          <div className="relative flex font-unkempt justify-between items-center  bg-black border border-black rounded-full h-14  focus:outline-none focus:border-black">
             <div className="pointer-events-none  w-14 h-14 rounded-full  overflow-hidden  border-custom-yellow  border-4">
               {profile_picture && profile_picture.startsWith("https") ? (
                 <img
@@ -122,13 +122,13 @@ const UserMenu = () => {
         <div className="flex gap-2 sm:gap-4">
           <button
             onClick={() => router.push("/login")}
-            className="text-lg sm:text-2xl font-bold text-center bg-custom-yellow border-2 w-16 sm:w-20 h-10 sm:h-12 hover:bg-white rounded-full border-black text-black font-comic"
+            className="text-lg sm:text-2xl font-bold text-center bg-custom-yellow border-2 w-16 sm:w-20 h-10 sm:h-12 hover:bg-white rounded-full border-black text-black font-unkempt"
           >
             Login
           </button>
           <button
             onClick={() => router.push("/signup")}
-            className="text-lg sm:text-2xl font-bold text-center bg-black border-2 w-24 sm:w-32 h-10 sm:h-12 rounded-full hover:opacity-80 border-black text-white font-comic"
+            className="text-lg sm:text-2xl font-bold text-center bg-black border-2 w-24 sm:w-32 h-10 sm:h-12 rounded-full hover:opacity-80 border-black text-white font-unkempt"
           >
             Sign up
           </button>

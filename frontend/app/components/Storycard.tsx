@@ -49,7 +49,9 @@ const Storycard: React.FC<StorycardProps> = ({
               )}
             </div>
             <div>
-              <h1 className="text-base sm:text-lg md:text-xl capitalize">{username}</h1>
+              <h1 className="text-base sm:text-lg md:text-xl capitalize">
+                {username}
+              </h1>
               {/* <p className="text-[2vw] sm:text-sm md:text-lg">{email}</p> */}
             </div>
           </div>

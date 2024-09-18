@@ -63,11 +63,11 @@ const Page = () => {
 
   return (
     <ProtectedRoute>
-      <div className="bg-gray-50  min-h-screen font-comic">
+      <div className="bg-gray-50  min-h-screen font-unkempt">
         <div className="flex h-screen">
           <div className="flex-1 flex flex-col p-6 space-y-6">
             {/* <div className="flex justify-between items-center w-5/6 bg-white shadow-sm p-4 rounded-lg border border-gray-200">
-              <div className="text-2xl font-semibold text-gray-700 font-comic">
+              <div className="text-2xl font-semibold text-gray-700 font-unkempt">
                 Category
               </div>
             
@@ -75,12 +75,12 @@ const Page = () => {
 
             <div className="bg-white shadow-sm p-4 rounded-lg border border-gray-200">
               <div className="flex justify-between items-center">
-                <div className="text-xl font-semibold text-gray-700  font-comic">
+                <div className="text-xl font-semibold text-gray-700  font-unkempt">
                   All categories
                 </div>
               
                 <button
-                  className="bg-custom-yellow text-black border border-black px-4 py-2 rounded-lg font-comic"
+                  className="bg-custom-yellow text-black border border-black px-4 py-2 rounded-lg font-unkempt"
                   onClick={handleAddClick}
                 >
                   Add

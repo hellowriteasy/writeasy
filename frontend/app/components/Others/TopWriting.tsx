@@ -38,7 +38,7 @@ const TopWriting: React.FC = () => {
       });
   }, []);
   return (
-    <div className="w-96 mid:w-[200px]   h-auto flex justify-center relative yellow border-4 border-yellow-500 rounded-3xl p-4 md:p-0">
+    <div className="w-96 h-auto flex justify-center relative yellow border-4 border-yellow-500 rounded-3xl p-4 md:p-0">
       <div className="absolute -top-6 sm-hide md:-top-9 right-4 md:right-[-12px]">
         <Image
           src={Crown}
@@ -50,16 +50,16 @@ const TopWriting: React.FC = () => {
       </div>
 
       <div className="text-center w-full md:w-11/12 pt-4 text-xl md:text-3xl">
-        <h2 className="font-comic text-xl py-4 font-bold leading-normal">
+        <h2 className="font-unkempt text-xl py-4 font-bold leading-normal">
           Top writings
         </h2>
         {upcomingWritingsData ? (
-          <p className="font-comic text-sm">{upcomingWritingsData}</p>
+          <p className="font-unkempt text-sm">{upcomingWritingsData}</p>
         ) : null}
         {isLoading ? (
-          <p className="font-comic">Loading...</p>
+          <p className="font-unkempt">Loading...</p>
         ) : error ? (
-          <p className="font-comic">{error}</p>
+          <p className="font-unkempt">{error}</p>
         ) : (
           <ul className="p-4 w-full flex flex-col gap-y-1">
             {topStories.map((story, index) => (
@@ -68,10 +68,10 @@ const TopWriting: React.FC = () => {
                 key={story._id}
                 className="my-2 flex flex-col  items-start"
               >
-                <h1 className="text-xl text-start font-comic font-bold capitalize ">
+                <h1 className="text-xl text-start font-unkempt font-bold capitalize ">
                   {story.user.username}
                 </h1>
-                <h3 className="text-lg text-start font-comic md:text-xl font-normal line-clamp-1">
+                <h3 className="text-lg text-start font-unkempt md:text-xl font-normal line-clamp-1">
                   {story.content}
                 </h3>
               </Link>

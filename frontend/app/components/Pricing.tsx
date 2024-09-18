@@ -50,8 +50,8 @@ const Pricing = () => {
   };
 
   return (
-    <div className="w-full py-10 h-auto   font-school">
-      <h1 className="text-center text-4xl font-school pt-10 font-bold">
+    <div className="w-full py-10 h-auto   font-unkempt">
+      <h1 className="text-center text-4xl font-unkempt pt-10 font-bold">
         Pricing
       </h1>
       <div className="flex flex-col lg:flex-row justify-center items-center h-full w-full relative ">
@@ -77,7 +77,7 @@ const Pricing = () => {
               </div>
               {!userId && (
                 <Link href="/signup" className="">
-                  <button className="border-2 mx-auto   sm:text-3xl sm:rounded-full font-comic text-5xl hover:bg-slate-200 border-slate-700 bg-white rounded-full text-black w-60 h-16">
+                  <button className="border-2 mx-auto   sm:text-3xl sm:rounded-full font-unkempt text-5xl hover:bg-slate-200 border-slate-700 bg-white rounded-full text-black w-60 h-16">
                     Sign up
                   </button>
                 </Link>
@@ -98,7 +98,7 @@ const Pricing = () => {
                   <>
                     <div className="flex top-[30%] justify-center items-center">
                       <TbCurrencyPound className="text-[5vw]" />
-                      <h2 className="text-[4vw] font-comic text-center font-bold">
+                      <h2 className="text-[4vw] font-unkempt text-center font-bold">
                         20
                       </h2>
                       <span className="pt-4 text-[4vw]">/month</span>
@@ -108,12 +108,12 @@ const Pricing = () => {
                   <div className="absolute top-[5%]">
                     <div className="flex items-center justify-center">
                       <TbCurrencyPound className="text-[5vw]" />
-                      <h2 className="text-[5vw] font-comic text-center font-bold">
+                      <h2 className="text-[5vw] font-unkempt text-center font-bold">
                         {sub?.unit_amount / 100}
                       </h2>
                       <span className="pt-4">/month</span>
                     </div>
-                    <div className="text-center font-comic font-bold text-xl sm:text-sm">
+                    <div className="text-center font-unkempt font-bold text-xl sm:text-sm">
                       {subscriptionRemainingDays} days left
                     </div>
                   </div>
@@ -130,14 +130,14 @@ const Pricing = () => {
                 {!userId ? (
                   <button
                     onClick={() => handleSignUp()}
-                    className="border-2 mx-auto  sm:text-3xl sm:rounded-full font-comic text-5xl hover:bg-white border-slate-700 hover:text-black rounded-full w-60 h-16 bg-black text-white"
+                    className="border-2 mx-auto  sm:text-3xl sm:rounded-full font-unkempt text-5xl hover:bg-white border-slate-700 hover:text-black rounded-full w-60 h-16 bg-black text-white"
                   >
                     Sign up
                   </button>
                 ) : !isSubcriptionActive ? (
                   <button
                     onClick={() => handleSignUp(sub?.id, sub?.type)}
-                    className="border text-5xl sm:text-3xl py-2 mx-auto font-comic hover:bg-slate-800 border-slate-400 bg-black rounded-full text-white w-40 md:w-56 lg:w-60 h-16  sm:h-6 flex items-center justify-center  sm:rounded-full"
+                    className="border text-5xl sm:text-3xl py-2 mx-auto font-unkempt hover:bg-slate-800 border-slate-400 bg-black rounded-full text-white w-40 md:w-56 lg:w-60 h-16  sm:h-6 flex items-center justify-center  sm:rounded-full"
                   >
                     Buy Now
                   </button>
