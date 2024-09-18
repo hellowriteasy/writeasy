@@ -37,4 +37,4 @@ jobs:
       run: sudo docker pull skilledsantoshh/test:writeasy_backend
     
     - name: Run the Docker Container - backend
-      run: sudo docker run --env-file /home/ubuntu/.env -d -p 8000:8000 --name writeasy_backend_container skilledsantoshh/test:writeasy_backend
+      run: sudo docker run --env-file /home/ubuntu/.env -d -p 8000:8000 -v /var/log:/var/log --name writeasy_backend_container skilledsantoshh/test:writeasy_backend
