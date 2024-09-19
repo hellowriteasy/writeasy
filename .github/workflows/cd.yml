@@ -31,10 +31,10 @@ jobs:
       run: sudo docker pull skilledsantoshh/test:writeasy_frontend
 
     - name: Run the Docker Container - frontend
-      run: sudo docker run -d -p 80:3000 --name writeasy_frontend_container skilledsantoshh/test:writeasy_frontend
-
+      run: sudo docker run -d -p 3000:3000 --restart on-failure --name writeasy_frontend_container skilledsantoshh/test:writeasy_frontend
+      
     - name: Pull the Docker Image - backend
       run: sudo docker pull skilledsantoshh/test:writeasy_backend
-    
+
     - name: Run the Docker Container - backend
-      run: sudo docker run --env-file /home/ubuntu/.env -d -p 8000:8000 -v /var/log:/var/log --name writeasy_backend_container skilledsantoshh/test:writeasy_backend
+      run: sudo docker run --env-file /home/ubuntu/.env -d -p 8000:8000 -v /var/log:/var/log --restart on-failure --name writeasy_backend_container skilledsantoshh/test:writeasy_backend
