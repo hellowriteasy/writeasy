@@ -1,5 +1,7 @@
 const express = require("express");
 const PaymentController = require("../src/controllers/paymentController");
+const getCachedData = require("../middleware/getCachedData");
+const cacheTypes = require("../src/utils/types/cacheType");
 const router = express.Router();
 
 /**
@@ -73,5 +75,9 @@ router.post(
   PaymentController.confirmStripeCheckoutSession
 );
 
-router.get("/subscriptions", PaymentController.getSubscriptions);
+router.get(
+  "/subscriptions",
+  getCachedData(cacheTypes.SUBSCRIPTION_DATA),
+  PaymentController.getSubscriptions
+);
 module.exports = router;

@@ -1,7 +1,9 @@
 const stripe = require("../../config/stripe");
 const Subscription = require("../models/subscription");
 const User = require("../models/user");
+const cacheService = require("../services/cacheService");
 const StripeService = require("../services/stripeService");
+const cacheTypes = require("../utils/types/cacheType");
 const createStripeCheckoutSession = async (req, res) => {
   const { user_id, price_id, type } = req.body;
   let stripe_customer_id = "";
@@ -113,6 +115,7 @@ const getSubscriptions = async (req, res) => {
   try {
     const prices = await StripeService.getPrices();
     res.send(prices);
+    await cacheService.set(cacheTypes.SUBSCRIPTION_DATA, prices);
   } catch (error) {
     console.log("*error: ", error);
     res.status(500).json({ message: error, success: false });

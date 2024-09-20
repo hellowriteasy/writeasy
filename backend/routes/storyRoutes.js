@@ -18,6 +18,8 @@ const {
   calculateTopWritings,
 } = require("../src/controllers/storyController");
 const { practiseStory } = require("../src/controllers/StoryScoreController");
+const getCachedData = require("../middleware/getCachedData");
+const cacheTypes = require("../src/utils/types/cacheType");
 /**
  * @openapi
  * /api/stories:
@@ -458,11 +460,13 @@ router.get("/contest/top-writings/:id", getTopStoriesForContest);
  *                   type: object
  */
 
-router.get("/contest/previous-week-top-stories", getPreviousWeekTopStories);
-
+router.get(
+  "/contest/previous-week-top-stories",
+  getCachedData(cacheTypes.PREV_WEEK_TOP_STORIES),
+  getPreviousWeekTopStories
+);
 router.post("/mark-top-story/:id", markTopStory);
 router.post("/remove-top-story/:id", removeTopStory);
-router.post("/calculate-top-writings",calculateTopWritings);
-
+router.post("/calculate-top-writings", calculateTopWritings);
 
 module.exports = router;

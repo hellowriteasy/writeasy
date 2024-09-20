@@ -9,9 +9,10 @@ const {
   updatePrompt,
   deletePrompt,
   getPromptsByContestId,
-  getAllPromptsOfContest
+  getAllPromptsOfContest,
 } = require("../src/controllers/promptController");
-
+const getCachedData = require("../middleware/getCachedData");
+const cacheTypes = require("../src/utils/types/cacheType");
 /**
  * @openapi
  * /api/prompts:
@@ -98,7 +99,11 @@ router.post("/", createPrompt);
  *       500:
  *         description: Internal server error
  */
-router.get("/practice-prompts", getPracticePrompts);
+router.get(
+  "/practice-prompts",
+  getCachedData(cacheTypes.PRACTISE_PROMPTS),
+  getPracticePrompts
+);
 
 /**
  * @openapi
@@ -130,7 +135,11 @@ router.get("/contest-prompts", getContestPrompts);
  *       500:
  *         description: Server error when fetching prompts.
  */
-router.get("/game-prompts", getGamePrompts);
+router.get(
+  "/game-prompts",
+  getCachedData(cacheTypes.GAME_PROMPT),
+  getGamePrompts
+);
 
 /**
  * @openapi
@@ -238,12 +247,7 @@ router.delete("/:id", deletePrompt);
  */
 router.get("/contest/:contestId", getPromptsByContestId);
 
-
-
-router.get("/list/:contestId", getAllPromptsOfContest)
-
-
-
+router.get("/list/:contestId", getAllPromptsOfContest);
 
 /**
  * @openapi
@@ -269,8 +273,5 @@ router.get("/list/:contestId", getAllPromptsOfContest)
  *         description: Server error when fetching contest prompts.
  */
 // router.get("/user/:contestId", getPromptsByContestId);
-
-
-
 
 module.exports = router;

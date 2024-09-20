@@ -9,7 +9,8 @@ const {
   getOngoingContests,
   getEndedContests,
 } = require("../src/controllers/contestController");
-
+const getCahcedData = require("../middleware/getCachedData");
+const cacheTypes = require("../src/utils/types/cacheType");
 /**
  * @openapi
  * /api/contests:
@@ -62,7 +63,11 @@ router.get("/", getContests);
  *       500:
  *         description: Server error when fetching ongoing contests.
  */
-router.get("/ongoing", getOngoingContests);
+router.get(
+  "/ongoing",
+  getCahcedData(cacheTypes.ONGOING_CONTEST),
+  getOngoingContests
+);
 
 /**
  * @openapi
@@ -78,7 +83,7 @@ router.get("/ongoing", getOngoingContests);
  *       500:
  *         description: Server error when fetching ongoing contests.
  */
-router.get("/ended", getEndedContests);
+router.get("/ended", getCahcedData(cacheTypes.ENDED_CONTEST), getEndedContests);
 
 /**
  * @openapi

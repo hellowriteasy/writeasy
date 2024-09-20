@@ -11,30 +11,38 @@ jobs:
     runs-on: self-hosted
 
     steps:
-    - name: Stop and Remove Old Docker Containers - frontend
-      run: |
-        sudo docker stop writeasy_frontend_container || true
-        sudo docker rm writeasy_frontend_container || true
+      - name: Stop and Remove Old Docker Containers - frontend
+        run: |
+          sudo docker stop writeasy_frontend_container || true
+          sudo docker rm writeasy_frontend_container || true
 
-    - name: Stop and Remove Old Docker Containers - backend
-      run: |
-        sudo docker stop writeasy_backend_container || true
-        sudo docker rm writeasy_backend_container || true
+      - name: Stop and Remove Old Docker Containers - backend
+        run: |
+          sudo docker stop writeasy_backend_container || true
+          sudo docker rm writeasy_backend_container || true
 
-    - name: Remove Old Docker Images - frontend
-      run: sudo docker image rm -f skilledsantoshh/test:writeasy_frontend || true
+      - name: Stop and Remove Old Redis server 
+        run: |
+          sudo docker stop writeasy_redis_server || true
+          sudo docker rm writeasy_redis_server || true
 
-    - name: Remove Old Docker Images - backend
-      run: sudo docker image rm -f skilledsantoshh/test:writeasy_backend || true
+      - name: Remove Old Docker Images - frontend
+        run: sudo docker image rm -f skilledsantoshh/test:writeasy_frontend || true
 
-    - name: Pull the Docker Image - frontend
-      run: sudo docker pull skilledsantoshh/test:writeasy_frontend
+      - name: Remove Old Docker Images - backend
+        run: sudo docker image rm -f skilledsantoshh/test:writeasy_backend || true
 
-    - name: Run the Docker Container - frontend
-      run: sudo docker run -d -p 3000:3000 --restart on-failure --name writeasy_frontend_container skilledsantoshh/test:writeasy_frontend
-      
-    - name: Pull the Docker Image - backend
-      run: sudo docker pull skilledsantoshh/test:writeasy_backend
+      - name: Pull the Docker Image - frontend
+        run: sudo docker pull skilledsantoshh/test:writeasy_frontend
 
-    - name: Run the Docker Container - backend
-      run: sudo docker run --env-file /home/ubuntu/.env -d -p 8000:8000 -v /var/log:/var/log --restart on-failure --name writeasy_backend_container skilledsantoshh/test:writeasy_backend
+      - name: Run the Docker Container - frontend
+        run: sudo docker run -d -p 3000:3000 --restart on-failure --name writeasy_frontend_container skilledsantoshh/test:writeasy_frontend
+
+      - name: Pull the Docker Image - backend
+        run: sudo docker pull skilledsantoshh/test:writeasy_backend
+
+      - name: Run the Docker Container - backend
+        run: sudo docker run --env-file /home/ubuntu/.env -d -p 8000:8000 -v /var/log:/var/log --restart on-failure --name writeasy_backend_container skilledsantoshh/test:writeasy_backend
+
+      - name: Run Redis Stack
+        run: sudo docker run -d --name writeasy_redis_server -p 6379:6379 redis/redis-stack-server:latest

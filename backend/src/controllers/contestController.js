@@ -1,7 +1,9 @@
 const Prompt = require("../models/prompt");
 const Story = require("../models/story");
+const cacheService = require("../services/cacheService");
 
 const ContestService = require("../services/contestService");
+const cacheTypes = require("../utils/types/cacheType");
 
 const createContest = async (req, res) => {
   try {
@@ -79,39 +81,39 @@ const getOngoingContests = async (req, res) => {
       skip,
       limit
     );
-    res.json({
+    const responseData = {
       data,
       pageData: {
         page,
         perPage,
         total,
       },
-    });
+    };
+    res.json(responseData);
+    await cacheService.set(cacheTypes.ONGOING_CONTEST, responseData);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
 const getEndedContests = async (req, res) => {
-  
   const page = req.query.page || 1; // Default page is 1
   const perPage = req.query.perPage || 5; // Default page size is 10
   const skip = (page - 1) * perPage;
   const limit = +perPage || 5;
 
   try {
-
     const { data, total } = await ContestService.getEndedContests(skip, limit);
-
-    res.json({
+    const responseData = {
       data,
       pageData: {
         page,
         perPage,
         total,
       },
-    });
-
+    };
+    res.json(responseData);
+    await cacheService.set(cacheTypes.ENDED_CONTEST, responseData);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

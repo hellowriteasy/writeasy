@@ -9,6 +9,8 @@ const emailServiceClass = require("../services/emailService");
 const path = require("path");
 const moment = require("moment");
 const nodemailer = require("nodemailer");
+const cacheService = require("../services/cacheService");
+const cacheTypes = require("../utils/types/cacheType");
 
 const createStory = async (req, res) => {
   try {
@@ -451,6 +453,7 @@ const getTopStoriesForContest = async (req, res) => {
 
 const getPreviousWeekTopStories = async (req, res) => {
   try {
+    let responseData;
     const lastWeekContest = await Contest.find({
       isActive: false,
       // topWritingPublished: true,
@@ -460,6 +463,13 @@ const getPreviousWeekTopStories = async (req, res) => {
 
     const latestContest = lastWeekContest[0];
 
+    console.log(
+      "submissionDeadline",
+      moment(new Date(lastWeekContest[0].submissionDeadline)).format("lll"),
+      "topWritingPublishDate",
+      moment(new Date(lastWeekContest[0].topWritingPublishDate)).format("lll")
+    );
+
     if (latestContest.topWritingPublished) {
       const lastWeekContestTopStories = await Story.find({
         contest: latestContest._id,
@@ -468,16 +478,18 @@ const getPreviousWeekTopStories = async (req, res) => {
         path: "user",
         select: "-password",
       });
-
-      res.status(200).json({ data: lastWeekContestTopStories || [] });
+      responseData = { data: lastWeekContestTopStories || [] };
+      res.status(200).json(responseData);
     } else {
-      res.status(200).json({
+      responseData = {
         hasTopWritingPublished: false,
         message: `Top writings will be published on ${moment(
-          latestContest.topWritingPublishDate
+          new Date(latestContest.topWritingPublishDate)
         ).format("lll")}`,
-      });
+      };
+      res.status(200).json(responseData);
     }
+    await cacheService.set(cacheTypes.PREV_WEEK_TOP_STORIES, responseData);
   } catch (error) {
     console.error(error);
     return res.status(500).json({
