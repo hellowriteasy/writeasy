@@ -11,17 +11,26 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      # Step 1: Checkout the repository, including docker-compose.yml
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Step 2: Install Docker Compose (if not installed)
+      - name: Install Docker and Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker docker-compose || true
+
+      # Step 3: Move to the correct directory and stop any old containers
       - name: Stop and Remove Old Containers and Images using Docker Compose
         run: |
-          cd ../../  # Change this to the actual path where docker-compose.yml is located
-          sudo docker-compose down || true  # Stop and remove old containers
-          sudo docker-compose rm -f || true # Force remove old containers (if any left)
+          cd ${{ github.workspace }}  # This will be the project root
+          sudo docker-compose down || true  # Stop old containers
+          sudo docker-compose rm -f || true # Remove old containers
 
+      # Step 4: Pull the latest Docker images and start the containers
       - name: Pull and Start Services using Docker Compose
         run: |
-          cd ../../  
+          cd ${{ github.workspace }}  # Ensure we're in the repo root with docker-compose.yml
           sudo docker-compose pull  # Pull the latest images from Docker Hub
           sudo docker-compose up -d --build  # Build and start services in detached mode
