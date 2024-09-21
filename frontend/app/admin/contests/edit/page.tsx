@@ -8,6 +8,7 @@ import { axiosInstance } from "@/app/utils/config/axios";
 import DatePicker from "react-datepicker";
 import { useRouter } from "next/navigation";
 import "react-datepicker/dist/react-datepicker.css";
+import useUploadFile from "@/app/hooks/useFileUpload";
 export interface TPromptAdd {
   _id: string;
   title: string;
@@ -18,6 +19,7 @@ const Page = () => {
   const Router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [promptCards, setPromptCards] = useState<TPromptAdd[]>([]);
+  const [image, setImage] = useState<File | null>(null);
   const [contestDetails, setContestDetails] = useState({
     promptPublishDate: new Date(),
     submissionDeadline: new Date(
@@ -29,6 +31,7 @@ const Page = () => {
     description: "",
     contestTheme: "",
   });
+  const { uploadFile } = useUploadFile();
 
   const toast = useCustomToast();
   const handleAddClick = () => {
@@ -37,10 +40,16 @@ const Page = () => {
 
   const handleSubmitContest = async () => {
     const AxiosIns = axiosInstance("");
+    let imageUrl = "";
+    if (image) {
+      imageUrl = await uploadFile(image);
+    }
+    console.log("image url", imageUrl);
     try {
       const { status } = await AxiosIns.post("/contests", {
         prompts: promptCards.map((prompt) => prompt._id),
         ...contestDetails,
+        image: imageUrl,
       });
       if (status === 201) {
         setContestDetails((_) => ({
@@ -55,6 +64,12 @@ const Page = () => {
       }
     } catch (error) {
       toast("Faield to create contest.", "error");
+    }
+  };
+  const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
+    if (file) {
+      setImage(file);
     }
   };
 
@@ -92,7 +107,6 @@ const Page = () => {
   const handlePromptAdd = (prompt: TPromptAdd) => {
     setPromptCards([...promptCards, prompt]);
   };
-
 
   return (
     <ProtectedRoute>
@@ -191,7 +205,40 @@ const Page = () => {
                   value={contestDetails.description}
                 />
               </div>
-
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="theme"
+                >
+                  Upload image
+                </label>
+                {image ? (
+                  <div>
+                    <img
+                      src={URL.createObjectURL(image)}
+                      width={"300px"}
+                      height={"auto"}
+                      alt="contet image"
+                    />
+                    <button
+                      onClick={() => setImage(null)}
+                      className="bg-red-600 text-white rounded-md p-2"
+                    >
+                      Remove Image
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex ">
+                    <input
+                      id="theme"
+                      type="file"
+                      name="image"
+                      className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                      onChange={handleChangeImage}
+                    />
+                  </div>
+                )}
+              </div>
               {/* {error && <div className="text-red-500 mb-4">{error}</div>} */}
 
               <button

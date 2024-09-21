@@ -8,10 +8,11 @@ import { HiUserGroup } from "react-icons/hi";
 import { SiBookstack } from "react-icons/si";
 import { MdOutlineMail } from "react-icons/md";
 import { FaQuestion } from "react-icons/fa";
-import { BiSolidCategory } from "react-icons/bi";
+import { BiHistory, BiSolidCategory } from "react-icons/bi";
 import { FaUsersCog } from "react-icons/fa";
 import { LuClipboardEdit } from "react-icons/lu";
 import useAdminSidebarStore from "@/app/store/useSidebarStore";
+import TopWritings from "@/app/admin/top-writings/page";
 
 const Sidebar = () => {
   const { adminSidebarOpen, toggleSidebar } = useAdminSidebarStore();
@@ -28,14 +29,15 @@ const Sidebar = () => {
     { faq: <FaQuestion /> },
     { category: <BiSolidCategory /> },
     { user: <FaUsersCog /> },
-    { "top-writings": <HiUserGroup /> },
+    // { "top-writings": <HiUserGroup /> },
+    {"Top-stories":<BiHistory/>}
   ] as Record<string, React.ReactNode>[];
 
   const path = usePathname();
 
   return (
     <>
-      <div className="lg:hidden  flex justify-between items-start     ">
+      <div className="lg:hidden  flex justify-between items-start">
         {/* <button onClick={toggleSidebar} className="">
           {adminSidebarOpen ? (
             <FaTimes className="h-6 w-6" />

@@ -1,8 +1,8 @@
 const Contest = require("../models/contest");
 
 const createContest = async (data) => {
-  const contest = new Contest(data);
-  return await contest.save();
+  const contest = await Contest.create(data);
+  return contest;
 };
 
 const getAllContests = async () => {

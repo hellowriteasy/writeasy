@@ -191,7 +191,11 @@ const CreateContest = () => {
                   />
                 </div>
               </div>
-
+              <img
+                src={promptDetails?.contestId?.image || ""}
+                alt="image"
+                className="w-full  object-fill mx-auto mb-5"
+              />
               <div className="h-auto w-full rounded-full">
                 <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
                   <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">

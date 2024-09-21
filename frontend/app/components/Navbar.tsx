@@ -19,7 +19,7 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
 
   const navContent = (
     <>
-      <div className="flex items-center justify-between w-11/12">
+      <div className="flex items-center justify-between w-full ">
         <Link href="/">
           <div className="flex min-w-20 cursor-pointer items-center flex-shrink-0 mr-6">
             <Image
@@ -31,7 +31,7 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
           </div>
         </Link>
         <div className="mid:hidden md:flex md:flex-grow justify-center">
-          <ul className="flex justify-center w-full items-center font-unkempt text-xl space-x-4">
+          <ul className="flex justify-center w-full items-center font-unkempt text-xl space-x-2">
             {titles.map((link) => {
               const isActive =
                 path.startsWith(link.path) || path.includes(link.path);
@@ -55,7 +55,7 @@ const Navbar: React.FC<NavbarProps> = ({ titles }) => {
             })}
           </ul>
         </div>
-        <div className="hidden md:flex mid:hidden items-center space-x-4">
+        <div className="hidden md:flex mid:hidden items-center space-x-5">
           <UserMenu />
         </div>
         <div className="md:hidden mid:block flex items-center">

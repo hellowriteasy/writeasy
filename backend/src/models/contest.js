@@ -7,6 +7,7 @@ const contestSchema = new mongoose.Schema(
     description: { type: String, required: false },
     submissionDeadline: { type: Date, required: true },
     comparisionCount: { type: Number, required: false },
+    image: { type: String },
     topWritingPercent: { type: Number, default: 50, required: false },
     promptPublishDate: {
       type: Date,

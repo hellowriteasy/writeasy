@@ -5,6 +5,7 @@ import { TContest } from "@/app/utils/types";
 import { axiosInstance } from "@/app/utils/config/axios";
 import useAuthStore from "@/app/store/useAuthStore";
 import Link from "next/link";
+import moment from "moment";
 
 const WeeklyTest = () => {
   const [contest, setContest] = useState<TContest | null>(null);
@@ -58,7 +59,7 @@ const WeeklyTest = () => {
             </ul>
             <p className="text-sm mid:text-[10px] pt-2">
               <span className="font-bold">Closes - </span>
-              {new Date(contest.submissionDeadline).toLocaleString()}
+              { moment( new Date(contest.submissionDeadline)).format("lll").toLocaleString()}
             </p>
             <Link href={`/Contests/${contest._id}`}>
               <button className="text-sm w-40 mid:w-28 mid:h-10 h-12 mt-4 bg-black font-bold font-unkempt text-white rounded-2xl ">
