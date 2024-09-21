@@ -7,42 +7,21 @@ on:
       - completed
 
 jobs:
-  build:
+  deploy:
     runs-on: self-hosted
 
     steps:
-      - name: Stop and Remove Old Docker Containers - frontend
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Stop and Remove Old Containers and Images using Docker Compose
         run: |
-          sudo docker stop writeasy_frontend_container || true
-          sudo docker rm writeasy_frontend_container || true
+          cd ../../  # Change this to the actual path where docker-compose.yml is located
+          sudo docker-compose down || true  # Stop and remove old containers
+          sudo docker-compose rm -f || true # Force remove old containers (if any left)
 
-      - name: Stop and Remove Old Docker Containers - backend
+      - name: Pull and Start Services using Docker Compose
         run: |
-          sudo docker stop writeasy_backend_container || true
-          sudo docker rm writeasy_backend_container || true
-
-      - name: Stop and Remove Old Redis server 
-        run: |
-          sudo docker stop writeasy_redis_server || true
-          sudo docker rm writeasy_redis_server || true
-
-      - name: Remove Old Docker Images - frontend
-        run: sudo docker image rm -f skilledsantoshh/test:writeasy_frontend || true
-
-      - name: Remove Old Docker Images - backend
-        run: sudo docker image rm -f skilledsantoshh/test:writeasy_backend || true
-
-      - name: Pull the Docker Image - frontend
-        run: sudo docker pull skilledsantoshh/test:writeasy_frontend
-
-      - name: Run the Docker Container - frontend
-        run: sudo docker run -d -p 3000:3000 --restart on-failure --name writeasy_frontend_container skilledsantoshh/test:writeasy_frontend
-
-      - name: Pull the Docker Image - backend
-        run: sudo docker pull skilledsantoshh/test:writeasy_backend
-
-      - name: Run the Docker Container - backend
-        run: sudo docker run --env-file /home/ubuntu/.env -d -p 8000:8000 -v /var/log:/var/log --restart on-failure --name writeasy_backend_container skilledsantoshh/test:writeasy_backend
-
-      - name: Run Redis Stack
-        run: sudo docker run -d --name writeasy_redis_server -p 6379:6379 redis/redis-stack-server:latest
+          cd ../../  
+          sudo docker-compose pull  # Pull the latest images from Docker Hub
+          sudo docker-compose up -d --build  # Build and start services in detached mode

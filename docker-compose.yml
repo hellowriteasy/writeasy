@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis/redis-stack-server:latest
+    container_name: writeasy_redis_server
+    ports:
+      - '6379:6379'
+    restart: always
+
+  frontend:
+    image: skilledsantoshh/test:writeasy_frontend
+    container_name: writeasy_frontend_container
+    ports:
+      - '3000:3000'
+    environment:
+      NEXT_PUBLIC_FIREBASE_API_KEY: ${NEXT_PUBLIC_FIREBASE_API_KEY}
+      NEXT_PUBLIC_BACKEND_ROOT_URL: ${NEXT_PUBLIC_BACKEND_ROOT_URL}
+    restart: on-failure
+
+  backend:
+    image: skilledsantoshh/test:writeasy_backend
+    container_name: writeasy_backend_container
+    ports:
+      - '8000:8000'
+    environment:
+      NODE_ENV: production
+      # Add more environment variables as required by your backend
+    env_file:
+      - /home/ubuntu/.env # Path to your environment file (update if needed)
+    volumes:
+      - /var/log:/var/log # Log mounting for persistent storage of logs
+    depends_on:
+      - redis
+    restart: on-failure
