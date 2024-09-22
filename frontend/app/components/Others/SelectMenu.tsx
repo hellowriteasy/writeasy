@@ -41,7 +41,7 @@ const SelectMenu: React.FC<SelectMenuProps> = ({
 
   return (
     <div className="relative">
-      <div className="relative ms-2 z-10 w-20 sm:w-28 cursor-pointer">
+      <div className="relative ms-2 z-10 w-fit sm:w-28 cursor-pointer">
         <div className="relative" onClick={toggleOptions}>
           <div className="w-full h-12 sm:h-8 sm:text-md text-center font-bold text-xl sm:text-sm flex  items-center font-comic bg-white border border-black rounded-full px-4 py-2 pr-10 focus:outline-none focus:border-black">
             {selectedOption || "All"}

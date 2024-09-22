@@ -46,7 +46,10 @@ app.get("/log", (req, res) => {
 
   res.json({ message: "Server is up and running" });
 });
-
+app.use((req, res, next) => {
+  req.logger = logger;
+  next();
+});
 // Use routes
 app.use("/api/auth", authRoutes);
 app.use("/api/stories", storyRoutes);

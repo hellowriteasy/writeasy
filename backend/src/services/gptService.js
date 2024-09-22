@@ -373,7 +373,7 @@ ${JSON.stringify(storyObj)}`;
           },
         }
       );
-
+      console.log("making api call");
       let result = response.data.choices[0].message.content;
       // Use regex to extract the JSON object from the result
       const jsonRegex = /{[\s\S]*?}/;
@@ -391,22 +391,32 @@ ${JSON.stringify(storyObj)}`;
       console.log("error while comparing stories", err);
     }
   }
+
   async rankStories(stories, title, iteration, topWritingPercentage) {
     let scores = [];
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
     for (let i = 0; i < iteration; i++) {
       let groupStories = this.groupStories(stories);
-      groupStories.forEach((r) => {
-        console.log(r.length);
-      });
-      const groupStoriesScores = await Promise.all(
-        groupStories.map(async (group) => {
-          const score = await this.getComparativeScores(group, title);
-          return score;
-        })
-      );
-      const dataDir = path.join(process.cwd(), "data");
 
+      groupStories.forEach((r) => {
+        console.log("group size ", r.length);
+      });
+
+      const groupStoriesScores = [];
+      for (const group of groupStories) {
+        // Introduce a delay between API calls to prevent rate limiting
+        await sleep(1000); // 1000ms = 1 second delay; adjust as needed
+
+        try {
+          const score = await this.getComparativeScores(group, title);
+          groupStoriesScores.push(score);
+        } catch (error) {
+          console.log("Error in API call:", error);
+        }
+      }
+
+      const dataDir = path.join(process.cwd(), "data");
       const outputFilePath = path.join(dataDir, `log-${Date.now()}.json`);
 
       fs.appendFileSync(
@@ -442,7 +452,7 @@ ${JSON.stringify(storyObj)}`;
       topWritingPercentage
     );
 
-    // this.sendWritingLogsToAdmin(scores, aggregatedScores, title, stories);
+    this.sendWritingLogsToAdmin(scores, aggregatedScores, title, stories);
 
     return { aggregatedScores, scores };
   }
