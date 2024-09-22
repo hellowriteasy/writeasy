@@ -22,11 +22,16 @@ jobs:
           sudo apt-get install -y docker docker-compose || true
 
       # Step 3: Move to the correct directory and stop any old containers
-      - name: Stop and Remove Old Containers and Images using Docker Compose
+      - name: Stop and Remove Old Containers using Docker Compose
         run: |
           cd ${{ github.workspace }}  # This will be the project root
           sudo docker-compose down || true  # Stop old containers
           sudo docker-compose rm -f || true # Remove old containers
+
+      # Step 3b: Remove unused Docker images
+      - name: Remove unused Docker images
+        run: |
+          sudo docker image prune -af  # Remove all unused images
 
       # Step 4: Clean up directories to free up disk space
       - name: Clean up directories
