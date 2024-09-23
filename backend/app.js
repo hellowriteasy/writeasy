@@ -21,6 +21,8 @@ const scheduleJob = require("./config/cron");
 const morgan = require("morgan");
 const StripeService = require("./src/services/stripeService");
 const pino = require("pino");
+const { withErrorResponse } = require("./src/utils/errors/with-error-response");
+const { InternalServerError } = require("./src/utils/errors/errors");
 const logfilePath = "/var/log/writeasy-logs.log";
 const logStream = createWriteStream(logfilePath, { flags: "a" });
 const logger = pino({}, logStream);
@@ -36,21 +38,33 @@ app.use(
     credentials: true,
   })
 );
+app.use((req, res, next) => {
+  req.logger = logger;
+  next();
+});
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 cron.schedule("*/10 * * * * *", () => scheduleJob());
 
-app.get("/log", (req, res) => {
-  logger.info("Received request");
+app.get("/test", (req, res) => {
+  console.log("insider test");
 
-  res.json({ message: "Server is up and running" });
+  return withErrorResponse(
+    {
+      type: "server",
+      data: new InternalServerError("Something went wrong while testing !!!!"),
+    },
+    req,
+    res,
+  );
 });
-app.use((req, res, next) => {
-  req.logger = logger;
-  next();
+
+//routes
+app.get("/ping", (req, res) => {
+  logger.info("pong");
+  res.json({ message: "pong" });
 });
-// Use routes
 app.use("/api/auth", authRoutes);
 app.use("/api/stories", storyRoutes);
 app.use("/api/faq", faqRoutes);
@@ -71,7 +85,7 @@ app.get("/success", (req, res) => {
 });
 
 // Global error handling
-app.use(errorHandlingMiddleware);
+// app.use(errorHandlingMiddleware);
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
