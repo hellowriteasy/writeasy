@@ -288,56 +288,17 @@ const emailServiceClass = require("../../src/services/emailService");
 //   JSON.stringify({ ...res.scores, ...res.aggregatedScores })
 // );
 async function main() {
-  // const stories = [
-  //   {
-  //     _id: "121212",
-  //     email: "santosh@gmail.com",
-  //     content:
-  //       "The concept of God varies widely across different cultures and religions, but many traditions agree on the idea of a supreme being who embodies the ultimate source of existence, morality, and purpose. In monotheistic religions like Christianity, Islam, and Judaism, God is often described as an all-powerful, all-knowing, and benevolent entity who created and governs the universe. This deity is not only the origin of all life but also serves as the moral compass for humanity, providing ethical guidelines and a sense of divine justice. For believers, God's presence is both a source of comfort and a call to live in accordance with higher principles.",
-  //   },
-  //   {
-  //     _id: "141414",
-  //     email: "ramit@gmail.com",
-  //     content:
-  //       "In contrast, polytheistic religions such as Hinduism and ancient Greek mythology present a pantheon of gods, each with distinct personalities, roles, and domains. These deities often interact with the world in complex ways, influencing everything from nature to human affairs. While these gods may have specific functions and limitations, they are still revered as powerful and essential forces that shape the universe and human experience. This multiplicity of gods reflects a more intricate and nuanced view of divine influence, where the sacred is experienced through a diverse range of divine figures and stories.",
-  //   },
-  //   {
-  //     _id: "19191919",
-  //     email: "rahul@gmail.com",
-  //     content: "Philosophical and spiritual perspectives offer yet another dimension to the understanding of God. In some Eastern philosophies and mystic traditions, God or the divine may be conceptualized more abstractly as an impersonal force or universal consciousness rather than a personal being. In these views, God is often seen as the underlying reality of all existence, a boundless and formless presence that transcends individual attributes and human concepts. This perspective emphasizes a direct, experiential relationship with the divine, where the focus is on inner enlightenment and unity with the greater whole of existence.",
-  //   },
-  // ];
-  // const res = openai.rankStories(stories, "testing logs with email", 5);
-  // console.log(res);
-  // try {
-  //   await connectDB();
-  //   const subsId = [
-  //     "6698ad4c53944187fda906db",
-  //     "6698ad4c53944187fda906db",
-  //     "6698ad4c53944187fda906db",
-  //     "6698ad4c53944187fda906db",
-  //   ];
-  //   await Promise.all(
-  //     subsId.map(async (sub_id) => {
-  //       Subscription.findByIdAndDelete(sub_id);
-  //     })
-  //   );
-  //   console.log("completed");
-  // } catch (error) {
-  //   console.log("error", error);
-  // }
-  // await connectDB();
-  // let stories = await Story.find({
-  //   prompt: "66e40a03da2b001ba7079f61",
-  // }).populate("user");
-
-  // stories = stories.map((story) => ({
-  //   _id: story._id,
-  //   content: story.content,
-  //   email: story.user?.email,
-  // }));
-
-  // openai.rankStories(stories, "testing logs with email", 10);
+  await connectDB();
+  const updated = await Story.updateMany(
+    {
+      contest: "66f167fc61f76975e9fcad8f",
+      isTopWriting: true,
+    },
+    {
+      isTopWriting: false,
+    }
+  );
+  console.log("successfully modified ", updated.modifiedCount + " stories ");
   process.exit(1);
 }
 

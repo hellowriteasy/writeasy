@@ -469,6 +469,7 @@ const getPreviousWeekTopStories = async (req, res) => {
       "topWritingPublishDate",
       moment(new Date(lastWeekContest[0].topWritingPublishDate)).format("lll")
     );
+    
     console.log(latestContest);
 
     if (latestContest.topWritingPublished) {
@@ -484,11 +485,14 @@ const getPreviousWeekTopStories = async (req, res) => {
       responseData = { data: lastWeekContestTopStories || [] };
       res.status(200).json(responseData);
     } else {
+      console.log(
+        "publish date",
+        moment(new Date(latestContest.topWritingPublishDate)).format("lll"),
+        latestContest.topWritingPublishDate
+      );
       responseData = {
         hasTopWritingPublished: false,
-        message: `Top writings will be published on ${moment(
-          new Date(latestContest.topWritingPublishDate)
-        ).format("lll")}`,
+        writingPublishDate:latestContest.topWritingPublishDate
       };
       res.status(200).json(responseData);
     }

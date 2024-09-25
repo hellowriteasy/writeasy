@@ -168,8 +168,8 @@ const CreateContest = () => {
   }
 
   return (
-    <div className="w-full h-auto z-0 relative flex justify-center">
-      <div className="w-10/12 ms-12">
+    <div className="w-full h-auto z-0 relative flex justify-center px-2  ">
+      <div className="w-10/12 sm:w-full " >
         <div className="w-full h-14 relative pt-4">
           <h1 className="text-6xl font-unkempt font-bold py-4"></h1>
         </div>
@@ -194,7 +194,7 @@ const CreateContest = () => {
               <img
                 src={promptDetails?.contestId?.image || ""}
                 alt="image"
-                className="w-full  object-fill mx-auto mb-5"
+                className="w-[40%] sm:w-full  object-fill mx-auto mb-5 rounded-md"
               />
               <div className="h-auto w-full rounded-full">
                 <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">

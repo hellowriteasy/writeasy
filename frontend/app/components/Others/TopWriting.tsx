@@ -5,6 +5,7 @@ import Crown from "@/public/Game/Crown.svg";
 import Link from "next/link";
 import { axiosInstance } from "@/app/utils/config/axios";
 import { TUser } from "@/app/utils/types";
+import moment from "moment";
 interface Story {
   _id: string;
   title: string;
@@ -31,7 +32,11 @@ const TopWriting: React.FC = () => {
           return;
         }
         if (!response.data?.hasTopWritingPublished) {
-          setUpcomingWritingsData(response.data.message);
+          setUpcomingWritingsData(
+            `Top writings will be published on ${moment(
+              new Date(response.data?.writingPublishDate)
+            ).format("lll")}`
+          );
           return;
         }
       })
@@ -61,7 +66,7 @@ const TopWriting: React.FC = () => {
           <p className="font-unkempt text-sm">{upcomingWritingsData}</p>
         ) : null}
         {isLoading ? (
-          <p className="font-unkempt">Loading...</p>
+          <p className="font-unkempt">...</p>
         ) : error ? (
           <p className="font-unkempt">{error}</p>
         ) : (

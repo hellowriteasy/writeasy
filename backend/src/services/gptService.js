@@ -328,33 +328,48 @@ class GptService {
     });
 
     try {
-      const systemPrompt = `You are tasked with evaluating stories submitted for the contest titled "${title}". Score each story out of 100 based on key writing criteria. Your decisions must be thorough, accurate, concise, and consistent across all stories.  Provide the final output strictly in JSON format and no story must be missing (no_of_input_story===no_of_output_story). \n Note: Dont score good if a story has less than less 250 words/content. `;
+      const systemPrompt = `You are tasked with evaluating stories submitted for the contest titled "${title}". Score each story out of 100 based on key writing criteria. Your decisions must be thorough, accurate, concise, and consistent across all stories. Provide the final output strictly in JSON format. Ensure that the number of stories in the output matches the number of stories in the input exactly (no_of_input_stories === no_of_output_stories). If any story has less than 250 words, reduce its score significantly.
+`;
 
-      const prompt = `You have been given a set of stories, each identified by a unique ID and associated with its content. Your goal is to evaluate these stories and provide a score for each based on the following criteria and also comparing each story with the other stories in the set.:
-1. **Writing Quality**: How engaging, creative, and clear is the writing? Does it capture the reader’s attention and maintain interest throughout?
-2. **Grammar and Syntax**: Evaluate the correctness of grammar, punctuation, and sentence structure. Are there any major errors that detract from the reading experience?
-3. **Story Structure**: How well-organized is the story? Does it have a coherent flow with a clear beginning, middle, and end?
-4. **Conciseness**: Is the story concise and to the point without unnecessary details? Does it use appropriate summarization techniques where relevant?
-5. **Overall Impact**: How effective is the story in delivering its intended message or theme? Does it leave a lasting impression on the reader? \n
-Note: Story should be scored comparing to each other in a set. \n Note: Dont score good if a story has less than less 250 words/content.
-Return the scores as a JSON object with the story IDs as keys and the respective scores (out of 100) as values. In the example below there are 3 stories provided but it may depend so you need to make sure (no_of_input_story===no_of_output_story) to ensure no story is missing in output.
+      const prompt = `You have been given a set of stories, each identified by a unique ID and associated with its content. Your goal is to evaluate these stories based on the following criteria, and compare each story with the others in the set:
 
-Example Input:
-{
-  "124": "story content",
-  "125": "story content",
-  "126": "story content"
-}
+          1. **Writing Quality**: How engaging, creative, and clear is the writing? Does it capture the reader’s attention and maintain interest throughout?
+          2. **Grammar and Syntax**: Evaluate the correctness of grammar, punctuation, and sentence structure. Are there any major errors that detract from the reading experience?
+          3. **Story Structure**: How well-organized is the story? Does it have a coherent flow with a clear beginning, middle, and end?
+          4. **Conciseness**: Is the story concise and to the point without unnecessary details? Does it use appropriate summarization techniques where relevant?
+          5. **Overall Impact**: How effective is the story in delivering its intended message or theme? Does it leave a lasting impression on the reader?
 
-Example Output:
-{
-  "124": 85,
-  "125": 72,
-  "126": 90
-}
+          ### Important Instructions:
+          - **Comparative Evaluation**: Score each story by comparing it to the others in the set. Each story's score should reflect its relative quality within the set.
+          - **Consistent Scoring**: Ensure that your scoring is consistent and fair across all stories.
+          - **Output Requirement**: Return the scores as a JSON object with story IDs as keys and the respective scores (out of 100) as values.
+          - **Match Input and Output Count**: The number of stories in the output must be exactly the same as the number of stories in the input. This means no story should be missing from the output. Check and confirm that the input count equals the output count (no_of_input_stories === no_of_output_stories).
+          - **Low Word Count Penalty**: If any story has fewer than 250 words, reduce its score significantly, as it does not meet the minimum content requirement.
 
-Now, evaluate and score the following stories:
-${JSON.stringify(storyObj)}`;
+          There are ${
+            Object.keys(storyObj).length
+          } stories provided in the input. Ensure that the output contains scores for all ${
+        Object.keys(storyObj).length
+      } stories.
+
+          ### Example Format:
+
+          **Input:**
+          {
+            "124": "Story content",
+            "125": "Story content",
+            "126": "Story content"
+          }
+
+          **Expected Output:**
+          {
+            "124": 85,
+            "125": 72,
+            "126": 90
+          }
+
+          ### Now, evaluate and score the following stories:
+          ${JSON.stringify(storyObj)}`;
 
       const response = await axios.post(
         this.apiUrl,
