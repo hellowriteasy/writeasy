@@ -29,8 +29,6 @@ const Card: React.FC<CardProps> = ({ story, onsuccess }) => {
   const AxiosIns = axiosInstance("");
   const toast = useCustomToast();
 
- 
-
   useEffect(() => {
     setFeedback(story.correctionSummary);
     setStoryDetail(story.content);
@@ -78,7 +76,7 @@ const Card: React.FC<CardProps> = ({ story, onsuccess }) => {
               className="text-black"
               onClick={() => setDeleteModalOpen(true)}
             >
-              <FaTrashAlt size={20}  color="red"/>
+              <FaTrashAlt size={20} color="red" />
             </button>
           </div>
         </div>
@@ -137,7 +135,6 @@ const Card: React.FC<CardProps> = ({ story, onsuccess }) => {
                           {/* {story.user.username} */}
                         </Dialog.Title>
                         <div className="mt-2">
-                        
                           {/* <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2">
                               Feedback
@@ -158,19 +155,19 @@ const Card: React.FC<CardProps> = ({ story, onsuccess }) => {
                               disabled={edit}
                             />
                           </div>
-                          <button
+                          {/* <button
                             type="button"
                             className="inline-flex  mx-4 justify-center rounded-md bg-black font-poppins px-4 py-2 font-semibold text-white shadow-sm  sm:ml-3 sm:w-auto"
                             onClick={() => setEdit(false)}
                             disabled={!edit}
                           >
                             Edit
-                          </button>
+                          </button> */}
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                  {/* <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                     <button
                       type="button"
                       className="inline-flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm  sm:ml-3 sm:w-auto"
@@ -186,7 +183,7 @@ const Card: React.FC<CardProps> = ({ story, onsuccess }) => {
                     >
                       Cancel
                     </button>
-                  </div>
+                  </div> */}
                 </Dialog.Panel>
               </Transition.Child>
             </div>

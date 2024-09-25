@@ -469,6 +469,7 @@ const getPreviousWeekTopStories = async (req, res) => {
       "topWritingPublishDate",
       moment(new Date(lastWeekContest[0].topWritingPublishDate)).format("lll")
     );
+    console.log(latestContest);
 
     if (latestContest.topWritingPublished) {
       const lastWeekContestTopStories = await Story.find({
@@ -478,6 +479,8 @@ const getPreviousWeekTopStories = async (req, res) => {
         path: "user",
         select: "-password",
       });
+      console.log("stories", lastWeekContestTopStories.length);
+
       responseData = { data: lastWeekContestTopStories || [] };
       res.status(200).json(responseData);
     } else {

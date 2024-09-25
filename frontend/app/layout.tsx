@@ -47,11 +47,11 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Unkempt:wght@400;700&display=swap"
           rel="stylesheet"
         ></link>
-      </head> 
-      <body className="two-line-bg font-unkempt">
+      </head>
+      <body className="two-line-bg font-unkempt h-full ">
         <Navbar titles={navTitles}></Navbar>
         <ToastContainer />
-        {children}
+        <div className="h-full">{children}</div>
         <Footer></Footer>
         <div className="container flex flex-col h-[300px]  justify-center mx-auto items-center gap-4 border-t border-gray-300 ">
           <p className=" text font-unkempt ">

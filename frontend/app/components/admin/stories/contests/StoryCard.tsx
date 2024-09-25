@@ -221,17 +221,18 @@ const Card: React.FC<CardProps> = ({ contest }) => {
                               placeholder="Story details"
                               value={storyDetail}
                               onChange={(e) => setStoryDetail(e.target.value)}
-                              disabled={Edit}
+                              // disabled={Edit}
+                              disabled={true}
                             />
                           </div>
-                          <button
+                          {/* <button
                             type="button"
                             className="inline-flex  mx-4 justify-center rounded-md bg-black font-poppins px-4 py-2 font-semibold text-white shadow-sm  sm:ml-3 sm:w-auto"
                             onClick={() => setEdit(false)}
                             disabled={!Edit}
                           >
                             Edit
-                          </button>
+                          </button> */}
                           {/* <button
                             onClick={() => setShowDiff(!showDiff)}
                             className="bg-white border-2 rounded-2xl border-slate-700 text-black px-4 py-2"
@@ -247,7 +248,7 @@ const Card: React.FC<CardProps> = ({ contest }) => {
                       </div>
                     </div>
                   </div>
-                  <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                  {/* <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                     {!Edit && (
                       <button
                         type="button"
@@ -265,7 +266,7 @@ const Card: React.FC<CardProps> = ({ contest }) => {
                     >
                       Cancel
                     </button>
-                  </div>
+                  </div> */}
                 </Dialog.Panel>
               </Transition.Child>
             </div>
