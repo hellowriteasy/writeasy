@@ -64,7 +64,7 @@ export function SimpleEditor({
   const [isSaving, setIsSaving] = useState(false);
   const [initialText, setInitialText] = useState("");
   const [writingMode, setWritingMode] = useState(true);
-
+  const [storyId, setStoryId] = useState("");
   const [isEditorDisabled, setIsEditorDisabled] = useState(false);
   useEffect(() => {
     setStoredFunction(toPDF);
@@ -120,7 +120,7 @@ export function SimpleEditor({
     ],
     editorProps: {
       handlePaste(view, event) {
-        const clipboardData = event.clipboardData 
+        const clipboardData = event.clipboardData;
         const text = clipboardData?.getData("text");
 
         if (text) {
@@ -203,10 +203,11 @@ export function SimpleEditor({
       };
 
       if (hasSaved) {
-        await axiosIns.post("/stories/practise/save", payload);
+        await axiosIns.post("/stories/practise/save", { ...payload, storyId });
         setIsSaving(false);
         toast.success("Story saved successfully");
-        router.push(`/profile`);
+        setIsLoading(false);
+        // router.push(`/profile`);
       }
       if (!hasSaved) {
         const response = await fetch(
@@ -219,6 +220,7 @@ export function SimpleEditor({
             body: JSON.stringify({ ...payload }),
           }
         );
+
         if (response.ok) {
           if (response.body === null) {
             return;
@@ -226,17 +228,50 @@ export function SimpleEditor({
 
           const reader = response.body.getReader();
           const decoder = new TextDecoder("utf-8");
+          let correctedText = ""; // Store the accumulated text
+          let storyId = null;
+
           setCorrectedText(""); // Reset the response text
 
           while (true) {
             const { done, value } = await reader.read();
             if (done) break;
+
             const chunk = decoder.decode(value, { stream: true });
-            setCorrectedText((prev) => prev + chunk);
+
+            // Check if the chunk might contain the final JSON response
+            if (chunk.startsWith("{") && chunk.endsWith("}")) {
+              // Parse the JSON at the end of the stream
+              const jsonResponse = JSON.parse(chunk);
+
+              if (jsonResponse.data !== null) {
+                // Only append the `data` part if it's not null
+                correctedText += jsonResponse.data;
+              }
+              // Capture storyId if needed
+              storyId = jsonResponse.storyId;
+            } else {
+              // Regular streaming data
+              correctedText += chunk;
+            }
+
+            // Update state with corrected text if it's not part of the final JSON object
+            setCorrectedText(correctedText);
           }
+
+          // Handle final states and actions after streaming is complete
+          console.log("Final corrected text: ", correctedText);
+          console.log("Story ID: ", storyId); // Now you have the storyId
+
           setIsLoading(false);
           setTriggerGrammarCheck(false);
           setWritingMode(false);
+
+          // If you want to do something with storyId (e.g., display or log it)
+          if (storyId) {
+            setStoryId(storyId);
+            console.log("Story ID:", storyId);
+          }
         }
       }
     } catch (error) {

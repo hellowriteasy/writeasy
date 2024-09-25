@@ -335,27 +335,15 @@ const getSortInputForStoriesByContestAndPrompt = (sortKey, direction) => {
   }
 };
 const savePractiseStoryToProfile = async (req, res) => {
-  const { userId, title, content, taskType, storyType, prompt } = req.body;
-
-  const wordCount = content.split(" ").length; // Calculate word count
+  const { userId, title, content, taskType, storyType, prompt, storyId } =
+    req.body;
 
   try {
-    const newStory = await new Story({
-      title,
-      storyType,
-      content,
-      user: userId,
-      prompt,
-      wordCount,
+    const updated = await Story.findByIdAndUpdate(storyId, {
       hasSaved: true,
     });
-    await newStory.save();
+    console.log("updated", updated);
     res.status(201).json({ message: "successfully saved to profile" });
-    processCorrectionAndSummary({
-      story_id: newStory._id,
-      content,
-      taskType,
-    });
   } catch (error) {
     console.log(error);
     res
@@ -469,7 +457,7 @@ const getPreviousWeekTopStories = async (req, res) => {
       "topWritingPublishDate",
       moment(new Date(lastWeekContest[0].topWritingPublishDate)).format("lll")
     );
-    
+
     console.log(latestContest);
 
     if (latestContest.topWritingPublished) {
@@ -492,7 +480,7 @@ const getPreviousWeekTopStories = async (req, res) => {
       );
       responseData = {
         hasTopWritingPublished: false,
-        writingPublishDate:latestContest.topWritingPublishDate
+        writingPublishDate: latestContest.topWritingPublishDate,
       };
       res.status(200).json(responseData);
     }
