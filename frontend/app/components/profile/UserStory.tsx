@@ -65,57 +65,40 @@ const Card: React.FC<CardProps> = ({
       });
   };
 
-  const compareSentences = (description = "", corrections = "") => {
-    if (!description) {
-      return (
-        <span style={{ color: "red", backgroundColor: "#FFD3D1" }}>
-          No original description provided.
-        </span>
-      );
-    }
 
-    const diff = diffChars(description, corrections);
-    return diff.map((part, index) => {
-      const style = {
-        backgroundColor: part.added
-          ? "#D6EDD4"
-          : part.removed
-          ? "#FFD3D1"
-          : "transparent",
-        textDecoration: part.removed ? "line-through" : "none",
-        color: part.added ? "green" : part.removed ? "red" : "black",
-      };
-      return (
-        <span key={index} style={style}>
-          {part.value}
-        </span>
-      );
-    });
-  };
 
-  const getDiff = (original: string, corrected: string) => {
-    const dmp = new diff_match_patch();
-    const diff = dmp.diff_main(original, corrected);
-    dmp.diff_cleanupSemantic(diff);
+const getDiff = (original: string, corrected: string) => {
+  const dmp = new diff_match_patch();
+  const diff = dmp.diff_main(original, corrected);
+  dmp.diff_cleanupSemantic(diff);
 
-    return diff.map((part, index) => {
-      const style = {
-        backgroundColor:
-          part[0] === 1
-            ? "#D6EDD4"
-            : part[0] === -1
-            ? "#FFD3D1"
-            : "transparent",
-        textDecoration: part[0] === -1 ? "line-through" : "none",
-        color: part[0] === 1 ? "green" : part[0] === -1 ? "red" : "black",
-      };
-      return (
-        <span key={index} style={style}>
-          {part[1]}
-        </span>
-      );
-    });
-  };
+  return diff.map((part, index) => {
+    const style = {
+      backgroundColor:
+        part[0] === 1 ? "#D6EDD4" : part[0] === -1 ? "#FFD3D1" : "transparent",
+      textDecoration: part[0] === -1 ? "line-through" : "none",
+      color: part[0] === 1 ? "green" : part[0] === -1 ? "red" : "black",
+    };
+
+    // Split the text by newline characters, keeping consecutive newlines
+    const segments = part[1].split(/(\n+)/);
+
+    return (
+      <span key={index} style={style}>
+        {segments.map((segment, i) => {
+          // If the segment is just newlines (e.g., '\n' or '\n\n'), return <br /> tags
+          if (/\n+/.test(segment)) {
+            return [...Array(segment.length)].map((_, brIndex) => (
+              <br key={`${index}-${i}-${brIndex}`} />
+            ));
+          }
+          // Otherwise, return the text segment
+          return <>{segment}</>;
+        })}
+      </span>
+    );
+  });
+};
 
   if (showEditor) {
     return (
@@ -155,9 +138,14 @@ const Card: React.FC<CardProps> = ({
                 ) : (
                   <div className="flex gap-x-1">
                     <span>
-                      Correction is being done in background hold on please! 
+                      Correction is being done in background hold on please!
                     </span>
-                    <span className="underline cursor-pointer" onClick={onsuccess}>Refresh</span>
+                    <span
+                      className="underline cursor-pointer"
+                      onClick={onsuccess}
+                    >
+                      Refresh
+                    </span>
                   </div>
                 )}
               </p>

@@ -414,44 +414,71 @@ class GptService {
     for (let i = 0; i < iteration; i++) {
       let groupStories = this.groupStories(stories);
 
-      groupStories.forEach((r) => {
-        console.log("group size ", r.length);
-      });
-
-      const groupStoriesScores = [];
       for (const group of groupStories) {
-        // Introduce a delay between API calls to prevent rate limiting
-        await sleep(1000); // 1000ms = 1 second delay; adjust as needed
+        console.log("Group size: ", group.length);
 
-        try {
-          const score = await this.getComparativeScores(group, title);
-          groupStoriesScores.push(score);
-        } catch (error) {
-          console.log("Error in API call:", error);
+        let groupScore;
+        let retries = 3; // Limit retries to avoid infinite loops
+
+        while (retries > 0) {
+          try {
+            // Introduce a delay between API calls to prevent rate limiting
+            await sleep(1000); // 1 second delay; adjust as needed
+
+            groupScore = await this.getComparativeScores(group, title);
+
+            // Check if the number of returned scores matches the number of stories in the group
+            if (Object.keys(groupScore).length === group.length) {
+              console.log("All stories in the group have valid scores.");
+
+              // **Validate that there are no undefined keys or values**
+              const validScores = Object.entries(groupScore).reduce(
+                (acc, [key, value]) => {
+                  if (key && value !== undefined) {
+                    // Ensure key and value are defined
+                    acc[key] = value;
+                  }
+                  return acc;
+                },
+                {}
+              );
+
+              if (Object.keys(validScores).length === group.length) {
+                scores.push(validScores);
+                break; // Exit loop when the result is valid
+              } else {
+                groupScore = await this.getComparativeScores(group, title);
+                console.warn(
+                  `Mismatch in valid scores for group of ${group.length} stories. Retrying...`
+                );
+                retries--;
+              }
+            } else {
+              groupScore = await this.getComparativeScores(group, title);
+              console.warn(
+                `Mismatch in scores for group of ${group.length} stories. Retrying...`
+              );
+              retries--;
+            }
+          } catch (error) {
+            console.log("Error in API call:", error);
+            retries--;
+          }
+        }
+
+        // If after retries we still don't get the right result, log the issue and move on
+        if (retries === 0) {
+          console.error(
+            `Failed to get valid scores for group after multiple attempts. Skipping group.`
+          );
         }
       }
-
-      const dataDir = path.join(process.cwd(), "data");
-      const outputFilePath = path.join(dataDir, `log-${Date.now()}.json`);
-
-      fs.appendFileSync(
-        outputFilePath,
-        JSON.stringify(
-          {
-            [`iteration-${i}`]: groupStoriesScores,
-          },
-          null,
-          4
-        )
-      );
-
-      // Add the group scores to the scores array
-      scores.push(...groupStoriesScores);
     }
 
     // Object to store aggregated scores
     let aggregatedScores = {};
 
+    // Combine scores from all groups
     scores.forEach((score) => {
       Object.keys(score).forEach((storyId) => {
         if (aggregatedScores[storyId]) {
@@ -462,6 +489,7 @@ class GptService {
       });
     });
 
+    // Get the top percentage based on the aggregated scores
     aggregatedScores = this.getTopPercentage(
       aggregatedScores,
       topWritingPercentage
@@ -471,6 +499,7 @@ class GptService {
 
     return { aggregatedScores, scores };
   }
+
   shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
