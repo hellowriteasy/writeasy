@@ -68,8 +68,8 @@ const Page: React.FC = () => {
         <div className="absolute top-24 left-2">
           <Image className="w-[10vw]" src={Bee} alt="bee" />
         </div>
-        <div className="flex w-full gap-x-5 min-h-screen justify-around sm:justify-start relative">
-          <div className="flex flex-col gap-4 w-full mid-w-full">
+        <div className="flex sm:flex-col-reverse gap-y-10 w-full gap-x-5 min-h-screen justify-around sm:justify-start relative">
+          <div className="flex flex-col w-[60%] sm:w-full gap-4 ">
             <div className="flex justify-between ">
               <h1 className="text-2xl sm:text-xl md:text-xl lg:text-xl xl:text-3xl font-unkempt font-extrabold">
                 Choose a prompt and start your writing journey!
@@ -113,7 +113,7 @@ const Page: React.FC = () => {
               </div>
             )}
           </div>
-          <div className="sm-hide flex mt-14 flex-col gap-y-4">
+          <div className=" flex sm:w-full w-[40%] flex-col gap-y-4">
             <WeeklyTest />
             <TopWriting />
           </div>

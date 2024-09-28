@@ -55,11 +55,6 @@ const Contest = () => {
       </div>
       <div className="w-10/12 min-h-full">
         <div className="w-full h-auto relative pt-4 mb-5  ">
-          <div className="w-10/12 sm:w-full">
-            <h1 className="text-xl sm:text-2xl sm:text-black md:text-5xl lg:text-4xl font-bold font-unkempt">
-              Compete with top writers worldwide!
-            </h1>
-          </div>
           <div className="absolute top-6 md-hide right-20">
             <Image className="w-[7vw]" src={A} alt="group" />
           </div>
@@ -68,10 +63,15 @@ const Contest = () => {
           </div>
         </div>
 
-        <div className="flex w-full h-auto relative mt-0 justify-around gap-x-5 sm:gap-x-0">
-          <div className="w-full">
+        <div className="flex sm:flex-col-reverse gap-y-10 w-full h-auto relative mt-0 justify-around gap-x-5 sm:gap-x-0">
+          <div className="w-[60%] sm:w-full">
             <div className="absolute top-40 -left-32">
               <Image className="w-[12vw]" src={Bee} alt="bee" />
+            </div>
+            <div className="w-10/12 sm:w-full">
+              <h1 className="text-xl sm:text-2xl sm:text-black md:text-5xl lg:text-4xl font-bold font-unkempt">
+                Compete with top writers worldwide!
+              </h1>
             </div>
             <div className="gap-8 relative flex flex-col gap-y-20 sm:gap-9 w-full">
               <div className="flex flex-col gap-y-3">
@@ -117,7 +117,7 @@ const Contest = () => {
               </div>
             )}
           </div>
-          <div className="flex flex-col vsm-hide gap-8">
+          <div className="flex w-[40%] sm:w-full flex-col gap-8">
             <WeeklyTest />
             <TopWriting />
           </div>

@@ -341,7 +341,7 @@ export function SimpleEditor({
                   : ""
               } ${
                 !writingMode ? "pointer-events-none" : ""
-              }  h-[600px] overflow-y-auto scrollbar-hide`}
+              }  md:h-[600px] h-fit min-h-[600px]  overflow-y-auto scrollbar-hide`}
               editor={editor}
               disabled={true}
               aria-disabled={true}

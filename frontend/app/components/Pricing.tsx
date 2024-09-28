@@ -137,7 +137,7 @@ const Pricing = () => {
                 ) : !isSubcriptionActive ? (
                   <button
                     onClick={() => handleSignUp(sub?.id, sub?.type)}
-                    className="border text-5xl sm:text-3xl py-2 mx-auto font-unkempt hover:bg-slate-800 border-slate-400 bg-black rounded-full text-white w-40 md:w-56 lg:w-60 h-16  sm:h-6 flex items-center justify-center  sm:rounded-full"
+                    className="border text-5xl  sm:text-3xl py-2 mx-auto font-unkempt hover:bg-slate-800 border-slate-400 bg-black rounded-full text-white w-40 md:w-56 lg:w-60   sm:h-14 flex items-center justify-center  sm:rounded-full"
                   >
                     Buy Now
                   </button>

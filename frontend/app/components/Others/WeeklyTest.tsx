@@ -41,7 +41,7 @@ const WeeklyTest = () => {
   }, []);
 
   return (
-    <div className="w-96  h-auto flex flex-col justify-center items-center relative yellow border-4 border-yellow-500 rounded-3xl py-5">
+    <div className="w-full  h-auto flex flex-col justify-center items-center relative yellow border-4 border-yellow-500 rounded-3xl py-5">
       <div className="absolute -top-12  sm-hide -right-12">
         <Image src={mic} alt="mic" />
       </div>
@@ -59,7 +59,9 @@ const WeeklyTest = () => {
             </ul>
             <p className="text-sm mid:text-[10px] pt-2">
               <span className="font-bold">Closes - </span>
-              { moment( new Date(contest.submissionDeadline)).format("lll").toLocaleString()}
+              {moment(new Date(contest.submissionDeadline))
+                .format("lll")
+                .toLocaleString()}
             </p>
             <Link href={`/Contests/${contest._id}`}>
               <button className="text-sm w-40 mid:w-28 mid:h-10 h-12 mt-4 bg-black font-bold font-unkempt text-white rounded-2xl ">
