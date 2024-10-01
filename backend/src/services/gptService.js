@@ -93,15 +93,16 @@ class GptService {
   }
   async generateScoreInChunk(storyText, taskType, wordCount, cb) {
     const systemMessage = {
-      grammar: "Proofread this text but only fix grammar",
+      grammar:
+        "Proofread this text, correcting only grammatical errors. Always return the full corrected text, even if no changes are needed.",
       rewrite:
-        "Rewrite this text improving clarity and flow. You may also add new lines to make the writing better.Grammer and spelling mistakes should be corrected.",
+        "Rewrite this text for clarity and flow. You can add new lines to improve readability and correct any grammar or spelling mistakes. Always return the full rewritten text.",
       improve:
-        "Proofread this text improving clarity and flow. Don't add new lines, just modify the text",
+        "Proofread this text to improve clarity and flow without adding new lines. Always return the full improved text, even if minimal changes are required.",
     };
 
     try {
-      const totalTokens = Math.min(Math.ceil(wordCount * 2), 4096); // Ensure the token count doesn't exceed model limits
+      const totalTokens = Math.min(Math.ceil(wordCount * 2), 4096); // Limit tokens within model constraints
       const response = await axios({
         method: "post",
         url: "https://api.openai.com/v1/chat/completions",
@@ -115,7 +116,7 @@ class GptService {
             {
               role: "system",
               content:
-                "You are a master proofreader. The instructions are often in English, but keep the proofread text in the same language as the language being asked to proofread. \n  No matter how small the input is you should do the work as ordered.",
+                "You are an expert proofreader. Follow the user's instructions precisely. Always return the proofread, rewritten, or improved text as requested. If the text doesn't require changes, return it as it is without commentary or additional questions.",
             },
             {
               role: "user",
@@ -128,7 +129,7 @@ class GptService {
         },
         responseType: "stream",
       });
-
+      
       let buffer = "";
 
       response.data.on("data", (chunk) => {

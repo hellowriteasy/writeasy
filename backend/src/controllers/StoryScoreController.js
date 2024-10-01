@@ -5,7 +5,6 @@ const gptService = new GptService(process.env.GPT_API_KEY);
 
 async function practiseStory(req, res) {
   const { content, taskType, userId, title, prompt } = req.body;
-
   const wordCount = content.split(" ").length; // Calculate word count
 
   const newStory = new Story({
@@ -16,6 +15,10 @@ async function practiseStory(req, res) {
     prompt: prompt,
   });
 
+  // Set headers for streaming data
+  res.setHeader("Content-Type", "application/json");
+  res.setHeader("Transfer-Encoding", "chunked");
+
   try {
     let response = "";
     await gptService.generateScoreInChunk(
@@ -25,36 +28,49 @@ async function practiseStory(req, res) {
       async (data, hasCompleted) => {
         if (!hasCompleted) {
           response += data;
-          res.write(data); // Write data to the response stream
+          res.write(data); // Write data to the response stream as chunks
         } else {
           if (data !== null) {
             response += data;
           }
+
           console.log("ended", data);
 
           // Save the story and include the story ID in the final response
           newStory.corrections = response;
           await newStory.save();
 
-          // Construct the final response, including the last piece of data and the storyId
-          res.end(
+          // Construct the final response with the last chunk of data and storyId
+          res.write(
             JSON.stringify({
               data,
               storyId: newStory._id,
             })
           );
 
+          // Call res.end() to indicate the stream has ended
+          res.end();
           console.log(newStory._id);
         }
       }
     );
   } catch (error) {
     console.error("Failed to score story:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Failed to score the story",
-    });
+
+    // End the response in case of error
+    res.end(
+      JSON.stringify({
+        success: false,
+        message: "Failed to score the story",
+      })
+    );
   }
+
+  // Handle client disconnect
+  req.on("close", () => {
+    console.log("Client disconnected");
+    res.end(); // Ensure the response is properly closed
+  });
 }
 
 module.exports = {

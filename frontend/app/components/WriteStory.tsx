@@ -203,11 +203,70 @@ export function SimpleEditor({
       };
 
       if (hasSaved) {
-        await axiosIns.post("/stories/practise/save", { ...payload, storyId });
-        setIsSaving(false);
-        toast.success("Story saved successfully");
-        setIsLoading(false);
-        // router.push(`/profile`);
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BACKEND_ROOT_URL}/api/stories/score`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ ...payload }),
+          }
+        );
+
+        if (response.ok) {
+          if (response.body === null) {
+            return;
+          }
+
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder("utf-8");
+          let correctedText = ""; // Store the accumulated text
+          let storyId = null;
+
+          setCorrectedText(""); // Reset the response text
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            const chunk = decoder.decode(value, { stream: true });
+            console.log(chunk);
+
+            // Try to detect the JSON chunk that signals the end of the stream
+            try {
+              const jsonResponse = JSON.parse(chunk); // Attempt to parse as JSON
+
+              if (jsonResponse.data !== null) {
+                // Only append the `data` part if it's not null
+                correctedText += jsonResponse.data;
+              }
+              // Capture storyId if needed
+              storyId = jsonResponse.storyId;
+              console.log("Parsed final JSON chunk:", jsonResponse);
+            } catch (e) {
+              // If JSON.parse fails, this is a regular text chunk
+              correctedText += chunk;
+            }
+
+            // Update state with corrected text (only update with non-JSON data)
+            setCorrectedText(correctedText);
+          }
+
+          // Handle final states and actions after streaming is complete
+          console.log("Final corrected text: ", correctedText);
+          console.log("Story ID: ", storyId); // Now you have the storyId
+
+          setIsLoading(false);
+          setTriggerGrammarCheck(false);
+          setWritingMode(false);
+
+          // If you want to do something with storyId (e.g., display or log it)
+          if (storyId) {
+            setStoryId(storyId);
+            console.log("Story ID:", storyId);
+          }
+        }
       }
       if (!hasSaved) {
         const response = await fetch(
@@ -238,7 +297,7 @@ export function SimpleEditor({
             if (done) break;
 
             const chunk = decoder.decode(value, { stream: true });
-
+            console.log(chunk);
             // Check if the chunk might contain the final JSON response
             if (chunk.startsWith("{") && chunk.endsWith("}")) {
               // Parse the JSON at the end of the stream
