@@ -78,7 +78,7 @@ class AuthService {
     } else {
       user.lastLogin = new Date();
       await user.save();
-      console.log("updatinggggggg user last losgin")
+      console.log("updatinggggggg user last losgin");
     }
     const userPayload = { user: { id: user.id } };
     const jwtToken = jwt.sign(userPayload, process.env.JWT_SECRET, {
