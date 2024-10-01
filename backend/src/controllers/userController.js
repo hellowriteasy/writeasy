@@ -49,6 +49,8 @@ const UserController = {
           subscription.expiresAt
         );
       }
+      user.lastLogin = new Date();
+      await user.save();
 
       res.json({
         ...others,

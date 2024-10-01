@@ -51,6 +51,8 @@ class AuthService {
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: 3600,
     });
+    user.lastLogin = new Date();
+    await user.save();
     return { token, _id: user.id }; // Return token and _id
   }
 
@@ -73,6 +75,10 @@ class AuthService {
         googleId: payload.sub,
       });
       await user.save();
+    } else {
+      user.lastLogin = new Date();
+      await user.save();
+      console.log("updatinggggggg user last losgin")
     }
     const userPayload = { user: { id: user.id } };
     const jwtToken = jwt.sign(userPayload, process.env.JWT_SECRET, {
