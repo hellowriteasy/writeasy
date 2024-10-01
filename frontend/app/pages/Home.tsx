@@ -34,11 +34,11 @@ const Hero = () => {
             muted
             loop
             playsInline
-            className="w-[100%] h-[100%] sm:object-cover sm:hidden"
+            className="w-[100%] h-[100%] sm:object-fit"
           >
             <source src="/videos/writeasy_demo_new.mov" type="video/mp4" />
           </video>
-          <video
+          {/* <video
             autoPlay
             muted
             loop
@@ -46,7 +46,7 @@ const Hero = () => {
             className="w-[100%] h-[100%] sm:object-cover sm:block hidden"
           >
             <source src="/videos/writeasy_mobile.mp4" type="video/mp4" />
-          </video>
+          </video> */}
 
           <div className="absolute vsm-hide w-[6vw] -top-[5%] -right-[8%]">
             <Image className="" src={heroLine} alt="heroline" />

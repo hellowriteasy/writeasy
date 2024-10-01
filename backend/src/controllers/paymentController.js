@@ -19,6 +19,7 @@ const createStripeCheckoutSession = async (req, res) => {
     stripe_customer_id = subscriptionExist?.stripe_customer_id;
 
     if (!stripe_customer_id) {
+      console.log("stripe creating customer", userExist.username);
       const customer = await StripeService.createCustomer({
         email: userExist.email,
         username: userExist.username,

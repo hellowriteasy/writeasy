@@ -10,6 +10,7 @@ interface TopWritingProps {
   username: string;
   email: string;
   profile_image?: string;
+  isSelectedStory: boolean;
 }
 
 const TopWriting: React.FC<TopWritingProps> = ({
@@ -18,6 +19,7 @@ const TopWriting: React.FC<TopWritingProps> = ({
   username,
   email,
   profile_image,
+  isSelectedStory,
 }) => {
   const [showFullContent, setShowFullContent] = useState(false);
 
@@ -32,7 +34,7 @@ const TopWriting: React.FC<TopWritingProps> = ({
     ? content.replace(/\n/g, "<br>")
     : getShortContent(content, 75).replace(/\n/g, "<br>");
   return (
-    <div className="relative my-6">
+    <div className={`relative ${isSelectedStory ? "mt-[140px]" : ""}  my-6`}>
       <div className="absolute sm:w-10 sm:-top-6 sm:left-2 -top-12 w-20 left-4">
         {" "}
         <Image src={mainstar} alt="main star" />

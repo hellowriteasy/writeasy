@@ -109,19 +109,14 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
     if (selectedStory && topStoryRefs.current[selectedStory]) {
       const element = topStoryRefs.current[selectedStory];
       if (element) {
-        // Scroll the element into view
-        element.scrollIntoView({ behavior: "smooth" });
-
-        // Calculate the position of the element relative to the viewport
-        // const elementTop = element.getBoundingClientRect().top;
-
-        // Only scroll up if the element's top is too close to the top of the viewport
-        // if (elementTop < 200) {
-        //   // Adjust 100 based on the height of your navbar
-        //   setTimeout(() => {
-        //     window.scrollBy(0, elementTop - 900); // Scroll up only by the necessary amount
-        //   }, 200); // Adjust the delay as needed
-        // }
+        // Add a small delay to ensure the element is mounted before scrolling
+        setTimeout(() => {
+          element.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+            inline: "nearest",
+          });
+        }, 100); // Adjust the delay as needed
       }
     }
   }, [selectedStory, topStories]);
@@ -156,6 +151,7 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
                       }}
                     >
                       <TopWriting
+                        isSelectedStory={selectedStory === story._id}
                         title={story.title}
                         content={story.content}
                         corrections={story.corrections}

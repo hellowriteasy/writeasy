@@ -53,12 +53,12 @@ export default function RootLayout({
         <ToastContainer />
         <div className="h-full">{children}</div>
         <Footer></Footer>
-        <div className="container flex flex-col h-[300px]  justify-center mx-auto items-center gap-4 border-t border-gray-300 ">
-          <p className=" text font-unkempt ">
+        <div className="container flex flex-col   justify-center mx-auto items-center gap-4 border-t border-gray-300 ">
+          <p className=" text font-unkempt sm:text-sm ">
             &copy; 2024 Writeasy. All rights reserved.
           </p>
           <div className="flex items-center ">
-            <div className=" text  flex gap-x-1 items-center font-unkempt">
+            <div className=" text  flex gap-x-1 items-center font-unkempt sm:text-sm">
               Created by{" "}
               <a
                 target="_blank"
@@ -76,7 +76,7 @@ export default function RootLayout({
             <Image
               src={CornorTechLogo}
               alt="Conortech Logo"
-              className="w-20 h-auto"
+              className="w-20 h-auto sm:w-16"
             ></Image>
           </a>
         </div>
