@@ -124,7 +124,9 @@ const Card: React.FC<CardProps> = ({ contest }) => {
     <>
       <div className="bg-white shadow-md rounded-lg w-full border z-50 border-gray-300 p-4 mb-4">
         <div className="flex justify-between items-center mb-2">
-          <div className="text-xl font-semibold">{contest.contest?.contestTheme}/{ contest.prompt.title}</div>
+          <div className="text-xl font-semibold">
+            {contest.contest?.contestTheme}/{contest.prompt.title}
+          </div>
           <div className="flex space-x-2 gap-4">
             <button className="text-black" onClick={() => setOpen(true)}>
               <FaEdit size={20} />
@@ -132,7 +134,13 @@ const Card: React.FC<CardProps> = ({ contest }) => {
           </div>
         </div>
         {contest.isTopWriting ? (
-          <div className="text-gray-700">⭐️ Top story</div>
+          <>
+            <div className="text-gray-700">⭐️ Top story</div>
+
+            <div className="text-gray-700">
+              Score : {contest.score || "N/A"}
+            </div>
+          </>
         ) : null}
 
         <div className="text-gray-700">Prompt : {contest.prompt.title}</div>

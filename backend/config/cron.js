@@ -78,6 +78,7 @@ const closeContestAndChooseTopWritingAfterDeadline = async () => {
                           if (story) {
                             console.log("updating story", storyId);
                             story.isTopWriting = true;
+                            story.score = topStories.aggregatedScores[storyId];
                             await story.save();
                           }
                         }

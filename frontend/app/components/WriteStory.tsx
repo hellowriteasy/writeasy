@@ -203,6 +203,21 @@ export function SimpleEditor({
       };
 
       if (hasSaved) {
+        if (storyId) {
+          await axiosIns.post("/stories/practise/save", {
+            ...payload,
+            storyId,
+          });
+          setIsSaving(false);
+          toast.success("Story saved successfully");
+          setIsLoading(false);
+        } else {
+          toast.warn(
+            "Please select any of grammer,rewrite or improve to save to profile."
+          );
+        }
+      }
+      if (!hasSaved) {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_BACKEND_ROOT_URL}/api/stories/score`,
           {
@@ -268,76 +283,11 @@ export function SimpleEditor({
           }
         }
       }
-      if (!hasSaved) {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_ROOT_URL}/api/stories/score`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ ...payload }),
-          }
-        );
-
-        if (response.ok) {
-          if (response.body === null) {
-            return;
-          }
-
-          const reader = response.body.getReader();
-          const decoder = new TextDecoder("utf-8");
-          let correctedText = ""; // Store the accumulated text
-          let storyId = null;
-
-          setCorrectedText(""); // Reset the response text
-
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-
-            const chunk = decoder.decode(value, { stream: true });
-            console.log(chunk);
-            // Check if the chunk might contain the final JSON response
-            if (chunk.startsWith("{") && chunk.endsWith("}")) {
-              // Parse the JSON at the end of the stream
-              const jsonResponse = JSON.parse(chunk);
-
-              if (jsonResponse.data !== null) {
-                // Only append the `data` part if it's not null
-                correctedText += jsonResponse.data;
-              }
-              // Capture storyId if needed
-              storyId = jsonResponse.storyId;
-            } else {
-              // Regular streaming data
-              correctedText += chunk;
-            }
-
-            // Update state with corrected text if it's not part of the final JSON object
-            setCorrectedText(correctedText);
-          }
-
-          // Handle final states and actions after streaming is complete
-          console.log("Final corrected text: ", correctedText);
-          console.log("Story ID: ", storyId); // Now you have the storyId
-
-          setIsLoading(false);
-          setTriggerGrammarCheck(false);
-          setWritingMode(false);
-
-          // If you want to do something with storyId (e.g., display or log it)
-          if (storyId) {
-            setStoryId(storyId);
-            console.log("Story ID:", storyId);
-          }
-        }
-      }
     } catch (error) {
       setIsLoading(false);
       setTriggerGrammarCheck(false);
       setIsSaving(false);
-      toast.error("An error occurred while checking grammar.");
+      toast.error("Something went wrong. Please try again .");
     }
   };
 
@@ -417,6 +367,7 @@ export function SimpleEditor({
           </div>
         </div>
         <button
+          disabled={isLoading}
           className={`text-white font-unkempt bg-black text-2xl  ${
             isSaving ? "text-black bg-custom-yellow" : ""
           } w-96 h-16 sm:w-full sm:h-12 sm:text-sm rounded-full mx-auto mt-10 `}
@@ -428,11 +379,6 @@ export function SimpleEditor({
           {isSaving ? "Saving to profile..." : "Save to Profile"}
         </button>
       </div>
-
-      {/* <div ref={targetRef} className="relative  "> */}
-
-      {/* <PDF corrected={correctedText} originals={initialText} /> */}
-      {/* </div> */}
     </>
   );
 }

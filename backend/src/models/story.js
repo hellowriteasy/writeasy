@@ -31,6 +31,9 @@ const storySchema = new mongoose.Schema(
     position: {
       type: Number,
     },
+    score: {
+      type: Number,
+    },
     isTopWriting: {
       type: Boolean,
       default: false,

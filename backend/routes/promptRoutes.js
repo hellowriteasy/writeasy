@@ -99,11 +99,7 @@ router.post("/", createPrompt);
  *       500:
  *         description: Internal server error
  */
-router.get(
-  "/practice-prompts",
-  getCachedData(cacheTypes.PRACTISE_PROMPTS),
-  getPracticePrompts
-);
+router.get("/practice-prompts", getPracticePrompts);
 
 /**
  * @openapi

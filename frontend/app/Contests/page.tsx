@@ -51,15 +51,15 @@ const Contest = () => {
   return (
     <div className="w-full min-h-screen mt-6 z-0 relative flex justify-center">
       <div className="absolute sm-hide -top-14 right-0">
-        <Image className="w-[9vw]" src={earth} alt="earth" />
+        {/* <Image className="w-[9vw] z-[-1]" src={earth} alt="earth" /> */}
       </div>
       <div className="w-10/12 min-h-full">
         <div className="w-full h-auto relative pt-4 mb-5  ">
           <div className="absolute top-6 md-hide right-20">
-            <Image className="w-[7vw]" src={A} alt="group" />
+            {/* <Image className="w-[7vw]" src={A} alt="group" /> */}
           </div>
           <div className="absolute top-10 md-hide right-48">
-            <Image className="w-[12vw]" src={Dumbelman} alt="group" />
+            {/* <Image className="w-[12vw]" src={Dumbelman} alt="group" /> */}
           </div>
         </div>
 

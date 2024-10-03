@@ -289,16 +289,18 @@ const emailServiceClass = require("../../src/services/emailService");
 // );
 async function main() {
   await connectDB();
-  const updated = await Story.updateMany(
-    {
-      contest: "66f167fc61f76975e9fcad8f",
-      isTopWriting: true,
-    },
-    {
-      isTopWriting: false,
-    }
+  const stories = await Story.find({
+    contest: "66fbd6a6880a50fd7908aa57",
+    isTopWriting: true,
+  });
+  await Promise.all(
+    stories.map(async (story) => {
+      story.score = Math.ceil(Math.random() * 100);
+      return story.save();
+    })
   );
-  console.log("successfully modified ", updated.modifiedCount + " stories ");
+
+  console.log("successfully modified ");
   process.exit(1);
 }
 

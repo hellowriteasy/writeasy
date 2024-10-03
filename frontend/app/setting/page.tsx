@@ -13,7 +13,7 @@ import { useCustomToast } from "../utils/hooks/useToast";
 import Pencil from "@/public/Game/Pencil.svg";
 import Image from "next/image";
 const Page = () => {
-  const { userId, profile_picture, token } = useAuthStore();
+  const { userId, profile_picture, token, login } = useAuthStore();
   const [userDetails, setUserDetails] = useState({
     username: "",
     email: "",
@@ -82,9 +82,16 @@ const Page = () => {
         ...(email ? { email: email } : {}),
         ...(newPassword ? { password: newPassword } : {}),
       });
-      toast("Profile updated successfully", "success");
-      setUpdating(false);
-      setIsEditable(false);
+      if (response.status === 201 && userId) {
+        login(userId, token || "");
+        toast("Profile updated successfully", "success");
+        setUpdating(false);
+        setIsEditable(false);
+      } else {
+        toast("Profile updated successfully", "success");
+        setUpdating(false);
+        setIsEditable(false);
+      }
     } catch (error) {
       setUpdating(false);
       setIsEditable(false);
@@ -141,15 +148,15 @@ const Page = () => {
             disabled={!isEditable}
           />
           <input
-            className={`border sm:text-sm ${
-              !isEditable ? "bg-gray-200" : ""
-            }  border-gray-500 w-full text-xl rounded-full indent-7 h-14 focus:outline-none focus:border-yellow-600`}
+            className={`border sm:text-sm 
+                bg-gray-200 
+             border-gray-500 w-full text-xl rounded-full indent-7 h-14 focus:outline-none focus:border-yellow-600`}
             type="email"
             name="email"
             placeholder="Email"
             value={userDetails.email}
             onChange={handleInputChange}
-            disabled={!isEditable}
+            disabled={true}
           />
 
           <div className="w-full flex justify-center md:col-span-2 mt-4">

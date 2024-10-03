@@ -122,16 +122,13 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
   return (
     <div className="w-full min-h-[calc(100vh-4rem)] h-auto z-0 relative flex justify-center">
       <div className="w-10/12  h-auto">
-        
         <div className="flex mt-8  sm:items-center sm:mt-0  ">
           <div className="py-2 mb-6 flex flex-col gap-y-2">
             <div className="flex gap-y-1 flex-col">
               <h2 className="text-4xl font-unkempt sm:text-xl font-bold">
                 {contest.contestTheme}
               </h2>
-              <p className="text-xl py-4 sm:text-sm ">
-                {contest.description}
-              </p>
+              <p className="text-xl py-4 sm:text-sm ">{contest.description}</p>
               <div className="flex w-full">
                 <p className="text-xl sm:text-sm text-center font-unkempt">
                   <b className="font-medium">Submission deadline</b> -
@@ -141,12 +138,12 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
             </div>
           </div>
         </div>
-        
-        <div className="flex w-full h-auto relative mt-0 justify-between gap-x-6" >
+
+        <div className="flex w-full h-auto relative mt-0 justify-between gap-x-6">
           <div className="absolute sm-hide top-0 -left-40">
             <Image src={Cloud2} alt="cloud" />
           </div>
-          <div className="gap-5 flex flex-col sm:justify-center sm:items-center w-full">
+          <div className="w-[60%] sm:w-full">
             {hasPromptPublished ? (
               promptList.length > 0 ? (
                 promptList.map((prompt) => (
@@ -196,7 +193,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
               </div>
             )}
           </div>
-          <div className="flex md-hide flex-col gap-8">
+          <div className="flex w-[40%] sm:w-full flex-col gap-8">
             <WeeklyTest />
             <TopWriting />
           </div>

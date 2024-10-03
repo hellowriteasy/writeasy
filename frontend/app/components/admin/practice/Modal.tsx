@@ -125,7 +125,7 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onSuccess }) => {
                           value={promptTitle}
                           onChange={(e) => setPromptTitle(e.target.value)}
                         ></textarea>
-                        <Menu as="div" className="relative  mt-3">
+                        <Menu as="div" className="relative  mt-3"  >
                           <MenuButton className="w-full text-left rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                             {selectedCategories.length === 0
                               ? "Select Category"
@@ -140,14 +140,14 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onSuccess }) => {
                             leaveFrom="transform opacity-100 scale-100"
                             leaveTo="transform opacity-0 scale-95"
                           >
-                            <MenuItems className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <MenuItems   className=" mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                               {category.map((data) => (
                                 <MenuItem key={data._id}>
                                   {({ active }) => (
                                     <button
                                       className={`${
                                         selectedCategories.includes(data.name)
-                                          ? "bg-indigo-600 text-white"
+                                          ? "bg-custom-yellow text-white"
                                           : "text-gray-900"
                                       } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                                       onClick={() => toggleCategory(data.name)}

@@ -36,7 +36,6 @@ const FrequentlyAsked = () => {
     fetchFaqs();
   }, []);
 
-  const displayedFaqs = showAll ? faqs : faqs.slice(0, 5);
 
   const handleShowMore = () => {
     setShowAll(true);
@@ -58,7 +57,7 @@ const FrequentlyAsked = () => {
         <div className="w-full sm:pt-8 pt-16 px-4">
           <div className="mx-auto w-full max-w-lg">
             <div className="divide-y divide-gray-300 rounded-xl flex flex-col items-center">
-              {displayedFaqs.map((question) => (
+              {faqs.map((question) => (
                 <Disclosure
                   as="div"
                   className="p-4 md:p-6 w-full border-none"
@@ -98,7 +97,7 @@ const FrequentlyAsked = () => {
             </div>
           </div>
         </div>
-        {faqs.length > 5 && !showAll && (
+        {/* {faqs.length > 5 && !showAll && (
           <div className="mt-4">
             <button
               className="mx-auto  hover:bg-yellow-300 bg-custom-yellow text-black w-24 md:w-32 text-lg md:text-xl font-bold h-10 md:h-12 border-2  border-black rounded-full"
@@ -107,7 +106,7 @@ const FrequentlyAsked = () => {
               More
             </button>
           </div>
-        )}
+        )} */}
       </div>
       <div className="absolute right-4 md:right-0 bottom-10  md:bottom-10">
         <Image src={cloud} alt="cloud" />

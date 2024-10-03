@@ -66,7 +66,7 @@ const Games: React.FC = () => {
       <div className="w-10/12 sm:w-full min-h-screen sm:px-4  ">
         <div className="w-full  relative pt-4  mx-auto mb-4 ">
           <div className="absolute md-hide top-2 -right-14">
-            <Image className="w-[14vw] " src={group} alt="group" />
+            {/* <Image className="w-[14vw] " src={group} alt="group" /> */}
           </div>
           {/* <p className="text-lg sm:text-sm md:text-xl lg:text-2xl font-unkempt pt-4">
             Team up with friends to create captivating stories together.
@@ -75,7 +75,7 @@ const Games: React.FC = () => {
 
         <div className="flex w-full sm:flex-col-reverse gap-y-10 h-auto relative mt-0 gap-x-5 justify-around mx-auto ">
           <div className="absolute -top-40 mt-3 -left-32">
-            <Image className="w-[12vw] relative z-[-1]" src={Bee} alt="bee" />
+            {/* <Image className="w-[12vw] relative z-[-1]" src={Bee} alt="bee" /> */}
           </div>
           <div className="gap-8 w-[60%] sm:w-full  relative flex flex-col items-center  ">
             <h1 className=" text-3xl sm:text-xl sm:text-center md:text-4xl lg:text-4xl xl:text-4xl font-extrabold font-unkempt  sm:w-full">

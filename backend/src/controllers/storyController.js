@@ -450,37 +450,27 @@ const getPreviousWeekTopStories = async (req, res) => {
     });
 
     const latestContest = lastWeekContest[0];
-
-    console.log(
-      "submissionDeadline",
-      moment(new Date(lastWeekContest[0].submissionDeadline)).format("lll"),
-      "topWritingPublishDate",
-      moment(new Date(lastWeekContest[0].topWritingPublishDate)).format("lll")
-    );
-
-    console.log(latestContest);
-
-    if (latestContest.topWritingPublished) {
+    console.log(latestContest._id)
+    if (latestContest?.topWritingPublished) {
       const lastWeekContestTopStories = await Story.find({
         contest: latestContest._id,
         isTopWriting: true,
-      }).populate({
-        path: "user",
-        select: "-password",
-      });
+      })
+        .populate({
+          path: "user",
+          select: "-password",
+        })
+        .sort({
+          score: "desc",
+        });
       console.log("stories", lastWeekContestTopStories.length);
 
       responseData = { data: lastWeekContestTopStories || [] };
       res.status(200).json(responseData);
     } else {
-      console.log(
-        "publish date",
-        moment(new Date(latestContest.topWritingPublishDate)).format("lll"),
-        latestContest.topWritingPublishDate
-      );
       responseData = {
         hasTopWritingPublished: false,
-        writingPublishDate: latestContest.topWritingPublishDate,
+        writingPublishDate: latestContest?.topWritingPublishDate,
       };
       res.status(200).json(responseData);
     }
