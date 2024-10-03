@@ -432,11 +432,21 @@ class GptService {
             if (Object.keys(groupScore).length === group.length) {
               console.log("All stories in the group have valid scores.");
 
-              // **Validate that there are no undefined keys or values**
+              // **Validate that there are no undefined or invalid keys or values (like string 'undefined')**
               const validScores = Object.entries(groupScore).reduce(
                 (acc, [key, value]) => {
-                  if (key && value !== undefined) {
-                    // Ensure key and value are defined
+                  // Ensure both key and value are valid, and key has the correct length (24 characters)
+                  if (
+                    key &&
+                    key !== "undefined" &&
+                    key !== "null" &&
+                    key.trim() !== "" &&
+                    key.length === 24 && // Check if key has a length of 24 characters (MongoDB ObjectId)
+                    value !== undefined &&
+                    value !== "undefined" &&
+                    value !== "null" &&
+                    value !== ""
+                  ) {
                     acc[key] = value;
                   }
                   return acc;
@@ -444,6 +454,7 @@ class GptService {
                 {}
               );
 
+              // Validate that the cleaned object has the same length as the original group
               if (Object.keys(validScores).length === group.length) {
                 scores.push(validScores);
                 break; // Exit loop when the result is valid
