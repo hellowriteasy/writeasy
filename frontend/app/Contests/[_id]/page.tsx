@@ -139,7 +139,7 @@ const Page: React.FC<ContestPageProps> = ({ params }) => {
           </div>
         </div>
 
-        <div className="flex w-full h-auto relative mt-0 justify-between gap-x-6">
+        <div className="flex sm:flex-col-reverse gap-y-10 w-full h-auto relative mt-0 justify-around gap-x-5 sm:gap-x-0">
           <div className="absolute sm-hide top-0 -left-40">
             <Image src={Cloud2} alt="cloud" />
           </div>
