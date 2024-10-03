@@ -83,7 +83,11 @@ router.get(
  *       500:
  *         description: Server error when fetching ongoing contests.
  */
-router.get("/ended", getCahcedData(cacheTypes.ENDED_CONTEST), getEndedContests);
+router.get(
+  "/ended",
+  getCahcedData(cacheTypes.ENDED_CONTEST, true),
+  getEndedContests
+);
 
 /**
  * @openapi

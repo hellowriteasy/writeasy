@@ -287,21 +287,55 @@ const emailServiceClass = require("../../src/services/emailService");
 //   path.join(process.cwd(), `/data/test-${Date.now()}.json`),
 //   JSON.stringify({ ...res.scores, ...res.aggregatedScores })
 // );
-async function main() {
-  await connectDB();
-  const stories = await Story.find({
-    contest: "66fbd6a6880a50fd7908aa57",
-    isTopWriting: true,
-  });
-  await Promise.all(
-    stories.map(async (story) => {
-      story.score = Math.ceil(Math.random() * 100);
-      return story.save();
-    })
-  );
 
-  console.log("successfully modified ");
-  process.exit(1);
+const crypto = require("crypto");
+
+function generateKeys() {
+  const { publicKey, privateKey } = crypto.generateKeyPairSync("rsa", {
+    modulusLength: 2048,
+    publicKeyEncoding: {
+      type: "pkcs1",
+      format: "pem",
+    },
+    privateKeyEncoding: {
+      type: "pkcs1",
+      format: "pem",
+    },
+  });
+
+  return { publicKey, privateKey };
+}
+
+const verifySignature = (data, signature, publicKey) => {
+  const verifier = crypto.createVerify("SHA256");
+  verifier.update(data);
+  verifier.end();
+  return verifier.verify(publicKey, signature, "base64");
+};
+
+function generateSignature(data, privateKey) {
+  const sign = crypto.createSign("SHA256");
+  sign.update(data);
+  sign.end();
+  return sign.sign(privateKey, "base64");
+}
+
+// Generate keys specifically for the server
+function generateServerKeys() {
+  return generateKeys();
+}
+async function main() {
+  const data = "helloworld";
+  let signature = "";
+
+  const { publicKey, privateKey } = generateServerKeys();
+  console.log("publicKey",publicKey)
+  console.log("secret key",privateKey)
+  signature = generateSignature(data, privateKey);
+
+  const isValid = verifySignature(data, signature, publicKey);
+
+  console.log("is valid", isValid);
 }
 
 main();

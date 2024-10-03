@@ -1,3 +1,4 @@
+const { extractPaginationDetailsFromQuery } = require("../../utils/methods");
 const cacheService = require("../services/cacheService");
 const PromptService = require("../services/promptService");
 const StoryService = require("../services/storyService");
@@ -13,11 +14,8 @@ const createPrompt = async (req, res) => {
 };
 
 const getPracticePrompts = async (req, res) => {
-  let { page, perPage, category } = req.query;
-
-  page = +page || 1;
-  const limit = +perPage || 5;
-  const skip = (page - 1) * limit;
+  let { category } = req.query;
+  const { limit, page, perPage, skip } = extractPaginationDetailsFromQuery(req);
 
   try {
     const { data, total } = await PromptService.getPracticePrompts(
@@ -36,7 +34,8 @@ const getPracticePrompts = async (req, res) => {
     };
 
     res.json(responseData);
-    await cacheService.set(cacheTypes.PRACTISE_PROMPTS, responseData);
+    const key = `${cacheTypes.PRACTISE_PROMPTS}-${page}-${skip}-${limit}-${perPage}`;
+    await cacheService.set(key, responseData);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -64,10 +63,7 @@ const getContestPrompts = async (req, res) => {
 };
 
 const getGamePrompts = async (req, res) => {
-  let { page, perPage } = req.query;
-  page = +page || 1;
-  let limit = +perPage || 5;
-  const skip = (page - 1) * limit;
+  const { limit, page, perPage, skip } = extractPaginationDetailsFromQuery(req);
   try {
     const { data, total } = await PromptService.getGamePrompts(skip, limit);
     const responseData = {
@@ -79,7 +75,8 @@ const getGamePrompts = async (req, res) => {
       },
     };
     res.json(responseData);
-    await cacheService.set(cacheTypes.GAME_PROMPT, responseData);
+    const key = `${cacheTypes.GAME_PROMPT}-${page}-${skip}-${limit}-${perPage}`;
+    await cacheService.set(key, responseData);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

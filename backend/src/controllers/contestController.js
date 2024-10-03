@@ -1,3 +1,4 @@
+const { extractPaginationDetailsFromQuery } = require("../../utils/methods");
 const Prompt = require("../models/prompt");
 const Story = require("../models/story");
 const cacheService = require("../services/cacheService");
@@ -97,10 +98,8 @@ const getOngoingContests = async (req, res) => {
 };
 
 const getEndedContests = async (req, res) => {
-  const page = req.query.page || 1; // Default page is 1
-  const perPage = req.query.perPage || 5; // Default page size is 10
-  const skip = (page - 1) * perPage;
-  const limit = +perPage || 5;
+  
+  const { limit, page, perPage, skip } = extractPaginationDetailsFromQuery(req);
 
   try {
     const { data, total } = await ContestService.getEndedContests(skip, limit);
@@ -113,7 +112,8 @@ const getEndedContests = async (req, res) => {
       },
     };
     res.json(responseData);
-    await cacheService.set(cacheTypes.ENDED_CONTEST, responseData);
+    const cacheKey = `${cacheTypes.ENDED_CONTEST}-${page}-${skip}-${limit}-${perPage}`;
+    await cacheService.set(cacheKey, responseData);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

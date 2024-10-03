@@ -104,6 +104,7 @@ const Contest = () => {
                   pageCount={Math.ceil(pageDetails.total / pageDetails.perPage)}
                   marginPagesDisplayed={2}
                   pageRangeDisplayed={5}
+                  
                   onPageChange={handlePageClick}
                   containerClassName="flex justify-center gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
                   pageClassName=""
