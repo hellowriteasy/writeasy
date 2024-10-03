@@ -289,6 +289,7 @@ const emailServiceClass = require("../../src/services/emailService");
 // );
 
 const crypto = require("crypto");
+const User = require("../../src/models/user");
 
 function generateKeys() {
   const { publicKey, privateKey } = crypto.generateKeyPairSync("rsa", {
@@ -324,18 +325,29 @@ function generateSignature(data, privateKey) {
 function generateServerKeys() {
   return generateKeys();
 }
+// const data = "helloworld";
+// let signature = "";
+
+// const { publicKey, privateKey } = generateServerKeys();
+// console.log("publicKey",publicKey)
+// console.log("secret key",privateKey)
+// signature = generateSignature(data, privateKey);
+
+// const isValid = verifySignature(data, signature, publicKey);
+
+// console.log("is valid", isValid);
 async function main() {
-  const data = "helloworld";
-  let signature = "";
+  // await connectDB();
 
-  const { publicKey, privateKey } = generateServerKeys();
-  console.log("publicKey",publicKey)
-  console.log("secret key",privateKey)
-  signature = generateSignature(data, privateKey);
+  // const updated = await User.updateMany(
+  //   {},
+  //   {
+  //     subscriptionId: null,
+  //   }
+  // );
+  // console.log("updated count", updated.modifiedCount);
 
-  const isValid = verifySignature(data, signature, publicKey);
-
-  console.log("is valid", isValid);
+  // process.exit(1);
 }
 
 main();

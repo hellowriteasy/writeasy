@@ -6,7 +6,7 @@ const StripeService = require("../services/stripeService");
 const cacheTypes = require("../utils/types/cacheType");
 const createStripeCheckoutSession = async (req, res) => {
   const { user_id, price_id, type } = req.body;
-  let stripe_customer_id = "";
+  // let stripe_customer_id = "";
   try {
     if (!user_id) {
       throw new Error("Please provide user id");
@@ -15,32 +15,37 @@ const createStripeCheckoutSession = async (req, res) => {
     if (!userExist) {
       throw new Error("User not found");
     }
-    const subscriptionExist = await Subscription.findOne({ userId: user_id });
-    stripe_customer_id = subscriptionExist?.stripe_customer_id;
 
-    if (!stripe_customer_id) {
-      console.log("stripe creating customer", userExist.username);
-      const customer = await StripeService.createCustomer({
-        email: userExist.email,
-        username: userExist.username,
-      });
-      stripe_customer_id = customer.id;
-    }
+    console.log(
+      "stripe: creating checkout session for user - ",
+      userExist.email
+    );
+    const subscriptionExist = await Subscription.findOne({ userId: user_id });
+    // stripe_customer_id = subscriptionExist?.stripe_customer_id;
+
+    // if (!stripe_customer_id) {
+    // console.log("stripe creating customer", userExist.username);
+    // const customer = await StripeService.createCustomer({
+    //   email: userExist.email,
+    //   username: userExist.username,
+    // });
+    // stripe_customer_id = customer.id;
+    // }
 
     const checkoutRes = await StripeService.createStripeCheckout(
       userExist.email,
       price_id,
-      stripe_customer_id,
       type
     );
+
     if (!subscriptionExist) {
       const userSubscription = new Subscription({
         stripe_session_id: checkoutRes.id,
         userId: user_id,
-        stripe_customer_id,
       });
       await userSubscription.save();
-    } else {
+    }
+    if (subscriptionExist) {
       if (subscriptionExist.isActive) {
         throw new Error(
           "Failed to create checkout session. Your subscription is active !!"
@@ -49,6 +54,7 @@ const createStripeCheckoutSession = async (req, res) => {
       subscriptionExist.stripe_session_id = checkoutRes.id;
       await subscriptionExist.save();
     }
+
     return res.status(200).json({
       url: checkoutRes.url,
       success_url: checkoutRes.success_url,
@@ -80,6 +86,10 @@ const confirmStripeCheckoutSession = async (req, res) => {
     if (!subscriptionExist) {
       throw new Error("Subscription not found.");
     }
+    console.log(
+      "stripe: creating confirming checkout session. stripe session id- ",
+      stripe_session_id
+    );
     const paidAt = new Date();
     const thirtyDaysLater = new Date(paidAt);
     thirtyDaysLater.setDate(thirtyDaysLater.getDate() + 30);

@@ -1,6 +1,6 @@
 const stripe = require("../../config/stripe");
 
-const createStripeCheckout = async (email, priceId, stripeCustomerId, type) => {
+const createStripeCheckout = async (email, priceId, type) => {
   const today = new Date();
   const startDate = today.toISOString().split("T")[0]; // Format: YYYY-MM-DD
   const endDateObj = new Date(today);
