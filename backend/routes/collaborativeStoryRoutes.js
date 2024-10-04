@@ -105,8 +105,6 @@ router.post("/submit", submitCollaborativePart);
 
 module.exports = router;
 
-
 // story create - story type game = collaborative story create
-
 
 // render html controller

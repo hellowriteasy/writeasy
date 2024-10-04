@@ -317,6 +317,11 @@ export function SimpleEditor({
     }
   };
 
+  const handleFocus = () => {
+    if (editor) {
+      editor.commands.focus();
+    }
+  };
   useEffect(() => {
     if (!editor) return;
     if (!writingMode) {
@@ -366,19 +371,24 @@ export function SimpleEditor({
           </div>
           <div className="mt-10" ref={targetRef}>
             <EditorContent
-              className={`scroll-m-2 w-[100%]  mt-10 font-comic ${
+              className={`scroll-m-2 w-[100%]  cursor-text mt-10 font-comic ${
                 isLoading
                   ? "opacity-50 cursor-not-allowed pointer-events-none"
                   : ""
               } ${
                 !writingMode ? "pointer-events-none" : ""
-              }   min-h-[600px]  overflow-y-auto scrollbar-hide`}
+              }    overflow-y-auto scrollbar-hide`}
               editor={editor}
               disabled={true}
               aria-disabled={true}
               style={{
                 overflowY: "auto",
                 scrollbarWidth: "none",
+                height: "fit-content",
+                minHeight: "800px",
+              }}
+              onClick={() => {
+                handleFocus();
               }}
             />
             <style jsx>{`

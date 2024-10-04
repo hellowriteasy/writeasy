@@ -50,7 +50,7 @@ const createCollaborativeStory = [
 const inviteCollaborators = [
   // authMiddleware,
   async (req, res) => {
-    let { storyID, email, promptID, userID } = req.body;
+    let { storyID, email, promptID, userID, isPublic } = req.body;
     let story;
     try {
       if (storyID) {
@@ -63,6 +63,7 @@ const inviteCollaborators = [
           prompt: promptID,
           storyType: "game",
           user: userID,
+          isPublic: !!isPublic,
         });
 
         await story.populate({

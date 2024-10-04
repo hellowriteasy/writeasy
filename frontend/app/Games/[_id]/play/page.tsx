@@ -58,6 +58,7 @@ const Page = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentStory, setCurrentStory] = useState<TStory | null>(null);
   const [submittingStory, setSubmittingStory] = useState(false);
+  const [isPublicStory, setIsPublicStory] = useState(true);
   const isSubcriptionActive = useAuthStore(
     (state) => state.isSubcriptionActive
   );
@@ -249,6 +250,7 @@ const Page = () => {
         email: selectedUsers,
         promptID: promptId,
         userID: userId,
+        isPublic: isPublicStory,
       };
 
       if (invitePayload) {
@@ -364,6 +366,19 @@ const Page = () => {
           {inviting ? "Inviting..." : "Invite"}
         </button>
       </div>
+      <div className="flex gap-x-2 mt-2">
+        <input
+          type="checkbox"
+          name="isPrivate"
+          checked={!isPublicStory}
+          onChange={(e) => {
+            console.log(e.target.checked);
+            setIsPublicStory(!e.target.checked);
+          }}
+        />
+        Would your group prefer to write without others seeing it?
+      </div>
+
       {showCard && searchQuery && (
         <RenderUserCard
           searchResults={searchResults}
@@ -372,6 +387,8 @@ const Page = () => {
       )}
     </div>
   );
+
+  console.log("value", isPublicStory);
 
   return (
     <div className="w-full h-[1000px] mt-6 z-0 relative flex justify-center ">

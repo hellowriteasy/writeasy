@@ -36,7 +36,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
   const fetchStories = async () => {
     try {
       const response = await AxiosIns.get(
-        `/stories/contest/prompt?prompt_id=${params._id}`,
+        `/stories/contest/prompt?prompt_id=${params._id}&public=true`,
         {
           params: {
             page: currentPage,
@@ -137,12 +137,11 @@ const Page: React.FC<PageProps> = ({ params }) => {
       <div className="w-screen flex sm:mt-[2vw]  flex-col items-center">
         {hasStoriesFetched && stories.length === 0 ? (
           <NotFound text="No stories to show!!" />
-        ) : (
+        ) : stories.length ? (
           <div className="w-4/5 ">
             <h1 className="font-bold text-3xl sm:text-xl md:text-4xl lg:text-6xl xl:text-5xl pt-5 font-unkempt">
               All Groups
             </h1>
-
             <div className="mt-4 flex flex-col gap-8">
               {stories.map((story: TStory, index) => (
                 <Storytitle
@@ -179,6 +178,8 @@ const Page: React.FC<PageProps> = ({ params }) => {
               </div>
             )}
           </div>
+        ) : (
+          ""
         )}
       </div>
     </div>

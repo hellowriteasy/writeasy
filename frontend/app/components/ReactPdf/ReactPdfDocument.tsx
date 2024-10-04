@@ -6,6 +6,7 @@ import {
   View,
   StyleSheet,
   Image,
+  Link,
 } from "@react-pdf/renderer";
 import { diff_match_patch } from "diff-match-patch";
 
@@ -87,10 +88,12 @@ const PdfDocument = (props: { originals: string; corrected: string }) => {
         {/* Navbar Section */}
         <View style={styles.navbar}>
           {/* Add the Image component for the logo */}
-          <Image
-            style={styles.logo}
-            src="https://res.cloudinary.com/onlinecoder/image/upload/v1728024504/yj56urjatyfoko30bz81.png"
-          />
+          <Link href="https://writeasy.app">
+            <Image
+              style={styles.logo}
+              src="https://res.cloudinary.com/onlinecoder/image/upload/v1728024504/yj56urjatyfoko30bz81.png"
+            />
+          </Link>
         </View>
 
         {/* Main content section */}

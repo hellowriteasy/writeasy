@@ -144,8 +144,8 @@ const Page: React.FC<PageProps> = ({ params }) => {
           <NotFound text="No stories to show!!" />
         ) : (
           <div className="w-4/5 ">
-            <h1 className="font-bold text-3xl sm:text-xl md:text-4xl lg:text-6xl xl:text-5xl pt-5 font-unkempt">
-              All Writings
+            <h1 className="font-bold text-2xl sm:text-xl md:text-3xl lg:text-3xl xl:text-3xl pt-5 font-unkempt">
+              {pageDetails.total} Stories
             </h1>
 
             <div className="mt-4 flex flex-col gap-8">
