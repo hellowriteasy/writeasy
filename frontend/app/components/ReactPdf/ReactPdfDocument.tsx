@@ -91,7 +91,7 @@ const PdfDocument = (props: { originals: string; corrected: string }) => {
           <Link href="https://writeasy.app">
             <Image
               style={styles.logo}
-              src="https://res.cloudinary.com/onlinecoder/image/upload/v1728024504/yj56urjatyfoko30bz81.png"
+              src="https://res.cloudinary.com/onlinecoder/image/upload/v1728039169/hto4bdciigkewl0oucrc.png"
             />
           </Link>
         </View>
