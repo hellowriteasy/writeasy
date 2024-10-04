@@ -249,13 +249,16 @@ const getStoryOfAuserByPrompt = async (req, res) => {
 };
 
 const getStoriesByContentAndPrompt = async (req, res) => {
-  const { prompt_id, contest_id } = req.query;
+  const { prompt_id, contest_id, public } = req.query;
   const exclude_top_writings = req.query.exclude_top_writings === "true";
   const page = +req.query.page || 1; // Default page is 1
   const perPage = +req.query.perPage || 5; // Default page size is 10
   const skip = (page - 1) * perPage;
   const limit = +perPage || 5;
   const sortKey = req.query.sortKey || "createdAt";
+  const isPublic = public === "true";
+
+  console.log("is public", isPublic);
   try {
     const contestExist = await Contest.findById(contest_id);
 
@@ -263,6 +266,7 @@ const getStoriesByContentAndPrompt = async (req, res) => {
     const total = await Story.countDocuments({
       ...(contest_id ? { contest: contest_id } : null),
       ...(prompt_id ? { prompt: prompt_id } : null),
+      ...(public ? { isPublic: isPublic } : null),
       ...(exclude_top_writings && hasTopWritingPublished
         ? {
             $or: [
@@ -276,6 +280,7 @@ const getStoriesByContentAndPrompt = async (req, res) => {
       {
         ...(contest_id ? { contest: contest_id } : null),
         ...(prompt_id ? { prompt: prompt_id } : null),
+        ...(public ? { isPublic: isPublic } : null),
         ...(exclude_top_writings && hasTopWritingPublished
           ? {
               $or: [
@@ -335,12 +340,21 @@ const getSortInputForStoriesByContestAndPrompt = (sortKey, direction) => {
   }
 };
 const savePractiseStoryToProfile = async (req, res) => {
-  const { userId, title, content, taskType, storyType, prompt, storyId } =
-    req.body;
+  const {
+    userId,
+    title,
+    content,
+    taskType,
+    storyType,
+    prompt,
+    storyId,
+    isPublic,
+  } = req.body;
 
   try {
     const updated = await Story.findByIdAndUpdate(storyId, {
       hasSaved: true,
+      isPublic: isPublic,
     });
     console.log("updated", updated);
     res.status(201).json({ message: "successfully saved to profile" });
@@ -450,7 +464,7 @@ const getPreviousWeekTopStories = async (req, res) => {
     });
 
     const latestContest = lastWeekContest[0];
-    console.log(latestContest._id)
+    console.log(latestContest._id);
     if (latestContest?.topWritingPublished) {
       const lastWeekContestTopStories = await Story.find({
         contest: latestContest._id,

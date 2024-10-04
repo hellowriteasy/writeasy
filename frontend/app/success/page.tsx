@@ -19,10 +19,8 @@ const Success = () => {
         stripe_session_id: sessionId,
       })
         .then((response) => {
-          //
           // location.href = "/success?session_id=" + sessionId;
           location.href = "/";
-          
         })
         .catch((error) => {
           console.error("Error confirming checkout session", error);

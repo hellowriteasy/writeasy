@@ -42,7 +42,8 @@ interface SimpleEditorProps {
 type THandleClickFeature = (
   type: TTaskType | string,
   event: React.MouseEvent<HTMLButtonElement> | MouseEvent,
-  hasSaved: boolean
+  hasSaved: boolean,
+  savePublic?: boolean
 ) => void;
 
 export function SimpleEditor({
@@ -165,7 +166,8 @@ export function SimpleEditor({
   const handleClickFeature: THandleClickFeature = async (
     type,
     event,
-    hasSaved = false
+    hasSaved = false,
+    savePublic
   ) => {
     event.preventDefault();
     try {
@@ -207,6 +209,7 @@ export function SimpleEditor({
           await axiosIns.post("/stories/practise/save", {
             ...payload,
             storyId,
+            isPublic: !!savePublic,
           });
           setIsSaving(false);
           toast.success("Story saved successfully");
@@ -366,18 +369,34 @@ export function SimpleEditor({
             `}</style>
           </div>
         </div>
-        <button
-          disabled={isLoading}
-          className={`text-white font-unkempt bg-black text-2xl  ${
-            isSaving ? "text-black bg-custom-yellow" : ""
-          } w-96 h-16 sm:w-full sm:h-12 sm:text-sm rounded-full mx-auto mt-10 `}
-          onClick={(e) => {
-            setIsSaving(true);
-            handleClickFeature(taskType, e, true);
-          }}
-        >
-          {isSaving ? "Saving to profile..." : "Save to Profile"}
-        </button>
+        <div className="flex gap-x-2 ">
+          <button
+            disabled={isLoading}
+            className={`text-white font-unkempt bg-black text-2xl  ${
+              isSaving ? "text-black bg-custom-yellow" : ""
+            } w-96 h-16 sm:w-full sm:h-12 sm:text-sm rounded-full mx-auto mt-10 `}
+            onClick={(e) => {
+              setIsSaving(true);
+              handleClickFeature(taskType, e, true);
+            }}
+          >
+            {isSaving ? "Saving to profile..." : "Save to Profile only"}
+          </button>
+          <button
+            disabled={isLoading}
+            className={`text-white font-unkempt bg-black text-2xl  ${
+              isSaving ? "text-black bg-custom-yellow" : ""
+            } w-96 h-16 sm:w-full sm:h-12 sm:text-sm rounded-full mx-auto mt-10 `}
+            onClick={(e) => {
+              setIsSaving(true);
+              handleClickFeature(taskType, e, true, true);
+            }}
+          >
+            {isSaving
+              ? "Saving to profile and publishing..."
+              : "Save to Profile and publish"}
+          </button>
+        </div>
       </div>
     </>
   );

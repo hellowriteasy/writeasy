@@ -1,55 +1,61 @@
-"use client";
 
+"use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import Bee from "@/public/Game/cloud3.svg";
-import { SimpleEditor } from "@/app/components/WriteStory";
-import useAuthStore from "@/app/store/useAuthStore";
-import Subscription from "@/app/components/Subscription";
+import cloud2 from "@/public/Game/cloud2.svg";
+import shootingstar from "@/public/Game/shotting_star.svg";
+import Storytitle from "@/app/components/Others/Storytitle";
+import { TPrompt, TStory } from "@/app/utils/types";
+import ReactPaginate from "react-paginate";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 import { axiosInstance } from "@/app/utils/config/axios";
-import { TTaskType } from "@/app/utils/types";
-import Loading from "@/app/loading";
-import ConfirmModal from "@/app/components/Modal/ConfirmModal";
-interface Prompt {
-  _id: string;
-  title: string;
-  promptType: string;
-  Userid: string;
-  type: string;
-}
+import NotFound from "@/app/components/Others/NotFound";
+import useAuthStore from "@/app/store/useAuthStore";
 
-interface PromptPageProps {
+interface PageProps {
   params: {
     id: string;
-    promptType: string;
   };
 }
 
-const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
-  const [prompt, setPrompt] = useState<Prompt | null>(null);
-  const [triggerGrammarCheck, setTriggerGrammarCheck] = useState(false);
-  const [taskType, setTaskType] = useState<TTaskType | string>("");
-  const [input, setInput] = useState("");
-  const { role, isSubcriptionActive } = useAuthStore();
+const Page: React.FC<PageProps> = ({ params }) => {
+  const [stories, setStories] = useState<TStory[]>([]);
+  const [hasStoriesFetched, setHasStoriesFetched] = useState(false);
+  const [prompt, setPrompt] = useState<TPrompt | null>(null);
+  const [userGameStory, setUserGameStory] = useState<TStory | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageDetails, setPageDetails] = useState({
+    perPage: 10,
+    page: 1,
+    total: 0,
+  });
+  const { userId } = useAuthStore();
+  const router = useRouter();
   const AxiosIns = axiosInstance("");
 
-  useEffect(() => {
-    const handleBeforeUnload = (event: any) => {
-      event.preventDefault();
-      event.returnValue =
-        "Refreshing the page may erase your changes. Are you sure you want to continue?";
-      return "Refreshing the page may erase your changes. Are you sure you want to continue?";
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (params.id) {
+  const fetchStories = async () => {
+    try {
+      const response = await AxiosIns.get(
+        `/stories/contest/prompt?prompt_id=${params.id}&public=true`,
+        {
+          params: {
+            page: currentPage,
+            perPage: 5,
+          },
+        }
+      );
+      const fetchedStories: TStory[] = response.data?.data;
+      setStories(fetchedStories);
+      setPageDetails(response.data?.pageData);
+      setHasStoriesFetched(true);
+    } catch (error) {
+      console.error("Error fetching stories:", error);
+    }
+  };
+  const getPromptById = async () => {
+    if (!params.id) return;
+    try {
       AxiosIns.get(`prompts/${params.id}`)
         .then((response) => {
           setPrompt(response.data);
@@ -57,111 +63,132 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
         .catch((error) => {
           console.error("Error fetching prompt:", error);
         });
+    } catch (error) {
+      //
     }
+  };
+
+  const fetchStoryOfUserByPromptId = async () => {
+    try {
+      const { data } = await AxiosIns.get(
+        `/stories/user/${params.id}/${userId}`
+      );
+      if (data) {
+        setUserGameStory(data);
+      }
+    } catch (error) {
+      //
+    }
+  };
+  useEffect(() => {
+    if (!params.id) return;
+    getPromptById();
+    fetchStoryOfUserByPromptId();
   }, [params.id]);
+  useEffect(() => {
+    if (!params.id) return;
+    fetchStories();
+  }, [params.id, currentPage]);
+  // useEffect(() => {
+  //   const filtered = stories.filter(
+  //     (story) => story.storyType === "game" && story.prompt._id === params._id
+  //   );
+  //   setFilteredStories(filtered);
+  // }, [stories, params._id]);
 
-  const handleTaskTypeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const { value } = e.currentTarget;
-
-    setTaskType(value as TTaskType);
-    setTriggerGrammarCheck(true);
+  const handleReadMore = (story: TStory) => {
+    // setIsCreating(false);
   };
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setInput(value);
+  const handleCreateStory = () => {
+    router.push(`/Practices/${params.id}/playground`);
   };
 
-  const handleRemoveActiveTaskType = () => setTaskType("");
+  const handlePageClick = (event: { selected: number }) => {
+    setCurrentPage(event.selected + 1);
+  };
 
-  if (!prompt) return <Loading></Loading>;
+  // const offset = currentPage * itemsPerPage;
+  // const currentStories = filteredStories.slice(offset, offset + itemsPerPage);
+  // const pageCount = Math.ceil(filteredStories.length / itemsPerPage);
+
+  // if (selectedStory || isCreating) {
+  //   return <StoryEditor id={params._id} />;
+  // }
 
   return (
-    <div className="w-full min-h-screen  mt-6 z-0 relative flex justify-center">
-      <div className="w-10/12 min-h-screen flex flex-col items-center gap-y-4 ">
-        <div className="w-4/5 mx-auto  relative pt-2 ">
-          <h1 className="text-3xl sm:text-sm text-center font-bold font-unkempt">
-            {prompt.title}
+    <div className="w-screen font-unkempt h-auto flex flex-col">
+      <div className="h-auto  relative w-full flex items-center flex-col">
+        <div className="absolute left-0">
+          <Image className="w-[9vw]" src={shootingstar} alt="shootingstar" />
+        </div>
+        <div className="w-4/5  font-unkempt flex flex-col gap-10 sm:gap-5 sm:my-10 mt-20 mb-10">
+          <h1 className="text-3xl  md:text-4xl lg:text-5xl xl:text-6xl sm:text-xl font-bold font-unkempt">
+            {prompt?.title}
           </h1>
+          <p className="sm:text-sm text-xl  font-medium">
+            {prompt?.description}
+          </p>
+          <button
+            onClick={handleCreateStory}
+            className=" sm:px-2 w-60  sm:text-md  sm:w-40 sm:h-12  bg-black hover:opacity-80 text-center text-white rounded-full border h-16  md:text-2xl  lg:text-md xl:text-2xl"
+          >
+            {userGameStory ? "Continue your story" : "    Create your group"}
+          </button>
         </div>
-        <div className="flex w-[100%] relative mt-0 ">
-          <div className="absolute vsm-hide -top-40 mt-3 -left-48">
-            <Image src={Bee} alt="bee" />
-          </div>
-          <div className="gap-8 relative w-full flex flex-col items-center ">
-            <div className="flex flex-col items-center w-full mx-auto">
-              <div className="flex flex-col w-full items-center gap-8 h-auto mx-auto">
-                <div>
-                  <input
-                    className="border border-gray-500 sm:w-[80vw] sm:h-10  sm:text-sm z-10 text-xl rounded-full indent-7 w-[50vw] h-12 focus:outline-none focus:border-yellow-600"
-                    placeholder="Untitled Story"
-                    onChange={handleTitleChange}
-                  />
-                </div>
-                <div className="flex w-full flex-col gap-8">
-                  <div className="flex flex-wrap justify-center gap-4 sm:gap-1 font-unkempt">
-                    {["grammar", "rewrite", "improve"].map((type) => (
-                      <div key={type} className="flex">
-                        <button
-                          className={` sm:h-10 sm:w-20  md:h-[7vh] w-32 h-12 text-md bg-black text-white ${
-                            taskType === type
-                              ? "bg-custom-yellow text-black"
-                              : ""
-                          } hover:opacity-80 font-medium text-md sm:text-[2.5vw] rounded-full`}
-                          value={type}
-                          type="button"
-                          onClick={
-                            type !== "pdf"
-                              ? (e) => {
-                                  handleTaskTypeClick(e);
-                                }
-                              : undefined
-                          }
-                        >
-                          {type.charAt(0).toUpperCase() + type.slice(1)}
-                        </button>
-                      </div>
-                    ))}
-                    <ConfirmModal
-                      onSuccess={() => {
-                        setTaskType("refresh");
-                        setTriggerGrammarCheck(true);
-                      }}
-                      title={"Are you sure you want to refresh?"}
-                      description={"Note: Your writing will not be saved."}
-                    >
-                      <button
-                        className={` sm:h-10 sm:w-20  md:h-[7vh] w-32 h-12 text-md bg-black text-white hover:opacity-80 font-medium text-md sm:text-[2.5vw] rounded-full`}
-                        type="button"
-                      >
-                        Refresh
-                      </button>
-                    </ConfirmModal>
-                    <div className="flex"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="w-full flex-grow">
-          <SimpleEditor
-            triggerGrammarCheck={triggerGrammarCheck}
-            title={input}
-            Userid={params.id}
-            type={prompt.promptType}
-            _id={prompt._id}
-            taskType={taskType}
-            key={prompt._id}
-            setTriggerGrammarCheck={setTriggerGrammarCheck}
-            handleRemoveActiveTaskType={handleRemoveActiveTaskType}
-          />
+        <div className="absolute right-5 sm-hide top-60">
+          <Image className="w-[12vw]" src={cloud2} alt="cloud2" />
         </div>
       </div>
+      <div className="w-screen flex sm:mt-[2vw]  flex-col items-center">
+        {hasStoriesFetched && stories.length === 0 ? (
+          <NotFound text="No stories to show!!" />
+        ) : (
+          <div className="w-4/5 ">
+            <h1 className="font-bold text-3xl sm:text-xl md:text-4xl lg:text-6xl xl:text-5xl pt-5 font-unkempt">
+              All Groups
+            </h1>
 
-      {!isSubcriptionActive && role !== "admin" ? <Subscription /> : null}
+            <div className="mt-4 flex flex-col gap-8">
+              {stories.map((story: TStory, index) => (
+                <Storytitle
+                  key={index}
+                  story={story}
+                  onReadMore={() => handleReadMore(story)}
+                />
+              ))}
+            </div>
+            {pageDetails.total > 5 && (
+              <div className="w-full mt-10 text-lg md:text-xl font-unkempt">
+                <ReactPaginate
+                  previousLabel={
+                    <FaAngleLeft className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+                  }
+                  nextLabel={
+                    <FaAngleRight className="w-6 h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+                  }
+                  breakLabel="..."
+                  breakClassName="break-me"
+                  pageCount={Math.ceil(pageDetails.total / pageDetails.perPage)}
+                  marginPagesDisplayed={2}
+                  pageRangeDisplayed={5}
+                  onPageChange={handlePageClick}
+                  containerClassName="flex justify-center gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
+                  pageClassName=""
+                  pageLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                  previousClassName=""
+                  previousLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                  nextClassName=""
+                  nextLinkClassName="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 flex items-center justify-center border border-gray-300 rounded-full"
+                  activeClassName="bg-black text-white rounded-full"
+                />
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
 
-export default PromptPage;
+export default Page;

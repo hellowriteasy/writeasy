@@ -38,6 +38,10 @@ const storySchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isPublic: {
+      type: Boolean,
+      default: false,
+    },
     contest: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Contest",
