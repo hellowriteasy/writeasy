@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
@@ -126,14 +125,14 @@ const Page: React.FC<PageProps> = ({ params }) => {
           <h1 className="text-3xl  md:text-4xl lg:text-5xl xl:text-6xl sm:text-xl font-bold font-unkempt">
             {prompt?.title}
           </h1>
-          <p className="sm:text-sm text-xl  font-medium">
+          {/* <p className="sm:text-sm text-xl  font-medium">
             {prompt?.description}
-          </p>
+          </p> */}
           <button
             onClick={handleCreateStory}
             className=" sm:px-2 w-60  sm:text-md  sm:w-40 sm:h-12  bg-black hover:opacity-80 text-center text-white rounded-full border h-16  md:text-2xl  lg:text-md xl:text-2xl"
           >
-            {userGameStory ? "Continue your story" : "    Create your group"}
+            Create your story
           </button>
         </div>
         <div className="absolute right-5 sm-hide top-60">
@@ -146,7 +145,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
         ) : (
           <div className="w-4/5 ">
             <h1 className="font-bold text-3xl sm:text-xl md:text-4xl lg:text-6xl xl:text-5xl pt-5 font-unkempt">
-              All Groups
+              All Writings
             </h1>
 
             <div className="mt-4 flex flex-col gap-8">

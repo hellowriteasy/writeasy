@@ -55,7 +55,6 @@ export function SimpleEditor({
   setTriggerGrammarCheck,
 }: SimpleEditorProps) {
   const [correctedText, setCorrectedText] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
   const setStoredFunction = usePdfStore((state) => state.setPdfExportFunction);
   const pdfExportFunction = usePdfStore((state) => state.pdfExportFunction);
@@ -67,6 +66,9 @@ export function SimpleEditor({
   const [writingMode, setWritingMode] = useState(true);
   const [storyId, setStoryId] = useState("");
   const [isEditorDisabled, setIsEditorDisabled] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSavingPublic, setIsSavingPublic] = useState(false);
+  const [isSavingPrivate, setIsSavingPrivate] = useState(false);
   useEffect(() => {
     setStoredFunction(toPDF);
   }, [toPDF, setStoredFunction]);
@@ -193,7 +195,14 @@ export function SimpleEditor({
         toast.error("Word limit exceeded. Please reduce the number of words.");
         return;
       }
+      if (hasSaved) {
+        console.log("inside has saved", !!savePublic);
+        setIsSavingPublic(!!savePublic);
+        setIsSavingPrivate(!savePublic);
+      }
+
       setIsLoading(true);
+
       const payload = {
         userId: userId,
         title: title,
@@ -212,9 +221,13 @@ export function SimpleEditor({
             isPublic: !!savePublic,
           });
           setIsSaving(false);
-          toast.success("Story saved successfully");
+          setIsSavingPrivate(false);
+          setIsSavingPublic(false);
           setIsLoading(false);
+          toast.success("Story saved successfully");
         } else {
+          setIsSavingPrivate(false);
+          setIsSavingPublic(false);
           toast.warn(
             "Please select any of grammer,rewrite or improve to save to profile."
           );
@@ -246,7 +259,10 @@ export function SimpleEditor({
 
           while (true) {
             const { done, value } = await reader.read();
-            if (done) break;
+            if (done) {
+              setIsLoading(false);
+              break;
+            }
 
             const chunk = decoder.decode(value, { stream: true });
             console.log(chunk);
@@ -275,7 +291,6 @@ export function SimpleEditor({
           console.log("Final corrected text: ", correctedText);
           console.log("Story ID: ", storyId); // Now you have the storyId
 
-          setIsLoading(false);
           setTriggerGrammarCheck(false);
           setWritingMode(false);
 
@@ -287,10 +302,10 @@ export function SimpleEditor({
         }
       }
     } catch (error) {
-      setIsLoading(false);
       setTriggerGrammarCheck(false);
       setIsSaving(false);
       toast.error("Something went wrong. Please try again .");
+      setIsLoading(true);
     }
   };
 
@@ -312,6 +327,9 @@ export function SimpleEditor({
   if (!editor) {
     return null;
   }
+
+  console.log("private", isSavingPrivate);
+  console.log("public", isSavingPublic);
 
   return (
     <>
@@ -373,26 +391,24 @@ export function SimpleEditor({
           <button
             disabled={isLoading}
             className={`text-white font-unkempt bg-black text-2xl  ${
-              isSaving ? "text-black bg-custom-yellow" : ""
+              isSavingPrivate ? "text-black bg-custom-yellow" : ""
             } w-96 h-16 sm:w-full sm:h-12 sm:text-sm rounded-full mx-auto mt-10 `}
             onClick={(e) => {
-              setIsSaving(true);
               handleClickFeature(taskType, e, true);
             }}
           >
-            {isSaving ? "Saving to profile..." : "Save to Profile only"}
+            {isSavingPrivate ? "Saving to profile..." : "Save to Profile only"}
           </button>
           <button
             disabled={isLoading}
             className={`text-white font-unkempt bg-black text-2xl  ${
-              isSaving ? "text-black bg-custom-yellow" : ""
+              isSavingPublic ? "text-black bg-custom-yellow" : ""
             } w-96 h-16 sm:w-full sm:h-12 sm:text-sm rounded-full mx-auto mt-10 `}
             onClick={(e) => {
-              setIsSaving(true);
               handleClickFeature(taskType, e, true, true);
             }}
           >
-            {isSaving
+            {isSavingPublic
               ? "Saving to profile and publishing..."
               : "Save to Profile and publish"}
           </button>
