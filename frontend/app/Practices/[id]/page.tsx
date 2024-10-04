@@ -139,7 +139,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
           <Image className="w-[12vw]" src={cloud2} alt="cloud2" />
         </div>
       </div>
-      <div className="w-screen flex sm:mt-[2vw]  flex-col items-center">
+      <div className="w-screen flex sm:mt-[2vw]  flex-col items-center min-h-[300px]">
         {hasStoriesFetched && stories.length === 0 ? (
           <NotFound text="No stories to show!!" />
         ) : (

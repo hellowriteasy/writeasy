@@ -228,6 +228,7 @@ export function SimpleEditor({
         } else {
           setIsSavingPrivate(false);
           setIsSavingPublic(false);
+          setIsLoading(false);
           toast.warn(
             "Please select any of grammer,rewrite or improve to save to profile."
           );
