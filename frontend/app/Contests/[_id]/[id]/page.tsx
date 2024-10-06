@@ -129,17 +129,17 @@ const ViewContest: React.FC<ViewContestProps> = ({ params }) => {
   return (
     <div className="w-full min-h-screen mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 sm:w-full h-auto ">
-        <div className="flex content-center justify-center items-center bg gap-x-6 sm:flex-col">
+        <div className="flex content-center justify-center items-center flex-col bg gap-y-6 sm:flex-col">
+          <div className=" text-center sm:text-xl text-5xl font-bold font-unkempt relative pt-4">
+            {prompt?.title}
+          </div>
           {contestDetails?.image && (
             <img
-              className="w-[100px] h-[100px] object-contain rounded-md"
+              className="w-[40%]  object-contain rounded-md"
               src={contestDetails?.image}
               alt="contest image"
             />
           )}
-          <div className=" text-center sm:text-xl text-5xl font-bold font-unkempt relative pt-4">
-            {prompt?.title}
-          </div>
         </div>
         <div className="flex justify-center mt-8"></div>
         <div className="flex w-full h-auto relative mt-0 justify-around">
