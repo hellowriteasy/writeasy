@@ -352,43 +352,40 @@ const savePractiseStoryToProfile = async (req, res) => {
   } = req.body;
 
   try {
-    const updated = await Story.findByIdAndUpdate(storyId, {
-      hasSaved: true,
-      isPublic: isPublic,
-    });
-    console.log("updated", updated);
+    if (storyId) {
+      await Story.findByIdAndUpdate(storyId, {
+        hasSaved: true,
+        isPublic: isPublic,
+      });
+
+      // await StoryService.savePractiseStoryToProfile(
+      //   userId,
+      //   title,
+      //   content,
+      //   taskType,
+      //   storyType,
+      //   prompt,
+      //   isPublic
+      // );
+    }
+    if (!storyId) {
+      await Story.create({
+        content,
+        user: userId,
+        prompt,
+        hasSaved: true,
+        isPublic,
+        title,
+        storyType: "practice",
+      });
+    }
+
     res.status(201).json({ message: "successfully saved to profile" });
   } catch (error) {
     console.log(error);
     res
       .status(500)
       .json({ message: error.message || "Error saving to profile" });
-  }
-};
-
-const processCorrectionAndSummary = async ({
-  story_id,
-  content,
-  taskType,
-  wordCount,
-}) => {
-  try {
-    const correction = await gptService.generateCorrection(
-      content,
-      taskType,
-      wordCount
-    );
-
-    const summary = await gptService.generateCorrectionSummary(
-      content,
-      correction
-    );
-    await Story.findByIdAndUpdate(story_id, {
-      corrections: correction,
-      correctionSummary: summary,
-    });
-  } catch (error) {
-    console.log("error generating correction summary", error);
   }
 };
 

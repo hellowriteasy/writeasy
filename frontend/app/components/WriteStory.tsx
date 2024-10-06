@@ -27,6 +27,7 @@ import DeletedText from "./tiptap/Deleted";
 import { divideNewlinesByTwo } from "../utils/methods";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import PdfDocument from "./ReactPdf/ReactPdfDocument";
+import { MdSettingsApplications } from "react-icons/md";
 
 interface SimpleEditorProps {
   triggerGrammarCheck: any;
@@ -214,7 +215,6 @@ export function SimpleEditor({
       };
 
       if (hasSaved) {
-        if (storyId) {
           await axiosIns.post("/stories/practise/save", {
             ...payload,
             storyId,
@@ -225,14 +225,6 @@ export function SimpleEditor({
           setIsSavingPublic(false);
           setIsLoading(false);
           toast.success("Story saved successfully");
-        } else {
-          setIsSavingPrivate(false);
-          setIsSavingPublic(false);
-          setIsLoading(false);
-          toast.warn(
-            "Please select any of grammer,rewrite or improve to save to profile."
-          );
-        }
       }
       if (!hasSaved) {
         const response = await fetch(
@@ -306,7 +298,7 @@ export function SimpleEditor({
       setTriggerGrammarCheck(false);
       setIsSaving(false);
       toast.error("Something went wrong. Please try again .");
-      setIsLoading(true);
+      setIsLoading(false);
     }
   };
 

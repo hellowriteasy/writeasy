@@ -36,20 +36,6 @@ const cacheTypes = require("../src/utils/types/cacheType");
 router.post("/", createPrompt);
 
 /**
- * @openapi
- * /api/prompts/practice-prompts:
- *   get:
- *     tags:
- *       - Prompts
- *     summary: Get all practice prompts
- *     description: Retrieves all practice prompts.
- *     responses:
- *       200:
- *         description: Successfully retrieved all practice prompts.
- *       500:
- *         description: Server error when fetching prompts.
- */
-/**
  * @swagger
  * /api/prompts/practice-prompts:
  *   get:
@@ -101,7 +87,10 @@ router.post("/", createPrompt);
  */
 router.get(
   "/practice-prompts",
-  getCachedData(cacheTypes.PRACTISE_PROMPTS, true),
+  (req, res, next) => {
+    getCachedData(`${cacheTypes.PRACTISE_PROMPTS}-${req.query.category}`, true);
+    next();
+  },
   getPracticePrompts
 );
 

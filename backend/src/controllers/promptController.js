@@ -34,7 +34,7 @@ const getPracticePrompts = async (req, res) => {
     };
 
     res.json(responseData);
-    const key = `${cacheTypes.PRACTISE_PROMPTS}-${page}-${skip}-${limit}-${perPage}`;
+    const key = `${cacheTypes.PRACTISE_PROMPTS}-${category}-${page}-${skip}-${limit}-${perPage}`;
     await cacheService.set(key, responseData);
   } catch (error) {
     res.status(500).json({ message: error.message });
