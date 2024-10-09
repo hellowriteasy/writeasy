@@ -21,6 +21,9 @@ const promptSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       ref: "Contest",
     },
+    image: {
+      type: String,
+    },
   },
   {
     timestamps: true,

@@ -121,19 +121,22 @@ const Page: React.FC<PageProps> = ({ params }) => {
         <div className="absolute left-0">
           <Image className="w-[9vw]" src={shootingstar} alt="shootingstar" />
         </div>
-        <div className="w-4/5  font-unkempt flex flex-col gap-10 sm:gap-5 sm:my-10 mt-20 mb-10">
-          <h1 className="text-3xl  md:text-4xl lg:text-5xl xl:text-6xl sm:text-xl font-bold font-unkempt">
-            {prompt?.title}
-          </h1>
-          {/* <p className="sm:text-sm text-xl  font-medium">
+        <div className="w-4/5  font-unkempt flex flex-col items-center gap-2 sm:gap-5 sm:my-10 mt-20 mb-10 ">
+          <div className="flex flex-col items-center gap-y-3 mb-5">
+            <h1 className="text-3xl sm:text-sm text-center font-bold font-unkempt">
+              {prompt?.title}
+            </h1>
+            {/* <p className="sm:text-sm text-xl  font-medium">
             {prompt?.description}
           </p> */}
-          <button
-            onClick={handleCreateStory}
-            className=" sm:px-2 w-60  sm:text-md  sm:w-40 sm:h-12  bg-black hover:opacity-80 text-center text-white rounded-full border h-16  md:text-2xl  lg:text-md xl:text-2xl"
-          >
-            Create your story
-          </button>
+            <button
+              onClick={handleCreateStory}
+              className=" sm:px-2 w-60  sm:text-md  sm:w-40 sm:h-12  bg-black hover:opacity-80 text-center text-white rounded-full border h-16  md:text-2xl  lg:text-md xl:text-2xl"
+            >
+              Create your story
+            </button>
+          </div>
+          <img src={prompt?.image || ""} className="w-[400px] sm:w-[90%] rounded-lg" />
         </div>
         <div className="absolute right-5 sm-hide top-60">
           <Image className="w-[12vw]" src={cloud2} alt="cloud2" />

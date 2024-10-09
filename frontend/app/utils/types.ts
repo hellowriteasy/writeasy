@@ -37,7 +37,8 @@ export type TPrompt = {
   __v: number;
   description: string;
   type: string;
-  contestId?:TContest
+  contestId?: TContest
+  image?: string;
 };
 
 export type TContest = {

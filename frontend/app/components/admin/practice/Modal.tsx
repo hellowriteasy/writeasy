@@ -9,6 +9,7 @@ import {
 } from "@headlessui/react";
 import "react-toastify/dist/ReactToastify.css";
 import { axiosInstance } from "@/app/utils/config/axios";
+import useUploadFile from "@/app/hooks/useFileUpload";
 
 interface ModalProps {
   setIsModalOpen: (isOpen: boolean) => void;
@@ -29,14 +30,22 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onSuccess }) => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]); // State for selected categories
   const [promptCards, setPromptCards] = useState<CardProps[]>([]);
   const [category, setCategory] = useState<Category[]>([]); // State to store added prompt cards
+  const [file, setFile] = useState<File | null>(null);
   const AxiosIns = axiosInstance("");
-
-  const handleAdd = () => {
+  const { uploadFile } = useUploadFile();
+  const handleAdd = async () => {
     const promptData = {
       title: promptTitle,
       promptCategory: selectedCategories, // Use selectedCategories array
       promptType: "practice",
+      image: "",
     };
+
+    let imageUrl = "";
+    if (file) {
+      imageUrl = await uploadFile(file);
+      promptData.image = imageUrl;
+    }
 
     AxiosIns.post("/prompts", promptData)
       .then((response) => {
@@ -78,6 +87,12 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onSuccess }) => {
 
     getCategory();
   }, []);
+  const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
+    if (file) {
+      setFile(file);
+    }
+  };
   return (
     <Transition.Root show={true} as={Fragment}>
       <Dialog
@@ -119,13 +134,14 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onSuccess }) => {
                         Add Prompt
                       </Dialog.Title>
                       <div className="mt-2 w-full ">
-                        <textarea
-                          className="mt-1 block  h-12 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50 w-full"
+                        <input
+                          className="mt-1 block h-12 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50 w-full"
                           placeholder="Prompt Title"
                           value={promptTitle}
                           onChange={(e) => setPromptTitle(e.target.value)}
-                        ></textarea>
-                        <Menu as="div" className="relative  mt-3"  >
+                        />
+
+                        <Menu as="div" className="relative  mt-3">
                           <MenuButton className="w-full text-left rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                             {selectedCategories.length === 0
                               ? "Select Category"
@@ -140,26 +156,58 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onSuccess }) => {
                             leaveFrom="transform opacity-100 scale-100"
                             leaveTo="transform opacity-0 scale-95"
                           >
-                            <MenuItems   className=" mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                              {category.map((data) => (
-                                <MenuItem key={data._id}>
+                            <MenuItems className=" mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                              {category.length > 1 ? (
+                                category.map((data) => (
+                                  <MenuItem key={data._id}>
+                                    {({ active }) => (
+                                      <button
+                                        className={`${
+                                          selectedCategories.includes(data.name)
+                                            ? "bg-custom-yellow text-white"
+                                            : "text-gray-900"
+                                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                        onClick={() =>
+                                          toggleCategory(data.name)
+                                        }
+                                      >
+                                        {data.name}
+                                      </button>
+                                    )}
+                                  </MenuItem>
+                                ))
+                              ) : (
+                                <MenuItem>
                                   {({ active }) => (
                                     <button
-                                      className={`${
-                                        selectedCategories.includes(data.name)
-                                          ? "bg-custom-yellow text-white"
-                                          : "text-gray-900"
-                                      } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                      onClick={() => toggleCategory(data.name)}
+                                      className={`"text-gray-900"
+                                     group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                                     >
-                                      {data.name}
+                                      Loading categories...
                                     </button>
                                   )}
                                 </MenuItem>
-                              ))}
+                              )}
                             </MenuItems>
                           </Transition>
                         </Menu>
+                        {file ? (
+                          <div className="mt-4 ">
+                            <img
+                              src={URL.createObjectURL(file)}
+                              alt="practise image"
+                              className="w-full h-60 object-contain rounded-md"
+                            />
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                        <input
+                          className="mt-4 mr-auto"
+                          type="file"
+                          name="image"
+                          onChange={handleImageFileChange}
+                        />
                       </div>
                     </div>
                   </div>

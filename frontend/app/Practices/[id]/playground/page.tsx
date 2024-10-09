@@ -7,16 +7,9 @@ import { SimpleEditor } from "@/app/components/WriteStory";
 import useAuthStore from "@/app/store/useAuthStore";
 import Subscription from "@/app/components/Subscription";
 import { axiosInstance } from "@/app/utils/config/axios";
-import { TTaskType } from "@/app/utils/types";
+import { TPrompt, TTaskType } from "@/app/utils/types";
 import Loading from "@/app/loading";
 import ConfirmModal from "@/app/components/Modal/ConfirmModal";
-interface Prompt {
-  _id: string;
-  title: string;
-  promptType: string;
-  Userid: string;
-  type: string;
-}
 
 interface PromptPageProps {
   params: {
@@ -26,7 +19,7 @@ interface PromptPageProps {
 }
 
 const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
-  const [prompt, setPrompt] = useState<Prompt | null>(null);
+  const [prompt, setPrompt] = useState<TPrompt | null>(null);
   const [triggerGrammarCheck, setTriggerGrammarCheck] = useState(false);
   const [taskType, setTaskType] = useState<TTaskType | string>("");
   const [input, setInput] = useState("");
@@ -79,10 +72,14 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
   return (
     <div className="w-full min-h-screen  mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 min-h-screen flex flex-col items-center gap-y-4 ">
-        <div className="w-4/5 mx-auto  relative pt-2 ">
+        <div className={`mx-auto flex flex-col items-center gap-y-4  relative pt-2 ${prompt.image ? "mb-10":""}   w-full`}>
           <h1 className="text-3xl sm:text-sm text-center font-bold font-unkempt">
             {prompt.title}
           </h1>
+          <img
+            src={prompt?.image || ""}
+            className="w-[400px] sm:w-[90%] rounded-lg"
+          />
         </div>
         <div className="flex w-[100%] relative mt-0 ">
           <div className="absolute vsm-hide -top-40 mt-3 -left-48">
