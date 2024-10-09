@@ -23,22 +23,11 @@ import Logo from "@/public/Landingpage-img/logo.svg";
 import { useRouter } from "next/navigation";
 import { convertToHtml, divideNewlinesByTwo } from "@/app/utils/methods";
 import HardBreak from "@tiptap/extension-hard-break";
-
 interface Props {
   searchResults: TUser[];
-  handleSelectedUser: (
-    selectedEmail: string,
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => void;
+  handleSelectedUser: (selectedUser: TUser) => void;
 }
 
-interface Props {
-  searchResults: TUser[];
-  handleSelectedUser: (
-    selectedEmail: string,
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => void;
-}
 const Page = () => {
   const [storyDetails, setStoryDetails] = useState({
     title: "",
@@ -49,7 +38,9 @@ const Page = () => {
     refresh: false,
   });
   const [Value, setValue] = useState<string>("");
-  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<
+    { name: string; email: string }[]
+  >([]); // Updated state to store both name and email
   const [inviting, setInviting] = useState(false);
   const [showCard, setShowCard] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -118,16 +109,21 @@ const Page = () => {
     await fetchUsers();
   };
 
-  const handleSelectedUser = (selectedEmail: string): void => {
-    setValue(selectedEmail);
-    if (selectedUsers.length < 5 && !selectedUsers.includes(selectedEmail)) {
-      setSelectedUsers([...selectedUsers, selectedEmail]);
+  // Update to handle both email and name
+  const handleSelectedUser = (selectedUser: TUser): void => {
+    if (
+      selectedUsers.length < 5 &&
+      !selectedUsers.find((user) => user.email === selectedUser.email)
+    ) {
+      setSelectedUsers([
+        ...selectedUsers,
+        { name: selectedUser.username, email: selectedUser.email },
+      ]);
     }
   };
-
   const handleRemoveUser = (email: string, e: SyntheticEvent): void => {
     e.preventDefault(); // Prevents page refresh
-    setSelectedUsers(selectedUsers.filter((user) => user !== email));
+    setSelectedUsers(selectedUsers.filter((user) => user.email !== email));
   };
 
   const fetchPromptById = async () => {
@@ -247,7 +243,7 @@ const Page = () => {
     try {
       const invitePayload = {
         storyID: storyId,
-        email: selectedUsers,
+        email: selectedUsers.map((user) => user.email),
         promptID: promptId,
         userID: userId,
         isPublic: isPublicStory,
@@ -295,7 +291,7 @@ const Page = () => {
         <div
           key={index}
           className="p-4 border-b border-gray-200 cursor-pointer flex items-center hover:bg-gray-100 transition-colors duration-200 ease-in-out"
-          onClick={(e) => handleSelectedUser(result.email, e)} // Add user selection handler
+          onClick={(e) => handleSelectedUser(result)}
         >
           <div className="w-12 h-12 rounded-full overflow-hidden">
             {result.profile_picture &&
@@ -329,10 +325,10 @@ const Page = () => {
           key={index}
           className="selected-user flex items-center space-x-2 bg-custom-yellow text-black px-3 py-1 rounded-full shadow-sm"
         >
-          <span>{user}</span>
+          <span>{user.name}</span>
           <button
             className="remove-user bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center focus:outline-none"
-            onClick={(e) => handleRemoveUser(user, e)}
+            onClick={(e) => handleRemoveUser(user.email, e)}
           >
             ✕
           </button>
@@ -388,7 +384,7 @@ const Page = () => {
     </div>
   );
 
-  console.log("value", isPublicStory);
+  console.log("selected", selectedUsers);
 
   return (
     <div className="w-full h-[1000px] mt-6 z-0 relative flex justify-center ">

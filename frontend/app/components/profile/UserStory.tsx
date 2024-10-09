@@ -179,7 +179,7 @@ const getDiff = (original: string, corrected: string) => {
             onClick={() => router.push(`/Games/${prompt_id}/play`)}
             className="bg-white font-unkempt border-2 sm:px-1 sm:w-20 sm:h-8 sm:rounded-full sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
           >
-            Contribute
+            Contribute 
           </button>
         )}
         {!shouldHideButtons && (
