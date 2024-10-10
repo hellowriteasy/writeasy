@@ -72,7 +72,11 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
   return (
     <div className="w-full min-h-screen  mt-6 z-0 relative flex justify-center">
       <div className="w-10/12 min-h-screen flex flex-col items-center gap-y-4 ">
-        <div className={`mx-auto flex flex-col items-center gap-y-4  relative pt-2 ${prompt.image ? "mb-10":""}   w-full`}>
+        <div
+          className={`mx-auto flex flex-col items-center gap-y-4  relative pt-2 ${
+            prompt.image ? "mb-10" : ""
+          }   w-full`}
+        >
           <h1 className="text-3xl sm:text-sm text-center font-bold font-unkempt">
             {prompt.title}
           </h1>
@@ -145,6 +149,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
           <SimpleEditor
             triggerGrammarCheck={triggerGrammarCheck}
             title={input}
+            prompt_title={prompt.title}
             Userid={params.id}
             type={prompt.promptType}
             _id={prompt._id}

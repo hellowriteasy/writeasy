@@ -121,7 +121,7 @@ const Page: React.FC<PageProps> = ({ params }) => {
         <div className="absolute left-0">
           <Image className="w-[9vw]" src={shootingstar} alt="shootingstar" />
         </div>
-        <div className="w-4/5  font-unkempt flex flex-col items-center gap-2 sm:gap-5 sm:my-10 mt-20 mb-10 ">
+        <div className="w-4/5 font-unkempt flex sm:w-full flex-col items-center gap-2 sm:gap-5 sm:my-10 mt-20 mb-10 ">
           <div className="flex flex-col items-center gap-y-3 mb-5">
             <h1 className="text-3xl sm:text-sm text-center font-bold font-unkempt">
               {prompt?.title}
@@ -136,7 +136,13 @@ const Page: React.FC<PageProps> = ({ params }) => {
               Create your story
             </button>
           </div>
-          <img src={prompt?.image || ""} className="w-[400px] sm:w-[90%] rounded-lg" />
+          {prompt?.image && (
+            <img
+              className="w-[40%]  object-contain rounded-md"
+              src={prompt?.image}
+              alt="contest image"
+            />
+          )}
         </div>
         <div className="absolute right-5 sm-hide top-60">
           <Image className="w-[12vw]" src={cloud2} alt="cloud2" />

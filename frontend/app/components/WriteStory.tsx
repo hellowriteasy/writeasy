@@ -38,6 +38,7 @@ interface SimpleEditorProps {
   _id: string;
   type: string;
   wordcount?: number;
+  prompt_title: string;
   setTriggerGrammarCheck: React.Dispatch<React.SetStateAction<boolean>>;
 }
 type THandleClickFeature = (
@@ -52,6 +53,7 @@ export function SimpleEditor({
   taskType,
   title,
   _id,
+  prompt_title,
   handleRemoveActiveTaskType,
   setTriggerGrammarCheck,
 }: SimpleEditorProps) {
@@ -354,7 +356,7 @@ export function SimpleEditor({
                       originals={initialText}
                     />
                   }
-                  fileName="example.pdf"
+                  fileName={`${prompt_title}.pdf`}
                 >
                   {({ blob, url, loading, error }) => "Download PDF"}
                 </PDFDownloadLink>
