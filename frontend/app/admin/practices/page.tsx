@@ -67,9 +67,9 @@ const Page = () => {
                 </button>
               </div>
               <div className="mt-4 space-y-4 ">
-                {prompts.map((prompt, index) => (
+                {prompts.map((prompt) => (
                   <Card
-                    key={index}
+                    key={prompt._id}
                     id={prompt._id}
                     title={prompt.title}
                     onSuccess={onSuccess}

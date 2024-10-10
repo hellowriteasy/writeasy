@@ -2,7 +2,13 @@ name: CI Pipeline
 
 on:
   push:
-    branches: ["main"]
+    branches: 
+      - "main"
+  pull_request:
+    branches:
+      - "main"
+    types:
+      - closed  # Trigger only when PRs are merged
 
 jobs:
   build:

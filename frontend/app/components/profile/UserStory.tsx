@@ -65,40 +65,42 @@ const Card: React.FC<CardProps> = ({
       });
   };
 
+  const getDiff = (original: string, corrected: string) => {
+    const dmp = new diff_match_patch();
+    const diff = dmp.diff_main(original, corrected);
+    dmp.diff_cleanupSemantic(diff);
 
+    return diff.map((part, index) => {
+      const style = {
+        backgroundColor:
+          part[0] === 1
+            ? "#D6EDD4"
+            : part[0] === -1
+            ? "#FFD3D1"
+            : "transparent",
+        textDecoration: part[0] === -1 ? "line-through" : "none",
+        color: part[0] === 1 ? "green" : part[0] === -1 ? "red" : "black",
+      };
 
-const getDiff = (original: string, corrected: string) => {
-  const dmp = new diff_match_patch();
-  const diff = dmp.diff_main(original, corrected);
-  dmp.diff_cleanupSemantic(diff);
+      // Split the text by newline characters, keeping consecutive newlines
+      const segments = part[1].split(/(\n+)/);
 
-  return diff.map((part, index) => {
-    const style = {
-      backgroundColor:
-        part[0] === 1 ? "#D6EDD4" : part[0] === -1 ? "#FFD3D1" : "transparent",
-      textDecoration: part[0] === -1 ? "line-through" : "none",
-      color: part[0] === 1 ? "green" : part[0] === -1 ? "red" : "black",
-    };
-
-    // Split the text by newline characters, keeping consecutive newlines
-    const segments = part[1].split(/(\n+)/);
-
-    return (
-      <span key={index} style={style}>
-        {segments.map((segment, i) => {
-          // If the segment is just newlines (e.g., '\n' or '\n\n'), return <br /> tags
-          if (/\n+/.test(segment)) {
-            return [...Array(segment.length)].map((_, brIndex) => (
-              <br key={`${index}-${i}-${brIndex}`} />
-            ));
-          }
-          // Otherwise, return the text segment
-          return <>{segment}</>;
-        })}
-      </span>
-    );
-  });
-};
+      return (
+        <span key={index} style={style}>
+          {segments.map((segment, i) => {
+            // If the segment is just newlines (e.g., '\n' or '\n\n'), return <br /> tags
+            if (/\n+/.test(segment)) {
+              return [...Array(segment.length)].map((_, brIndex) => (
+                <br key={`${index}-${i}-${brIndex}`} />
+              ));
+            }
+            // Otherwise, return the text segment
+            return <>{segment}</>;
+          })}
+        </span>
+      );
+    });
+  };
 
   if (showEditor) {
     return (
@@ -166,7 +168,7 @@ const getDiff = (original: string, corrected: string) => {
               document={
                 <PdfDocument corrected={corrections} originals={description} />
               }
-              fileName={`${promptTitle}${prompt_id.substring(0, 5)}.pdf`}
+              fileName={`${promptTitle}pdf`}
             >
               {({ blob, url, loading, error }) =>
                 loading ? "Downloading.." : "PDF"
@@ -179,7 +181,7 @@ const getDiff = (original: string, corrected: string) => {
             onClick={() => router.push(`/Games/${prompt_id}/play`)}
             className="bg-white font-unkempt border-2 sm:px-1 sm:w-20 sm:h-8 sm:rounded-full sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
           >
-            Contribute 
+            Contribute
           </button>
         )}
         {!shouldHideButtons && (

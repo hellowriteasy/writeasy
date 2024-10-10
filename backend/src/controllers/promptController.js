@@ -16,7 +16,7 @@ const createPrompt = async (req, res) => {
 const getPracticePrompts = async (req, res) => {
   let { category } = req.query;
   const { limit, page, perPage, skip } = extractPaginationDetailsFromQuery(req);
-
+  console.log("api/prompts/practice-prompts", category);
   try {
     const { data, total } = await PromptService.getPracticePrompts(
       skip,
