@@ -4,11 +4,6 @@ on:
   push:
     branches: 
       - "main"
-  pull_request:
-    branches:
-      - "main"
-    types:
-      - closed  # Trigger only when PRs are merged
 
 jobs:
   build:
