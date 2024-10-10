@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { FaAngleDown } from "react-icons/fa6";
+import {
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Button,
+  Box,
+  Flex,
+} from "@chakra-ui/react";
+import { FaAngleDown } from "react-icons/fa";
 import { axiosInstance } from "../../utils/config/axios";
 
 interface SelectMenuProps {
@@ -16,7 +25,6 @@ const SelectMenu: React.FC<SelectMenuProps> = ({
   selectedOption,
   onSelectOption,
 }) => {
-  const [showOptions, setShowOptions] = useState<boolean>(false);
   const [options, setOptions] = useState<Option[] | null>([]);
   const AxiosIns = axiosInstance("");
 
@@ -35,51 +43,43 @@ const SelectMenu: React.FC<SelectMenuProps> = ({
     fetchOptions();
   }, []);
 
-  const toggleOptions = () => {
-    setShowOptions(!showOptions);
-  };
-
   return (
-    <div className="relative">
-      <div className="relative ms-2 z-10 w-40 sm:w-28 cursor-pointer">
-        <div className="relative" onClick={toggleOptions}>
-          <div className="w-full h-12 sm:h-8 sm:text-md text-center font-bold text-xl sm:text-sm flex  items-center font-comic bg-white border border-black rounded-full px-4 py-2 pr-10 focus:outline-none focus:border-black">
-            {selectedOption || "All"}
-          </div>
-          <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center px-2 text-black">
-            <FaAngleDown className="text-xl sm:text-md" />
-          </div>
-        </div>
-      </div>
-      <div >
-        {showOptions && (
-          <div className="absolute  z-[2] mt-2 w-36 bg-white border border-black rounded-lg shadow-lg">
-            <div
-              className="px-4 py-2 h-9  cursor-pointer hover:font-bold"
-              onClick={() => {
-                onSelectOption("");
-                setShowOptions(false);
-              }}
-            >
-              All
-            </div>
-            {options &&
-              options.map((option) => (
-                <div
-                  key={option._id}
-                  className="px-4 py-2 h-9  cursor-pointer hover:font-bold"
-                  onClick={() => {
-                    onSelectOption(option.name);
-                    setShowOptions(false);
-                  }}
-                >
-                  {option.name}
-                </div>
-              ))}
-          </div>
-        )}
-      </div>
-    </div>
+    <Box>
+      <Menu>
+        <MenuButton
+          as={Button}
+          rightIcon={<FaAngleDown />}
+          iconSpacing={5}
+          bg="white"
+          border="1px solid black"
+          rounded="full"
+          className="w-48 rounded-3xl h-12 px-3"
+        >
+          {selectedOption || "All"}
+        </MenuButton>
+        <MenuList bg={"white" } zIndex="999" border={"1px solid black"} className="p-4 rounded-md d ">
+          <MenuItem
+            onClick={() => {
+              onSelectOption("");
+            }}
+          >
+            All
+          </MenuItem>
+          {options &&
+            options.map((option) => (
+              <MenuItem
+                className="h-8"
+                key={option._id}
+                onClick={() => {
+                  onSelectOption(option.name);
+                }}
+              >
+                {option.name}
+              </MenuItem>
+            ))}
+        </MenuList>
+      </Menu>
+    </Box>
   );
 };
 

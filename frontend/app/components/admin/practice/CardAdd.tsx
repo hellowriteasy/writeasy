@@ -8,7 +8,6 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/react";
-import { toast } from "react-toastify";
 import { axiosInstance } from "@/app/utils/config/axios";
 import DeleteModal from "@/app/components/DeleteModal"; // Adjust the import path as necessary
 
@@ -34,7 +33,7 @@ const Card: React.FC<CardProps> = ({ title, type, id, onSuccess }) => {
       const prompt_type = type as string;
       setSelectedTypes(prompt_type.split(","));
     } else {
-      setSelectedTypes([]);
+      setSelectedTypes(type || []);
     }
   }, [type]);
 
@@ -57,9 +56,9 @@ const Card: React.FC<CardProps> = ({ title, type, id, onSuccess }) => {
   }, []);
   const handleUpdate = async () => {
     try {
-      const response = await AxiosIns.put(`/prompts/${id}`, {
+      await AxiosIns.put(`/prompts/${id}`, {
         title: promptTitle,
-        promptCategory: selectedTypes.join(","), // Join selected types into a comma-separated string for backend
+        promptCategory: selectedTypes, // Join selected types into a comma-separated string for backend
         promptType: "practice",
       });
       setOpenEditModal(false);
@@ -90,7 +89,7 @@ const Card: React.FC<CardProps> = ({ title, type, id, onSuccess }) => {
         <div className="flex justify-between items-center mb-2 sm:flex-col sm:items-start sm:gap-y-3">
           <div className="text-xl font-semibold font-unkempt sm:text-sm">
             <p>{title}</p>
-            <div className="text-gray-600 sm:text-sm">{type}</div>
+            <div className="text-gray-600 sm:text-sm">{type.join(", ")}</div>
           </div>
           <div className="flex space-x-1">
             <button
@@ -140,8 +139,10 @@ const Card: React.FC<CardProps> = ({ title, type, id, onSuccess }) => {
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white   flex flex-col gap-y-2 items-center shadow-xl transition-all sm:my-8  sm:max-w-lg sm:w-[95%] mx-auto">
-                  <div className=" w-full sm:pb-4 flex flex-col items-center p-2 ">
+                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white flex flex-col gap-y-2 items-center shadow-xl transition-all sm:my-8 sm:max-w-lg sm:w-[95%] mx-auto">
+                  <div className="w-full sm:pb-4 flex flex-col items-center p-2 overflow-y-auto max-h-[80vh]">
+                    {" "}
+                    {/* Added max-height and scrolling */}
                     <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
                       <Dialog.Title
                         as="h3"
@@ -157,7 +158,7 @@ const Card: React.FC<CardProps> = ({ title, type, id, onSuccess }) => {
                             value={promptTitle}
                             onChange={(e) => setPromptTitle(e.target.value)}
                           /> */}
-                        <Menu as="div" className="relative mt-3">
+                        <Menu as="div" className="relative mt-3  z-20">
                           <MenuButton className="w-full text-left rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                             {selectedTypes.length > 0
                               ? selectedTypes.join(", ")
@@ -172,7 +173,7 @@ const Card: React.FC<CardProps> = ({ title, type, id, onSuccess }) => {
                             leaveFrom="transform opacity-100 scale-100"
                             leaveTo="transform opacity-0 scale-95"
                           >
-                            <MenuItems className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <MenuItems className="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none max-h-60 overflow-y-auto">
                               {category.map((type) => (
                                 <MenuItem key={type._id}>
                                   {({ active }) => (
@@ -212,7 +213,7 @@ const Card: React.FC<CardProps> = ({ title, type, id, onSuccess }) => {
                       </div>
                     </div>
                   </div>
-                  <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                  <div className="bg-gray-50 flex items-center gap-x-3 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                     <button
                       type="button"
                       className="inline-flex w-full justify-center rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm sm:ml-3 sm:w-auto"
@@ -222,7 +223,7 @@ const Card: React.FC<CardProps> = ({ title, type, id, onSuccess }) => {
                     </button>
                     <button
                       type="button"
-                      className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                      className="inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
                       onClick={() => setOpenEditModal(false)}
                       ref={cancelButtonRef}
                     >
