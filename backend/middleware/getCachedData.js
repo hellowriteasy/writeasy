@@ -5,14 +5,14 @@ const { extractPaginationDetailsFromQuery } = require("../utils/methods");
 const getCachedData = (cacheKey, isPagination) => {
   return async (req, res, next) => {
     try {
-      console.log("initial", cacheKey);
+      const { search } = req.query;
       const { limit, page, perPage, skip } =
         extractPaginationDetailsFromQuery(req);
 
       let key = cacheKey;
       console.log("checking cache for 1 ", key);
       if (isPagination) {
-        key = `${cacheKey}-${page}-${skip}-${limit}-${perPage}`;
+        key = `${cacheKey}-${page}-${skip}-${limit}-${perPage}-${search || ""}`;
       }
       console.log("checking cache for 2  ", key);
       const cachedData = await cacheService.get(`${key}`);

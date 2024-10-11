@@ -13,6 +13,7 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { TPrompt } from "../utils/types";
 import { axiosInstance } from "../utils/config/axios";
 import NotFound from "../components/Others/NotFound";
+import SearchInput from "../components/SearchInput";
 
 const Games: React.FC = () => {
   const itemsPerPage = 5;
@@ -21,6 +22,7 @@ const Games: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [hasGamePromptFetched, setHasGamePromptFetched] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string>("");
+  const [searchInput, setSearchInput] = useState<string>("");
   const [pageDetails, setPageDetails] = useState({
     page: 1,
     perPage: 10,
@@ -33,6 +35,7 @@ const Games: React.FC = () => {
         const response = await AxiosIns.get("/prompts/game-prompts", {
           params: {
             page: currentPage,
+            ...(searchInput ? { search: searchInput } : null),
           },
         });
         setPrompts(response.data?.data);
@@ -43,7 +46,7 @@ const Games: React.FC = () => {
       }
     };
     fetchPrompts();
-  }, [currentPage]);
+  }, [currentPage, searchInput]);
 
   const handleSelectOption = (selectedOption: string) => {
     setSelectedOption(selectedOption);
@@ -54,7 +57,10 @@ const Games: React.FC = () => {
     setCurrentPage(event.selected + 1);
   };
 
-  const offset = currentPage * itemsPerPage;
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
+  };
+
 
   if (error) return <p>Error: {error}</p>;
 
@@ -77,10 +83,11 @@ const Games: React.FC = () => {
           <div className="absolute -top-40 mt-3 -left-32">
             {/* <Image className="w-[12vw] relative z-[-1]" src={Bee} alt="bee" /> */}
           </div>
-          <div className="gap-8 w-[60%] sm:w-full  relative flex flex-col items-center  ">
+          <div className="gap-8 w-[60%] sm:w-full  relative flex flex-col   ">
             <h1 className=" text-3xl sm:text-xl sm:text-center md:text-4xl lg:text-4xl xl:text-4xl font-extrabold font-unkempt  sm:w-full">
               Create the best original stories with your friends!
             </h1>
+            <SearchInput placeholder="Search for games" onChange={handleSearchInputChange} />
             {hasGamePromptFetched && prompts.length === 0 ? (
               <NotFound text="No games right now !!" />
             ) : (

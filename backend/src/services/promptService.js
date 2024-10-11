@@ -11,9 +11,16 @@ const createPrompt = async (data) => {
   return await prompt.save();
 };
 
-const getPromptsByType = async (type, skip, limit, category) => {
+const getPromptsByType = async (type, skip, limit, category, search) => {
   const total = await Prompt.countDocuments({
     promptType: type,
+    ...(search
+      ? {
+          $or: [
+            { title: { $regex: search, $options: "i" } }, // Case-insensitive search on title
+          ],
+        }
+      : null),
     ...(category
       ? {
           promptCategory: {
@@ -26,34 +33,42 @@ const getPromptsByType = async (type, skip, limit, category) => {
   const data = await Prompt.find(
     {
       promptType: type,
+      ...(search
+        ? {
+            $or: [
+              { title: { $regex: search, $options: "i" } }, // Case-insensitive search on title
+            ],
+          }
+        : null),
       ...(category
         ? {
             promptCategory: {
-              $in: category ? [category] : [], // Ensure category is properly handled as an array
+              $in: category ? [category] : [],
             },
           }
         : null),
     },
-    null, // Use null instead of an empty object for the projection parameter
+    null, // Use null for the projection parameter
     {
       limit: limit || undefined, // Only add limit if it's defined
       skip: skip || undefined, // Only add skip if it's defined
       sort: { createdAt: -1 }, // Keep sort inside the third argument object
     }
   );
+
   return { data, total };
 };
 
-const getPracticePrompts = (skip, limit, category) => {
-  return getPromptsByType("practice", skip, limit, category);
+const getPracticePrompts = (skip, limit, category, search) => {
+  return getPromptsByType("practice", skip, limit, category, search);
 };
 
 const getContestPrompts = (skip, limit) => {
   return getPromptsByType("contest", skip, limit);
 };
 
-const getGamePrompts = (skip, limit) => {
-  return getPromptsByType("game", skip, limit);
+const getGamePrompts = (skip, limit, search) => {
+  return getPromptsByType("game", skip, limit, undefined, search);
 };
 
 const getPromptById = async (promptId) => {

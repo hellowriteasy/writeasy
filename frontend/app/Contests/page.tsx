@@ -15,6 +15,7 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
 import { axiosInstance } from "../utils/config/axios";
 import { TContest } from "../utils/types";
 import NotFound from "../components/Others/NotFound";
+import SearchInput from "../components/SearchInput";
 
 const Contest = () => {
   const itemsPerPage = 5;
@@ -23,6 +24,7 @@ const Contest = () => {
   const [endedContests, setEndedContests] = useState<TContest[]>([]);
   const [hasEndedContestFetched, setHasEndedContestFetched] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [searchInput, setSearchInput] = useState("");
   const AxiosIns = axiosInstance("");
   const [pageDetails, setPageDetails] = useState({
     page: 1,
@@ -31,7 +33,7 @@ const Contest = () => {
   });
 
   useEffect(() => {
-    AxiosIns.get(`/contests/ended?page=${currentPage}`)
+    AxiosIns.get(`/contests/ended?page=${currentPage}&search=${searchInput}`)
       .then((response) => {
         setEndedContests(response.data?.data);
         setPageDetails(response.data?.pageData);
@@ -40,13 +42,17 @@ const Contest = () => {
       .catch((error) => {
         setError("Error fetching contest data: " + error.message);
       });
-  }, [currentPage]);
+  }, [currentPage, searchInput]);
 
   const handlePageClick = (event: { selected: number }) => {
     setCurrentPage(event.selected + 1);
   };
 
   const offset = currentPage * itemsPerPage;
+
+  const handleChangeSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
+  };
 
   return (
     <div className="w-full min-h-screen mt-6 z-0 relative flex justify-center">
@@ -78,6 +84,11 @@ const Contest = () => {
                 <Join />
               </div>
               <div className="flex flex-col gap-y-3 sm:gap-y-0 w-full">
+                <SearchInput
+                  placeholder="Search for a contest"
+                  onChange={handleChangeSearchInput}
+                />
+
                 {hasEndedContestFetched && endedContests.length === 0 ? (
                   <NotFound text="No contest available at the moment." />
                 ) : (
@@ -104,7 +115,6 @@ const Contest = () => {
                   pageCount={Math.ceil(pageDetails.total / pageDetails.perPage)}
                   marginPagesDisplayed={2}
                   pageRangeDisplayed={5}
-                  
                   onPageChange={handlePageClick}
                   containerClassName="flex justify-center gap-2 md:gap-4 lg:gap-6 rounded-full mt-8"
                   pageClassName=""

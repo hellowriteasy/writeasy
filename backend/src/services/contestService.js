@@ -47,13 +47,26 @@ const getOngoingContests = async (skip, limit) => {
     data,
   };
 };
-const getEndedContests = async (skip, limit) => {
+const getEndedContests = async (skip, limit, search) => {
+  // Count total documents where the contest is not active
   const total = await Contest.countDocuments({
     isActive: false,
+    ...(search
+      ? {
+          contestTheme: { $regex: search, $options: "i" }, // Case-insensitive regex search for contestTheme
+        }
+      : null),
   });
+
+  // Find documents with pagination and sorting
   const data = await Contest.find(
     {
       isActive: false,
+      ...(search
+        ? {
+            contestTheme: { $regex: search, $options: "i" }, // Case-insensitive regex search for contestTheme
+          }
+        : null),
     },
     {},
     {
@@ -61,11 +74,13 @@ const getEndedContests = async (skip, limit) => {
       ...(limit ? { limit } : null),
     }
   ).sort({ createdAt: "desc" });
+
   return {
     total,
     data,
   };
 };
+
 
 module.exports = {
   createContest,

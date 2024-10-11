@@ -98,11 +98,15 @@ const getOngoingContests = async (req, res) => {
 };
 
 const getEndedContests = async (req, res) => {
-  
   const { limit, page, perPage, skip } = extractPaginationDetailsFromQuery(req);
+  const { search } = req.query;
 
   try {
-    const { data, total } = await ContestService.getEndedContests(skip, limit);
+    const { data, total } = await ContestService.getEndedContests(
+      skip,
+      limit,
+      search
+    );
     const responseData = {
       data,
       pageData: {
@@ -112,7 +116,9 @@ const getEndedContests = async (req, res) => {
       },
     };
     res.json(responseData);
-    const cacheKey = `${cacheTypes.ENDED_CONTEST}-${page}-${skip}-${limit}-${perPage}`;
+    const cacheKey = `${
+      cacheTypes.ENDED_CONTEST
+    }-${page}-${skip}-${limit}-${perPage}-${search || ""}`;
     await cacheService.set(cacheKey, responseData);
   } catch (error) {
     res.status(500).json({ message: error.message });

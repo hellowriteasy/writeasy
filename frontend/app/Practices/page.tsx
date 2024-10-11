@@ -12,6 +12,7 @@ import { TPrompt } from "../utils/types";
 import NotFound from "../components/Others/NotFound";
 import { axiosInstance } from "../utils/config/axios";
 import WeeklyTest from "../components/Others/WeeklyTest";
+import SearchInput from "../components/SearchInput";
 
 const Page: React.FC = () => {
   const itemsPerPage = 5;
@@ -19,6 +20,7 @@ const Page: React.FC = () => {
   const [promptData, setPromptData] = useState<TPrompt[]>([]);
   const [hasPromptFetched, setHasPromptFetched] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchInput, setSearchInput] = useState("");
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [pageDetails, setPageDetails] = useState({
     page: 1,
@@ -34,6 +36,7 @@ const Page: React.FC = () => {
         params: {
           page,
           category: selectedOption,
+          ...(searchInput ? { search: searchInput } : null),
         },
       });
       setPromptData(response.data.data);
@@ -48,7 +51,7 @@ const Page: React.FC = () => {
 
   useEffect(() => {
     fetchPrompts(currentPage, itemsPerPage);
-  }, [currentPage, selectedOption]);
+  }, [currentPage, selectedOption,searchInput]);
 
   const handleSelectOption = (selectedOption: string) => {
     setSelectedOption(selectedOption);
@@ -57,6 +60,9 @@ const Page: React.FC = () => {
 
   const handlePageClick = (event: { selected: number }) => {
     setCurrentPage(event.selected + 1);
+  };
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
   };
 
   return (
@@ -79,6 +85,10 @@ const Page: React.FC = () => {
                 onSelectOption={handleSelectOption}
               />
             </div>
+            <SearchInput
+              placeholder="Search for practise prompt"
+              onChange={handleSearchInputChange}
+            />
             {isLoading ? (
               <></>
             ) : // <LoadingAnimation />
