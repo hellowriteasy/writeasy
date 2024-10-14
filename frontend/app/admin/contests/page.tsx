@@ -1,10 +1,11 @@
-'use client';
-import { useState, useEffect } from "react";
+"use client";
+import { useState, useEffect, ChangeEvent } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { axiosInstance } from "@/app/utils/config/axios";
 import Card from "../../components/admin/contests/CardAdd";
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
+import SearchInput from "@/app/components/SearchInput";
 
 interface Contest {
   id: string;
@@ -13,45 +14,33 @@ interface Contest {
   _id: string;
 }
 
-
 const Page: React.FC = () => {
   const router = useRouter();
   const [contests, setContests] = useState<Contest[]>([]);
-const AxiosIns=axiosInstance("");
+  const AxiosIns = axiosInstance("");
+  const [searchInput, setSearchInput] = useState("");
+  const fetchContests = async () => {
+    try {
+      const response = await AxiosIns.get<Contest[]>(
+        `/contests?search=${searchInput}`
+      );
+      setContests(response.data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+      } else {
+      }
+    }
+  };
+
   useEffect(() => {
-    const fetchContests = async () => {
-      try {
-        const response = await AxiosIns.get<Contest[]>("/contests");
-        setContests(response.data);
-     
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-     
-        } else {
-        
-        }
-       
-      }
-    };
-
     fetchContests();
-  }, []);
-
-  async function onsuccess(){
-    const fetchPrompts = async () => {
-      try {
-        const response = await AxiosIns.get('/contests');
-        setContests(response.data);
-      } catch (error) {
-        console.error('Error fetching contest:', error);
-      }
-    };
-
-    fetchPrompts();
-   }
-
+  }, [searchInput]);
   const handleAddClick = () => {
     router.push("/admin/contests/edit");
+  };
+
+  const handleSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
   };
 
   return (
@@ -80,6 +69,11 @@ const AxiosIns=axiosInstance("");
                   Add
                 </button>
               </div>
+              <SearchInput
+                onChange={handleSearchInputChange}
+                value={searchInput}
+                placeholder="Search for contest"
+              />
               <div className="mt-4 space-y-4 w-full">
                 {contests.map((contest) => (
                   <Card
@@ -87,7 +81,7 @@ const AxiosIns=axiosInstance("");
                     title={contest.contestTheme}
                     id={contest._id}
                     deadline={contest.submissionDeadline}
-                    onSuccess={onsuccess}
+                    onSuccess={() => fetchContests()}
                   />
                 ))}
               </div>

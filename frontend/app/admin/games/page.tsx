@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import CardAdd from "@/app/components/admin/Games/CardAdd";
 import ModalGame from "@/app/components/admin/Games/Modal";
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
@@ -7,6 +7,7 @@ import { TPrompt } from "@/app/utils/types";
 import { axiosInstance } from "@/app/utils/config/axios";
 import ReactPaginate from "react-paginate";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa6";
+import SearchInput from "@/app/components/SearchInput";
 
 const Games: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -16,15 +17,19 @@ const Games: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const AxiosIns = axiosInstance("");
   const [refetch, setRefetch] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
 
   const fetchGamePrompts = async (): Promise<void> => {
     try {
-      const response = await AxiosIns.get("prompts/game-prompts", {
-        params: {
-          page: currentPage,
-        },
-      });
-
+      const response = await AxiosIns.get(
+        `prompts/game-prompts?${searchInput}`,
+        {
+          params: {
+            page: currentPage,
+            perPage: 1000000,
+          },
+        }
+      );
       setGamePrompts(response.data.data);
       setTotalItems(response.data?.pageData?.total); // Adjust according to your API response
       setIsLoading(false);
@@ -35,7 +40,7 @@ const Games: React.FC = () => {
 
   useEffect(() => {
     fetchGamePrompts();
-  }, [refetch, currentPage]);
+  }, [refetch, currentPage, searchInput]);
 
   const onSuccess = (): void => {
     setRefetch((prev) => !prev);
@@ -47,6 +52,10 @@ const Games: React.FC = () => {
 
   const handlePageClick = (event: { selected: number }): void => {
     setCurrentPage(event.selected + 1);
+  };
+
+  const handleSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
   };
 
   if (isLoading) return <p>Loading...</p>;
@@ -72,6 +81,11 @@ const Games: React.FC = () => {
                 </button>
               </div>
             </div>
+            <SearchInput
+              onChange={handleSearchInputChange}
+              value={searchInput}
+              placeholder="Search for games"
+            />
             {gamePrompts &&
               gamePrompts.map((prompt) => (
                 <CardAdd

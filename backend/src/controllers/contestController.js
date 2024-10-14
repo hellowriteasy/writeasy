@@ -25,7 +25,8 @@ const createContest = async (req, res) => {
 
 const getContests = async (req, res) => {
   try {
-    const contests = await ContestService.getAllContests();
+    const { search } = req.query;
+    const contests = await ContestService.getAllContests(search);
     res.json(contests);
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -2,6 +2,8 @@
 const cacheService = require("../src/services/cacheService");
 const { extractPaginationDetailsFromQuery } = require("../utils/methods");
 
+
+
 const getCachedData = (cacheKey, isPagination) => {
   return async (req, res, next) => {
     try {

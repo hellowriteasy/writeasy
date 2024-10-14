@@ -1,16 +1,19 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import Card from "../../components/admin/practice/CardAdd";
 import Modal from "../../components/admin/practice/Modal";
 import ProtectedRoute from "@/app/utils/ProtectedRoute";
 import { TPrompt } from "@/app/utils/types";
 import { axiosInstance } from "@/app/utils/config/axios";
+import SearchInput from "@/app/components/SearchInput";
+import { Change } from "diff";
 
 const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [prompts, setPrompts] = useState<TPrompt[]>([]);
   const AxiosIns = axiosInstance("");
   const [refetch, setRefetch] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
 
   const handleAddClick = () => {
     setIsModalOpen(true);
@@ -18,12 +21,15 @@ const Page = () => {
 
   const fetchPrompts = async () => {
     try {
-      const response = await AxiosIns.get("/prompts/practice-prompts", {
-        params: {
-          page: 1,
-          perPage: 1000, // Set a high number to fetch all items
-        },
-      });
+      const response = await AxiosIns.get(
+        `/prompts/practice-prompts?search=${searchInput}`,
+        {
+          params: {
+            page: 1,
+            perPage: 1000, // Set a high number to fetch all items
+          },
+        }
+      );
       setPrompts(response.data.data);
     } catch (error) {
       console.error("Error fetching prompts:", error);
@@ -32,10 +38,14 @@ const Page = () => {
 
   useEffect(() => {
     fetchPrompts();
-  }, [refetch]);
+  }, [refetch, searchInput]);
 
   const onSuccess = () => {
     setRefetch(!refetch);
+  };
+
+  const handleSearchInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
   };
 
   return (
@@ -66,6 +76,11 @@ const Page = () => {
                   Add
                 </button>
               </div>
+              <SearchInput
+                onChange={handleSearchInputChange}
+                value={searchInput}
+                placeholder="Search for practise prompts"
+              />
               <div className="mt-4 space-y-4 ">
                 {prompts.map((prompt) => (
                   <Card

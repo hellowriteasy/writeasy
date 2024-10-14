@@ -5,8 +5,18 @@ const createContest = async (data) => {
   return contest;
 };
 
-const getAllContests = async () => {
-  return await Contest.find().sort({ createdAt: "desc" }).populate("prompts");
+const getAllContests = async (search) => {
+  const query = search
+    ? {
+        $or: [
+          { contestTheme: { $regex: search, $options: "i" } }, // Case-insensitive search on contestTheme
+        ],
+      }
+    : {};
+
+  return await Contest.find(query)
+    .sort({ createdAt: "desc" })
+    .populate("prompts");
 };
 
 const getContestById = async (contestId) => {
@@ -80,7 +90,6 @@ const getEndedContests = async (skip, limit, search) => {
     data,
   };
 };
-
 
 module.exports = {
   createContest,
