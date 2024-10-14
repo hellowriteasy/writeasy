@@ -497,6 +497,11 @@ const Page = () => {
                         </div>
                       </div>
                     </div>
+                    <EditorWordCount
+                      characters={editor.storage.characterCount.characters()}
+                      limit={limit}
+                      words={editor.storage.characterCount.words()}
+                    />
                     <button
                       onClick={handleSubmit}
                       className="text-white bg-black border text-2xl font-bold font-unkempt rounded-full  px-3 h-[60px]"
@@ -508,11 +513,6 @@ const Page = () => {
               </div>
             </form>
           </div>
-          <EditorWordCount
-            characters={editor.storage.characterCount.characters()}
-            limit={limit}
-            words={editor.storage.characterCount.words()}
-          />
         </div>
       </div>
       {!isSubcriptionActive && role != "admin" ? <Subscription /> : null}
