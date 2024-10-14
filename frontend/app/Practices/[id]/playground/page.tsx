@@ -146,6 +146,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
           </div>
         </div>
         <div className="w-full flex-grow">
+          
           <SimpleEditor
             triggerGrammarCheck={triggerGrammarCheck}
             title={input}

@@ -27,7 +27,8 @@ import DeletedText from "./tiptap/Deleted";
 import { divideNewlinesByTwo } from "../utils/methods";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import PdfDocument from "./ReactPdf/ReactPdfDocument";
-import { MdSettingsApplications } from "react-icons/md";
+import CharacterCount from "@tiptap/extension-character-count";
+import EditorWordCount from "./tiptap/EditorWordCount";
 
 interface SimpleEditorProps {
   triggerGrammarCheck: any;
@@ -71,7 +72,9 @@ export function SimpleEditor({
   const [isEditorDisabled, setIsEditorDisabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSavingPublic, setIsSavingPublic] = useState(false);
+  const [wordsLength, setWordsLength] = useState(0);
   const [isSavingPrivate, setIsSavingPrivate] = useState(false);
+  const limit = 16000;
   useEffect(() => {
     setStoredFunction(toPDF);
   }, [toPDF, setStoredFunction]);
@@ -123,6 +126,9 @@ export function SimpleEditor({
       Strike,
       Code,
       HardBreak,
+      CharacterCount.configure({
+        limit,
+      }),
     ],
     editorProps: {
       handlePaste(view, event) {
@@ -155,8 +161,9 @@ export function SimpleEditor({
     },
 
     onUpdate: ({ editor }) => {
-      // const textContent = editor.getText();
-      // const words = textContent.split(/\s+/).filter(Boolean).length;
+      const textContent = editor.getText();
+      const words = textContent.split(/\s+/).filter(Boolean).length;
+      setWordsLength(words);
       // setWordLimitExceeded(words > 1000);
     },
   }) as Editor;
@@ -217,16 +224,16 @@ export function SimpleEditor({
       };
 
       if (hasSaved) {
-          await axiosIns.post("/stories/practise/save", {
-            ...payload,
-            storyId,
-            isPublic: !!savePublic,
-          });
-          setIsSaving(false);
-          setIsSavingPrivate(false);
-          setIsSavingPublic(false);
-          setIsLoading(false);
-          toast.success("Story saved successfully");
+        await axiosIns.post("/stories/practise/save", {
+          ...payload,
+          storyId,
+          isPublic: !!savePublic,
+        });
+        setIsSaving(false);
+        setIsSavingPrivate(false);
+        setIsSavingPublic(false);
+        setIsLoading(false);
+        toast.success("Story saved successfully");
       }
       if (!hasSaved) {
         const response = await fetch(
@@ -328,9 +335,6 @@ export function SimpleEditor({
     return null;
   }
 
-  console.log("private", isSavingPrivate);
-  console.log("public", isSavingPublic);
-
   return (
     <>
       <div className="w-full flex flex-col justify-center items-center">
@@ -363,7 +367,8 @@ export function SimpleEditor({
               </button>
             </div>
           </div>
-          <div className="mt-10" ref={targetRef}>
+
+          <div className="mt-10 " ref={targetRef}>
             <EditorContent
               className={`scroll-m-2 w-[100%]  cursor-text mt-10 font-comic ${
                 isLoading
@@ -392,6 +397,12 @@ export function SimpleEditor({
             `}</style>
           </div>
         </div>
+
+        <EditorWordCount
+          characters={editor.storage.characterCount.characters()}
+          limit={limit}
+          words={editor.storage.characterCount.words()}
+        />
         <div className="flex gap-x-2 ">
           <button
             disabled={isLoading}

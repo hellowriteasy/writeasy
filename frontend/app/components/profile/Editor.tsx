@@ -21,6 +21,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { TUser } from "@/app/utils/types";
 import { axiosInstance } from "@/app/utils/config/axios";
 import CharacterCount from "@tiptap/extension-character-count";
+import EditorWordCount from "../tiptap/EditorWordCount";
 
 interface StoryEditorProps {
   id: string;
@@ -145,6 +146,7 @@ const StoryEditor: React.FC<StoryEditorProps> = ({
   if (!editor) {
     return null;
   }
+
 
   return (
     <div className="w-full h-[1300px] mt-6 z-0 relative flex justify-center">
@@ -285,6 +287,11 @@ const StoryEditor: React.FC<StoryEditorProps> = ({
                       </div>
                     </div>
                     <div className="w-[50vw] rounded-full">
+                      <EditorWordCount
+                        characters={editor.storage.characterCount.characters()}
+                        limit={limit}
+                        words={editor.storage.characterCount.words()}
+                      />
                       <EditorContent
                         className="scroll-m-2 w-[100%] h-96 mt-10"
                         editor={editor}

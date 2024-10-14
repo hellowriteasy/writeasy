@@ -23,6 +23,8 @@ import Logo from "@/public/Landingpage-img/logo.svg";
 import { useRouter } from "next/navigation";
 import { convertToHtml, divideNewlinesByTwo } from "@/app/utils/methods";
 import HardBreak from "@tiptap/extension-hard-break";
+import EditorWordCount from "@/app/components/tiptap/EditorWordCount";
+import CharacterCount from "@tiptap/extension-character-count";
 interface Props {
   searchResults: TUser[];
   handleSelectedUser: (selectedUser: TUser) => void;
@@ -58,7 +60,7 @@ const Page = () => {
   const promptId = params._id;
   const router = useRouter();
   const AxiosIns = axiosInstance(token || "");
-
+  let limit = 1000000;
   const editor = useEditor({
     extensions: [
       Document,
@@ -71,6 +73,9 @@ const Page = () => {
       Strike,
       Code,
       HardBreak,
+      CharacterCount.configure({
+        limit,
+      }),
     ],
     editorProps: {
       attributes: {
@@ -384,8 +389,6 @@ const Page = () => {
     </div>
   );
 
-  console.log("selected", selectedUsers);
-
   return (
     <div className="w-full h-[1000px] mt-6 z-0 relative flex justify-center ">
       <div className="w-10/12 h-screen  flex flex-col gap-y-4">
@@ -505,6 +508,11 @@ const Page = () => {
               </div>
             </form>
           </div>
+          <EditorWordCount
+            characters={editor.storage.characterCount.characters()}
+            limit={limit}
+            words={editor.storage.characterCount.words()}
+          />
         </div>
       </div>
       {!isSubcriptionActive && role != "admin" ? <Subscription /> : null}
