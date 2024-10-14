@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useCallback, useState, useEffect, SyntheticEvent } from "react";
 import classNames from "classnames";
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
@@ -16,21 +16,25 @@ import Bee from "@/public/Game/cloud3.svg";
 import Image from "next/image";
 import Subscription from "@/app/components/Subscription";
 import useAuthStore from "@/app/store/useAuthStore";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { TUser } from "@/app/utils/types";
 import { axiosInstance } from "@/app/utils/config/axios";
-
+import CharacterCount from "@tiptap/extension-character-count";
 
 interface StoryEditorProps {
   id: string;
   Content: string;
   Title: string;
-  contributors: TUser[]; 
+  contributors: TUser[];
 }
 
-const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,contributors }) => {
-   
+const StoryEditor: React.FC<StoryEditorProps> = ({
+  id,
+  Title,
+  Content,
+  contributors,
+}) => {
   const [title, setTitle] = useState(Title || "");
   const [content, setContent] = useState(Content || "");
   const [wordCount, setWordCount] = useState(0);
@@ -40,9 +44,10 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,contributo
     (state) => state.isSubcriptionActive
   );
   useEffect(() => {
-    const handleBeforeUnload = (event:any) => {
+    const handleBeforeUnload = (event: any) => {
       event.preventDefault();
-      event.returnValue = "Refreshing the page may erase your changes. Are you sure you want to continue?";
+      event.returnValue =
+        "Refreshing the page may erase your changes. Are you sure you want to continue?";
       return "Refreshing the page may erase your changes. Are you sure you want to continue?";
     };
     window.addEventListener("beforeunload", handleBeforeUnload);
@@ -51,8 +56,8 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,contributo
     };
   }, []);
 
-
-  const AxiosIns =axiosInstance("")
+  const limit = 1000;
+  const AxiosIns = axiosInstance("");
   const { token } = useAuthStore();
   const editor = useEditor({
     extensions: [
@@ -65,10 +70,14 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,contributo
       Italic,
       Strike,
       Code,
+      CharacterCount.configure({
+        limit,
+      }),
     ],
     editorProps: {
       attributes: {
-        class: 'prose dark:prose-invert prose-sm sm:prose-base w-full inline-block lg:prose-lg xl:prose-2xl outline-none h-full',
+        class:
+          "prose dark:prose-invert prose-sm sm:prose-base w-full inline-block lg:prose-lg xl:prose-2xl outline-none h-full",
       },
     },
     content: content,
@@ -77,38 +86,39 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,contributo
       const words = textContent.split(/\s+/).filter(Boolean).length;
       setWordCount(words);
       setWordLimitExceeded(words > 1000);
-    }
+    },
   }) as Editor;
 
-
-  const handleSubmit = async (e:SyntheticEvent) => {
+  const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
 
     try {
       const currentContent = editor.getText();
-    
+
       if (wordLimitExceeded) {
         toast.error("Word limit exceeded. Please reduce the number of words.");
         return;
       }
       const payload = {
         storyID: storyId,
-        text: currentContent
-        };
-        const { data, status } = await AxiosIns.post(
-          `/collaborative-stories/submit`,
-          payload,
-          {
-            headers: {
-              'x-auth-token': token
-              }
-              }
-              );
-           
+        text: currentContent,
+      };
+      const { data, status } = await AxiosIns.post(
+        `/collaborative-stories/submit`,
+        payload,
+        {
+          headers: {
+            "x-auth-token": token,
+          },
+        }
+      );
+
       setStoryId(data.story); // Assume the API returns the story ID in the response
       toast.success("Story saved successfully");
     } catch (error) {
-      toast.error("An error occurred while submitting the story. Please try again later.");
+      toast.error(
+        "An error occurred while submitting the story. Please try again later."
+      );
     }
   };
 
@@ -295,7 +305,7 @@ const StoryEditor: React.FC<StoryEditorProps> = ({ id, Title, Content,contributo
           </div>
         </div>
       </div>
-      {!isSubcriptionActive  && <Subscription />}
+      {!isSubcriptionActive && <Subscription />}
       <ToastContainer />
     </div>
   );
