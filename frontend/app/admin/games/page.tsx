@@ -21,15 +21,13 @@ const Games: React.FC = () => {
 
   const fetchGamePrompts = async (): Promise<void> => {
     try {
-      const response = await AxiosIns.get(
-        `prompts/game-prompts?${searchInput}`,
-        {
-          params: {
-            page: currentPage,
-            perPage: 1000000,
-          },
-        }
-      );
+      const response = await AxiosIns.get(`prompts/game-prompts`, {
+        params: {
+          page: currentPage,
+          perPage: 1000000,
+          search: searchInput,
+        },
+      });
       setGamePrompts(response.data.data);
       setTotalItems(response.data?.pageData?.total); // Adjust according to your API response
       setIsLoading(false);
