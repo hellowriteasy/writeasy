@@ -10,6 +10,7 @@ const createStripeCheckout = async (email, priceId, type) => {
     const session = await stripe.checkout.sessions.create({
       mode: type === "recurring" ? "subscription" : "payment",
       payment_method_types: ["card"],
+      allow_promotion_codes: true,
       line_items: [
         {
           price: priceId,
