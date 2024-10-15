@@ -5,8 +5,12 @@ const StripeService = require("../services/stripeService");
 const { calculateSubscriptionRemainingDays } = require("../utils/methods");
 const authService = new AuthService();
 const EmailServiceClass = require("../services/emailService");
-const { getDeviceInfo } = require("../../utils/methods");
+const {
+  getDeviceInfo,
+  checkIpAddressValidationChangedLimits,
+} = require("../../utils/methods");
 const EmailService = new EmailServiceClass();
+const loginHistorySchema = require("../models/session");
 const UserController = {
   async register(req, res) {
     const { username, email, password } = req.body;
@@ -28,7 +32,6 @@ const UserController = {
       res.status(400).json({ msg: error.message });
     }
   },
-
   async login(req, res) {
     const { email, password: userPassword } = req.body;
     try {
@@ -36,6 +39,7 @@ const UserController = {
 
       const deviceInfo = await getDeviceInfo(req, _id);
       console.log(deviceInfo);
+
       // Fetch the user information from the database
       const user = await User.findById(_id);
 
@@ -54,8 +58,33 @@ const UserController = {
       }
       user.lastLogin = new Date();
       await user.save();
+      await loginHistorySchema.create({
+        userId: _id,
+        browser: {
+          name: deviceInfo.name,
+          version: deviceInfo.version,
+        },
+        os: {
+          name: deviceInfo.os.name,
+          version: deviceInfo.os.version,
+        },
+        userAgent: deviceInfo.userAgent,
+        deviceLanguage: deviceInfo.deviceLanguage,
+        ip: deviceInfo.ip,
+        location: {
+          city: deviceInfo.location.city,
+          region: deviceInfo.location.region,
+          country: deviceInfo.location.country,
+          lat: deviceInfo.location.lat,
+          lon: deviceInfo.location.lon,
+        },
+        timezone: deviceInfo.location.timezone,
+        org: deviceInfo.org,
+      });
 
-      res.json({
+      checkIpAddressValidationChangedLimits(user._id, 3);
+
+      await res.json({
         ...others,
         token,
         isSubcriptionActive,

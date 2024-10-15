@@ -3,6 +3,8 @@ dotenv.config();
 const gptService = require("../../src/services/gptService");
 const openai = new gptService(process.env.GPT_API_KEY);
 const bcrypt = require("bcryptjs");
+const moment = require('moment'); // To handle dates
+
 const cuid = require("cuid");
 // let stories = [
 //   {
@@ -290,6 +292,7 @@ const emailServiceClass = require("../../src/services/emailService");
 
 const crypto = require("crypto");
 const User = require("../../src/models/user");
+const { isAccountSuspicious } = require("../../utils/methods");
 
 function generateKeys() {
   const { publicKey, privateKey } = crypto.generateKeyPairSync("rsa", {
@@ -347,7 +350,37 @@ async function main() {
   // );
   // console.log("updated count", updated.modifiedCount);
 
-  // process.exit(1);
+const logins = [
+  {
+    userId: "userA",
+    location: {
+      city: "Plymouth",
+      country: "GB",
+      lat: "50.3715",
+      lon: "-4.1430",
+      ip: "90.242.8.71",
+    },
+    timestamp: moment("2024-10-15T09:00:00Z"), // User A login time
+  },
+  {
+    userId: "userB",
+    location: {
+      city: "Plymouth",
+      country: "GB",
+      lat: "50.3715",
+      lon: "-4.1430",
+      ip: "90.242.8.71",
+    },
+    timestamp: moment("2024-10-15T13:00:00Z"), // User B login time
+  },
+];
+
+  
+
+
+
+  const result = isAccountSuspicious(logins);
+  console.log(result);
 }
 
 main();

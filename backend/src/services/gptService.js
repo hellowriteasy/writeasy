@@ -129,7 +129,7 @@ class GptService {
         },
         responseType: "stream",
       });
-      
+
       let buffer = "";
 
       response.data.on("data", (chunk) => {

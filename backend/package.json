@@ -25,6 +25,7 @@
     "express": "^4.19.2",
     "express-validator": "^7.0.1",
     "google-auth-library": "^9.9.0",
+    "haversine-distance": "^1.2.3",
     "http-status-codes": "^2.3.0",
     "ipinfo": "^1.5.1",
     "jsonwebtoken": "^9.0.2",
