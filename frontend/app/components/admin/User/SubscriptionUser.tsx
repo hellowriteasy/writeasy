@@ -59,6 +59,35 @@ const SubscriptionUser = ({
       toast("Failed to delete user", "error");
     }
   };
+  const handleSuspendAccount = async (userId: string) => {
+    try {
+      const res = await AxiosIns.put(`/auth/users/profile/${userId}`, {
+        status: "suspended",
+      });
+      if (res.status === 201) {
+        await onUpdate();
+
+        toast("Account suspended successfully", "success");
+      }
+    } catch (error) {
+      toast("Failed to suspend account", "error");
+    }
+  };
+  const handleActivateAccount = async (userId: string) => {
+    try {
+      const res = await AxiosIns.put(`/auth/users/profile/${userId}`, {
+        status: "active",
+      });
+      if (res.status === 201) {
+        await onUpdate();
+
+        toast("Account activated successfully", "success");
+      }
+    } catch (error) {
+      toast("Failed to activate account", "error");
+    }
+  };
+  console.log("user status", user.status);
   return (
     <div
       key={user._id}
@@ -67,6 +96,8 @@ const SubscriptionUser = ({
       <p className="text-lg font-bold">{user.username}</p>
       <p className="text-gray-600">{user.email}</p>
       <p className="text-gray-600">Role: {user.role}</p>
+      <p className="text-gray-600">Status: {user.status}</p>
+
       <p className="text-gray-600">
         {hasExpired ? "Subscription Expired" : null}
         {user.isSubcriptionActive ? (
@@ -103,12 +134,28 @@ const SubscriptionUser = ({
         >
           Update Subscription
         </button>
+
         <button
           className="ml-2 px-4 py-2 bg-red-500 text-white rounded-md"
           onClick={() => handleDeleteUser(user._id)}
         >
           Delete User
         </button>
+        {user.status === "suspended" ? (
+          <button
+            className="ml-2 px-4 py-2 bg-green-500 text-white rounded-md"
+            onClick={() => handleActivateAccount(user._id)}
+          >
+            Unsuspend Account
+          </button>
+        ) : (
+          <button
+            className="ml-2 px-4 py-2 bg-red-500 text-white rounded-md"
+            onClick={() => handleSuspendAccount(user._id)}
+          >
+            Suspend Account
+          </button>
+        )}
       </div>
     </div>
   );

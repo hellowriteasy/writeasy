@@ -35,10 +35,12 @@ const UserController = {
   async login(req, res) {
     const { email, password: userPassword } = req.body;
     try {
-      const { token, _id } = await authService.loginUser(email, userPassword);
+      const { token, _id, status } = await authService.loginUser(
+        email,
+        userPassword
+      );
 
       const deviceInfo = await getDeviceInfo(req, _id);
-      console.log(deviceInfo);
 
       // Fetch the user information from the database
       const user = await User.findById(_id);
@@ -68,7 +70,6 @@ const UserController = {
           name: deviceInfo.os.name,
           version: deviceInfo.os.version,
         },
-        userAgent: deviceInfo.userAgent,
         deviceLanguage: deviceInfo.deviceLanguage,
         ip: deviceInfo.ip,
         location: {

@@ -8,6 +8,7 @@ interface AuthState {
   username: string | null;
   email: string | null;
   role: string | null;
+  status?: string;
   subscriptionType: string | null;
   subscriptionRemainingDays?: number | null;
   profile_picture?: string | null;
@@ -34,6 +35,7 @@ const useAuthStore = create<AuthState>((set) => {
             subscriptionRemainingDays,
             profile_picture,
             email,
+            status,
           } = response.data.message;
           set({
             username,
@@ -43,6 +45,7 @@ const useAuthStore = create<AuthState>((set) => {
             subscriptionRemainingDays,
             profile_picture,
             email,
+            status,
           });
         } else {
           throw new Error(`Error: ${response.status}`);
@@ -61,6 +64,7 @@ const useAuthStore = create<AuthState>((set) => {
       username: null,
       role: null,
       email: null,
+      status: "",
       subscriptionType: null,
       login: async (userId: string, token: string) => {
         localStorage.setItem("userId", userId);

@@ -18,6 +18,10 @@ const userSchema = new mongoose.Schema(
     },
     lastLogin: { type: Date, default: Date.now },
     email_unsubscribed: { type: Boolean, default: false },
+    status: {
+      type: String,
+      enum: ["active", "suspended"],
+    },
     role: { type: String, enum: ["user", "admin"], default: "user" },
   },
   {

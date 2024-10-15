@@ -125,6 +125,47 @@
             "deviceLanguage": "en-US,en;q=0.9",
             "timestamp": "2024-10-15T08:52:44.231Z",
             "__v": 0
+        },
+        {
+            "location": {
+                "city": "Plymouth",
+                "region": "England",
+                "country": "GB",
+                "lat": "50.3715",
+                "lon": "-4.1430"
+            },
+            "os": {
+                "name": "Windows",
+                "version": "10"
+            },
+            "_id": "670e2f5809a83c5d94f4d6e1",
+            "userId": "668e948dda8aa5ae0b523383",
+            "ip": "90.242.8.71",
+            "timezone": "Europe/London",
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/129.0.0.0",
+            "deviceLanguage": "en-GB,en;q=0.9,zh-CN;q=0.8,zh;q=0.7,en-US;q=0.6,zh-TW;q=0.5",
+            "timestamp": "2024-10-15T09:01:12.095Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "Unknown",
+                "region": "Unknown",
+                "country": "Unknown",
+                "lat": "Unknown",
+                "lon": "Unknown"
+            },
+            "os": {
+                "name": "Mac OS",
+                "version": "10.15.7"
+            },
+            "_id": "670e3888a8763850da563bb5",
+            "userId": "668e948dda8aa5ae0b523383",
+            "ip": "::1",
+            "timezone": "Unknown",
+            "deviceLanguage": "en-US,en;q=0.9",
+            "timestamp": "2024-10-15T09:40:24.824Z",
+            "__v": 0
         }
     ]
 }

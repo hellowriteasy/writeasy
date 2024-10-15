@@ -5,6 +5,7 @@ export type TUser = {
   role: string;
   lastLogin: string;
   profile_picture?: string;
+  status: "suspended" | "active";
   isSubcriptionActive: boolean;
   subscriptionRemainingDays: number | null;
   __v: number;
@@ -26,7 +27,7 @@ export type TStory = {
   contributors: TUser[];
   hasEnded: boolean;
   position?: number;
-  isTopWriting?:boolean
+  isTopWriting?: boolean;
 };
 
 export type TPrompt = {
@@ -37,7 +38,7 @@ export type TPrompt = {
   __v: number;
   description: string;
   type: string;
-  contestId?: TContest
+  contestId?: TContest;
   image?: string;
 };
 
@@ -74,4 +75,4 @@ export type TPageDetails = {
   page: number;
   total: number;
   perPage: number;
-}
+};

@@ -1,11 +1,15 @@
-'use client';
-import { Fragment } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
-import { useRouter } from 'next/navigation';
+"use client";
+import { Fragment } from "react";
+import { Dialog, Transition } from "@headlessui/react";
+import { useRouter } from "next/navigation";
 type TsubscriptionProps = {
-  setIsModalOpen?: (value:boolean) => void;
-}
-const Subscription: React.FC<TsubscriptionProps> = ({ setIsModalOpen }) => {
+  setIsModalOpen?: (value: boolean) => void;
+  isAccountSuspended?: boolean;
+};
+const Subscription: React.FC<TsubscriptionProps> = ({
+  setIsModalOpen,
+  isAccountSuspended,
+}) => {
   const router = useRouter();
 
   return (
@@ -13,7 +17,9 @@ const Subscription: React.FC<TsubscriptionProps> = ({ setIsModalOpen }) => {
       <Dialog
         as="div"
         className="relative z-10"
-        onClose={() =>{ setIsModalOpen && setIsModalOpen(false)}}
+        onClose={() => {
+          setIsModalOpen && setIsModalOpen(false);
+        }}
       >
         <Transition.Child
           as={Fragment}
@@ -40,12 +46,24 @@ const Subscription: React.FC<TsubscriptionProps> = ({ setIsModalOpen }) => {
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                 <div className="flex items-center justify-center h-14">
-                  <button
-                    onClick={() => router.push(`/Pricing`)}
-                    className="h-14 w-full px-5 bg-custom-yellow text-slate-950 text-3xl font-bold font-unkempt rounded-full"
-                  >
-                    Upgrade to premium
-                  </button>
+                  {isAccountSuspended ? (
+                    <button
+                      onClick={() => {
+                        window.open("https://www.gmail.com", "_blank");
+                      }}
+                      className="h-14 w-full px-5 bg-custom-yellow text-slate-950 text-3xl font-bold font-unkempt rounded-full"
+                    >
+                      Your account has been suspended. Please contact
+                      hellowriteasy@gmail.com
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => router.push(`/Pricing`)}
+                      className="h-14 w-full px-5 bg-custom-yellow text-slate-950 text-3xl font-bold font-unkempt rounded-full"
+                    >
+                      Upgrade to premium
+                    </button>
+                  )}
                 </div>
               </Dialog.Panel>
             </Transition.Child>

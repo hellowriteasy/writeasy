@@ -23,7 +23,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
   const [triggerGrammarCheck, setTriggerGrammarCheck] = useState(false);
   const [taskType, setTaskType] = useState<TTaskType | string>("");
   const [input, setInput] = useState("");
-  const { role, isSubcriptionActive } = useAuthStore();
+  const { role, isSubcriptionActive, status } = useAuthStore();
   const AxiosIns = axiosInstance("");
 
   useEffect(() => {
@@ -146,7 +146,6 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
           </div>
         </div>
         <div className="w-full flex-grow">
-          
           <SimpleEditor
             triggerGrammarCheck={triggerGrammarCheck}
             title={input}
@@ -162,7 +161,11 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
         </div>
       </div>
 
-      {!isSubcriptionActive && role !== "admin" ? <Subscription /> : null}
+      {status === "suspended" ? (
+        <Subscription isAccountSuspended={true} />
+      ) : !isSubcriptionActive && role !== "admin" ? (
+        <Subscription />
+      ) : null}
     </div>
   );
 };

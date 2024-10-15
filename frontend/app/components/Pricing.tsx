@@ -130,7 +130,8 @@ const Pricing: React.FC = () => {
                   )}
                   <ul className="text-[3vw] flex flex-col gap-y-2 lg:text-[18px] mt-4 text-left pl-[20px]">
                     <li>
-                      • Unlimited writing practices with immediate GPT markings
+                      • Up to 5 writing practices everyday with immediate GPT
+                      markings
                     </li>
                     <li>• Weekly writing contests</li>
                     <li>• Unlimited collaborative writing games</li>

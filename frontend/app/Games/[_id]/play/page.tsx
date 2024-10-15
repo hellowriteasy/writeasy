@@ -55,7 +55,7 @@ const Page = () => {
   const isSubcriptionActive = useAuthStore(
     (state) => state.isSubcriptionActive
   );
-  const { userId, token, role } = useAuthStore();
+  const { userId, token, role, status } = useAuthStore();
   const params = useParams();
   const promptId = params._id;
   const router = useRouter();
@@ -515,7 +515,11 @@ const Page = () => {
           </div>
         </div>
       </div>
-      {!isSubcriptionActive && role != "admin" ? <Subscription /> : null}
+      {status === "suspended" ? (
+        <Subscription isAccountSuspended={true} />
+      ) : !isSubcriptionActive && role !== "admin" ? (
+        <Subscription />
+      ) : null}
     </div>
   );
 };

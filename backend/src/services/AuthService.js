@@ -53,7 +53,7 @@ class AuthService {
     });
     user.lastLogin = new Date();
     await user.save();
-    return { token, _id: user.id }; // Return token and _id
+    return { token, _id: user.id, status: user.status }; // Return token and _id
   }
 
   async generateHash(string) {
