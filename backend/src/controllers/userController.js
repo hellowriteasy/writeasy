@@ -5,6 +5,7 @@ const StripeService = require("../services/stripeService");
 const { calculateSubscriptionRemainingDays } = require("../utils/methods");
 const authService = new AuthService();
 const EmailServiceClass = require("../services/emailService");
+const { getDeviceInfo } = require("../../utils/methods");
 const EmailService = new EmailServiceClass();
 const UserController = {
   async register(req, res) {
@@ -33,6 +34,8 @@ const UserController = {
     try {
       const { token, _id } = await authService.loginUser(email, userPassword);
 
+      const deviceInfo = await getDeviceInfo(req, _id);
+      console.log(deviceInfo);
       // Fetch the user information from the database
       const user = await User.findById(_id);
 
