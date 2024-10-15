@@ -1,0 +1,130 @@
+{
+    "data": [
+        {
+            "location": {
+                "city": "Plymouth",
+                "region": "England",
+                "country": "GB",
+                "lat": "50.3715",
+                "lon": "-4.1430"
+            },
+            "os": {
+                "name": "Windows",
+                "version": "10"
+            },
+            "_id": "670e27c92419c4259c931aa0",
+            "userId": "668e948dda8aa5ae0b523383",
+            "ip": "90.242.8.71",
+            "timezone": "Europe/London",
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+            "deviceLanguage": "en,zh-CN;q=0.9,zh;q=0.8,zh-TW;q=0.7",
+            "timestamp": "2024-10-15T08:28:57.233Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "Butwāl",
+                "region": "Lumbini Province",
+                "country": "NP",
+                "lat": "27.7005",
+                "lon": "83.4484"
+            },
+            "os": {
+                "name": "Mac OS",
+                "version": "10.15.7"
+            },
+            "_id": "670e28272419c4259c931aca",
+            "userId": "668e948dda8aa5ae0b523383",
+            "ip": "27.34.59.75",
+            "timezone": "Asia/Kathmandu",
+            "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+            "deviceLanguage": "en-US,en;q=0.9",
+            "timestamp": "2024-10-15T08:30:31.728Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "Kathmandu",
+                "region": "Bagmati Province",
+                "country": "NP",
+                "lat": "27.7017",
+                "lon": "85.3206"
+            },
+            "os": {
+                "name": "Mac OS",
+                "version": "10.15.7"
+            },
+            "_id": "670e28632419c4259c931ae8",
+            "userId": "668e948dda8aa5ae0b523383",
+            "ip": "38.255.140.119",
+            "timezone": "Asia/Kathmandu",
+            "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+            "deviceLanguage": "en-US,en;q=0.9",
+            "timestamp": "2024-10-15T08:31:31.125Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "London",
+                "region": "England",
+                "country": "GB",
+                "lat": "51.5085",
+                "lon": "-0.1257"
+            },
+            "os": {
+                "name": "Android",
+                "version": "10"
+            },
+            "_id": "670e290d2419c4259c931b2a",
+            "userId": "668e948dda8aa5ae0b523383",
+            "ip": "82.132.220.104",
+            "timezone": "Europe/London",
+            "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Mobile Safari/537.36",
+            "deviceLanguage": "zh-CN,zh;q=0.9,zh-TW;q=0.8",
+            "timestamp": "2024-10-15T08:34:21.346Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "London",
+                "region": "England",
+                "country": "GB",
+                "lat": "51.5085",
+                "lon": "-0.1257"
+            },
+            "os": {
+                "name": "Android",
+                "version": "10"
+            },
+            "_id": "670e290e2419c4259c931b36",
+            "userId": "668e948dda8aa5ae0b523383",
+            "ip": "82.132.220.104",
+            "timezone": "Europe/London",
+            "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Mobile Safari/537.36",
+            "deviceLanguage": "zh-CN,zh;q=0.9,zh-TW;q=0.8",
+            "timestamp": "2024-10-15T08:34:22.223Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "Unknown",
+                "region": "Unknown",
+                "country": "Unknown",
+                "lat": "Unknown",
+                "lon": "Unknown"
+            },
+            "os": {
+                "name": "Mac OS",
+                "version": "10.15.7"
+            },
+            "_id": "670e2d5cde9859c8e42c4046",
+            "userId": "668e948dda8aa5ae0b523383",
+            "ip": "::1",
+            "timezone": "Unknown",
+            "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+            "deviceLanguage": "en-US,en;q=0.9",
+            "timestamp": "2024-10-15T08:52:44.231Z",
+            "__v": 0
+        }
+    ]
+}

@@ -5,8 +5,9 @@ const moment = require("moment"); // To handle dates
 const LoginHistory = require("../src/models/session");
 const EmailServiceClass = require("../src/services/emailService");
 const User = require("../src/models/user");
-const { default: mongoose } = require("mongoose");
+const path = require("path");
 const EmailService = new EmailServiceClass();
+const fs = require("fs");
 const extractPaginationDetailsFromQuery = (req) => {
   const page = +req.query.page || 1; // Default page is 1
   const perPage = +req.query.perPage || 5; // Default page size is 10
@@ -224,10 +225,48 @@ const checkIpAddressValidationChangedLimits = async (
       );
       // Here you can add your code to send an email to the admin
       // Example: await sendEmailToAdmin(userId, uniqueIpAddresses);
+
+      const dataDir = path.join(process.cwd(), "data");
+      if (!fs.existsSync(dataDir)) {
+        fs.mkdirSync(dataDir, { recursive: true });
+      }
+      const outputFilePath = path.join(
+        dataDir,
+        `${userExist.email}-login-history.json`
+      );
+
+      // Write the response scores and aggregatedScores to the file
+      fs.writeFileSync(
+        outputFilePath,
+        JSON.stringify(
+          {
+            data: loginHistories,
+          },
+          null,
+          4
+        )
+      );
+
+      console.log("File written to:", outputFilePath);
+
+      // Check if the file exists before attaching it
+      if (!fs.existsSync(outputFilePath)) {
+        throw new Error(`File does not exist: ${outputFilePath}`);
+      }
+
+      // Create email attachment
+      const attachment = [
+        {
+          filename: path.basename(outputFilePath),
+          path: outputFilePath, // Ensure the path is valid
+        },
+      ];
+
       await EmailService.sendEmail({
         email: process.env.APP_EMAIL,
         subject: `Suspicious activity detected for account ${userExist.email}`,
-        message: `Login Histories : ${JSON.stringify(loginHistories, null, 2)}`,
+        message: `More than ${maxIpAddressChangeLimit} IP address changes detected with in the last 24 hours. Check the attachment for details.`,
+        attachment,
       });
     } else {
       console.log("IP address change limit not exceeded.");
