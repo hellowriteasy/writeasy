@@ -2,6 +2,7 @@ import { axiosInstance } from "@/app/utils/config/axios";
 import { useCustomToast } from "@/app/utils/hooks/useToast";
 import { TUser } from "@/app/utils/types";
 import React, { useEffect, useState } from "react";
+import moment from "moment";
 
 const SubscriptionUser = ({
   user,
@@ -67,9 +68,6 @@ const SubscriptionUser = ({
       <p className="text-gray-600">{user.email}</p>
       <p className="text-gray-600">Role: {user.role}</p>
       <p className="text-gray-600">
-        {/* {hasExpired || !user.isSubcriptionActive
-          ? "Subscription Expired"
-          : new Date(user.expiresAt).toLocaleString()} */}
         {hasExpired ? "Subscription Expired" : null}
         {user.isSubcriptionActive ? (
           <p className="text-gray-600">
@@ -77,7 +75,7 @@ const SubscriptionUser = ({
           </p>
         ) : null}
         {user.isSubcriptionActive
-          ? ` Expires At : ${new Date(user.expiresAt).toLocaleString()} `
+          ? ` Expires At : ${moment(new Date(user.expiresAt)).format()} `
           : null}
         {hasExpired === null && user.isSubcriptionActive === false
           ? ` No Subscription `
@@ -85,7 +83,7 @@ const SubscriptionUser = ({
       </p>
 
       <p className="text-gray-600">
-        Last Login: {new Date(user.lastLogin).toLocaleString()}
+        Last Login: {moment(new Date(user.lastLogin)).format("lll")}
       </p>
       {user.isSubcriptionActive && (
         <p className="text-gray-600">

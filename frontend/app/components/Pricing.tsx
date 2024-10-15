@@ -73,8 +73,6 @@ const Pricing: React.FC = () => {
             <Image src={Group16} alt="" />
             <div className="absolute top-0 w-full h-full flex flex-col justify-between items-center p-4 pb-8">
               <div className="text-center mt-28">
-                {" "}
-                {/* Added margin-top here */}
                 <h2 className="text-[4vw] lg:text-[24px] font-bold">Free</h2>
                 <ul className="text-[3vw] lg:text-[18px] mt-4 text-left pl-[20px]">
                   <li>
@@ -85,7 +83,7 @@ const Pricing: React.FC = () => {
               </div>
               {!userId && (
                 <Link href="/signup">
-                  <button className="border-2 sm:text-3xl sm:rounded-full text-[5vw] lg:text-[24px] hover:bg-slate-200 border-slate-700 bg-white rounded-full text-black w-40 lg:w-60 h-16">
+                  <button className="border-2 sm:text-3xl sm:rounded-full text-[5vw] lg:text-[24px] hover:bg-slate-200 border-slate-700 bg-white rounded-full text-black w-60 h-16">
                     Sign up
                   </button>
                 </Link>
@@ -104,8 +102,6 @@ const Pricing: React.FC = () => {
               <Image src={Group15} alt="" />
               <div className="absolute top-0 w-full h-full flex flex-col justify-between items-center p-4 pb-8">
                 <div className="text-center mt-28">
-                  {" "}
-                  {/* Added margin-top here */}
                   {!isSubcriptionActive ? (
                     <div className="flex items-center justify-center">
                       <TbCurrencyPound className="text-[5vw] lg:text-[32px]" />
@@ -122,7 +118,7 @@ const Pricing: React.FC = () => {
                         <TbCurrencyPound className="text-[5vw] lg:text-[32px]" />
                         <h2 className="text-[4vw] lg:text-[24px] font-bold">
                           {sub?.unit_amount / 100}
-                          </h2>
+                        </h2>
                         <span className="pt-2 text-[4vw] lg:text-[18px]">
                           /month
                         </span>
@@ -143,14 +139,14 @@ const Pricing: React.FC = () => {
                 {!userId ? (
                   <button
                     onClick={() => handleSignUp()}
-                    className="border-2 mx-auto  sm:text-3xl sm:rounded-full font-unkempt text-5xl hover:bg-white border-slate-700 hover:text-black rounded-full w-60 h-16 bg-black text-white"
+                    className="border-2 sm:text-3xl sm:rounded-full text-[5vw] lg:text-[24px] hover:bg-slate-200 border-slate-700 bg-white rounded-full text-black w-60 h-16"
                   >
                     Sign up
                   </button>
                 ) : !isSubcriptionActive ? (
                   <button
                     onClick={() => handleSignUp(sub?.id, sub?.type)}
-                    className="border text-5xl  sm:text-3xl py-2 mx-auto font-unkempt hover:bg-slate-800 border-slate-400 bg-black rounded-full text-white w-40 md:w-56 lg:w-60   sm:h-14 flex items-center justify-center  sm:rounded-full"
+                    className="border-2 sm:text-3xl sm:rounded-full text-[5vw] lg:text-[24px] hover:bg-slate-200 border-slate-700 bg-white rounded-full text-black w-60 h-16"
                   >
                     Buy Now
                   </button>

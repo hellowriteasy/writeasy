@@ -8,7 +8,7 @@ const SearchInput: FC<SearchInputProps> = (props) => {
     <div>
       <input
         type="text"
-        className="w-full flex-grow h-10 rounded-3xl  border border-black px-2"
+        className="w-full flex-grow h-12 rounded-3xl  border-2 outline-yellow-500 border-custom-yellow px-2 "
         {...props}
       />
     </div>

@@ -21,16 +21,6 @@ const createStripeCheckoutSession = async (req, res) => {
       userExist.email
     );
     const subscriptionExist = await Subscription.findOne({ userId: user_id });
-    // stripe_customer_id = subscriptionExist?.stripe_customer_id;
-
-    // if (!stripe_customer_id) {
-    // console.log("stripe creating customer", userExist.username);
-    // const customer = await StripeService.createCustomer({
-    //   email: userExist.email,
-    //   username: userExist.username,
-    // });
-    // stripe_customer_id = customer.id;
-    // }
 
     const checkoutRes = await StripeService.createStripeCheckout(
       userExist.email,
@@ -86,10 +76,7 @@ const confirmStripeCheckoutSession = async (req, res) => {
     if (!subscriptionExist) {
       throw new Error("Subscription not found.");
     }
-    console.log(
-      "stripe: creating confirming checkout session. stripe session id- ",
-      stripe_session_id
-    );
+
     const paidAt = new Date();
     const thirtyDaysLater = new Date(paidAt);
     thirtyDaysLater.setDate(thirtyDaysLater.getDate() + 30);
@@ -124,6 +111,7 @@ const confirmStripeCheckoutSession = async (req, res) => {
 
 const getSubscriptions = async (req, res) => {
   try {
+    console.log("inside get subscriptions");
     const prices = await StripeService.getPrices();
     res.send(prices);
     await cacheService.set(cacheTypes.SUBSCRIPTION_DATA, prices);

@@ -11,6 +11,9 @@ const createStripeCheckout = async (email, priceId, type) => {
       mode: type === "recurring" ? "subscription" : "payment",
       payment_method_types: ["card"],
       allow_promotion_codes: true,
+      subscription_data: {
+        trial_period_days: 7,
+      },
       line_items: [
         {
           price: priceId,
