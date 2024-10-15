@@ -15,6 +15,15 @@ const extractPaginationDetailsFromQuery = (req) => {
   };
 };
 
+// Function to extract the first IP from x-forwarded-for
+function getClientIp(req) {
+  const forwarded = req.headers["x-forwarded-for"];
+  if (forwarded) {
+    return forwarded.split(",")[0]; // Extract the first IP in case of multiple proxies
+  }
+  return req.connection.remoteAddress; // Fallback to remote address if no proxy
+}
+
 const getDeviceInfo = (req, userId) => {
   // Parse the user-agent to get device info
   const parser = new UAParser();
@@ -22,9 +31,8 @@ const getDeviceInfo = (req, userId) => {
   const deviceInfo = parser.setUA(userAgent).getResult();
 
   // Get the IP address (will differ depending on whether you're behind a proxy)
-  const ipAddress =
-    req.headers["x-forwarded-for"] || req.connection.remoteAddress;
-
+  // Extract the client's IP address (handle multiple IPs from x-forwarded-for)
+  const ipAddress = getClientIp(req);
   // Return a promise to handle asynchronous geolocation
   return new Promise((resolve, reject) => {
     // Get location data from the IP address
@@ -33,9 +41,10 @@ const getDeviceInfo = (req, userId) => {
         reject(err);
         return;
       }
-      console.log("location",location)
-      console.log("ip address",ipAddress)
+      console.log("location", location);
+      console.log("ip address", ipAddress);
       // Construct the device info object
+
       const info = {
         userId: userId, // You can set or pass the userId dynamically
         browser: {
