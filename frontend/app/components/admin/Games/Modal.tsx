@@ -15,13 +15,14 @@ const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen, onSuccess }) => {
   const [description, setDescription] = useState("");
   const [error, setError] = useState<string | null>(null);
   const AxiosIns = axiosInstance("");
-  const [isPinned,setIsPinned] =useState(false)
+  const [isPinned, setIsPinned] = useState(false);
   const handleUpdate = async () => {
     try {
       const response = await AxiosIns.post("/prompts", {
         title: promptTitle,
         description: description,
         promptType: "game",
+        isPinned,
       });
       setIsModalOpen(false);
       onSuccess();

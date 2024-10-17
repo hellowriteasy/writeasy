@@ -19,6 +19,7 @@ const Page: React.FC = () => {
   const [contests, setContests] = useState<Contest[]>([]);
   const AxiosIns = axiosInstance("");
   const [searchInput, setSearchInput] = useState("");
+  
   const fetchContests = async () => {
     try {
       const response = await AxiosIns.get<Contest[]>(
@@ -27,7 +28,9 @@ const Page: React.FC = () => {
       setContests(response.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        //
       } else {
+        //
       }
     }
   };
