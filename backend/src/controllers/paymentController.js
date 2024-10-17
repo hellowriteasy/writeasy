@@ -132,6 +132,7 @@ const cancelSubscription = async (req, res) => {
     const subscriptionExist = await Subscription.findOne({
       userId: user_id,
     });
+
     if (!subscriptionExist) {
       throw new Error("Subscription not found");
     }
@@ -141,12 +142,14 @@ const cancelSubscription = async (req, res) => {
       throw new Error("Subscription not found");
     }
 
+    subscriptionExist.isActive = false;
+    subscriptionExist.expiresAt = new Date();
+    await subscriptionExist.save();
+
     await StripeService.deleteSubscription(subscriptonId);
     res.status(200).json({ message: "Subscription cancelled" });
   } catch (error) {
     res.status(500).json({ message: "Failed to cancel subscription" });
-
-    //
   }
 };
 const PaymentController = {
