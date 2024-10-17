@@ -36,6 +36,7 @@ export type TPrompt = {
   promptCategory: string[];
   promptType: string;
   __v: number;
+  isPinned?: boolean;
   description: string;
   type: string;
   contestId?: TContest;

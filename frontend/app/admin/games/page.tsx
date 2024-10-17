@@ -17,6 +17,7 @@ const Games: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const AxiosIns = axiosInstance("");
   const [refetch, setRefetch] = useState(false);
+  const [isPinned, setIsPinned] = useState<boolean>(false);
   const [searchInput, setSearchInput] = useState("");
 
   const fetchGamePrompts = async (): Promise<void> => {
@@ -79,11 +80,13 @@ const Games: React.FC = () => {
                 </button>
               </div>
             </div>
-            <SearchInput
-              onChange={handleSearchInputChange}
-              value={searchInput}
-              placeholder="Search for games"
-            />
+            <div className="my-4">
+              <SearchInput
+                onChange={handleSearchInputChange}
+                value={searchInput}
+                placeholder="Search for games"
+              />
+            </div>
             {gamePrompts &&
               gamePrompts.map((prompt) => (
                 <CardAdd

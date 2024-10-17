@@ -2,9 +2,6 @@
 import React, { useEffect, useState } from "react";
 import TopWriting from "../components/Others/TopWriting";
 import WeeklyTest from "../components/Others/WeeklyTest";
-import earth from "../../public/Game/earth.svg";
-import A from "../../public/Game/A.svg";
-import Dumbelman from "../../public/Game/dumbelman.svg";
 import Bee from "../../public/Game/Bee.svg";
 import Cloud from "../../public/Game/cloud.svg";
 import Image from "next/image";

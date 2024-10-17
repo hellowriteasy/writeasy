@@ -191,7 +191,7 @@ const checkIpAddressValidationChangedLimits = async (
   maxIpAddressChangeLimit
 ) => {
   const now = new Date();
-  const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000); // 24 hours ago
+  const oneweekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); // 24 hours ago
 
   try {
     const userExist = await User.findById(userId);
@@ -202,7 +202,7 @@ const checkIpAddressValidationChangedLimits = async (
     // Retrieve login history for the last 24 hours for the specific user
     const loginHistories = await LoginHistory.find({
       userId: userId, // Ensure userId is a valid ObjectId
-      timestamp: { $gte: twentyFourHoursAgo },
+      timestamp: { $gte: oneweekAgo },
     });
 
     // Create a Set to collect unique IP addresses

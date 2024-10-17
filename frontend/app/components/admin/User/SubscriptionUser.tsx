@@ -106,7 +106,7 @@ const SubscriptionUser = ({
           </p>
         ) : null}
         {user.isSubcriptionActive
-          ? ` Expires At : ${moment(new Date(user.expiresAt)).format()} `
+          ? ` Expires At : ${moment(new Date(user.expiresAt)).format("lll")} `
           : null}
         {hasExpired === null && user.isSubcriptionActive === false
           ? ` No Subscription `
@@ -129,18 +129,12 @@ const SubscriptionUser = ({
           className="px-3 py-2 border border-gray-300 rounded-md"
         />
         <button
-          className="ml-2 px-4 py-2 bg-black text-white rounded-md"
+          className="ml-2 px-4 py-2 bg-custom-yellow text-black rounded-md"
           onClick={() => handleUpdateSubscription(user._id)}
         >
           Update Subscription
         </button>
 
-        <button
-          className="ml-2 px-4 py-2 bg-red-500 text-white rounded-md"
-          onClick={() => handleDeleteUser(user._id)}
-        >
-          Delete User
-        </button>
         {user.status === "suspended" ? (
           <button
             className="ml-2 px-4 py-2 bg-green-500 text-white rounded-md"
@@ -150,12 +144,18 @@ const SubscriptionUser = ({
           </button>
         ) : (
           <button
-            className="ml-2 px-4 py-2 bg-red-500 text-white rounded-md"
+            className="ml-2 px-4 py-2 bg-orange-600 text-white rounded-md"
             onClick={() => handleSuspendAccount(user._id)}
           >
             Suspend Account
           </button>
         )}
+        <button
+          className="ml-2 px-4 py-2 bg-red-500 text-white rounded-md"
+          onClick={() => handleDeleteUser(user._id)}
+        >
+          Delete User
+        </button>
       </div>
     </div>
   );

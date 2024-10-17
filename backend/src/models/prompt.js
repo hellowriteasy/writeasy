@@ -24,6 +24,10 @@ const promptSchema = new mongoose.Schema(
     image: {
       type: String,
     },
+    isPinned: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

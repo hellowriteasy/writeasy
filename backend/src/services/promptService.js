@@ -52,12 +52,13 @@ const getPromptsByType = async (type, skip, limit, category, search) => {
     {
       limit: limit || undefined, // Only add limit if it's defined
       skip: skip || undefined, // Only add skip if it's defined
-      sort: { createdAt: -1 }, // Keep sort inside the third argument object
+      sort: { isPinned: -1, createdAt: -1 }, // Sort by isPinned first, then by createdAt
     }
   );
 
   return { data, total };
 };
+
 
 const getPracticePrompts = (skip, limit, category, search) => {
   return getPromptsByType("practice", skip, limit, category, search);

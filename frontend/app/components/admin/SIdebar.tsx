@@ -66,7 +66,7 @@ const Sidebar = () => {
                 onClick={toggleSidebar} // Close the sidebar when a link is clicked
               >
                 <li
-                  className={`text-start h-16 px-3 flex items-center gap-x-2 cursor-pointer  border-t border-white ${
+                  className={`text-start h-16 px-3 flex items-center gap-x-2 cursor-pointer  border-t border-white font-unkempt ${
                     isActive
                       ? "bg-custom-yellow text-black border-t border-white  "
                       : "hover:bg-custom-yellow hover:text-black text-black"

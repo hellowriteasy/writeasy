@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect, ChangeEvent } from "react";
 import {
   Dialog,
   Transition,
@@ -33,12 +33,15 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onSuccess }) => {
   const [file, setFile] = useState<File | null>(null);
   const AxiosIns = axiosInstance("");
   const { uploadFile } = useUploadFile();
+  const [isPinned, setIsPinned] = useState(false);
+
   const handleAdd = async () => {
     const promptData = {
       title: promptTitle,
       promptCategory: selectedCategories, // Use selectedCategories array
       promptType: "practice",
       image: "",
+      isPinned,
     };
 
     let imageUrl = "";
@@ -133,7 +136,7 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onSuccess }) => {
                       >
                         Add Prompt
                       </Dialog.Title>
-                      <div className="mt-2 w-full ">
+                      <div className="mt-2 w-full flex flex-col gap-y-2 ">
                         <input
                           className="mt-1 block h-12 rounded-md border-gray-300 shadow-sm outline-none border ps-4 focus:ring-opacity-50 w-full"
                           placeholder="Prompt Title"
@@ -208,6 +211,16 @@ const Modal: React.FC<ModalProps> = ({ setIsModalOpen, onSuccess }) => {
                           name="image"
                           onChange={handleImageFileChange}
                         />
+                      </div>
+                      <div className="w-full flex flex-row gap-x-2 my-2">
+                        <input
+                          type="checkbox"
+                          checked={isPinned}
+                          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                            setIsPinned(e.target.checked);
+                          }}
+                        />
+                        <p>Should pin this prompt</p>
                       </div>
                     </div>
                   </div>

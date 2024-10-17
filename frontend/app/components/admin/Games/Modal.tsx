@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useState } from "react";
+import { ChangeEvent, Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -15,7 +15,7 @@ const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen, onSuccess }) => {
   const [description, setDescription] = useState("");
   const [error, setError] = useState<string | null>(null);
   const AxiosIns = axiosInstance("");
-
+  const [isPinned,setIsPinned] =useState(false)
   const handleUpdate = async () => {
     try {
       const response = await AxiosIns.post("/prompts", {
@@ -98,6 +98,17 @@ const ModalGame: React.FC<ModalProps> = ({ setIsModalOpen, onSuccess }) => {
                           onChange={(e) => setDescription(e.target.value)}
                         />
                       </div>
+                      <div className="w-full flex flex-row gap-x-2 my-2">
+                        <input
+                          type="checkbox"
+                          checked={isPinned}
+                          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                            setIsPinned(e.target.checked);
+                          }}
+                        />
+                        <p>Should pin this prompt</p>
+                      </div>
+
                       {error && <p className="text-red-500">{error}</p>}
                     </div>
                   </div>
