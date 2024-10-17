@@ -57,6 +57,17 @@ const Pricing: React.FC = () => {
     }
   };
 
+  const handleCancelSubscription = async () => {
+    try {
+      const { status } = await AxiosIns.post("/payments/cancel-subscription");
+      if (status === 200) {
+        toast("Subscription canceled successfully", "success");
+      }
+    } catch (error) {
+      toast("Failed to cancel subscription", "success");
+    }
+  };
+
   return (
     <div className="w-full py-10 h-auto font-unkempt">
       <h1 className="text-center text-4xl font-unkempt pt-10 font-bold">

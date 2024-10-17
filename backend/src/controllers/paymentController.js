@@ -32,6 +32,7 @@ const createStripeCheckoutSession = async (req, res) => {
       const userSubscription = new Subscription({
         stripe_session_id: checkoutRes.id,
         userId: user_id,
+        subscription_id: checkoutRes.payment_intent,
       });
       await userSubscription.save();
     }
@@ -42,6 +43,7 @@ const createStripeCheckoutSession = async (req, res) => {
         );
       }
       subscriptionExist.stripe_session_id = checkoutRes.id;
+      subscriptionExist.subscription_id = checkoutRes.payment_intent;
       await subscriptionExist.save();
     }
 
@@ -120,9 +122,37 @@ const getSubscriptions = async (req, res) => {
     res.status(500).json({ message: error, success: false });
   }
 };
+const cancelSubscription = async (req, res) => {
+  const { user_id } = req.params;
+  try {
+    const userExist = await User.findById(user_id);
+    if (!userExist) {
+      throw new Error("User not found");
+    }
+    const subscriptionExist = await Subscription.findOne({
+      userId: user_id,
+    });
+    if (!subscriptionExist) {
+      throw new Error("Subscription not found");
+    }
+    const subscriptonId = subscriptionExist.subscription_id;
+
+    if (!subscriptonId) {
+      throw new Error("Subscription not found");
+    }
+
+    await StripeService.deleteSubscription(subscriptonId);
+    res.status(200).json({ message: "Subscription cancelled" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to cancel subscription" });
+
+    //
+  }
+};
 const PaymentController = {
   getSubscriptions,
   createStripeCheckoutSession,
   confirmStripeCheckoutSession,
+  cancelSubscription,
 };
 module.exports = PaymentController;

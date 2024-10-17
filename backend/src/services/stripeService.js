@@ -72,6 +72,9 @@ async function getStripeCustomers() {
   return customers;
 }
 
+async function deleteSubscription(subscription_id) {
+  return await stripe.subscriptions.del(subscription_id);
+}
 const StripeService = {
   getPrices,
   createCustomer,
@@ -79,5 +82,6 @@ const StripeService = {
   getStripeCustomers,
   createStripeCheckout,
   confirmStripeCheckout,
+  deleteSubscription,
 };
 module.exports = StripeService;
