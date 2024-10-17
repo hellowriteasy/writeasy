@@ -65,19 +65,26 @@ const Contest = () => {
             {/* <Image className="w-[12vw]" src={Dumbelman} alt="group" /> */}
           </div>
         </div>
-
+        <div className=" sm:block hidden ">
+          <div className="w-10/12 sm:w-full">
+            <h1 className="text-xl sm:text-2xl sm:text-black md:text-5xl lg:text-4xl font-bold font-unkempt">
+              Compete with top writers worldwide!
+            </h1>
+          </div>
+          <Join />
+        </div>
         <div className="flex sm:flex-col-reverse gap-y-10 w-full h-auto relative mt-0 justify-around gap-x-5 sm:gap-x-0">
           <div className="w-[60%] sm:w-full">
             <div className="absolute top-40 -left-32">
               <Image className="w-[12vw]" src={Bee} alt="bee" />
             </div>
-            <div className="w-10/12 sm:w-full">
+            <div className="w-10/12 sm:w-full sm:hidden">
               <h1 className="text-xl sm:text-2xl sm:text-black md:text-5xl lg:text-4xl font-bold font-unkempt">
                 Compete with top writers worldwide!
               </h1>
             </div>
             <div className="gap-8 relative flex flex-col gap-y-20 sm:gap-9 w-full">
-              <div className="flex flex-col gap-y-3">
+              <div className="flex flex-col gap-y-3 sm:hidden ">
                 <Join />
               </div>
               <div className="flex flex-col gap-y-3 sm:gap-y-0 w-full">

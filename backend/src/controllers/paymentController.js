@@ -123,14 +123,14 @@ const getSubscriptions = async (req, res) => {
   }
 };
 const cancelSubscription = async (req, res) => {
-  const { user_id } = req.params;
+  const { userId } = req.params;
   try {
-    const userExist = await User.findById(user_id);
+    const userExist = await User.findById(userId);
     if (!userExist) {
       throw new Error("User not found");
     }
     const subscriptionExist = await Subscription.findOne({
-      userId: user_id,
+      userId,
     });
 
     if (!subscriptionExist) {
@@ -138,17 +138,26 @@ const cancelSubscription = async (req, res) => {
     }
     const subscriptonId = subscriptionExist.subscription_id;
 
-    if (!subscriptonId) {
-      throw new Error("Subscription not found");
+    console.log("subscripton type", subscriptionExist.payment_type);
+
+    if (subscriptionExist.payment_type === "online_payment") {
+      if (!subscriptonId) {
+        throw new Error("Subscription not found");
+      }
+      await StripeService.deleteSubscription(subscriptonId);
     }
+
 
     subscriptionExist.isActive = false;
     subscriptionExist.expiresAt = new Date();
+    subscriptionExist.payment_type = undefined;
+    subscriptionExist.subscription_id = undefined;
+    subscriptionExist.stripe_session_id = undefined;
     await subscriptionExist.save();
 
-    await StripeService.deleteSubscription(subscriptonId);
     res.status(200).json({ message: "Subscription cancelled" });
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: "Failed to cancel subscription" });
   }
 };

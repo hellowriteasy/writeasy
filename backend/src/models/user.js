@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema(
     },
     lastLogin: { type: Date, default: Date.now },
     email_unsubscribed: { type: Boolean, default: false },
+    practiceLimit: { type: Number, default: 5 },
     status: {
       type: String,
       enum: ["active", "suspended"],

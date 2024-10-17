@@ -4,12 +4,14 @@ const Story = require("../src/models/story");
 const Subscription = require("../src/models/subscription");
 const stripe = require("./stripe");
 const gptServiceClass = require("../src//services/gptService");
+const User = require("../src/models/user");
 const gptService = new gptServiceClass(process.env.GPT_API_KEY);
 async function scheduleJob() {
   await closeContestAndChooseTopWritingAfterDeadline();
   await closeSubscriptionWhenDeadline();
   await publishWritingsAfterPromptPublishDate();
 }
+
 const getTopPercentage = (array, percentage) => {
   // Sort the array by score in descending order
   const sortedArray = array.sort((a, b) => b.score - a.score);

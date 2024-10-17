@@ -1,4 +1,5 @@
 const Story = require("../models/story");
+const User = require("../models/user");
 const GptService = require("../services/gptService");
 
 const gptService = new GptService(process.env.GPT_API_KEY);
@@ -6,7 +7,6 @@ const gptService = new GptService(process.env.GPT_API_KEY);
 async function practiseStory(req, res) {
   const { content, taskType, userId, title, prompt } = req.body;
   const wordCount = content.split(" ").length; // Calculate word count
-
   const newStory = new Story({
     content: content,
     user: userId,
@@ -14,6 +14,16 @@ async function practiseStory(req, res) {
     storyType: "practice",
     prompt: prompt,
   });
+  const userExist = await User.findById(userId);
+  if (!userExist) {
+    throw new Error("User not found");
+  }
+
+  if (userExist.practiceLimit <= 0) {
+    return res.status(403).json({
+      message: "No practice limit left for today. Try after 24 hours .",
+    });
+  }
 
   // Set headers for streaming data
   res.setHeader("Content-Type", "application/json");
@@ -50,6 +60,8 @@ async function practiseStory(req, res) {
 
           // Call res.end() to indicate the stream has ended
           res.end();
+          userExist.practiceLimit = userExist.practiceLimit - 1;
+          await userExist.save();
           console.log(newStory._id);
         }
       }

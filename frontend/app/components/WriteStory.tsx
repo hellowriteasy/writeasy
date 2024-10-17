@@ -301,6 +301,14 @@ export function SimpleEditor({
             setStoryId(storyId);
             console.log("Story ID:", storyId);
           }
+        } else {
+          const error = await response.json();
+          setTriggerGrammarCheck(false);
+          setIsSaving(false);
+          toast.error(
+            error?.message || "Something went wrong. Please try again ."
+          );
+          setIsLoading(false);
         }
       }
     } catch (error) {

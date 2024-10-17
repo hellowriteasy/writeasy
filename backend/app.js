@@ -23,6 +23,7 @@ const StripeService = require("./src/services/stripeService");
 const pino = require("pino");
 const { withErrorResponse } = require("./src/utils/errors/with-error-response");
 const { InternalServerError } = require("./src/utils/errors/errors");
+const User = require("./src/models/user");
 const logfilePath = "/var/log/writeasy-logs.log";
 const logStream = createWriteStream(logfilePath, { flags: "a" });
 const logger = pino({}, logStream);
@@ -42,9 +43,19 @@ app.use((req, res, next) => {
   req.logger = logger;
   next();
 });
+async function scheduleJobMidnight() {
+  try {
+    // Reset practiceLimit to 0 for all users
+    await User.updateMany({}, { practiceLimit: 5 });
+    console.log("Successfully reset practiceLimit for all users.");
+  } catch (error) {
+    console.error("Error resetting practiceLimit:", error);
+  }
+}
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("dev"));
+cron.schedule("0 0 * * *", () => scheduleJobMidnight());
 cron.schedule("*/10 * * * * *", () => scheduleJob());
 
 app.get("/test", (req, res) => {
@@ -56,7 +67,7 @@ app.get("/test", (req, res) => {
       data: new InternalServerError("Something went wrong while testing !!!!"),
     },
     req,
-    res,
+    res
   );
 });
 

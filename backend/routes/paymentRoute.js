@@ -80,4 +80,6 @@ router.get(
   getCachedData(cacheTypes.SUBSCRIPTION_DATA),
   PaymentController.getSubscriptions
 );
+
+router.post("/cancel-subscription/:userId", PaymentController.cancelSubscription);
 module.exports = router;
