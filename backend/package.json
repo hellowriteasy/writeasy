@@ -37,7 +37,7 @@
     "openai-gpt-token-counter": "^1.1.1",
     "pino": "^9.4.0",
     "redis": "^4.6.13",
-    "stripe": "^16.9.0",
+    "stripe": "^11.18.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
     "ua-parser-js": "^1.0.39"

@@ -9,7 +9,6 @@ const subscriptionSchema = new mongoose.Schema(
     },
     stripe_session_id: {
       type: String,
-      required: true,
     },
     subscription_id: {
       type: String,

@@ -139,7 +139,7 @@ const cancelSubscription = async (req, res) => {
     const subscriptonId = subscriptionExist.subscription_id;
 
     console.log("subscripton type", subscriptionExist.payment_type);
-
+    console.log("subscription id ", subscriptonId);
     if (subscriptionExist.payment_type === "online_payment") {
       if (!subscriptonId) {
         throw new Error("Subscription not found");
@@ -147,17 +147,15 @@ const cancelSubscription = async (req, res) => {
       await StripeService.deleteSubscription(subscriptonId);
     }
 
-
     subscriptionExist.isActive = false;
     subscriptionExist.expiresAt = new Date();
     subscriptionExist.payment_type = undefined;
     subscriptionExist.subscription_id = undefined;
-    subscriptionExist.stripe_session_id = undefined;
     await subscriptionExist.save();
 
     res.status(200).json({ message: "Subscription cancelled" });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({ message: "Failed to cancel subscription" });
   }
 };

@@ -45,7 +45,7 @@ const Login: NextPage = () => {
       login(userId, token);
       router.push("/", { scroll: false });
     } catch (error: any) {
-      console.log(error)
+      console.log(error);
       setError(error.response?.data?.msg || "Login failed");
     }
   };

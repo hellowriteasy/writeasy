@@ -6,7 +6,7 @@ import ProtectedRoute from "@/app/utils/ProtectedRoute";
 import { TPrompt } from "@/app/utils/types";
 import { axiosInstance } from "@/app/utils/config/axios";
 import SearchInput from "@/app/components/SearchInput";
-import { Change } from "diff";
+import { useCustomToast } from "@/app/utils/hooks/useToast";
 
 const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,10 +14,15 @@ const Page = () => {
   const AxiosIns = axiosInstance("");
   const [refetch, setRefetch] = useState(false);
   const [searchInput, setSearchInput] = useState("");
-
+  const [practiseLimit, setPractiseLimit] = useState(5);
+  const toast = useCustomToast();
   const handleAddClick = () => {
     setIsModalOpen(true);
   };
+
+  useEffect(() => {
+    fetchCurrentPractiseLimit();
+  }, []);
 
   const fetchPrompts = async () => {
     try {
@@ -48,6 +53,28 @@ const Page = () => {
     setSearchInput(e.target.value);
   };
 
+  const fetchCurrentPractiseLimit = async () => {
+    try {
+      const { data } = await AxiosIns.get("/auth/users/practiseLimit");
+      setPractiseLimit(data.limit);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updatePractiseLimit = async () => {
+    try {
+      const res = await AxiosIns.post("/auth/users/practiseLimit", { limit: practiseLimit });
+      if (res.status === 200) {
+        fetchCurrentPractiseLimit();
+        toast("Practise limit updated successfully", "success");
+      }
+    } catch (error) {
+      console.log(error);
+      toast("Failed to update practise limit", "success");
+    }
+  };
+
   return (
     <ProtectedRoute>
       <div className=" font-poppins min-h-screen">
@@ -69,11 +96,31 @@ const Page = () => {
                   <i className="fas fa-plus cursor-pointer"></i>
                   <i className="fas fa-hashtag cursor-pointer"></i>
                 </div>
+
                 <button
                   className="bg-custom-yellow text-black border border-black px-4 py-2 rounded-lg font-unkempt"
                   onClick={handleAddClick}
                 >
                   Add
+                </button>
+              </div>
+              <div className="flex items-center gap-x-2 my-4">
+                <p className="text-xl font-semibold text-gray-700 font-unkempt">
+                  Set practise limit
+                </p>
+                <input
+                  type="input"
+                  className="w-20 p-2 border border-gray-300 rounded-lg"
+                  value={practiseLimit}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setPractiseLimit(+e.target.value)
+                  }
+                />
+                <button
+                  className="bg-custom-yellow text-black border border-black px-4 py-2 rounded-lg font-unkempt"
+                  onClick={updatePractiseLimit}
+                >
+                  Update
                 </button>
               </div>
               <SearchInput

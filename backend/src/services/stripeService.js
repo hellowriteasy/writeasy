@@ -72,9 +72,48 @@ async function getStripeCustomers() {
   return customers;
 }
 
-async function deleteSubscription(subscription_id) {
-  return await stripe.subscriptions.del(subscription_id);
+async function getSubscription(subscription_id) {
+  return await stripe.subscriptions.retrieve(subscription_id);
 }
+
+async function deleteSubscription(subscription_id) {
+  try {
+    const subscription = await stripe.subscriptions.retrieve(subscription_id);
+
+    if (subscription) {
+      const deletedSubscription = await stripe.subscriptions.del(
+        subscription_id
+      );
+      return deletedSubscription;
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    throw error;
+  }
+}
+function getSubscriptionRemainingDays(subscription) {
+  console.log(subscription);
+  if (!subscription) return;
+  const now = Math.floor(Date.now() / 1000); // Get the current timestamp in seconds
+  const secondsRemaining = subscription.current_period_end - now;
+  console.log(secondsRemaining, subscription);
+  if (secondsRemaining > 0) {
+    const days = Math.ceil(secondsRemaining / (60 * 60 * 24)); // Convert to days
+    return days;
+  } else {
+    return 0; // Current period has ended
+  }
+}
+
+function isInTrialPeriod(subscription) {
+  return subscription.status === "trialing";
+}
+
+// Function to check if the subscription is canceled or active
+function isSubscriptionCanceled(subscription) {
+  return subscription.canceled_at !== null;
+}
+
 const StripeService = {
   getPrices,
   createCustomer,
@@ -83,5 +122,9 @@ const StripeService = {
   createStripeCheckout,
   confirmStripeCheckout,
   deleteSubscription,
+  getSubscriptionRemainingDays,
+  isInTrialPeriod,
+  isSubscriptionCanceled,
+  getSubscription,
 };
 module.exports = StripeService;

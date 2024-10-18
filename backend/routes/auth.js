@@ -342,4 +342,7 @@ router.post(
 router.post("/users/resetpassword/:token", UserController.handleResetPassword);
 router.delete("/users/:id", UserController.deleteUserById);
 
+router.post("/users/practiseLimit", UserController.updateUserPractiseLimit);
+
+router.get("/users/practiseLimit", UserController.getUserPractiseLimit);
 module.exports = router;

@@ -11,6 +11,7 @@ const {
 } = require("../../utils/methods");
 const EmailService = new EmailServiceClass();
 const loginHistorySchema = require("../models/session");
+const siteConfigModel = require("../models/app");
 const UserController = {
   async register(req, res) {
     const { username, email, password } = req.body;
@@ -50,14 +51,18 @@ const UserController = {
       });
 
       const { password, ...others } = user._doc;
-      const isSubcriptionActive = !!subscription?.isActive;
+      const subscriptionId = subscription?.subscription_id;
       let subscriptionRemainingDays = null;
-      if (isSubcriptionActive) {
-        subscriptionRemainingDays = calculateSubscriptionRemainingDays(
-          subscription.paidAt,
-          subscription.expiresAt
+
+      let stripeSubscription = null;
+      if (subscription.isActive) {
+        stripeSubscription = await StripeService.getSubscription(
+          subscriptionId
         );
+        subscriptionRemainingDays =
+          StripeService.getSubscriptionRemainingDays(stripeSubscription);
       }
+
       user.lastLogin = new Date();
       await user.save();
       await loginHistorySchema.create({
@@ -88,8 +93,9 @@ const UserController = {
       await res.json({
         ...others,
         token,
-        isSubcriptionActive,
+        isSubcriptionActive: !!subscription.isActive,
         subscriptionRemainingDays,
+        subscriptionStatus: stripeSubscription?.status || "",
       });
     } catch (error) {
       console.log(error);
@@ -128,11 +134,16 @@ const UserController = {
       const { password, ...others } = user._doc;
       const isSubcriptionActive = !!subscription?.isActive;
       let subscriptionRemainingDays = null;
-      if (isSubcriptionActive) {
-        subscriptionRemainingDays = calculateSubscriptionRemainingDays(
-          subscription.paidAt,
-          subscription.expiresAt
+
+      let stripeSubscription = null;
+      if (subscription.isActive) {
+        const subscription_id = subscription.subscription_id;
+        console.log("subscid", subscription_id);
+        stripeSubscription = await StripeService.getSubscription(
+          subscription_id
         );
+        subscriptionRemainingDays =
+          StripeService.getSubscriptionRemainingDays(stripeSubscription);
       }
 
       return res.status(200).json({
@@ -141,6 +152,7 @@ const UserController = {
           isSubcriptionActive,
           subscriptionRemainingDays,
           subscription_id: subscription?.subscription_id,
+          subscriptionStatus: stripeSubscription?.status || "",
         },
       });
     } catch (error) {
@@ -421,6 +433,60 @@ const UserController = {
         }
       }
       return res.status(500).json({ message: errorMessage, success: false });
+    }
+  },
+  async updateUserPractiseLimit(req, res) {
+    const { limit } = req.body;
+
+    try {
+      // Fetch the site configuration
+      const config = await siteConfigModel.find();
+
+      // Check if site configuration exists
+      if (!config || config.length === 0) {
+        // If no config exists, create a new one with the provided limit
+        await siteConfigModel.create({
+          sitePractiseLimit: +limit,
+        });
+      } else {
+        // If config exists, store the previous practice limit
+
+        // Update the site practice limit with the new limit
+        await siteConfigModel.findByIdAndUpdate(config[0]._id, {
+          $set: { sitePractiseLimit: +limit },
+        });
+      }
+
+      await User.updateMany({}, { practiceLimit: +limit });
+
+      res
+        .status(200)
+        .json({ message: "Successfully updated users' practice limits" });
+    } catch (error) {
+      // Handle errors
+      res
+        .status(500)
+        .json({ message: error?.message || "Failed to update practice limit" });
+    }
+  },
+  async getUserPractiseLimit(req, res) {
+    const { userId } = req.query;
+    try {
+      const config = await siteConfigModel.find();
+      const limit = config[0]?.sitePractiseLimit || 5;
+      let  remainingLimit = null;
+      if (userId) {
+        const userExist = await User.findById(userId);
+        remainingLimit = userExist.practiceLimit;
+      }
+      res.status(200).json({
+        limit: limit || 5,
+        remainingLimit: remainingLimit,
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: error?.message || "Failed to get practice limit" });
     }
   },
 };

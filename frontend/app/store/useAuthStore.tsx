@@ -13,6 +13,7 @@ interface AuthState {
   subscriptionRemainingDays?: number | null;
   profile_picture?: string | null;
   isSubcriptionActive?: boolean;
+  subscriptionStatus?: "trialing" | "active";
   login: (userId: string, token: string) => void;
   logout: () => void;
 }
@@ -36,6 +37,7 @@ const useAuthStore = create<AuthState>((set) => {
             profile_picture,
             email,
             status,
+            subscriptionStatus,
           } = response.data.message;
           set({
             username,
@@ -44,6 +46,7 @@ const useAuthStore = create<AuthState>((set) => {
             isSubcriptionActive,
             subscriptionRemainingDays,
             profile_picture,
+            subscriptionStatus,
             email,
             status,
           });
@@ -82,6 +85,7 @@ const useAuthStore = create<AuthState>((set) => {
           role: null,
           isSubcriptionActive: false,
           email: null,
+
           subscriptionType: null,
         });
         localStorage.removeItem("userId");

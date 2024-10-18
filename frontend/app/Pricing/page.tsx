@@ -18,8 +18,14 @@ interface Subscription {
 }
 
 const Pricing: React.FC = () => {
-  const { userId, isSubcriptionActive, subscriptionRemainingDays } =
-    useAuthStore();
+  const {
+    userId,
+    isSubcriptionActive,
+    subscriptionRemainingDays,
+    token,
+    subscriptionStatus,
+    login,
+  } = useAuthStore();
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const AxiosIns = axiosInstance("");
   const router = useRouter();
@@ -63,6 +69,7 @@ const Pricing: React.FC = () => {
         `/payments/cancel-subscription/${userId}`
       );
       if (status === 200) {
+        login(userId || "", token || "");
         toast("Subscription canceled successfully", "success");
       }
     } catch (error) {
@@ -137,7 +144,9 @@ const Pricing: React.FC = () => {
                         </span>
                       </div>
                       <div className="text-center font-bold text-xl sm:text-sm">
-                        {subscriptionRemainingDays} days left
+                        {subscriptionStatus === "trialing"
+                          ? `${subscriptionRemainingDays} days free trail left`
+                          : `${subscriptionRemainingDays} days left `}
                       </div>
                     </div>
                   )}

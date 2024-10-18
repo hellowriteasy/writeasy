@@ -29,6 +29,7 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import PdfDocument from "./ReactPdf/ReactPdfDocument";
 import CharacterCount from "@tiptap/extension-character-count";
 import EditorWordCount from "./tiptap/EditorWordCount";
+import { set } from "react-hook-form";
 
 interface SimpleEditorProps {
   triggerGrammarCheck: any;
@@ -74,10 +75,31 @@ export function SimpleEditor({
   const [isSavingPublic, setIsSavingPublic] = useState(false);
   const [wordsLength, setWordsLength] = useState(0);
   const [isSavingPrivate, setIsSavingPrivate] = useState(false);
+  const [practistLimit, setPractiseLimit] = useState({
+    totalLimit: null,
+    remainingLimit: null,
+  });
   const limit = 16000;
   useEffect(() => {
     setStoredFunction(toPDF);
   }, [toPDF, setStoredFunction]);
+
+  const fetchUsersPractiseLimit = async () => {
+    try {
+      const res = await axiosIns.get(
+        `/auth/users/practiseLimit?userId=${userId}`
+      );
+      if (res.status === 200) {
+        setPractiseLimit({
+          remainingLimit: res.data.remainingLimit,
+          totalLimit: res.data.limit,
+        });
+      }
+    } catch (error) {}
+  };
+  useEffect(() => {
+    fetchUsersPractiseLimit();
+  }, []);
 
   const axiosIns = axiosInstance(token || "");
 
@@ -292,7 +314,6 @@ export function SimpleEditor({
           // Handle final states and actions after streaming is complete
           console.log("Final corrected text: ", correctedText);
           console.log("Story ID: ", storyId); // Now you have the storyId
-
           setTriggerGrammarCheck(false);
           setWritingMode(false);
 
@@ -301,6 +322,7 @@ export function SimpleEditor({
             setStoryId(storyId);
             console.log("Story ID:", storyId);
           }
+          await fetchUsersPractiseLimit();
         } else {
           const error = await response.json();
           setTriggerGrammarCheck(false);
@@ -349,7 +371,15 @@ export function SimpleEditor({
         <div className="editor bg-white p-4 rounded-3xl relative shadow-md w-full">
           <div className="menu flex gap-5 w-[100%] h-12 left-0 top-0 flex-col border border-slate-300 bg-slate-100 rounded-t-3xl absolute">
             <div className="flex h-16  gap-3 p-3 ps-6">
-              {isLoading && <div className="loader mr-10 "></div>}
+              {isLoading && <div className="loader  "></div>}
+              <div className="ml-auto">
+                <p>
+                  {practistLimit.remainingLimit !== null
+                    ? `Practise Limit : ${practistLimit.remainingLimit}/
+                   ${practistLimit.totalLimit}`
+                    : ""}
+                </p>
+              </div>
               <button
                 disabled={isLoading}
                 className={classNames(

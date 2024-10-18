@@ -24,6 +24,7 @@ const pino = require("pino");
 const { withErrorResponse } = require("./src/utils/errors/with-error-response");
 const { InternalServerError } = require("./src/utils/errors/errors");
 const User = require("./src/models/user");
+const siteConfigModel = require("./src/models/app");
 const logfilePath = "/var/log/writeasy-logs.log";
 const logStream = createWriteStream(logfilePath, { flags: "a" });
 const logger = pino({}, logStream);
@@ -45,9 +46,17 @@ app.use((req, res, next) => {
 });
 async function scheduleJobMidnight() {
   try {
-    // Reset practiceLimit to 0 for all users
-    await User.updateMany({}, { practiceLimit: 5 });
-    console.log("Successfully reset practiceLimit for all users.");
+    const siteConfig = await siteConfigModel.find();
+    if (siteConfig.length > 0 && siteConfig[0]) {
+      await User.updateMany(
+        {},
+        { practiceLimit: siteConfig[0].sitePractiseLimit }
+      );
+      console.log(
+        "Successfully reset practiceLimit for all users to ",
+        siteConfig[0].sitePractiseLimit
+      );
+    }
   } catch (error) {
     console.error("Error resetting practiceLimit:", error);
   }
