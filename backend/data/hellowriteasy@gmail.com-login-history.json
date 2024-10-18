@@ -366,6 +366,26 @@
             "deviceLanguage": "en-US,en;q=0.9",
             "timestamp": "2024-10-18T08:04:08.660Z",
             "__v": 0
+        },
+        {
+            "location": {
+                "city": "Unknown",
+                "region": "Unknown",
+                "country": "Unknown",
+                "lat": "Unknown",
+                "lon": "Unknown"
+            },
+            "os": {
+                "name": "Mac OS",
+                "version": "10.15.7"
+            },
+            "_id": "6712881c38a50b9f44ec08c8",
+            "userId": "668e948dda8aa5ae0b523383",
+            "ip": "::1",
+            "timezone": "Unknown",
+            "deviceLanguage": "en-US,en;q=0.9",
+            "timestamp": "2024-10-18T16:09:00.212Z",
+            "__v": 0
         }
     ]
 }

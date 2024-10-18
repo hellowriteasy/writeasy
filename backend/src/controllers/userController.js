@@ -55,7 +55,7 @@ const UserController = {
       let subscriptionRemainingDays = null;
 
       let stripeSubscription = null;
-      if (subscription.isActive) {
+      if (subscription.isActive && subscriptionId) {
         stripeSubscription = await StripeService.getSubscription(
           subscriptionId
         );
@@ -474,7 +474,7 @@ const UserController = {
     try {
       const config = await siteConfigModel.find();
       const limit = config[0]?.sitePractiseLimit || 5;
-      let  remainingLimit = null;
+      let remainingLimit = null;
       if (userId) {
         const userExist = await User.findById(userId);
         remainingLimit = userExist.practiceLimit;
