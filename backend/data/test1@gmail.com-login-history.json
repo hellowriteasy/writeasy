@@ -219,6 +219,186 @@
             "deviceLanguage": "en-US,en;q=0.9",
             "timestamp": "2024-10-18T16:07:40.695Z",
             "__v": 0
+        },
+        {
+            "location": {
+                "city": "Kathmandu",
+                "region": "Bagmati Province",
+                "country": "NP",
+                "lat": "27.7017",
+                "lon": "85.3206"
+            },
+            "os": {
+                "name": "Mac OS",
+                "version": "10.15.7"
+            },
+            "_id": "67128a0a2736525be9420c3a",
+            "userId": "66a65ce7f3bd6e229696482f",
+            "ip": "38.255.140.101",
+            "timezone": "Asia/Kathmandu",
+            "deviceLanguage": "en-US,en;q=0.9",
+            "timestamp": "2024-10-18T16:17:14.560Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "London",
+                "region": "England",
+                "country": "GB",
+                "lat": "51.5085",
+                "lon": "-0.1257"
+            },
+            "os": {
+                "name": "Linux",
+                "version": "x86_64"
+            },
+            "_id": "671298fa2736525be9421698",
+            "userId": "66a65ce7f3bd6e229696482f",
+            "ip": "82.132.229.72",
+            "timezone": "Europe/London",
+            "deviceLanguage": "zh-CN,zh;q=0.9,zh-TW;q=0.8",
+            "timestamp": "2024-10-18T17:20:58.658Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "London",
+                "region": "England",
+                "country": "GB",
+                "lat": "51.5085",
+                "lon": "-0.1257"
+            },
+            "os": {
+                "name": "Linux",
+                "version": "x86_64"
+            },
+            "_id": "67129b2b2736525be9421b5e",
+            "userId": "66a65ce7f3bd6e229696482f",
+            "ip": "82.132.229.72",
+            "timezone": "Europe/London",
+            "deviceLanguage": "zh-CN,zh;q=0.9,zh-TW;q=0.8",
+            "timestamp": "2024-10-18T17:30:19.107Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "London",
+                "region": "England",
+                "country": "GB",
+                "lat": "51.5085",
+                "lon": "-0.1257"
+            },
+            "os": {
+                "name": "Linux",
+                "version": "x86_64"
+            },
+            "_id": "67129bf02736525be9421ba6",
+            "userId": "66a65ce7f3bd6e229696482f",
+            "ip": "82.132.229.72",
+            "timezone": "Europe/London",
+            "deviceLanguage": "zh-CN,zh;q=0.9,zh-TW;q=0.8",
+            "timestamp": "2024-10-18T17:33:36.783Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "Southend-on-Sea",
+                "region": "England",
+                "country": "GB",
+                "lat": "51.5378",
+                "lon": "0.7143"
+            },
+            "os": {
+                "name": "Android",
+                "version": "11"
+            },
+            "_id": "67129cb22736525be9421bff",
+            "userId": "66a65ce7f3bd6e229696482f",
+            "ip": "90.242.8.71",
+            "timezone": "Europe/London",
+            "deviceLanguage": "zh-CN,zh;q=0.9,zh-TW;q=0.8",
+            "timestamp": "2024-10-18T17:36:50.979Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "Southend-on-Sea",
+                "region": "England",
+                "country": "GB",
+                "lat": "51.5378",
+                "lon": "0.7143"
+            },
+            "os": {
+                "name": "Android",
+                "version": "11"
+            },
+            "_id": "67129cd32736525be9421c14",
+            "userId": "66a65ce7f3bd6e229696482f",
+            "ip": "90.242.8.71",
+            "timezone": "Europe/London",
+            "deviceLanguage": "zh-CN,zh;q=0.9,zh-TW;q=0.8",
+            "timestamp": "2024-10-18T17:37:23.809Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "London",
+                "region": "England",
+                "country": "GB",
+                "lat": "51.5085",
+                "lon": "-0.1257"
+            },
+            "os": {
+                "name": "Linux",
+                "version": "x86_64"
+            },
+            "_id": "67129e6b2736525be9421ca3",
+            "userId": "66a65ce7f3bd6e229696482f",
+            "ip": "82.132.220.111",
+            "timezone": "Europe/London",
+            "deviceLanguage": "zh-CN,zh;q=0.9,zh-TW;q=0.8",
+            "timestamp": "2024-10-18T17:44:11.484Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "Unknown",
+                "region": "Unknown",
+                "country": "Unknown",
+                "lat": "Unknown",
+                "lon": "Unknown"
+            },
+            "os": {
+                "name": "Mac OS",
+                "version": "10.15.7"
+            },
+            "_id": "67134783b3dac2986640cdb5",
+            "userId": "66a65ce7f3bd6e229696482f",
+            "ip": "::1",
+            "timezone": "Unknown",
+            "deviceLanguage": "en-US,en;q=0.9",
+            "timestamp": "2024-10-19T05:45:39.460Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "Unknown",
+                "region": "Unknown",
+                "country": "Unknown",
+                "lat": "Unknown",
+                "lon": "Unknown"
+            },
+            "os": {
+                "name": "Mac OS",
+                "version": "10.15.7"
+            },
+            "_id": "671348239168862f907f4b8b",
+            "userId": "66a65ce7f3bd6e229696482f",
+            "ip": "::1",
+            "timezone": "Unknown",
+            "deviceLanguage": "en-US,en;q=0.9",
+            "timestamp": "2024-10-19T05:48:19.291Z",
+            "__v": 0
         }
     ]
 }

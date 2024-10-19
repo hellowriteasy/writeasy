@@ -136,7 +136,7 @@ const UserController = {
       let subscriptionRemainingDays = null;
 
       let stripeSubscription = null;
-      if (subscription.isActive) {
+      if (subscription.isActive && subscription.subscription_id) {
         const subscription_id = subscription.subscription_id;
         console.log("subscid", subscription_id);
         stripeSubscription = await StripeService.getSubscription(
