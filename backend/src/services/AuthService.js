@@ -69,10 +69,12 @@ class AuthService {
     const payload = ticket.getPayload();
 
     let user = await User.findOne({ email: payload.email });
+    console.log("user", payload);
     if (!user) {
       user = new User({
         email: payload.email,
         googleId: payload.sub,
+        user: payload.name || payload.email.split("@")[0],
       });
       await user.save();
     } else {
