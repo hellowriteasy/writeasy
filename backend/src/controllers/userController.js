@@ -55,7 +55,7 @@ const UserController = {
       let subscriptionRemainingDays = null;
 
       let stripeSubscription = null;
-      if (subscription.isActive && subscriptionId) {
+      if (subscription?.isActive && subscriptionId) {
         stripeSubscription = await StripeService.getSubscription(
           subscriptionId
         );
@@ -93,7 +93,7 @@ const UserController = {
       await res.json({
         ...others,
         token,
-        isSubcriptionActive: !!subscription.isActive,
+        isSubcriptionActive: !!subscription?.isActive,
         subscriptionRemainingDays,
         subscriptionStatus: stripeSubscription?.status || "",
       });
@@ -136,7 +136,7 @@ const UserController = {
       let subscriptionRemainingDays = null;
 
       let stripeSubscription = null;
-      if (subscription.isActive && subscription.subscription_id) {
+      if (subscription?.isActive && subscription?.subscription_id) {
         const subscription_id = subscription.subscription_id;
         console.log("subscid", subscription_id);
         stripeSubscription = await StripeService.getSubscription(
