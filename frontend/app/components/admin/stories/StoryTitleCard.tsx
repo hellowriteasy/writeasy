@@ -85,7 +85,7 @@ const Card: React.FC<CardProps> = ({
           </div>
         </div>
          {title ? <div className="text-gray-600">title: {title}</div>:null } 
-        <div className="text-gray-600">User: {user.username}</div>
+        <div className="text-gray-600">User: {user?.username}</div>
         <div className="text-gray-600">
           Submission Date: {new Date(submissionDateTime).toLocaleString()}
         </div>
@@ -125,7 +125,7 @@ const Card: React.FC<CardProps> = ({
                           {title}
                         </Dialog.Title>
                         <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                          {user.username}
+                          {user?.username}
                         </Dialog.Title>
                         <div className="mt-2">
                           {/* <div className="mb-4">
