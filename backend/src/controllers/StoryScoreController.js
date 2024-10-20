@@ -5,7 +5,7 @@ const GptService = require("../services/gptService");
 const gptService = new GptService(process.env.GPT_API_KEY);
 
 async function practiseStory(req, res) {
-  const { content, taskType, userId, title, prompt } = req.body;
+  const { content, taskType, userId, timezone, title, prompt } = req.body;
   const wordCount = content.split(" ").length; // Calculate word count
   const newStory = new Story({
     content: content,
@@ -14,6 +14,7 @@ async function practiseStory(req, res) {
     storyType: "practice",
     prompt: prompt,
   });
+
   const userExist = await User.findById(userId);
   if (!userExist) {
     throw new Error("User not found");
@@ -61,6 +62,7 @@ async function practiseStory(req, res) {
           // Call res.end() to indicate the stream has ended
           res.end();
           userExist.practiceLimit = userExist.practiceLimit - 1;
+          userExist.timezone = timezone;
           await userExist.save();
           console.log(newStory._id);
         }

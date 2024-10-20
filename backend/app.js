@@ -2,7 +2,6 @@ const express = require("express");
 const dotenv = require("dotenv");
 const { connectDB, initializeDatabase } = require("./config/db");
 const cors = require("cors");
-const errorHandlingMiddleware = require("./middleware/errorHandlingMiddleware");
 const bodyParser = require("body-parser");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swaggerConfig");
@@ -17,7 +16,8 @@ const collaborativeStoryRoutes = require("./routes/collaborativeStoryRoutes");
 const faqRoutes = require("./routes/faq");
 const paymentRoutes = require("./routes/paymentRoute");
 const categoriesRoute = require("./routes/category");
-const scheduleJob = require("./config/cron");
+
+const { updateUserPracticeLimits, scheduleJob } = require("./config/cron");
 const morgan = require("morgan");
 const StripeService = require("./src/services/stripeService");
 const pino = require("pino");
@@ -61,10 +61,14 @@ async function scheduleJobMidnight() {
     console.error("Error resetting practiceLimit:", error);
   }
 }
+
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("dev"));
-cron.schedule("0 0 * * *", () => scheduleJobMidnight());
+cron.schedule("*/15 * * * * *", async () => {
+  console.log("hello");
+  await updateUserPracticeLimits();
+});
 cron.schedule("*/10 * * * * *", () => scheduleJob());
 
 app.get("/test", (req, res) => {

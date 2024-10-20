@@ -7,14 +7,13 @@ const gptService = new GptService(process.env.GPT_API_KEY); // Initialize GPT se
 const fs = require("fs");
 const emailServiceClass = require("../services/emailService");
 const path = require("path");
-const moment = require("moment");
 const nodemailer = require("nodemailer");
 const cacheService = require("../services/cacheService");
 const cacheTypes = require("../utils/types/cacheType");
 
 const createStory = async (req, res) => {
   try {
-    const { content, contest, prompt } = req.body;
+    const { content, contest, prompt, storyType, user } = req.body;
     const contestExist = await Contest.findById(contest);
     if (!contestExist) {
       throw new Error("Contest not found");
@@ -22,11 +21,19 @@ const createStory = async (req, res) => {
     if (contestExist.submissionDeadline.getTime() < new Date().getTime()) {
       throw new Error("Contest submission deadline has been reached");
     }
-
     const promptExist = await Prompt.findById(prompt);
-
     if (!promptExist) {
       throw new Error("Prompt not found");
+    }
+    if (storyType === "contest") {
+      const storyExist = await Story.findOne({
+        prompt,
+        user,
+        contest,
+      });
+      if (storyExist) {
+        throw new Error("Story already exists");
+      }
     }
 
     const wordCount = content.split(" ").length;
@@ -35,39 +42,11 @@ const createStory = async (req, res) => {
       message: "Story has been successfully saved.",
       story: story._id,
     });
-
-    // Process the story for scoring in the background
-    // processStoryForScoring(
-    //   story._id,
-    //   story.content,
-    //   wordCount,
-    //   promptExist.title
-    // ); // Ensuring 'content' exists in your story model
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message||"Failed " });
   }
 };
-
-// Function to handle scoring
-async function processStoryForScoring(storyId, content, wordCount, topic) {
-  try {
-    const score = await gptService.generateScore(content, "", wordCount, topic); // Get score from GPT API
-    const correctionSummary = await gptService.generateCorrectionSummary(
-      content,
-      score.corrections,
-      wordCount
-    );
-    await StoryService.updateStory(storyId, {
-      score: score.score,
-      corrections: score.corrections,
-      correctionSummary: correctionSummary,
-    }); // Update the story with the score
-    console.log(`Score updated for story ${storyId}.`);
-  } catch (error) {
-    console.error(`Failed to score story ${storyId}:`, error);
-  }
-}
 
 const getStories = async (req, res) => {
   const storyType = req.query.storyType;

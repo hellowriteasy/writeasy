@@ -18,21 +18,20 @@ const Page = ({ params }: { params: { id: string } }) => {
   const AxiosIns = axiosInstance("");
   const [currentPage, setCurrentPage] = useState(1);
 
+  const fetchStories = async () => {
+    try {
+      const response = await AxiosIns.get(
+        `/stories/contest/prompt?contest_id=${params.id}&sortKey=score&page=${currentPage}`
+      );
+      setStories(response.data?.data);
+      setPageDetails(response.data.pageData);
+    } catch (error) {
+      console.error("Error fetching stories:", error);
+    }
+  };
   useEffect(() => {
-    const fetchStories = async () => {
-      try {
-        const response = await AxiosIns.get(
-          `/stories/contest/prompt?contest_id=${params.id}&sortKey=score&page=${currentPage}`
-        );
-        setStories(response.data?.data);
-        setPageDetails(response.data.pageData);
-      } catch (error) {
-        console.error("Error fetching stories:", error);
-      }
-    };
-
     fetchStories();
-  }, [params.id,currentPage]);
+  }, [params.id, currentPage]);
 
   const handlePageClick = (event: { selected: number }) => {
     setCurrentPage(event.selected + 1);
@@ -46,7 +45,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             <StoryNav />
             <div className="bg-white shadow-sm p-4 rounded-lg border w-full border-gray-200 space-y-4">
               {stories.map((story) => (
-                <Card key={story._id} contest={story} />
+                <Card key={story._id} story={story} refetchStory={fetchStories} />
               ))}
               {pageDetails && pageDetails.total > 5 && (
                 <div className="w-full  ">

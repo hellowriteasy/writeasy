@@ -6,6 +6,8 @@ const stripe = require("./stripe");
 const gptServiceClass = require("../src//services/gptService");
 const User = require("../src/models/user");
 const gptService = new gptServiceClass(process.env.GPT_API_KEY);
+const moment = require("moment-timezone");
+const siteConfigModel = require("../src/models/app");
 async function scheduleJob() {
   await closeContestAndChooseTopWritingAfterDeadline();
   await closeSubscriptionWhenDeadline();
@@ -173,5 +175,46 @@ const closeSubscriptionWhenDeadline = async () => {
   }
 };
 
-module.exports = { getTopPercentage };
-module.exports = scheduleJob;
+// Fetch site practise limit from config
+async function getSitePractiseLimit() {
+  const config = await siteConfigModel.findOne();
+  return config ? config.sitePractiseLimit : 5; // Default to 5 if no config is found
+}
+
+// Function to update user's practice limit
+async function updateUserPracticeLimits() {
+  console.log("Updating practice limits...");
+
+  // Get current sitePractiseLimit
+  const sitePractiseLimit = await getSitePractiseLimit();
+  const users = await User.find({
+    practiceLimit: { $ne: sitePractiseLimit },
+  });
+
+  console.log("debug 1 users", users.length);
+  if (!users || users.length === 0) {
+    console.log("No users found with timezones.");
+    return;
+  }
+  console.log("debug 2");
+
+  for (const user of users) {
+    console.log("debug 3");
+    const currentUserTimezone = user.timezone || "UTC";
+    const currentTimeInUserTimezone = moment.tz(currentUserTimezone);
+    console.log("debug 4");
+    // Check if it's midnight for the user
+    if (currentTimeInUserTimezone.format("HH:mm") === "00:00") {
+      console.log("debug 5");
+      // Reset practiceLimit to sitePractiseLimit
+      user.practiceLimit = sitePractiseLimit;
+      await user.save();
+      console.log(`Reset practice limit for user: ${user.username}`);
+    } else {
+      console.log("debug 6");
+      console.log(`No need to reset practice limit for user: ${user.username}`);
+    }
+  }
+}
+
+module.exports = { getTopPercentage, updateUserPracticeLimits, scheduleJob };

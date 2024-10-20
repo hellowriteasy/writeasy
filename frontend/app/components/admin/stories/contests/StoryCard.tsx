@@ -1,87 +1,26 @@
 import { useState, Fragment, useRef, useEffect } from "react";
 import { FaEdit } from "react-icons/fa";
 import { Dialog, Transition } from "@headlessui/react";
-import { diffChars } from "diff";
 import { axiosInstance } from "@/app/utils/config/axios";
 import { TStory } from "@/app/utils/types";
 import { useCustomToast } from "@/app/utils/hooks/useToast";
+import { FaTrash } from "react-icons/fa6";
 interface CardProps {
-  contest: TStory;
+  story: TStory;
+  refetchStory: () => void;
 }
 
-const Card: React.FC<CardProps> = ({ contest }) => {
+const Card: React.FC<CardProps> = ({ story, refetchStory }) => {
   const [open, setOpen] = useState(false);
-  const [Edit, setEdit] = useState(true);
-  const [showDiff, setShowDiff] = useState(false);
-  const [feedback, setFeedback] = useState(contest.correctionSummary);
-  const [storyDetail, setStoryDetail] = useState(contest.content);
+  const [storyDetail, setStoryDetail] = useState(story.content);
   const [isTopStory, setIsTopStory] = useState(false);
-  const [corrections, setCorrections] = useState(contest.corrections);
-  const [grade, setGrade] = useState(contest.score); // Renamed to grade for clarity
   const cancelButtonRef = useRef(null);
   const toast = useCustomToast();
   const AxiosIns = axiosInstance("");
   useEffect(() => {
-    setFeedback(contest.correctionSummary);
-    setStoryDetail(contest.content);
-    setCorrections(contest.corrections);
-    setGrade(contest.score);
-    setIsTopStory(!!contest.isTopWriting);
-  }, [contest]);
-
-  const handleUpdate = async () => {
-    try {
-      const response = await AxiosIns.put(
-        `http://localhost:8000/api/stories/${contest._id}`,
-        {
-          correctionSummary: feedback,
-          content: storyDetail,
-          score: grade,
-        }
-      );
-      toast("contest updated successfully", "success");
-      setOpen(false);
-    } catch (error) {
-      console.error("There was an error updating the story!", error);
-      toast("failed to update contest", "error");
-    }
-  };
-
-  const compareSentences = (description = "", corrections = "") => {
-    if (!description) {
-      return (
-        <span style={{ color: "red", backgroundColor: "lightcoral" }}>
-          No original description provided.
-        </span>
-      );
-    }
-
-    if (!corrections) {
-      return (
-        <span style={{ color: "green", backgroundColor: "lightgreen" }}>
-          No corrections provided.
-        </span>
-      );
-    }
-
-    const diff = diffChars(description, corrections);
-    return diff.map((part, index) => {
-      const style = {
-        backgroundColor: part.added
-          ? "lightgreen"
-          : part.removed
-          ? "lightcoral"
-          : "transparent",
-        textDecoration: part.removed ? "line-through" : "none",
-        color: part.added ? "green" : part.removed ? "red" : "black",
-      };
-      return (
-        <span key={index} style={style}>
-          {part.value}
-        </span>
-      );
-    });
-  };
+    setStoryDetail(story.content);
+    setIsTopStory(!!story.isTopWriting);
+  }, [story]);
 
   const handleChangeTopStoryCheckBox = async () => {
     if (isTopStory) {
@@ -95,7 +34,7 @@ const Card: React.FC<CardProps> = ({ contest }) => {
 
   const handleMarkAsTopStory = async () => {
     try {
-      const res = await AxiosIns.post(`/stories/mark-top-story/${contest._id}`);
+      const res = await AxiosIns.post(`/stories/mark-top-story/${story._id}`);
       if (res.status === 200) {
         setIsTopStory(true);
         toast("Story marked as top story", "success");
@@ -108,9 +47,7 @@ const Card: React.FC<CardProps> = ({ contest }) => {
   };
   const handleUnMarkFromTopStory = async () => {
     try {
-      const res = await AxiosIns.post(
-        `/stories/remove-top-story/${contest._id}`
-      );
+      const res = await AxiosIns.post(`/stories/remove-top-story/${story._id}`);
       if (res.status === 200) {
         setIsTopStory(false);
         toast("Story removed from top story", "success");
@@ -120,37 +57,48 @@ const Card: React.FC<CardProps> = ({ contest }) => {
       toast("Failed to mark as top story", "error");
     }
   };
+  const handleDeleteStory = async () => {
+    try {
+      const res = await AxiosIns.delete(`/stories/${story._id}`);
+      if (res.status === 200) {
+        refetchStory();
+        toast("Story deleted successfully", "success");
+      }
+    } catch (error) {
+      toast("Failed to delete story", "error");
+    }
+  };
   return (
     <>
       <div className="bg-white shadow-md rounded-lg w-full border z-50 border-gray-300 p-4 mb-4">
         <div className="flex justify-between items-center mb-2">
           <div className="text-xl font-semibold">
-            {contest.contest?.contestTheme}/{contest.prompt.title}
-          </div>
-          <div className="flex space-x-2 gap-4">
-            <button className="text-black" onClick={() => setOpen(true)}>
-              <FaEdit size={20} />
-            </button>
+            {story.contest?.contestTheme}/{story.prompt.title}
           </div>
         </div>
-        {contest.isTopWriting ? (
+        {story.isTopWriting ? (
           <>
             <div className="text-gray-700">⭐️ Top story</div>
 
-            <div className="text-gray-700">
-              Score : {contest.score || "N/A"}
-            </div>
+            <div className="text-gray-700">Score : {story.score || "N/A"}</div>
           </>
         ) : null}
 
-        <div className="text-gray-700">Prompt : {contest.prompt.title}</div>
-        <div className="text-gray-700">User: {contest.user.username}</div>
+        <div className="text-gray-700">Prompt : {story.prompt.title}</div>
+        <div className="text-gray-700">User: {story.user.username}</div>
 
         {/* <div className="text-gray-700">Score: {contest.score}</div> */}
 
         <div className="text-gray-700">
-          Submission Date:{" "}
-          {new Date(contest.submissionDateTime).toLocaleString()}
+          Submission Date: {new Date(story.submissionDateTime).toLocaleString()}
+        </div>
+        <div className="flex space-x gap-4 my-2">
+          <button className="text-black" onClick={() => setOpen(true)}>
+            <FaEdit size={20} />
+          </button>
+          <button className="text-red-500" onClick={handleDeleteStory}>
+            <FaTrash size={20} />
+          </button>
         </div>
       </div>
 
@@ -192,7 +140,7 @@ const Card: React.FC<CardProps> = ({ contest }) => {
                           as="h3"
                           className="text-base font-semibold leading-6 text-gray-900"
                         >
-                          {contest.title}
+                          {story.title}
                         </Dialog.Title>
                         <Dialog.Title
                           as="h3"

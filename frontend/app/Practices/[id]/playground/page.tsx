@@ -10,6 +10,7 @@ import { axiosInstance } from "@/app/utils/config/axios";
 import { TPrompt, TTaskType } from "@/app/utils/types";
 import Loading from "@/app/loading";
 import ConfirmModal from "@/app/components/Modal/ConfirmModal";
+import WarningModal from "@/app/components/WarningModal";
 
 interface PromptPageProps {
   params: {
@@ -80,10 +81,14 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
           <h1 className="text-3xl sm:text-sm text-center font-bold font-unkempt">
             {prompt.title}
           </h1>
-          <img
-            src={prompt?.image || ""}
-            className="w-[400px] sm:w-[90%] rounded-lg"
-          />
+          {prompt.image ? (
+            <img
+              src={prompt?.image || ""}
+              className="w-[400px] sm:w-[90%] rounded-lg"
+            />
+          ) : (
+            ""
+          )}
         </div>
         <div className="flex w-[100%] relative mt-0 ">
           <div className="absolute vsm-hide -top-40 mt-3 -left-48">
@@ -160,12 +165,12 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
           />
         </div>
       </div>
-
-      {status === "suspended" ? (
-        <Subscription isAccountSuspended={true} />
-      ) : !isSubcriptionActive && role !== "admin" ? (
-        <Subscription />
-      ) : null}
+      <WarningModal
+        isAccountSuspended={status === "suspended"}
+        isSubcriptionActive={isSubcriptionActive}
+        role={role || ""}
+        status={status || ""}
+      />
     </div>
   );
 };

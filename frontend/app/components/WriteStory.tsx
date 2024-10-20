@@ -75,6 +75,8 @@ export function SimpleEditor({
   const [isSavingPublic, setIsSavingPublic] = useState(false);
   const [wordsLength, setWordsLength] = useState(0);
   const [isSavingPrivate, setIsSavingPrivate] = useState(false);
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
   const [practistLimit, setPractiseLimit] = useState({
     totalLimit: null,
     remainingLimit: null,
@@ -248,6 +250,7 @@ export function SimpleEditor({
       if (hasSaved) {
         await axiosIns.post("/stories/practise/save", {
           ...payload,
+          timezone,
           storyId,
           isPublic: !!savePublic,
         });
