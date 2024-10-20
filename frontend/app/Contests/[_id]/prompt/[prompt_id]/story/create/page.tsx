@@ -105,9 +105,9 @@ const CreateContest = () => {
         toast.success("Story saved successfully");
         router.push(`/profile/contest?search=${promptId}`);
       }
-    } catch (error) {
+    } catch (error:any) {
       setIsLoading(false);
-      toast.error("Story failed to save.");
+      toast.error(error?.response?.data?.message || "Story failed to save.");
     }
   }
 

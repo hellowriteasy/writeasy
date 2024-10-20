@@ -21,7 +21,7 @@ const Page = ({ params }: { params: { id: string } }) => {
   const fetchStories = async () => {
     try {
       const response = await AxiosIns.get(
-        `/stories/contest/prompt?contest_id=${params.id}&sortKey=score&page=${currentPage}`
+        `/stories/contest/prompt?contest_id=${params.id}&sortKey=score&page=${currentPage}&perPage=100`
       );
       setStories(response.data?.data);
       setPageDetails(response.data.pageData);
@@ -45,9 +45,13 @@ const Page = ({ params }: { params: { id: string } }) => {
             <StoryNav />
             <div className="bg-white shadow-sm p-4 rounded-lg border w-full border-gray-200 space-y-4">
               {stories.map((story) => (
-                <Card key={story._id} story={story} refetchStory={fetchStories} />
+                <Card
+                  key={story._id}
+                  story={story}
+                  refetchStory={fetchStories}
+                />
               ))}
-              {pageDetails && pageDetails.total > 5 && (
+              {pageDetails && pageDetails.total > 100 && (
                 <div className="w-full  ">
                   <ReactPaginate
                     previousLabel={
