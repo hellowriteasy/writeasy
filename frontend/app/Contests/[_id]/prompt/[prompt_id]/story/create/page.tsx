@@ -206,7 +206,7 @@ const CreateContest = () => {
                   onClick={handleSubmit}
                   className="text-white bg-black border text-2xl font-bold font-unkempt rounded-full w-[50vw] h-14"
                 >
-                  Submit Story
+                 {isLoading ? "Submitting..." :" Submit Story"}
                 </button>
               </div>
             </form>
