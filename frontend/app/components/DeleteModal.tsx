@@ -1,18 +1,29 @@
-import { Fragment, useRef } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
+import { Fragment, useRef } from "react";
+import { Dialog, Transition } from "@headlessui/react";
 
 interface DeleteModalProps {
+  title?: string;
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   onConfirm: () => void;
 }
 
-const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, setIsOpen, onConfirm }) => {
+const DeleteModal: React.FC<DeleteModalProps> = ({
+  isOpen,
+  setIsOpen,
+  onConfirm,
+  title,
+}) => {
   const cancelButtonRef = useRef(null);
 
   return (
     <Transition.Root show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={setIsOpen}>
+      <Dialog
+        as="div"
+        className="relative z-10"
+        initialFocus={cancelButtonRef}
+        onClose={setIsOpen}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -40,12 +51,16 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, setIsOpen, onConfirm 
                 <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                   <div className="sm:flex sm:items-start">
                     <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                      <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
+                      <Dialog.Title
+                        as="h3"
+                        className="text-base font-semibold leading-6 text-gray-900"
+                      >
                         Delete Prompt
                       </Dialog.Title>
                       <div className="mt-2">
                         <p className="text-sm text-gray-500">
-                          Are you sure you want to delete this prompt? This action cannot be undone.
+                          {title ||
+                            "  Are you sure you want to delete this prompt? This action cannot be undone."}
                         </p>
                       </div>
                     </div>

@@ -332,6 +332,8 @@ const savePractiseStoryToProfile = async (req, res) => {
   } = req.body;
 
   try {
+    console.log("storyid", storyId);
+    
     if (storyId) {
       await Story.findByIdAndUpdate(storyId, {
         hasSaved: true,

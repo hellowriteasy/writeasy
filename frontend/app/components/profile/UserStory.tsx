@@ -10,6 +10,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { diff_match_patch } from "diff-match-patch";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import PdfDocument from "../ReactPdf/ReactPdfDocument";
+import moment from "moment";
 
 interface CardProps {
   id: string;
@@ -22,6 +23,7 @@ interface CardProps {
   contestTitle: string;
   contributors: TUser[];
   isPublic?: boolean;
+  createdAt: string;
   onsuccess: () => void;
 }
 
@@ -36,6 +38,7 @@ const Card: React.FC<CardProps> = ({
   prompt_id,
   contributors,
   isPublic,
+  createdAt,
   onsuccess,
 }) => {
   const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
@@ -127,6 +130,9 @@ const Card: React.FC<CardProps> = ({
         <h1 className="text-2xl sm:text-sm font-bold mb-4 font-unkempt">
           {contestTitle ? `${contestTitle} > ` : ""} {promptTitle}
         </h1>
+        <p className="py-4 font-comic">
+          Last modified : {moment(createdAt).format("lll")}
+        </p>
         <div>
           <h2 className="py-2 font-bold font-unkempt">{title}</h2>
           <div

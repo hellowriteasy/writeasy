@@ -80,6 +80,7 @@ const Page: React.FC = () => {
             <UserStory
               key={story._id}
               title={story.title}
+              createdAt={story.createdAt}
               description={story.content}
               id={story._id}
               corrections={story.corrections}

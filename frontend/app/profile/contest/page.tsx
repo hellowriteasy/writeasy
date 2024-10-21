@@ -74,6 +74,7 @@ const ContestPage: React.FC = () => {
                 <UserStory
                   key={index}
                   title={story.title}
+                  createdAt={story.createdAt}
                   description={story.content}
                   id={story._id}
                   corrections={story.corrections}

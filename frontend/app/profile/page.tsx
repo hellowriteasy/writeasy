@@ -84,6 +84,7 @@ const Page: React.FC = () => {
           userStories.map((story) => (
             <UserStory
               key={story._id}
+              createdAt={story.createdAt}
               title={story.title}
               contestTitle={story.contest?.contestTheme || ""}
               promptTitle={story.prompt?.title}

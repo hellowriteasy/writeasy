@@ -5,6 +5,7 @@ import { axiosInstance } from "@/app/utils/config/axios";
 import { TStory } from "@/app/utils/types";
 import { useCustomToast } from "@/app/utils/hooks/useToast";
 import { FaTrash } from "react-icons/fa6";
+import DeleteModal from "@/app/components/DeleteModal";
 interface CardProps {
   story: TStory;
   refetchStory: () => void;
@@ -16,6 +17,8 @@ const Card: React.FC<CardProps> = ({ story, refetchStory }) => {
   const [isTopStory, setIsTopStory] = useState(false);
   const cancelButtonRef = useRef(null);
   const toast = useCustomToast();
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
   const AxiosIns = axiosInstance("");
   useEffect(() => {
     setStoryDetail(story.content);
@@ -96,12 +99,20 @@ const Card: React.FC<CardProps> = ({ story, refetchStory }) => {
           <button className="text-black" onClick={() => setOpen(true)}>
             <FaEdit size={20} />
           </button>
-          <button className="text-red-500" onClick={handleDeleteStory}>
+          <button
+            className="text-red-500"
+            onClick={() => setOpenDeleteModal(true)}
+          >
             <FaTrash size={20} />
           </button>
         </div>
       </div>
-
+      <DeleteModal
+        title="Are you sure you want to delete this story? This action can't be undone."
+        isOpen={openDeleteModal}
+        setIsOpen={setOpenDeleteModal}
+        onConfirm={handleDeleteStory}
+      />
       <Transition.Root show={open} as={Fragment}>
         <Dialog
           as="div"

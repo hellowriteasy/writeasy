@@ -29,6 +29,7 @@ export type TStory = {
   position?: number;
   isTopWriting?: boolean;
   isPublic?: boolean;
+  createdAt: string;
 };
 
 export type TPrompt = {
