@@ -11,6 +11,7 @@ import { TPrompt, TTaskType } from "@/app/utils/types";
 import Loading from "@/app/loading";
 import ConfirmModal from "@/app/components/Modal/ConfirmModal";
 import WarningModal from "@/app/components/WarningModal";
+import { useSearchParams } from "next/navigation";
 
 interface PromptPageProps {
   params: {
@@ -26,7 +27,8 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
   const [input, setInput] = useState("");
   const { role, isSubcriptionActive, status } = useAuthStore();
   const AxiosIns = axiosInstance("");
-
+  const searchParams = useSearchParams();
+  const storyId = new URLSearchParams(searchParams).get("storyId");
   useEffect(() => {
     const handleBeforeUnload = (event: any) => {
       event.preventDefault();
@@ -152,6 +154,7 @@ const PromptPage: React.FC<PromptPageProps> = ({ params }) => {
         </div>
         <div className="w-full flex-grow">
           <SimpleEditor
+            currentStoryId={storyId || ""}
             triggerGrammarCheck={triggerGrammarCheck}
             title={input}
             prompt_title={prompt.title}

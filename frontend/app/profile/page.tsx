@@ -92,6 +92,7 @@ const Page: React.FC = () => {
               id={story._id}
               corrections={story.corrections}
               type={story.storyType}
+              isPublic={story.isPublic}
               contributors={story.contributors}
               onsuccess={onSuccess}
             />

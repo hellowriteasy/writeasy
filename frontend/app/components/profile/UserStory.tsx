@@ -21,6 +21,7 @@ interface CardProps {
   promptTitle: string;
   contestTitle: string;
   contributors: TUser[];
+  isPublic?: boolean;
   onsuccess: () => void;
 }
 
@@ -34,6 +35,7 @@ const Card: React.FC<CardProps> = ({
   promptTitle,
   prompt_id,
   contributors,
+  isPublic,
   onsuccess,
 }) => {
   const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
@@ -183,6 +185,18 @@ const Card: React.FC<CardProps> = ({
           >
             Contribute
           </button>
+        )}
+        {type === "practice" && !isPublic ? (
+          <button
+            onClick={() =>
+              router.push(`/Practices/${prompt_id}/playground?storyId=${id}`)
+            }
+            className="bg-white font-unkempt border-2 sm:px-1 sm:w-20 sm:h-8 sm:rounded-full sm:text-[10px] rounded-2xl border-slate-700 text-black px-4 py-2"
+          >
+            Continue
+          </button>
+        ) : (
+          ""
         )}
         {!shouldHideButtons && (
           <button

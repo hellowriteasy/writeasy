@@ -44,7 +44,7 @@ const createStory = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: error.message||"Failed " });
+    res.status(500).json({ message: error.message || "Failed " });
   }
 };
 
@@ -328,6 +328,7 @@ const savePractiseStoryToProfile = async (req, res) => {
     prompt,
     storyId,
     isPublic,
+    isPrevious,
   } = req.body;
 
   try {
@@ -335,17 +336,8 @@ const savePractiseStoryToProfile = async (req, res) => {
       await Story.findByIdAndUpdate(storyId, {
         hasSaved: true,
         isPublic: isPublic,
+        ...(isPrevious ? { content } : null),
       });
-
-      // await StoryService.savePractiseStoryToProfile(
-      //   userId,
-      //   title,
-      //   content,
-      //   taskType,
-      //   storyType,
-      //   prompt,
-      //   isPublic
-      // );
     }
     if (!storyId) {
       await Story.create({

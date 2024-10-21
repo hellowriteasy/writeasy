@@ -5,8 +5,25 @@ const GptService = require("../services/gptService");
 const gptService = new GptService(process.env.GPT_API_KEY);
 
 async function practiseStory(req, res) {
-  const { content, taskType, userId, timezone, title, prompt } = req.body;
+  const {
+    content,
+    taskType,
+    userId,
+    timezone,
+    title,
+    prompt,
+    isPrevious,
+    storyId,
+  } = req.body;
   const wordCount = content.split(" ").length; // Calculate word count
+
+  let previousStory = null;
+  if (isPrevious) {
+    previousStory = await Story.findById(storyId);
+    if (!previousStory) {
+      throw new Error("Story not found");
+    }
+  }
   const newStory = new Story({
     content: content,
     user: userId,
@@ -48,17 +65,30 @@ async function practiseStory(req, res) {
           console.log("ended", data);
 
           // Save the story and include the story ID in the final response
-          newStory.corrections = response;
-          await newStory.save();
 
-          // Construct the final response with the last chunk of data and storyId
-          res.write(
-            JSON.stringify({
-              data,
-              storyId: newStory._id,
-            })
-          );
+          if (isPrevious) {
+            previousStory.corrections = response;
+            await previousStory.save();
+            // Construct the final response with the last chunk of data and storyId
+            res.write(
+              JSON.stringify({
+                data,
+                storyId: storyId,
+              })
+            );
+          } else {
+            newStory.corrections = response;
+            await newStory.save();
+            // Construct the final response with the last chunk of data and storyId
+            res.write(
+              JSON.stringify({
+                data,
+                storyId: newStory._id,
+              })
+            );
+          }
 
+       
           // Call res.end() to indicate the stream has ended
           res.end();
           userExist.practiceLimit = userExist.practiceLimit - 1;

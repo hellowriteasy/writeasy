@@ -28,6 +28,7 @@ export type TStory = {
   hasEnded: boolean;
   position?: number;
   isTopWriting?: boolean;
+  isPublic?: boolean;
 };
 
 export type TPrompt = {

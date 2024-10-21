@@ -41,6 +41,7 @@ interface SimpleEditorProps {
   type: string;
   wordcount?: number;
   prompt_title: string;
+  currentStoryId: string;
   setTriggerGrammarCheck: React.Dispatch<React.SetStateAction<boolean>>;
 }
 type THandleClickFeature = (
@@ -57,6 +58,7 @@ export function SimpleEditor({
   _id,
   prompt_title,
   handleRemoveActiveTaskType,
+  currentStoryId,
   setTriggerGrammarCheck,
 }: SimpleEditorProps) {
   const [correctedText, setCorrectedText] = useState("");
@@ -81,60 +83,11 @@ export function SimpleEditor({
     totalLimit: null,
     remainingLimit: null,
   });
+
   const limit = 16000;
   useEffect(() => {
     setStoredFunction(toPDF);
   }, [toPDF, setStoredFunction]);
-
-  const fetchUsersPractiseLimit = async () => {
-    try {
-      const res = await axiosIns.get(
-        `/auth/users/practiseLimit?userId=${userId}`
-      );
-      if (res.status === 200) {
-        setPractiseLimit({
-          remainingLimit: res.data.remainingLimit,
-          totalLimit: res.data.limit,
-        });
-      }
-    } catch (error) {}
-  };
-  useEffect(() => {
-    fetchUsersPractiseLimit();
-  }, []);
-
-  const axiosIns = axiosInstance(token || "");
-
-  const getDiff = (original: string, corrected: string) => {
-    const dmp = new diff_match_patch();
-    const diff = dmp.diff_main(original, corrected);
-    dmp.diff_cleanupSemantic(diff);
-
-    let text = "";
-
-    let store = "";
-
-    diff.forEach((part) => {
-      // Replace \n\n with <br> and single \n with a space (to handle single line breaks)
-      const partText = part[1].replace(/\n/g, "<br>").replace(/\n/g, " ");
-      store += partText;
-      if (part[0] === -1) {
-        text += `<del>${partText}</del>`;
-      } else if (part[0] === 1) {
-        text += `<u>${partText}</u>`;
-      } else {
-        text += partText;
-      }
-    });
-
-    localStorage.setItem("correction", JSON.stringify({ value: store }));
-
-    return text;
-  };
-
-  useEffect(() => {
-    handleUpdate();
-  }, [correctedText]);
 
   const editor = useEditor({
     extensions: [
@@ -193,6 +146,63 @@ export function SimpleEditor({
   }) as Editor;
 
   useEffect(() => {
+    if (currentStoryId) {
+      setStoryId(currentStoryId);
+      fetchStoryById(currentStoryId);
+    }
+  }, [currentStoryId, editor]);
+
+  const fetchUsersPractiseLimit = async () => {
+    try {
+      const res = await axiosIns.get(
+        `/auth/users/practiseLimit?userId=${userId}`
+      );
+      if (res.status === 200) {
+        setPractiseLimit({
+          remainingLimit: res.data.remainingLimit,
+          totalLimit: res.data.limit,
+        });
+      }
+    } catch (error) {}
+  };
+  useEffect(() => {
+    fetchUsersPractiseLimit();
+  }, []);
+
+  const axiosIns = axiosInstance(token || "");
+
+  const getDiff = (original: string, corrected: string) => {
+    const dmp = new diff_match_patch();
+    const diff = dmp.diff_main(original, corrected);
+    dmp.diff_cleanupSemantic(diff);
+
+    let text = "";
+
+    let store = "";
+
+    diff.forEach((part) => {
+      // Replace \n\n with <br> and single \n with a space (to handle single line breaks)
+      const partText = part[1].replace(/\n/g, "<br>").replace(/\n/g, " ");
+      store += partText;
+      if (part[0] === -1) {
+        text += `<del>${partText}</del>`;
+      } else if (part[0] === 1) {
+        text += `<u>${partText}</u>`;
+      } else {
+        text += partText;
+      }
+    });
+
+    localStorage.setItem("correction", JSON.stringify({ value: store }));
+
+    return text;
+  };
+
+  useEffect(() => {
+    handleUpdate();
+  }, [correctedText]);
+
+  useEffect(() => {
     if (!triggerGrammarCheck) return;
     handleClickFeature(taskType, new MouseEvent("click"), false);
   }, [triggerGrammarCheck, taskType]);
@@ -245,6 +255,7 @@ export function SimpleEditor({
         storyType: "practice",
         prompt: _id,
         hasSaved,
+        isPrevious: !!currentStoryId,
       };
 
       if (hasSaved) {
@@ -268,7 +279,7 @@ export function SimpleEditor({
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ ...payload }),
+            body: JSON.stringify({ ...payload, storyId: storyId }),
           }
         );
 
@@ -356,6 +367,23 @@ export function SimpleEditor({
       editor.commands.focus();
     }
   };
+
+  const fetchStoryById = async (storyId: string) => {
+    try {
+      const res = await axiosIns.get(`/stories/${storyId}`);
+      if (res.status === 200) {
+        const { data } = res;
+        console.log(data);
+        if (data && editor) {
+          console.log(data.content);
+          editor.commands.setContent(data.content);
+        }
+      }
+    } catch (error) {
+      //
+    }
+  };
+
   useEffect(() => {
     if (!editor) return;
     if (!writingMode) {

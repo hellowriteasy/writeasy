@@ -191,7 +191,7 @@ const checkIpAddressValidationChangedLimits = async (
   maxIpAddressChangeLimit
 ) => {
   const now = new Date();
-  const oneweekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); // 24 hours ago
+  const oneweekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); // 7 days ago
 
   try {
     const userExist = await User.findById(userId);
@@ -265,7 +265,7 @@ const checkIpAddressValidationChangedLimits = async (
       await EmailService.sendEmail({
         email: process.env.APP_EMAIL,
         subject: `Suspicious activity detected for account ${userExist.email}`,
-        message: `More than ${maxIpAddressChangeLimit} IP address changes detected with in the last 24 hours. Check the attachment for details.`,
+        message: `More than ${maxIpAddressChangeLimit} IP address changes detected with in the last 7 days. Check the attachment for details.`,
         attachment,
       });
     } else {
