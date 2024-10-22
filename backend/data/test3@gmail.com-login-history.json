@@ -119,6 +119,126 @@
             "deviceLanguage": "en-US,en;q=0.9",
             "timestamp": "2024-10-22T06:57:06.426Z",
             "__v": 0
+        },
+        {
+            "location": {
+                "city": "London",
+                "region": "England",
+                "country": "GB",
+                "lat": "51.5085",
+                "lon": "-0.1257"
+            },
+            "os": {
+                "name": "Windows",
+                "version": "10"
+            },
+            "_id": "67179c92b9019c871be7dc23",
+            "userId": "66ac40f800f784ceed4811cb",
+            "ip": "90.242.8.71",
+            "timezone": "Europe/London",
+            "deviceLanguage": "en,zh-CN;q=0.9,zh;q=0.8,zh-TW;q=0.7",
+            "timestamp": "2024-10-22T12:37:38.151Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "London",
+                "region": "England",
+                "country": "GB",
+                "lat": "51.5085",
+                "lon": "-0.1257"
+            },
+            "os": {
+                "name": "Windows",
+                "version": "10"
+            },
+            "_id": "67179d47b9019c871be7e248",
+            "userId": "66ac40f800f784ceed4811cb",
+            "ip": "90.242.8.71",
+            "timezone": "Europe/London",
+            "deviceLanguage": "en,zh-CN;q=0.9,zh;q=0.8,zh-TW;q=0.7",
+            "timestamp": "2024-10-22T12:40:39.645Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "London",
+                "region": "England",
+                "country": "GB",
+                "lat": "51.5085",
+                "lon": "-0.1257"
+            },
+            "os": {
+                "name": "Windows",
+                "version": "10"
+            },
+            "_id": "67179d81b9019c871be7e38e",
+            "userId": "66ac40f800f784ceed4811cb",
+            "ip": "90.242.8.71",
+            "timezone": "Europe/London",
+            "deviceLanguage": "en,zh-CN;q=0.9,zh;q=0.8,zh-TW;q=0.7",
+            "timestamp": "2024-10-22T12:41:37.607Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "London",
+                "region": "England",
+                "country": "GB",
+                "lat": "51.5085",
+                "lon": "-0.1257"
+            },
+            "os": {
+                "name": "Windows",
+                "version": "10"
+            },
+            "_id": "67179dd8b9019c871be7e4cd",
+            "userId": "66ac40f800f784ceed4811cb",
+            "ip": "90.242.8.71",
+            "timezone": "Europe/London",
+            "deviceLanguage": "en,zh-CN;q=0.9,zh;q=0.8,zh-TW;q=0.7",
+            "timestamp": "2024-10-22T12:43:04.285Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "London",
+                "region": "England",
+                "country": "GB",
+                "lat": "51.5085",
+                "lon": "-0.1257"
+            },
+            "os": {
+                "name": "Windows",
+                "version": "10"
+            },
+            "_id": "67179e1cb9019c871be7e515",
+            "userId": "66ac40f800f784ceed4811cb",
+            "ip": "90.242.8.71",
+            "timezone": "Europe/London",
+            "deviceLanguage": "en,zh-CN;q=0.9,zh;q=0.8,zh-TW;q=0.7",
+            "timestamp": "2024-10-22T12:44:12.461Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "Unknown",
+                "region": "Unknown",
+                "country": "Unknown",
+                "lat": "Unknown",
+                "lon": "Unknown"
+            },
+            "os": {
+                "name": "Mac OS",
+                "version": "10.15.7"
+            },
+            "_id": "6717d4c50bbe117e357f6027",
+            "userId": "66ac40f800f784ceed4811cb",
+            "ip": "::1",
+            "timezone": "Unknown",
+            "deviceLanguage": "en-US,en;q=0.9",
+            "timestamp": "2024-10-22T16:37:25.543Z",
+            "__v": 0
         }
     ]
 }

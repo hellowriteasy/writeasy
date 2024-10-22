@@ -14,11 +14,11 @@ const WarningModal = ({
   isSubcriptionActive,
 }: TWarningModal) => {
   if (role === "admin") return <></>;
-  if (!isSubcriptionActive) {
-    return <Subscription />;
-  }
   if (status === "suspended") {
     return <Subscription isAccountSuspended={true} />;
+  }
+  if (!isSubcriptionActive) {
+    return <Subscription />;
   }
 };
 

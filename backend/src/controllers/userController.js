@@ -135,18 +135,15 @@ const UserController = {
       const { password, ...others } = user._doc;
       const isSubcriptionActive = !!subscription?.isActive;
 
-      const subscriptionId = subscription.subscription_id;
+      const subscriptionId = subscription?.subscription_id;
       let stripeSubscription = null;
-      console.log(
-        "subscription active",
-        subscription.isActive,
-        subscription?.subscription_id
-      );
+
       if (subscription?.isActive && subscriptionId) {
         stripeSubscription = await StripeService.getSubscription(
           subscriptionId
         );
       }
+
       const subscriptionRemainingDays = calculateSubscriptionRemainingDays(
         subscription?.expiresAt
       );
