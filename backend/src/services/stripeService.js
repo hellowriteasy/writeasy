@@ -11,9 +11,9 @@ const createStripeCheckout = async (email, priceId, type) => {
       mode: type === "recurring" ? "subscription" : "payment",
       payment_method_types: ["card"],
       allow_promotion_codes: true,
-      subscription_data: {
-        trial_period_days: 7,
-      },
+      ...(type === "recurring" && {
+        subscription_data: { trial_period_days: 7 },
+      }),
       line_items: [
         {
           price: priceId,
@@ -24,7 +24,6 @@ const createStripeCheckout = async (email, priceId, type) => {
       cancel_url: `${process.env.FRONTEND_BASE_URL}/failure?session_id={CHECKOUT_SESSION_ID}&type=string`,
       customer_email: email,
     });
-
     return session;
   } catch (error) {
     console.log(error);
@@ -73,6 +72,9 @@ async function getStripeCustomers() {
 }
 
 async function getSubscription(subscription_id) {
+  console.log("subscription_id", subscription_id);
+  if (!subscription_id) null;
+
   return await stripe.subscriptions.retrieve(subscription_id);
 }
 

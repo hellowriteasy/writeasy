@@ -18,7 +18,7 @@ interface Subscription {
 }
 
 const Pricing: React.FC = () => {
-  const { userId, isSubcriptionActive, subscriptionRemainingDays } =
+  const { userId, isSubcriptionActive, subscriptionRemainingDays,subscriptionType} =
     useAuthStore();
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const AxiosIns = axiosInstance("");

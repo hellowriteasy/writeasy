@@ -60,7 +60,7 @@ const UserController = {
         );
       }
       const subscriptionRemainingDays = calculateSubscriptionRemainingDays(
-        subscription.expiresAt
+        subscription?.expiresAt
       );
 
       user.lastLogin = new Date();
@@ -94,6 +94,7 @@ const UserController = {
         ...others,
         token,
         isSubcriptionActive: !!subscription?.isActive,
+        subscriptionType: subscription?.payment_type,
         subscriptionRemainingDays,
         subscriptionStatus: stripeSubscription?.status || "",
       });
@@ -133,29 +134,29 @@ const UserController = {
       });
       const { password, ...others } = user._doc;
       const isSubcriptionActive = !!subscription?.isActive;
-      let subscriptionRemainingDays = null;
 
+      const subscriptionId = subscription.subscription_id;
       let stripeSubscription = null;
       console.log(
         "subscription active",
         subscription.isActive,
         subscription?.subscription_id
       );
-      if (subscription?.isActive && subscription?.subscription_id) {
-        const subscription_id = subscription.subscription_id;
-        console.log("subscid", subscription_id);
+      if (subscription?.isActive && subscriptionId) {
         stripeSubscription = await StripeService.getSubscription(
-          subscription_id
+          subscriptionId
         );
-        subscriptionRemainingDays =
-          getSubscriptionRemainingDay(stripeSubscription);
       }
+      const subscriptionRemainingDays = calculateSubscriptionRemainingDays(
+        subscription?.expiresAt
+      );
 
       return res.status(200).json({
         message: {
           ...others,
           isSubcriptionActive,
           subscriptionRemainingDays,
+          subscriptionType: subscription?.payment_type,
           subscription_id: subscription?.subscription_id,
           subscriptionStatus: stripeSubscription?.status || "",
         },

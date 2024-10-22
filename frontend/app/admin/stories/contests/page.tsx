@@ -49,9 +49,7 @@ const Page = () => {
                   id={contest._id}
                   theme={contest.contestTheme}
                   title={contest.contestTheme}
-                  deadline={new Date(
-                    contest.submissionDeadline
-                  ).toLocaleDateString()}
+                  deadline={contest.submissionDeadline}
                 />
               ))}
             </div>

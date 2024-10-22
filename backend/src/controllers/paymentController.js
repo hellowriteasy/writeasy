@@ -6,6 +6,7 @@ const StripeService = require("../services/stripeService");
 const cacheTypes = require("../utils/types/cacheType");
 const createStripeCheckoutSession = async (req, res) => {
   const { user_id, price_id, type } = req.body;
+  console.log("type", type);
   // let stripe_customer_id = "";
   try {
     if (!user_id) {
@@ -20,7 +21,6 @@ const createStripeCheckoutSession = async (req, res) => {
       "stripe: creating checkout session for user - ",
       userExist.email
     );
-    const subscriptionExist = await Subscription.findOne({ userId: user_id });
 
     const checkoutRes = await StripeService.createStripeCheckout(
       userExist.email,
@@ -28,25 +28,33 @@ const createStripeCheckoutSession = async (req, res) => {
       type
     );
 
+    console.log(checkoutRes);
+
+    if (!checkoutRes || !checkoutRes.id) {
+      throw new Error("Stripe checkout session creation failed.");
+    }
+
+    const subscriptionExist = await Subscription.findOne({ userId: user_id });
+
     if (!subscriptionExist) {
+      console.log("creating new subscription");
       const userSubscription = new Subscription({
         stripe_session_id: checkoutRes.id,
         userId: user_id,
-        subscription_id: checkoutRes.payment_intent,
       });
       await userSubscription.save();
-    }
-    if (subscriptionExist) {
+    } else {
+      console.log("updating subscription");
       if (subscriptionExist.isActive) {
         throw new Error(
-          "Failed to create checkout session. Your subscription is active !!"
+          "Failed to create checkout session. Your subscription is active!!"
         );
       }
       subscriptionExist.stripe_session_id = checkoutRes.id;
-      subscriptionExist.subscription_id = checkoutRes.payment_intent;
       await subscriptionExist.save();
     }
 
+    console.log("subscription", subscriptionExist.subscription_id);
     return res.status(200).json({
       url: checkoutRes.url,
       success_url: checkoutRes.success_url,
@@ -78,9 +86,10 @@ const confirmStripeCheckoutSession = async (req, res) => {
     if (!subscriptionExist) {
       throw new Error("Subscription not found.");
     }
+    console.log("the session ", session);
 
     const stripeSubscription = await StripeService.getSubscription(
-      subscriptionExist.subscription_id
+      session.data.subscription
     );
 
     // Extracting timestamps from the Stripe subscription
@@ -93,6 +102,7 @@ const confirmStripeCheckoutSession = async (req, res) => {
       },
       {
         $set: {
+          subscription_id: session.data.subscription,
           paidAt: paidAt, // Set the 'paidAt' field to the start of the current billing period
           expiresAt: expiresAt, // Set the 'expiresAt' field to the end of the current billing period
           isActive: true, // Mark the subscription as active

@@ -1,4 +1,5 @@
 function calculateSubscriptionRemainingDays(expiresAt) {
+  if (!expiresAt) return 0;
   // Get the current date
   const currentDate = new Date();
 

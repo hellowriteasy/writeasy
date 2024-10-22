@@ -13,6 +13,7 @@ interface AuthState {
   subscriptionRemainingDays?: number | null;
   profile_picture?: string | null;
   isSubcriptionActive?: boolean;
+
   subscriptionStatus?: "trialing" | "active";
   login: (userId: string, token: string) => void;
   logout: () => void;
