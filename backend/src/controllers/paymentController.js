@@ -79,9 +79,13 @@ const confirmStripeCheckoutSession = async (req, res) => {
       throw new Error("Subscription not found.");
     }
 
-    const paidAt = new Date();
-    const thirtyDaysLater = new Date(paidAt);
-    thirtyDaysLater.setDate(thirtyDaysLater.getDate() + 30);
+    const stripeSubscription = await StripeService.getSubscription(
+      subscriptionExist.subscription_id
+    );
+
+    // Extracting timestamps from the Stripe subscription
+    const paidAt = new Date(stripeSubscription.current_period_start * 1000); // Convert from UNIX timestamp
+    const expiresAt = new Date(stripeSubscription.current_period_end * 1000); // Convert from UNIX timestamp
 
     await Subscription.updateOne(
       {
@@ -89,10 +93,9 @@ const confirmStripeCheckoutSession = async (req, res) => {
       },
       {
         $set: {
-          paidAt,
-          expiresAt: thirtyDaysLater,
-          subscription_id: session.data.subscription,
-          isActive: true,
+          paidAt: paidAt, // Set the 'paidAt' field to the start of the current billing period
+          expiresAt: expiresAt, // Set the 'expiresAt' field to the end of the current billing period
+          isActive: true, // Mark the subscription as active
         },
       }
     );

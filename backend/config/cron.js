@@ -8,6 +8,7 @@ const User = require("../src/models/user");
 const gptService = new gptServiceClass(process.env.GPT_API_KEY);
 const moment = require("moment-timezone");
 const siteConfigModel = require("../src/models/app");
+const StripeService = require("../src/services/stripeService");
 async function scheduleJob() {
   await closeContestAndChooseTopWritingAfterDeadline();
   await closeSubscriptionWhenDeadline();
@@ -160,7 +161,7 @@ const closeSubscriptionWhenDeadline = async () => {
       // Delete the subscription from Stripe
       if (subscription.subscription_id) {
         console.log("subscriptionId", subscription.subscription_id);
-        // await stripe.subscriptions.cancel(subscription.subscription_id);
+        await StripeService.deleteSubscription(subscription.subscription_id);
       }
       // Update the subscription in your database
       subscription.isActive = false;

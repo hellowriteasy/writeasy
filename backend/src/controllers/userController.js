@@ -2,9 +2,9 @@ const Subscription = require("../models/subscription");
 const User = require("../models/user");
 const AuthService = require("../services/AuthService");
 const StripeService = require("../services/stripeService");
-const { calculateSubscriptionRemainingDays } = require("../utils/methods");
 const authService = new AuthService();
 const EmailServiceClass = require("../services/emailService");
+const { calculateSubscriptionRemainingDays } = require("../utils/methods");
 const {
   getDeviceInfo,
   checkIpAddressValidationChangedLimits,
@@ -52,16 +52,16 @@ const UserController = {
 
       const { password, ...others } = user._doc;
       const subscriptionId = subscription?.subscription_id;
-      let subscriptionRemainingDays = null;
 
       let stripeSubscription = null;
       if (subscription?.isActive && subscriptionId) {
         stripeSubscription = await StripeService.getSubscription(
           subscriptionId
         );
-        subscriptionRemainingDays =
-          StripeService.getSubscriptionRemainingDays(stripeSubscription);
       }
+      const subscriptionRemainingDays = calculateSubscriptionRemainingDays(
+        subscription.expiresAt
+      );
 
       user.lastLogin = new Date();
       await user.save();
@@ -136,6 +136,11 @@ const UserController = {
       let subscriptionRemainingDays = null;
 
       let stripeSubscription = null;
+      console.log(
+        "subscription active",
+        subscription.isActive,
+        subscription?.subscription_id
+      );
       if (subscription?.isActive && subscription?.subscription_id) {
         const subscription_id = subscription.subscription_id;
         console.log("subscid", subscription_id);
@@ -143,7 +148,7 @@ const UserController = {
           subscription_id
         );
         subscriptionRemainingDays =
-          StripeService.getSubscriptionRemainingDays(stripeSubscription);
+          getSubscriptionRemainingDay(stripeSubscription);
       }
 
       return res.status(200).json({

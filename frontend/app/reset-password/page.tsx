@@ -44,8 +44,7 @@ const PasswordRest = () => {
             Reset your password
           </span>
           <p className="text-gray-700  ">
-            We will email you a link to reset your password in
-            your email address.
+            We will email you a link to reset your password in your email address.
           </p>
         </div>
         <form

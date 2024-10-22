@@ -100,7 +100,7 @@ const SubscriptionUser = ({
 
       <p className="text-gray-600">
         {hasExpired ? "Subscription Expired" : null}
-        {user.isSubcriptionActive ? (
+        {user.isSubcriptionActive  ? (
           <p className="text-gray-600">
             Payment Type : {user.payment_type || ""}
           </p>
@@ -116,11 +116,7 @@ const SubscriptionUser = ({
       <p className="text-gray-600">
         Last Login: {moment(new Date(user.lastLogin)).format("lll")}
       </p>
-      {user.isSubcriptionActive && (
-        <p className="text-gray-600">
-          Subscription Type: {user.payment_type || "Online Payment"}
-        </p>
-      )}
+
       <div className="mt-2">
         <input
           type="date"

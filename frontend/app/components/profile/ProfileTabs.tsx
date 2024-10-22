@@ -1,7 +1,7 @@
 // components/Navbar.tsx
-'use client'
-import { usePathname } from 'next/navigation';
-import Link from 'next/link';
+"use client";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 const ProfileTabs = () => {
   const pathname = usePathname();
@@ -19,7 +19,7 @@ const ProfileTabs = () => {
               }`}
               href="/profile"
             >
-              Practice
+              Practices
             </Link>
             <Link
               className={`border-b-4 rounded-sm ${
@@ -29,7 +29,7 @@ const ProfileTabs = () => {
               }`}
               href="/profile/contest"
             >
-              Contest
+              Contests
             </Link>
             <Link
               className={`border-b-4 rounded-sm ${
@@ -39,7 +39,7 @@ const ProfileTabs = () => {
               }`}
               href="/profile/game"
             >
-              Game
+              Games
             </Link>
           </div>
         </div>

@@ -1,20 +1,14 @@
-function calculateSubscriptionRemainingDays(startDate, endDate) {
+function calculateSubscriptionRemainingDays(expiresAt) {
+  // Get the current date
   const currentDate = new Date();
-  const startDateObj = new Date(startDate);
-  const endDateObj = new Date(endDate);
 
-  // Check if subscription is active
-  if (currentDate >= startDateObj && currentDate <= endDateObj) {
-    // Calculate difference in milliseconds between current date and end date
-    const differenceMs = endDateObj - currentDate;
+  // Calculate the difference in milliseconds
+  const differenceInTime = new Date(expiresAt) - currentDate;
 
-    // Convert milliseconds to days
-    const remainingDays = Math.ceil(differenceMs / (1000 * 60 * 60 * 24));
+  // Convert the difference from milliseconds to days (1 day = 86400000 ms)
+  const remainingDays = Math.ceil(differenceInTime / (1000 * 60 * 60 * 24));
 
-    return remainingDays;
-  } else {
-    return 0; // Return 0 if subscription is not active
-  }
+  return remainingDays > 0 ? remainingDays : 0; // Return 0 if the subscription has already expired
 }
 
 module.exports = {

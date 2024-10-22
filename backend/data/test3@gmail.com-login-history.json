@@ -1,0 +1,124 @@
+{
+    "data": [
+        {
+            "location": {
+                "city": "Southend-on-Sea",
+                "region": "England",
+                "country": "GB",
+                "lat": "51.5378",
+                "lon": "0.7143"
+            },
+            "os": {
+                "name": "Windows",
+                "version": "10"
+            },
+            "_id": "6710f79204e2163793435f11",
+            "userId": "66ac40f800f784ceed4811cb",
+            "ip": "90.242.8.71",
+            "timezone": "Europe/London",
+            "deviceLanguage": "en,zh-CN;q=0.9,zh;q=0.8,zh-TW;q=0.7",
+            "timestamp": "2024-10-17T11:40:02.946Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "Southend-on-Sea",
+                "region": "England",
+                "country": "GB",
+                "lat": "51.5378",
+                "lon": "0.7143"
+            },
+            "os": {
+                "name": "Windows",
+                "version": "10"
+            },
+            "_id": "6711176104e21637934379bc",
+            "userId": "66ac40f800f784ceed4811cb",
+            "ip": "90.242.8.71",
+            "timezone": "Europe/London",
+            "deviceLanguage": "en,zh-CN;q=0.9,zh;q=0.8,zh-TW;q=0.7",
+            "timestamp": "2024-10-17T13:55:45.668Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "Kathmandu",
+                "region": "Bagmati Province",
+                "country": "NP",
+                "lat": "27.7017",
+                "lon": "85.3206"
+            },
+            "os": {
+                "name": "Mac OS",
+                "version": "10.15.7"
+            },
+            "_id": "6713d594504c5f2fa8cf3bad",
+            "userId": "66ac40f800f784ceed4811cb",
+            "ip": "38.255.140.101",
+            "timezone": "Asia/Kathmandu",
+            "deviceLanguage": "en-US,en;q=0.9",
+            "timestamp": "2024-10-19T15:51:48.052Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "Kathmandu",
+                "region": "Bagmati Province",
+                "country": "NP",
+                "lat": "27.7017",
+                "lon": "85.3206"
+            },
+            "os": {
+                "name": "Mac OS",
+                "version": "10.15.7"
+            },
+            "_id": "6714ba8875f1f341e2d2ed92",
+            "userId": "66ac40f800f784ceed4811cb",
+            "ip": "103.121.172.250",
+            "timezone": "Asia/Kathmandu",
+            "deviceLanguage": "en-US,en;q=0.9",
+            "timestamp": "2024-10-20T08:08:40.491Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "Southend-on-Sea",
+                "region": "England",
+                "country": "GB",
+                "lat": "51.5378",
+                "lon": "0.7143"
+            },
+            "os": {
+                "name": "Windows",
+                "version": "10"
+            },
+            "_id": "6716173c06b2c40f415fc9bc",
+            "userId": "66ac40f800f784ceed4811cb",
+            "ip": "90.242.8.71",
+            "timezone": "Europe/London",
+            "deviceLanguage": "en-US,en;q=0.9",
+            "timestamp": "2024-10-21T08:56:28.856Z",
+            "__v": 0
+        },
+        {
+            "location": {
+                "city": "Unknown",
+                "region": "Unknown",
+                "country": "Unknown",
+                "lat": "Unknown",
+                "lon": "Unknown"
+            },
+            "os": {
+                "name": "Mac OS",
+                "version": "10.15.7"
+            },
+            "_id": "67174cc2541e6a4ef27f58a3",
+            "userId": "66ac40f800f784ceed4811cb",
+            "ip": "::1",
+            "timezone": "Unknown",
+            "deviceLanguage": "en-US,en;q=0.9",
+            "timestamp": "2024-10-22T06:57:06.426Z",
+            "__v": 0
+        }
+    ]
+}
