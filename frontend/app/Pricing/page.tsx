@@ -177,7 +177,9 @@ const Pricing: React.FC = () => {
                 ) : (
                   ""
                 )}
-                {isSubcriptionActive && subscriptionType !== "cash_payment" ? (
+                {isSubcriptionActive &&
+                subscriptionType !== "cash_payment" &&
+                subscriptionStatus === "trialing" ? (
                   <button
                     onClick={() => handleCancelSubscription()}
                     className="border-2 font-bold sm:rounded-full text-[5vw] lg:text-[35px] hover:bg-slate-200 hover:text-black border-slate-700 bg-black text-white rounded-full w-fit px-3 h-16"
