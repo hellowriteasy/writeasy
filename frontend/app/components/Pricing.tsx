@@ -18,8 +18,12 @@ interface Subscription {
 }
 
 const Pricing: React.FC = () => {
-  const { userId, isSubcriptionActive, subscriptionRemainingDays,subscriptionType} =
-    useAuthStore();
+  const {
+    userId,
+    isSubcriptionActive,
+    subscriptionRemainingDays,
+    subscriptionType,
+  } = useAuthStore();
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const AxiosIns = axiosInstance("");
   const router = useRouter();
@@ -141,7 +145,7 @@ const Pricing: React.FC = () => {
                   )}
                   <ul className="text-[3vw] flex flex-col gap-y-2 lg:text-[18px] mt-4 text-left pl-[20px]">
                     <li>
-                      • Up to 5 writing practices everyday with immediate GPT
+                      • Up to 5 writing practices everyday with immediate
                       markings
                     </li>
                     <li>• Weekly writing contests</li>
