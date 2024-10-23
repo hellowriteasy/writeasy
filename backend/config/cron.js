@@ -231,7 +231,7 @@ async function checkSuspiciousUsers() {
 
     // Iterate through each user and check if they have more than 3 distinct IP addresses
     for (const userId in userLogins) {
-      if (userLogins[userId].ips.size > 1) {
+      if (userLogins[userId].ips.size > 3) {
         suspiciousData.push({
           userId,
           loginHistory: userLogins[userId].logins,
@@ -266,13 +266,10 @@ async function checkSuspiciousUsers() {
 
       await emailServiceIns.sendEmail({
         subject: `No Suspicious Users - ${new Date().toUTCString()}`,
-        attachment,
         email: [process.env.APP_EMAIL],
         message: `There are no suspicious users in last 7 days.`,
       });
     }
-
-    console.log(`Suspicious users data saved to ${filePath}`);
   } catch (error) {
     console.error("Error checking suspicious users:", error);
   }

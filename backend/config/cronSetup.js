@@ -14,10 +14,7 @@ function setupCronJobs() {
   cron.schedule("*/10 * * * * *", scheduleJob);
 
   // Run every Sunday at 8 PM GMT to check suspicious users
-  //   cron.schedule("0 20 * * 0", checkSuspiciousUsers);
-    // cron.schedule("0 20 * * 0", checkSuspiciousUsers);
-  cron.schedule("*/50 * * * * *", checkSuspiciousUsers);
-
+  cron.schedule("0 20 * * 0", checkSuspiciousUsers);
 
   console.log("Cron jobs are set up and running...");
 }
