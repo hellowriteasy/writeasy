@@ -45,13 +45,13 @@ const Subscription: React.FC<TsubscriptionProps> = ({
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                <div className="flex items-center justify-center h-14">
+                <div className="flex items-center justify-center">
                   {isAccountSuspended ? (
                     <button
                       onClick={() => {
                         window.open("https://www.gmail.com", "_blank");
                       }}
-                      className="h-fit w-full px-5 bg-custom-yellow text-slate-950 text-3xl font-bold font-unkempt rounded-full"
+                      className="h-fit py-4 w-full px-5 bg-custom-yellow text-slate-950 text-3xl font-bold font-unkempt rounded-full"
                     >
                       Your account has been suspended. Please contact
                       hellowriteasy@gmail.com
