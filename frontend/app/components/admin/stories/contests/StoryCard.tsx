@@ -79,7 +79,7 @@ const Card: React.FC<CardProps> = ({ story, refetchStory }) => {
             {story.contest?.contestTheme}/{story.prompt.title}
           </div>
         </div>
-        {story.isTopWriting ? (
+        {isTopStory ? (
           <>
             <div className="text-gray-700">⭐️ Top story</div>
 

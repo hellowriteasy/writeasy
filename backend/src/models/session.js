@@ -58,6 +58,10 @@ const loginHistorySchema = new mongoose.Schema({
   deviceLanguage: {
     type: String,
   },
+  hasChecked: {
+    type: Boolean,
+    default: false,
+  },
   timestamp: {
     type: Date,
     default: Date.now, // Automatically set to current date and time

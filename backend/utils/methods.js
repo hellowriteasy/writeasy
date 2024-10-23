@@ -8,6 +8,7 @@ const User = require("../src/models/user");
 const path = require("path");
 const EmailService = new EmailServiceClass();
 const fs = require("fs");
+
 const extractPaginationDetailsFromQuery = (req) => {
   const page = +req.query.page || 1; // Default page is 1
   const perPage = +req.query.perPage || 5; // Default page size is 10
@@ -276,6 +277,29 @@ const checkIpAddressValidationChangedLimits = async (
   }
 };
 
+async function createJSONFile(filename, data) {
+  try {
+    // Create data directory if it doesn't exist
+    const dataDir = path.join(process.cwd(), "data");
+
+    if (!fs.existsSync(dataDir)) {
+      fs.mkdirSync(dataDir, { recursive: true });
+    }
+
+    // Define the full output file path
+    const outputFilePath = path.join(dataDir, `${filename}.json`);
+
+    // Write the data to the file
+    fs.writeFileSync(outputFilePath, JSON.stringify(data, null, 4));
+
+    return outputFilePath;
+  } catch (error) {
+    console.log("Error creating JSON file:", error);
+    throw error; // Throw the error to be caught in the calling function
+  }
+}
+
+module.exports = createJSONFile;
 
 module.exports = {
   getDeviceInfo,

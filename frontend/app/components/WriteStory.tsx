@@ -217,6 +217,8 @@ export function SimpleEditor({
   ) => {
     event.preventDefault();
     try {
+      if (isSaving || isLoading) return;
+      
       let currentContent = divideNewlinesByTwo(editor.getText());
       if (taskType === "refresh") {
         setInitialText("");
@@ -406,9 +408,10 @@ export function SimpleEditor({
               <div className="ml-auto">
                 <p>
                   {practistLimit.remainingLimit !== null
-                    ? `Practise Limit : ${practistLimit.remainingLimit}/
+                    ? `You still have ${practistLimit.remainingLimit}/
                    ${practistLimit.totalLimit}`
                     : ""}
+                  markings left
                 </p>
               </div>
               <button

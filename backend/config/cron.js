@@ -9,6 +9,9 @@ const gptService = new gptServiceClass(process.env.GPT_API_KEY);
 const moment = require("moment-timezone");
 const siteConfigModel = require("../src/models/app");
 const StripeService = require("../src/services/stripeService");
+const LoginHistory = require("../src/models/session");
+const createJSONFile = require("../utils/methods");
+const emailService = require("../src/services/emailService");
 async function scheduleJob() {
   await closeContestAndChooseTopWritingAfterDeadline();
   await closeSubscriptionWhenDeadline();
@@ -16,13 +19,10 @@ async function scheduleJob() {
 }
 
 const getTopPercentage = (array, percentage) => {
-  // Sort the array by score in descending order
   const sortedArray = array.sort((a, b) => b.score - a.score);
 
-  // Calculate the number of items to include (20% of the array)
   const topCount = Math.ceil((percentage / 100) * sortedArray.length);
 
-  // Return the top percentage of items
   return sortedArray.slice(0, topCount);
 };
 
@@ -37,8 +37,6 @@ const closeContestAndChooseTopWritingAfterDeadline = async () => {
     });
 
     if (endedContests.length > 0) {
-      console.log("Ending contests...");
-
       await Promise.all(
         endedContests.map(async (contest) => {
           contest.startedScoringStories = true;
@@ -184,7 +182,7 @@ async function getSitePractiseLimit() {
 
 // Function to update user's practice limit
 async function updateUserPracticeLimits() {
-  console.log("Updating practice limits...");
+  console.log("************ updating user practice limits ************");
 
   // Get current sitePractiseLimit
   const sitePractiseLimit = await getSitePractiseLimit();
@@ -192,30 +190,97 @@ async function updateUserPracticeLimits() {
     practiceLimit: { $ne: sitePractiseLimit },
   });
 
-  console.log("debug 1 users", users.length);
   if (!users || users.length === 0) {
     console.log("No users found with timezones.");
     return;
   }
-  console.log("debug 2");
 
   for (const user of users) {
-    console.log("debug 3");
     const currentUserTimezone = user.timezone || "UTC";
     const currentTimeInUserTimezone = moment.tz(currentUserTimezone);
-    console.log("debug 4");
     // Check if it's midnight for the user
     if (currentTimeInUserTimezone.format("HH:mm") === "00:00") {
-      console.log("debug 5");
       // Reset practiceLimit to sitePractiseLimit
       user.practiceLimit = sitePractiseLimit;
       await user.save();
       console.log(`Reset practice limit for user: ${user.username}`);
     } else {
-      console.log("debug 6");
       console.log(`No need to reset practice limit for user: ${user.username}`);
     }
   }
 }
 
-module.exports = { getTopPercentage, updateUserPracticeLimits, scheduleJob };
+async function checkSuspiciousUsers() {
+  console.log("************ checking for suspicious users ************");
+  try {
+    // Find all login histories where hasChecked is false
+    const unCheckedLogins = await LoginHistory.find({ hasChecked: false });
+
+    // Group logins by userId and count distinct IP addresses
+    const userLogins = {};
+    unCheckedLogins.forEach((login) => {
+      if (!userLogins[login.userId]) {
+        userLogins[login.userId] = { ips: new Set(), logins: [] };
+      }
+      userLogins[login.userId].ips.add(login.ip);
+      userLogins[login.userId].logins.push(login);
+    });
+
+    // Array to store suspicious users data
+    const suspiciousData = [];
+
+    // Iterate through each user and check if they have more than 3 distinct IP addresses
+    for (const userId in userLogins) {
+      if (userLogins[userId].ips.size > 1) {
+        suspiciousData.push({
+          userId,
+          loginHistory: userLogins[userId].logins,
+        });
+      }
+    }
+    await LoginHistory.updateMany({ hasChecked: false }, { hasChecked: true });
+
+    if (suspiciousData.length) {
+      const outputFilePath = await createJSONFile(
+        `${suspiciousData.length}-suspiciousUsers`,
+        suspiciousData
+      );
+      const attachment = [
+        {
+          filename: path.basename(outputFilePath),
+          path: outputFilePath,
+        },
+      ];
+
+      // Create an instance of the email service
+      const emailServiceIns = new emailService();
+      // Send the email with the attachment
+      await emailServiceIns.sendEmail({
+        subject: `Suspicous Users - ${new Date().toUTCString()}`,
+        attachment,
+        email: [process.env.APP_EMAIL],
+        message: `There are ${suspiciousData.length} suspicious users in last 7 days. Found in the system. Please check the attachment for more information.`,
+      });
+    } else {
+      const emailServiceIns = new emailService();
+
+      await emailServiceIns.sendEmail({
+        subject: `No Suspicious Users - ${new Date().toUTCString()}`,
+        attachment,
+        email: [process.env.APP_EMAIL],
+        message: `There are no suspicious users in last 7 days.`,
+      });
+    }
+
+    console.log(`Suspicious users data saved to ${filePath}`);
+  } catch (error) {
+    console.error("Error checking suspicious users:", error);
+  }
+}
+
+module.exports = {
+  getTopPercentage,
+  updateUserPracticeLimits,
+  scheduleJob,
+  checkSuspiciousUsers,
+};

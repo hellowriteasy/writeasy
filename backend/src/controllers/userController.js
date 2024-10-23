@@ -88,7 +88,7 @@ const UserController = {
         org: deviceInfo.org,
       });
 
-      checkIpAddressValidationChangedLimits(user._id, 3);
+      // checkIpAddressValidationChangedLimits(user._id, 3);
 
       await res.json({
         ...others,
