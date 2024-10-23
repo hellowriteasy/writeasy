@@ -51,7 +51,7 @@ const Subscription: React.FC<TsubscriptionProps> = ({
                       onClick={() => {
                         window.open("https://www.gmail.com", "_blank");
                       }}
-                      className="h-14 w-full px-5 bg-custom-yellow text-slate-950 text-3xl font-bold font-unkempt rounded-full"
+                      className="h-fit w-full px-5 bg-custom-yellow text-slate-950 text-3xl font-bold font-unkempt rounded-full"
                     >
                       Your account has been suspended. Please contact
                       hellowriteasy@gmail.com
