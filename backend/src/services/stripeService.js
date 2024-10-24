@@ -7,21 +7,51 @@ const createStripeCheckout = async (email, priceId, type) => {
   endDateObj.setDate(endDateObj.getDate() + 30);
   const endDate = endDateObj.toISOString().split("T")[0]; // Format: YYYY-MM-DD
   try {
+    // const session = await stripe.checkout.sessions.create({
+    //   mode: type === "recurring" ? "subscription" : "payment",
+    //   payment_method_types: ["card"],
+    //   expand: ["latest_invoice.payment_intent"], // Expand this if you need payment intent data
+    //   allow_promotion_codes: true,
+    //   ...(type === "recurring" && {
+    //     subscription_data: {
+    //       trial_period_days: 7,
+    //       trial_settings: {
+    //         end_behavior: {
+    //           missing_payment_method: "cancel",
+    //         },
+    //       },
+    //     },
+    //   }),
+    //   payment_method_collection: "if_required",
+    //   line_items: [
+    //     {
+    //       price: priceId,
+    //       quantity: 1,
+    //     },
+    //   ],
+    //   success_url: `${process.env.FRONTEND_BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}&type=stripe`,
+    //   cancel_url: `${process.env.FRONTEND_BASE_URL}/failure?session_id={CHECKOUT_SESSION_ID}&type=string`,
+    //   customer_email: email,
+    // });
     const session = await stripe.checkout.sessions.create({
-      mode: type === "recurring" ? "subscription" : "payment",
-      payment_method_types: ["card"],
-      allow_promotion_codes: true,
-      ...(type === "recurring" && {
-        subscription_data: { trial_period_days: 7 },
-      }),
+      mode: "subscription",
+      success_url: `${process.env.FRONTEND_BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}&type=stripe`,
+      cancel_url: `${process.env.FRONTEND_BASE_URL}/failure?session_id={CHECKOUT_SESSION_ID}&type=string`,
       line_items: [
         {
           price: priceId,
           quantity: 1,
         },
       ],
-      success_url: `${process.env.FRONTEND_BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}&type=stripe`,
-      cancel_url: `${process.env.FRONTEND_BASE_URL}/failure?session_id={CHECKOUT_SESSION_ID}&type=string`,
+      subscription_data: {
+        trial_settings: {
+          end_behavior: {
+            missing_payment_method: "cancel",
+          },
+        },
+        trial_period_days: 7,
+      },
+      payment_method_collection: "if_required",
       customer_email: email,
     });
     return session;
@@ -94,7 +124,6 @@ async function deleteSubscription(subscription_id) {
   }
 }
 function getSubscriptionRemainingDays(subscription) {
-  console.log(subscription);
   if (!subscription) return;
   const now = Math.floor(Date.now() / 1000); // Get the current timestamp in seconds
   const secondsRemaining = subscription.current_period_end - now;

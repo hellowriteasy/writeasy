@@ -303,21 +303,7 @@ const getStoriesByContentAndPrompt = async (req, res) => {
   }
 };
 
-const getSortInputForStoriesByContestAndPrompt = (sortKey, direction) => {
-  if (sortKey === "createdAt") {
-    return {
-      createdAt: direction,
-    };
-  } else if (sortKey === "score") {
-    return {
-      score: direction,
-    };
-  } else {
-    return {
-      createdAt: direction,
-    };
-  }
-};
+
 const savePractiseStoryToProfile = async (req, res) => {
   const {
     userId,
